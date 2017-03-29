@@ -19,10 +19,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Test.cpp" />
+    <ClCompile Include="src\engine.cpp" />
+    <ClCompile Include="src\gl\gbuffer.cpp" />
+    <ClCompile Include="src\gl\mesh.cpp" />
+    <ClCompile Include="src\gl\shader.cpp" />
+    <ClCompile Include="src\gl\texture.cpp" />
+    <ClCompile Include="src\io\texturemanager.cpp" />
+    <ClCompile Include="src\lib\glad.c" />
+    <ClCompile Include="src\lib\imgui.cpp" />
+    <ClCompile Include="src\lib\imgui_demo.cpp" />
+    <ClCompile Include="src\lib\imgui_draw.cpp" />
+    <ClCompile Include="src\lib\imgui_impl_sdl_gl3.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Test.hpp" />
+    <ClInclude Include="src\engine.hpp" />
+    <ClInclude Include="src\gl\gbuffer.hpp" />
+    <ClInclude Include="src\gl\mesh.hpp" />
+    <ClInclude Include="src\gl\shader.hpp" />
+    <ClInclude Include="src\gl\texture.hpp" />
+    <ClInclude Include="src\io\texturemanager.hpp" />
+    <ClInclude Include="src\lib\glad.h" />
+    <ClInclude Include="src\lib\imconfig.h" />
+    <ClInclude Include="src\lib\imgui.h" />
+    <ClInclude Include="src\lib\imgui_impl_sdl_gl3.h" />
+    <ClInclude Include="src\lib\imgui_internal.h" />
+    <ClInclude Include="src\lib\KHR\khrplatform.h" />
+    <ClInclude Include="src\lib\stb_rect_pack.h" />
+    <ClInclude Include="src\lib\stb_textedit.h" />
+    <ClInclude Include="src\lib\stb_truetype.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -97,13 +122,15 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s "$(SolutionDir)dll" "$(SolutionDir)build/$(Configuration)"</Command>
+      <Command>xcopy /sy "$(SolutionDir)bin" "$(SolutionDir)build\$(Configuration)"</Command>
       <Message>Copy runtime DLLs into build folder</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -113,14 +140,16 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s "$(SolutionDir)dll" "$(SolutionDir)build/$(Configuration)"</Command>
+      <Command>xcopy /sy "$(SolutionDir)bin" "$(SolutionDir)build\$(Configuration)"</Command>
       <Message>Copy runtime DLLs into build folder</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -132,15 +161,17 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s "$(SolutionDir)dll" "$(SolutionDir)build/$(Configuration)"</Command>
+      <Command>xcopy /sy "$(SolutionDir)bin" "$(SolutionDir)build\$(Configuration)"</Command>
       <Message>Copy runtime DLLs into build folder</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -152,15 +183,17 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s "$(SolutionDir)dll" "$(SolutionDir)build/$(Configuration)"</Command>
+      <Command>xcopy /sy "$(SolutionDir)bin" "$(SolutionDir)build\$(Configuration)"</Command>
       <Message>Copy runtime DLLs into build folder</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
