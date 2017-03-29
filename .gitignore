@@ -27,3 +27,9 @@
 *.exe
 *.out
 *.app
+.vscode
+.ninja*
+*.ninja
+imgui.ini
+.reggae
+/trigonoverthrow
