@@ -1,0 +1,67 @@
+[
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/gl/mesh.cpp -o objs/trigonoverthrow.objs/src/gl/mesh.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/gl/mesh.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/gl/texture.cpp -o objs/trigonoverthrow.objs/src/gl/texture.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/gl/texture.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/gl/gbuffer.cpp -o objs/trigonoverthrow.objs/src/gl/gbuffer.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/gl/gbuffer.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/gl/shader.cpp -o objs/trigonoverthrow.objs/src/gl/shader.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/gl/shader.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/engine.cpp -o objs/trigonoverthrow.objs/src/engine.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/engine.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/main.cpp -o objs/trigonoverthrow.objs/src/main.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/main.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/lib/imgui.cpp -o objs/trigonoverthrow.objs/src/lib/imgui.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/lib/imgui.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/lib/imgui_demo.cpp -o objs/trigonoverthrow.objs/src/lib/imgui_demo.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/lib/imgui_demo.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/lib/imgui_draw.cpp -o objs/trigonoverthrow.objs/src/lib/imgui_draw.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/lib/imgui_draw.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/lib/imgui_impl_sdl_gl3.cpp -o objs/trigonoverthrow.objs/src/lib/imgui_impl_sdl_gl3.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/lib/imgui_impl_sdl_gl3.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/io/texturemanager.cpp -o objs/trigonoverthrow.objs/src/io/texturemanager.cpp.o",
+        "file": "objs/trigonoverthrow.objs/src/io/texturemanager.cpp.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -c -std=c++11 -O0 -ggdb -Wall -fdiagnostics-color=always /home/wild/NativeProjects/TrigonOverthrow/src/lib/glad.c -o objs/trigonoverthrow.objs/src/lib/glad.c.o",
+        "file": "objs/trigonoverthrow.objs/src/lib/glad.c.o"
+    },
+    {
+        "directory": "/home/wild/NativeProjects/TrigonOverthrow",
+        "command": "g++ -std=c++11 -O3 -ggdb -Wall -fdiagnostics-color=always -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lGL -lassimp objs/trigonoverthrow.objs/src/gl/mesh.cpp.o objs/trigonoverthrow.objs/src/gl/texture.cpp.o objs/trigonoverthrow.objs/src/gl/gbuffer.cpp.o objs/trigonoverthrow.objs/src/gl/shader.cpp.o objs/trigonoverthrow.objs/src/engine.cpp.o objs/trigonoverthrow.objs/src/main.cpp.o objs/trigonoverthrow.objs/src/lib/imgui.cpp.o objs/trigonoverthrow.objs/src/lib/imgui_demo.cpp.o objs/trigonoverthrow.objs/src/lib/imgui_draw.cpp.o objs/trigonoverthrow.objs/src/lib/imgui_impl_sdl_gl3.cpp.o objs/trigonoverthrow.objs/src/io/texturemanager.cpp.o objs/trigonoverthrow.objs/src/lib/glad.c.o -o trigonoverthrow",
+        "file": "trigonoverthrow"
+    }
+]
