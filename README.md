@@ -15,4 +15,4 @@ This project uses:
 - Assimp
 
 ## License
-Mozilla Public License, version 2.0 - See LICENSE or [[https://www.mozilla.org/en-US/MPL/2.0/][here]].
+Mozilla Public License, version 2.0 - See [LICENSE](LICENSE) or [here](https://www.mozilla.org/en-US/MPL/2.0/).
