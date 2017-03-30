@@ -12,10 +12,6 @@
 *.so
 *.dylib
 
-# Fortran module files
-*.mod
-*.smod
-
 # Compiled Static libraries
 *.lai
 *.la
@@ -25,10 +21,18 @@
 *.exe
 *.out
 *.app
+/trigonoverthrow
 
 # Build Folder
 /build/
+/.reggae/
+/objs/
 
 # VS
 /.vs/
 *.vcxproj.user
+
+# Reggae
+compile_commands.json
+*.ninja
+.ninja_*
