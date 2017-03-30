@@ -179,7 +179,7 @@ static void free_exts(void) {
     }
 }
 
-static int has_ext(const char *ext) {
+/*static int has_ext(const char *ext) {
 #ifdef _GLAD_IS_SOME_NEW_VERSION
     if(max_loaded_major < 3) {
 #endif
@@ -219,7 +219,7 @@ static int has_ext(const char *ext) {
 #endif
 
     return 0;
-}
+}*/
 int GLAD_GL_VERSION_1_0;
 int GLAD_GL_VERSION_1_1;
 int GLAD_GL_VERSION_1_2;
