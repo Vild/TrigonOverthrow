@@ -8,7 +8,12 @@
 #include <cmath>
 
 #include "io/texturemanager.hpp"
+#include "io/meshloader.hpp"
 #include "world/world.hpp"
+
+#include "world/system/physics.hpp"
+#include "world/system/render.hpp"
+#include "world/system/imgui.hpp"
 
 class Engine {
 public:
@@ -22,7 +27,10 @@ public:
 
 	int run(bool vsync);
 
-	std::shared_ptr<TextureManager> getTextureManager();
+	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
+	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
+
+	inline World& getWorld() { return _world; }
 
 private:
 	uint32_t _width = 1280;
@@ -45,7 +53,13 @@ private:
 	SDL_GLContext _context;
 
 	std::shared_ptr<TextureManager> _textureManager;
-	std::shared_ptr<World> _world;
+	std::shared_ptr<MeshLoader> _meshLoader;
+	World _world;
+
+	std::unique_ptr<PhysicsSystem> _physicsSystem;
+	std::unique_ptr<RenderSystem> _renderSystem;
+	std::unique_ptr<ImGuiSystem> _imGuiSystem;
+
 
 	Engine() {}
 	virtual ~Engine();
@@ -56,5 +70,5 @@ private:
 	void _initImGui();
 
 	void _resolutionChanged();
-	//void _updateMovement(float delta, bool updateCamera);
+	// void _updateMovement(float delta, bool updateCamera);
 };

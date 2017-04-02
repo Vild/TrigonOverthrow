@@ -2,7 +2,7 @@
 
 #include "entity.hpp"
 
-class Player : Entity {
+class Player : public Entity {
 public:
 	Player();
 };

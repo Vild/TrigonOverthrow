@@ -2,7 +2,7 @@
 
 #include "system.hpp"
 
-class ParticleSystem : System {
+class ParticleSystem : public System {
 public:
 	virtual void update(World & world, float delta);
 };

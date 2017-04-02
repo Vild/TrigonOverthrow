@@ -4,6 +4,9 @@
 #include <type_traits>
 #include <memory>
 #include <vector>
+#include <cstdint>
+
+#include "../../lib/sole/sole.hpp"
 
 #include "../component/component.hpp"
 
@@ -11,6 +14,7 @@
 
 class Entity {
 public:
+	Entity(sole::uuid uuid, std::string name);
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 	std::shared_ptr<T> addComponent() {
@@ -23,7 +27,7 @@ public:
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 	std::shared_ptr<T> getComponent() {
 		for (std::shared_ptr<IComponent> c : _components) {
-			std::shared_ptr<T> com = (std::shared_ptr<T>)c;
+			std::shared_ptr<T> com = std::dynamic_pointer_cast<T>(c);
 			if (com)
 				return com;
 		}
@@ -34,7 +38,7 @@ public:
 	void removeComponent() {
 		std::shared_ptr<T> com;
 		for (std::shared_ptr<IComponent> c : _components) {
-			com = (std::shared_ptr<T>)c;
+			com = std::dynamic_pointer_cast<T>(c);
 			if (com)
 				break;
 		}
@@ -49,10 +53,12 @@ public:
 			}
 	}
 
-	inline const std::string & getName() { return _name; }
-	inline std::vector<std::shared_ptr<IComponent>> & getComponents() { return _components; }
+	inline const sole::uuid& getUUID() { return _uuid; }
+	inline const std::string& getName() { return _name; }
+	inline std::vector<std::shared_ptr<IComponent>>& getComponents() { return _components; }
 
 protected:
+	sole::uuid _uuid;
 	std::string _name;
 	std::vector<std::shared_ptr<IComponent>> _components;
 };

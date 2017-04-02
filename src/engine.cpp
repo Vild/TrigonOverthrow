@@ -10,6 +10,8 @@
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <cmath>
 
+#include "world/entity/player.hpp"
+
 Engine::~Engine() {
 	IMG_Quit();
 
@@ -68,7 +70,7 @@ int Engine::run(bool vsync) {
 				if (io.WantCaptureMouse)
 					break;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					//updateCamera = true;
+					// updateCamera = true;
 					SDL_ShowCursor(0);
 					SDL_WarpMouseInWindow(_window, _width / 2, _height / 2);
 				}
@@ -78,7 +80,7 @@ int Engine::run(bool vsync) {
 				if (io.WantCaptureMouse)
 					break;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					//updateCamera = false;
+					// updateCamera = false;
 					SDL_ShowCursor(1);
 				}
 				break;
@@ -107,21 +109,20 @@ int Engine::run(bool vsync) {
 		float delta = (curTime - lastTime) / 1000.0f;
 		lastTime = curTime;
 
-		//_world->update(delta);
+		// This will add all the entities and their information to the debug UI
+		_imGuiSystem->update(_world, delta);
 
-		glClearColor(0, 0, 0, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// This will update all the physics in the world
+		_physicsSystem->update(_world, delta);
 
-		//_world->render();
+		// This will render all the entities to the screen
+		_renderSystem->update(_world, delta);
 
+		// NOTE: Make sure that the screen is binded to glBindFramebuffer, else the following code will break!
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
 	}
 	return 0;
-}
-
-std::shared_ptr<TextureManager> Engine::getTextureManager() {
-	return _textureManager;
 }
 
 void Engine::_init(bool vsync) {
@@ -130,7 +131,13 @@ void Engine::_init(bool vsync) {
 	_initGL();
 	_initImGui();
 	_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
-	_world = std::make_shared<World>();
+	_meshLoader = std::make_shared<MeshLoader>();
+
+	_world.addEntity(std::dynamic_pointer_cast<Entity>(std::make_shared<Player>()));
+
+	_physicsSystem = std::make_unique<PhysicsSystem>();
+	_renderSystem = std::make_unique<RenderSystem>();
+	_imGuiSystem = std::make_unique<ImGuiSystem>();
 }
 
 void Engine::_initSDL() {
@@ -159,8 +166,8 @@ void Engine::_initGL() {
 
 	SDL_GL_SetSwapInterval(_vsync);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 
 	glViewport(0, 0, _width, _height);
 
@@ -223,7 +230,7 @@ void Engine::_initImGui() {
 void Engine::_resolutionChanged() { // TODO: don't call all the time
 	_projection = glm::perspective(glm::radians(_fov), (float)_width / (float)_height, 0.1f, 60.0f);
 	glViewport(0, 0, _width, _height);
-	//TODO: Trigger event in world
+	// TODO: Trigger event in world
 }
 
 /*void Engine::_updateMovement(float delta, bool updateCamera) { // TODO: don't call all the time

@@ -2,7 +2,7 @@
 
 #include "system.hpp"
 
-class PhysicsSystem : System {
+class PhysicsSystem : public System {
 public:
 	virtual void update(World & world, float delta);
 };

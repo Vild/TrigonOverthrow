@@ -2,7 +2,6 @@
 
 #include "component.hpp"
 
-class LightComponent : public Component<LightComponent> {
-public:
-private:
+struct LightComponent : public Component<LightComponent> {
+	virtual std::string name() { return "LightComponent"; }
 };

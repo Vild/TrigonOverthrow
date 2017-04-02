@@ -20,8 +20,6 @@ struct Component : public IComponent {
 public:
 	static inline std::vector<std::shared_ptr<T>> & getActiveComponents() { return _activeComponents; }
 
-	virtual std::string name() { return typeid(T).name(); }
-
 	virtual void registerImGui() {}
 
 private:
