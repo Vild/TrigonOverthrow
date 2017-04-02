@@ -57,9 +57,7 @@ LightStick o-- LightComponent
 
 
 
-* 
-
-
+* Planning
 
 Component can do actions:
 - Update internal data

@@ -8,13 +8,11 @@
 
 class World {
 public:
-	World();
-	virtual ~World();
-
 	World& addEntity(std::shared_ptr<Entity> entity);
 
-	void update(float delta);
-	void render();
+	inline std::vector<std::shared_ptr<Entity>> & getEntities() {
+		return _entities;
+	}
 
 private:
 	std::vector<std::shared_ptr<Entity>> _entities;

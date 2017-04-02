@@ -4,24 +4,25 @@
 #include <vector>
 #include <memory>
 
-class Entity;
+#include "../../lib/imgui.h"
+
 
 /// Used to identifying a Component
-class IComponent {
-public:
-	IComponent(Entity& entity) : _entity(entity) {}
+struct IComponent {
+	virtual std::string name() = 0;
 
-	inline Entity& getEntity() { return _entity; }
-
-protected:
-	Entity& _entity;
+	virtual void registerImGui() = 0;
 };
 
 /// Used for extending and getting all the active components
 template <typename T>
-class Component : public IComponent {
+struct Component : public IComponent {
 public:
 	static inline std::vector<std::shared_ptr<T>> & getActiveComponents() { return _activeComponents; }
+
+	virtual std::string name() { return typeid(T).name(); }
+
+	virtual void registerImGui() {}
 
 private:
 	static std::vector<std::shared_ptr<T>> _activeComponents;

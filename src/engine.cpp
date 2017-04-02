@@ -107,12 +107,12 @@ int Engine::run(bool vsync) {
 		float delta = (curTime - lastTime) / 1000.0f;
 		lastTime = curTime;
 
-		_world->update(delta);
+		//_world->update(delta);
 
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		_world->render();
+		//_world->render();
 
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);

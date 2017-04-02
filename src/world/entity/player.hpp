@@ -4,8 +4,5 @@
 
 class Player : Entity {
 public:
-
-private:
-
-
+	Player();
 };
