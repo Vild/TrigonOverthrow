@@ -1,0 +1,80 @@
+#+begin_src plantuml :file EntityMap.png
+scale 1.2
+class Component
+class TransformationComponent extends Component
+
+class ModelComponent extends Component
+
+class InputComponent extends Component
+class KBMouseInputComponent extends InputComponent
+class LuaInputComponent extends InputComponent
+
+class LightComponent extends Component
+
+class ParticleEmitterComponent extends Component
+
+class Entity
+class Player extends Entity
+Player o-- TransformationComponent
+Player o-- KBMouseInputComponent
+Player o-- ModelComponent
+
+class Enemy extends Entity
+Enemy o-- TransformationComponent
+Enemy o-- LuaInputComponent
+Enemy o-- ModelComponent
+
+
+class Bullet extends Entity
+Bullet o-- TransformationComponent
+Bullet o-- LuaInputComponent
+Bullet o-- ModelComponent
+Bullet o-- LightComponent
+
+
+class LightStick extends Entity
+LightStick o-- TransformationComponent
+LightStick o-- ModelComponent
+LightStick o-- ParticleEmitterComponent
+LightStick o-- LightComponent
+
+
+#+end_src
+
+#+RESULTS:
+[[file:EntityMap.png]]
+
+
+
+* Lua
+** getWorld
+*** getAllEntities
+**** getAllComponents
+** getMyEntityId
+
+
+
+
+
+
+* 
+
+
+
+Component can do actions:
+- Update internal data
+- Render
+
+They need to be able to get data from other components
+- *System* (ECS)
+  - Let them do the data manipulation 
+
+
+	 
+
+
+
+
+
+
+

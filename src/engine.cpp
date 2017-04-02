@@ -20,15 +20,12 @@ Engine::~Engine() {
 	SDL_Quit();
 }
 
-int Engine::run() {
-	_init();
+int Engine::run(bool vsync) {
+	_init(vsync);
 	_quit = false;
-	int fps = 0;
 	uint32_t lastTime = SDL_GetTicks();
 
 	_resolutionChanged();
-	_updateMovement(0, false);
-	bool updateCamera = false;
 	while (!_quit) {
 		SDL_Event event;
 		ImGuiIO& io = ImGui::GetIO();
@@ -71,7 +68,7 @@ int Engine::run() {
 				if (io.WantCaptureMouse)
 					break;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					updateCamera = true;
+					//updateCamera = true;
 					SDL_ShowCursor(0);
 					SDL_WarpMouseInWindow(_window, _width / 2, _height / 2);
 				}
@@ -81,7 +78,7 @@ int Engine::run() {
 				if (io.WantCaptureMouse)
 					break;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					updateCamera = false;
+					//updateCamera = false;
 					SDL_ShowCursor(1);
 				}
 				break;
@@ -109,14 +106,15 @@ int Engine::run() {
 		uint32_t curTime = SDL_GetTicks();
 		float delta = (curTime - lastTime) / 1000.0f;
 		lastTime = curTime;
-		_updateMovement(delta, updateCamera);
-		glm::mat4 vp = _projection * _view;
+
+		_world->update(delta);
 
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		_world->render();
+
 		ImGui::Render();
-		fps++;
 		SDL_GL_SwapWindow(_window);
 	}
 	return 0;
@@ -126,12 +124,13 @@ std::shared_ptr<TextureManager> Engine::getTextureManager() {
 	return _textureManager;
 }
 
-void Engine::_init() {
+void Engine::_init(bool vsync) {
+	_vsync = vsync;
 	_initSDL();
 	_initGL();
 	_initImGui();
 	_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
-	_initShaders();
+	_world = std::make_shared<World>();
 }
 
 void Engine::_initSDL() {
@@ -221,16 +220,13 @@ void Engine::_initImGui() {
 	style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.09f, 0.27f, 0.27f, 0.67f);
 }
 
-void Engine::_initShaders() {
-
-}
-
 void Engine::_resolutionChanged() { // TODO: don't call all the time
 	_projection = glm::perspective(glm::radians(_fov), (float)_width / (float)_height, 0.1f, 60.0f);
 	glViewport(0, 0, _width, _height);
+	//TODO: Trigger event in world
 }
 
-void Engine::_updateMovement(float delta, bool updateCamera) { // TODO: don't call all the time
+/*void Engine::_updateMovement(float delta, bool updateCamera) { // TODO: don't call all the time
 	if (updateCamera) {
 		int x, y;
 		SDL_GetMouseState(&x, &y);
@@ -272,3 +268,4 @@ void Engine::_updateMovement(float delta, bool updateCamera) { // TODO: don't ca
 	_view = glm::lookAt(_position, _position + forward, up);
 	//_baseProgram->bind().setUniform("cameraPos", _position);
 }
+*/

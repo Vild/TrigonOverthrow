@@ -8,6 +8,7 @@
 #include <cmath>
 
 #include "io/texturemanager.hpp"
+#include "world/world.hpp"
 
 class Engine {
 public:
@@ -19,7 +20,7 @@ public:
 	Engine(Engine const&) = delete;
 	void operator=(Engine const&) = delete;
 
-	int run();
+	int run(bool vsync);
 
 	std::shared_ptr<TextureManager> getTextureManager();
 
@@ -44,17 +45,16 @@ private:
 	SDL_GLContext _context;
 
 	std::shared_ptr<TextureManager> _textureManager;
+	std::shared_ptr<World> _world;
 
 	Engine() {}
 	virtual ~Engine();
 
-	void _init();
+	void _init(bool vsync);
 	void _initSDL();
 	void _initGL();
 	void _initImGui();
-	void _initShaders();
 
 	void _resolutionChanged();
-	void _updateMovement(float delta, bool updateCamera);
-	void _updateLights();
+	//void _updateMovement(float delta, bool updateCamera);
 };

@@ -2,4 +2,10 @@
 
 #include "entity.hpp"
 
-class Player : Entity {}
+class Player : Entity {
+public:
+
+private:
+
+
+};

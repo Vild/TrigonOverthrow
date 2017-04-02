@@ -40,3 +40,6 @@ compile_commands.json
 
 # Runtime settings
 imgui.ini
+
+# Misc
+*~
