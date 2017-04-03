@@ -70,7 +70,7 @@ int Engine::run(bool vsync) {
 				if (io.WantCaptureMouse)
 					break;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					// updateCamera = true;
+					_updateCamera = true;
 					SDL_ShowCursor(0);
 					SDL_WarpMouseInWindow(_window, _width / 2, _height / 2);
 				}
@@ -80,7 +80,7 @@ int Engine::run(bool vsync) {
 				if (io.WantCaptureMouse)
 					break;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					// updateCamera = false;
+					_updateCamera = false;
 					SDL_ShowCursor(1);
 				}
 				break;
@@ -109,8 +109,12 @@ int Engine::run(bool vsync) {
 		float delta = (curTime - lastTime) / 1000.0f;
 		lastTime = curTime;
 
+
 		// This will add all the entities and their information to the debug UI
 		_imGuiSystem->update(_world, delta);
+
+		// Update inputs
+		_inputSystem->update(_world, delta);
 
 		// This will update all the physics in the world
 		_physicsSystem->update(_world, delta);
@@ -135,6 +139,7 @@ void Engine::_init(bool vsync) {
 
 	_world.addEntity(std::dynamic_pointer_cast<Entity>(std::make_shared<Player>()));
 
+	_inputSystem = std::make_unique<InputSystem>();
 	_physicsSystem = std::make_unique<PhysicsSystem>();
 	_renderSystem = std::make_unique<RenderSystem>();
 	_imGuiSystem = std::make_unique<ImGuiSystem>();
@@ -234,45 +239,6 @@ void Engine::_resolutionChanged() { // TODO: don't call all the time
 }
 
 /*void Engine::_updateMovement(float delta, bool updateCamera) { // TODO: don't call all the time
-	if (updateCamera) {
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-		SDL_WarpMouseInWindow(_window, _width / 2, _height / 2);
 
-		x = _width / 2 - x;
-		y = _height / 2 - y;
-
-		float mspeed = 0.005f;
-		_yaw += mspeed * x;
-		_pitch += mspeed * y;
-		_pitch = glm::clamp(_pitch, (float)-M_PI / 2, (float)M_PI / 2);
-	}
-	ImGuiIO& io = ImGui::GetIO();
-	if (io.WantCaptureKeyboard)
-		return;
-
-	glm::vec3 forward(cos(_pitch) * sin(_yaw), sin(_pitch), cos(_pitch) * cos(_yaw));
-	glm::vec3 right(sin(_yaw - M_PI / 2.0f), 0, cos(_yaw - M_PI / 2.0f));
-	glm::vec3 up = glm::cross(right, forward);
-
-	const uint8_t* state = SDL_GetKeyboardState(NULL);
-
-	if (state[SDL_SCANCODE_W])
-		_position += forward * delta * _speed;
-	if (state[SDL_SCANCODE_S])
-		_position -= forward * delta * _speed;
-
-	if (state[SDL_SCANCODE_A])
-		_position -= right * delta * _speed;
-	if (state[SDL_SCANCODE_D])
-		_position += right * delta * _speed;
-
-	if (state[SDL_SCANCODE_SPACE])
-		_position += glm::vec3(0, 1, 0) * delta * _speed;
-	if (state[SDL_SCANCODE_LCTRL])
-		_position -= glm::vec3(0, 1, 0) * delta * _speed;
-
-	_view = glm::lookAt(_position, _position + forward, up);
-	//_baseProgram->bind().setUniform("cameraPos", _position);
 }
 */

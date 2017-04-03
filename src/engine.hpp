@@ -11,6 +11,7 @@
 #include "io/meshloader.hpp"
 #include "world/world.hpp"
 
+#include "world/system/input.hpp"
 #include "world/system/physics.hpp"
 #include "world/system/render.hpp"
 #include "world/system/imgui.hpp"
@@ -27,14 +28,19 @@ public:
 
 	int run(bool vsync);
 
+	inline uint32_t & getWidth() { return _width; }
+	inline uint32_t & getHeight() { return _height; }
+	inline bool & getUpdateCamera() { return _updateCamera; }
+	inline SDL_Window* getWindow() { return _window; }
+
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
-
 	inline World& getWorld() { return _world; }
 
 private:
 	uint32_t _width = 1280;
 	uint32_t _height = 720;
+	bool _updateCamera;
 	bool _vsync = true;
 
 	float _speed = 5.0f;
@@ -56,6 +62,8 @@ private:
 	std::shared_ptr<MeshLoader> _meshLoader;
 	World _world;
 
+
+	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<PhysicsSystem> _physicsSystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<ImGuiSystem> _imGuiSystem;
