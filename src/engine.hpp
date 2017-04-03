@@ -9,12 +9,16 @@
 
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
+#include "io/hidinput.hpp"
 #include "world/world.hpp"
 
 #include "world/system/input.hpp"
 #include "world/system/physics.hpp"
 #include "world/system/render.hpp"
 #include "world/system/imgui.hpp"
+#include "world/system/lookat.hpp"
+
+#include "world/entity/camera.hpp"
 
 class Engine {
 public:
@@ -35,7 +39,10 @@ public:
 
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
+	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
+
 	inline World& getWorld() { return _world; }
+	inline std::shared_ptr<Camera> getCamera() { return _camera; }
 
 private:
 	uint32_t _width = 1280;
@@ -60,12 +67,16 @@ private:
 
 	std::shared_ptr<TextureManager> _textureManager;
 	std::shared_ptr<MeshLoader> _meshLoader;
+	std::shared_ptr<HIDInput> _hidInput;
+
 	World _world;
+	std::shared_ptr<Camera> _camera;
 
 	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<PhysicsSystem> _physicsSystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<ImGuiSystem> _imGuiSystem;
+	std::unique_ptr<LookAtSystem> _lookAtSystem;
 
 	Engine() {}
 	virtual ~Engine();

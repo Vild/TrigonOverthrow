@@ -11,6 +11,7 @@
 #include <cmath>
 
 #include "world/entity/player.hpp"
+#include "world/component/lookat.hpp"
 
 Engine::~Engine() {
 	IMG_Quit();
@@ -109,6 +110,8 @@ int Engine::run(bool vsync) {
 		float delta = (curTime - lastTime) / 1000.0f;
 		lastTime = curTime;
 
+		_hidInput->update();
+
 		// This will add all the entities and their information to the debug UI
 		_imGuiSystem->update(_world, delta);
 
@@ -117,6 +120,9 @@ int Engine::run(bool vsync) {
 
 		// This will update all the physics in the world
 		_physicsSystem->update(_world, delta);
+
+		// Update lookAt
+		_lookAtSystem->update(_world, delta);
 
 		// This will render all the entities to the screen
 		_renderSystem->update(_world, delta);
@@ -135,13 +141,18 @@ void Engine::_init(bool vsync) {
 	_initImGui();
 	_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
 	_meshLoader = std::make_shared<MeshLoader>();
+	_hidInput = std::make_shared<HIDInput>();
 
-	_world.addEntity(std::dynamic_pointer_cast<Entity>(std::make_shared<Player>()));
+	std::shared_ptr<Entity> target;
+	_world.addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<Player>()));
+	_world.addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<Camera>()));
+	_camera->getComponent<LookAtComponent>()->target = target;
 
 	_inputSystem = std::make_unique<InputSystem>();
 	_physicsSystem = std::make_unique<PhysicsSystem>();
 	_renderSystem = std::make_unique<RenderSystem>();
 	_imGuiSystem = std::make_unique<ImGuiSystem>();
+	_lookAtSystem = std::make_unique<LookAtSystem>();
 }
 
 void Engine::_initSDL() {
@@ -170,8 +181,8 @@ void Engine::_initGL() {
 
 	SDL_GL_SetSwapInterval(_vsync);
 	glEnable(GL_DEPTH_TEST);
-	// glEnable(GL_CULL_FACE);
-	// glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	glViewport(0, 0, _width, _height);
 
@@ -236,8 +247,3 @@ void Engine::_resolutionChanged() { // TODO: don't call all the time
 	glViewport(0, 0, _width, _height);
 	// TODO: Trigger event in world
 }
-
-/*void Engine::_updateMovement(float delta, bool updateCamera) { // TODO: don't call all the time
-
-}
-*/
