@@ -109,7 +109,6 @@ int Engine::run(bool vsync) {
 		float delta = (curTime - lastTime) / 1000.0f;
 		lastTime = curTime;
 
-
 		// This will add all the entities and their information to the debug UI
 		_imGuiSystem->update(_world, delta);
 
@@ -171,8 +170,8 @@ void Engine::_initGL() {
 
 	SDL_GL_SetSwapInterval(_vsync);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	// glEnable(GL_CULL_FACE);
+	// glCullFace(GL_BACK);
 
 	glViewport(0, 0, _width, _height);
 

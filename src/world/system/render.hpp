@@ -7,7 +7,7 @@ class RenderSystem : public System {
 public:
 	RenderSystem();
 
-	virtual void update(World & world, float delta);
+	virtual void update(World& world, float delta);
 
 private:
 	ShaderProgram _program;

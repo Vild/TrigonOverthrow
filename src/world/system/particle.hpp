@@ -4,5 +4,5 @@
 
 class ParticleSystem : public System {
 public:
-	virtual void update(World & world, float delta);
+	virtual void update(World& world, float delta);
 };

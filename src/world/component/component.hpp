@@ -6,7 +6,6 @@
 
 #include "../../lib/imgui.h"
 
-
 /// Used to identifying a Component
 struct IComponent {
 	virtual std::string name() = 0;
@@ -18,7 +17,7 @@ struct IComponent {
 template <typename T>
 struct Component : public IComponent {
 public:
-	static inline std::vector<std::shared_ptr<T>> & getActiveComponents() { return _activeComponents; }
+	static inline std::vector<std::shared_ptr<T>>& getActiveComponents() { return _activeComponents; }
 
 	virtual void registerImGui() {}
 

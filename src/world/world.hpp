@@ -10,9 +10,7 @@ class World {
 public:
 	World& addEntity(std::shared_ptr<Entity> entity);
 
-	inline std::vector<std::shared_ptr<Entity>> & getEntities() {
-		return _entities;
-	}
+	inline std::vector<std::shared_ptr<Entity>>& getEntities() { return _entities; }
 
 private:
 	std::vector<std::shared_ptr<Entity>> _entities;

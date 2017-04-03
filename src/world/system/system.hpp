@@ -4,5 +4,5 @@
 
 class System {
 public:
-	virtual void update(World & world, float delta) = 0;
+	virtual void update(World& world, float delta) = 0;
 };

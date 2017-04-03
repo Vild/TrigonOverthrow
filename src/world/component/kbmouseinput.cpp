@@ -7,7 +7,7 @@
 #include "../../engine.hpp"
 
 void KBMouseInputComponent::update() {
-	auto & engine = Engine::getInstance();
+	auto& engine = Engine::getInstance();
 	if (engine.getUpdateCamera()) {
 		int x, y;
 		SDL_GetMouseState(&x, &y);
@@ -40,5 +40,4 @@ void KBMouseInputComponent::update() {
 		direction.y++;
 	if (state[SDL_SCANCODE_LCTRL])
 		direction.y--;
-
 }

@@ -28,9 +28,9 @@ public:
 
 	int run(bool vsync);
 
-	inline uint32_t & getWidth() { return _width; }
-	inline uint32_t & getHeight() { return _height; }
-	inline bool & getUpdateCamera() { return _updateCamera; }
+	inline uint32_t& getWidth() { return _width; }
+	inline uint32_t& getHeight() { return _height; }
+	inline bool& getUpdateCamera() { return _updateCamera; }
 	inline SDL_Window* getWindow() { return _window; }
 
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
@@ -62,12 +62,10 @@ private:
 	std::shared_ptr<MeshLoader> _meshLoader;
 	World _world;
 
-
 	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<PhysicsSystem> _physicsSystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<ImGuiSystem> _imGuiSystem;
-
 
 	Engine() {}
 	virtual ~Engine();
