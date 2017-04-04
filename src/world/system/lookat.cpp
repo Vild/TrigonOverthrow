@@ -22,14 +22,21 @@ void LookAtSystem::update(World& world, float delta) {
 		if (!transform)
 			continue;
 
-		glm::vec3 dir = glm::normalize(target->position - transform->position);
+		if (lookat->followMode == FollowMode::followByDistance) {
+			glm::vec3 dir = glm::normalize(target->position - transform->position);
 
-		float dist = glm::distance(transform->position, target->position);
-		if (dist > lookat->maxDistance)
-			transform->position += dir * delta;
-		else if (dist < lookat->minDistance)
-			transform->position -= dir * delta;
+			float dist = glm::distance(transform->position, target->position);
+			if (dist > lookat->maxDistance)
+				transform->position += dir * delta;
+			else if (dist < lookat->minDistance)
+				transform->position -= dir * delta;
 
-		// transform->rotation = glm::lookAt(transform->position, transform->position + dir, glm::vec3(0, 1, 0));
+			transform->rotation = glm::lookAt(transform->position, target->position, glm::vec3(0, 1, 0));
+		} else if (lookat->followMode == FollowMode::followByOffset) {
+			transform->position = target->position + lookat->offsetFromTarget;
+
+			// transform->rotation is more than just a rotation, it is also the movement in space
+			transform->rotation = glm::lookAt(transform->position, target->position, glm::vec3(0, 1, 0));
+		}
 	}
 }

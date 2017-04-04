@@ -1,17 +1,25 @@
 #include "lookat.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
+
 void LookAtComponent::registerImGui() {
-	ImGui::Columns(2);
+	ImGui::Text("Targeting:");
+	ImGui::SameLine();
 	if (target)
 		ImGui::Text(target->getName().c_str());
 	else
 		ImGui::Text("**NULL**");
 
-	ImGui::NextColumn();
-	ImGui::Text("Targeting");
-	ImGui::NextColumn();
-	ImGui::Columns(1);
+	ImGui::Text("Follow by: ");
+	ImGui::SameLine();
+	ImGui::RadioButton("Distance", (int*)&followMode, (int)FollowMode::followByDistance);
+	ImGui::SameLine();
+	ImGui::RadioButton("Offset", (int*)&followMode, (int)FollowMode::followByOffset);
 
-	ImGui::DragFloat("Min distance", &minDistance);
-	ImGui::DragFloat("Max distance", &maxDistance);
+	if (followMode == FollowMode::followByDistance) {
+		ImGui::DragFloat("Min distance", &minDistance);
+		ImGui::DragFloat("Max distance", &maxDistance);
+	} else {
+		ImGui::DragFloat3("Offset from target", glm::value_ptr(offsetFromTarget));
+	}
 }
