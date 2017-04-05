@@ -1,7 +1,7 @@
-#include "input.hpp"
+#include "inputsystem.hpp"
 
-#include "../component/kbmouseinput.hpp"
-#include "../component/transform.hpp"
+#include "../component/kbmouseinputcomponent.hpp"
+#include "../component/transformcomponent.hpp"
 
 #include "../../engine.hpp"
 

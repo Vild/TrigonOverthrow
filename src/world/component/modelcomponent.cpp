@@ -1,4 +1,4 @@
-#include "model.hpp"
+#include "modelcomponent.hpp"
 
 void ModelComponent::render(GLenum drawMode) {
 	if (!meshData)

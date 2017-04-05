@@ -1,8 +1,8 @@
-#include "render.hpp"
+#include "rendersystem.hpp"
 
 #include "../../engine.hpp"
-#include "../component/model.hpp"
-#include "../component/transform.hpp"
+#include "../component/modelcomponent.hpp"
+#include "../component/transformcomponent.hpp"
 
 #include <glm/gtx/transform.hpp>
 

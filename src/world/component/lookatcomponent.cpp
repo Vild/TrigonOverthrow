@@ -1,4 +1,4 @@
-#include "lookat.hpp"
+#include "lookatcomponent.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 

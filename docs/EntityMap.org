@@ -14,10 +14,10 @@ class LightComponent extends Component
 class ParticleEmitterComponent extends Component
 
 class Entity
-class Player extends Entity
-Player o-- TransformationComponent
-Player o-- KBMouseInputComponent
-Player o-- ModelComponent
+class PlayerEntity extends Entity
+PlayerEntity o-- TransformationComponent
+PlayerEntity o-- KBMouseInputComponent
+PlayerEntity o-- ModelComponent
 
 class Enemy extends Entity
 Enemy o-- TransformationComponent
@@ -65,10 +65,10 @@ Component can do actions:
 
 They need to be able to get data from other components
 - *System* (ECS)
-  - Let them do the data manipulation 
+  - Let them do the data manipulation
 
 
-	 
+
 
 
 

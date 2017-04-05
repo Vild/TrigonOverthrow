@@ -10,8 +10,8 @@
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <cmath>
 
-#include "world/entity/player.hpp"
-#include "world/component/lookat.hpp"
+#include "world/entity/playerentity.hpp"
+#include "world/component/lookatcomponent.hpp"
 
 Engine::~Engine() {
 	IMG_Quit();
@@ -144,8 +144,8 @@ void Engine::_init(bool vsync) {
 	_hidInput = std::make_shared<HIDInput>();
 
 	std::shared_ptr<Entity> target;
-	_world.addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<Player>()));
-	_world.addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<Camera>()));
+	_world.addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
+	_world.addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
 	_camera->getComponent<LookAtComponent>()->target = target;
 
 	_inputSystem = std::make_unique<InputSystem>();

@@ -1,4 +1,4 @@
-#include "transform.hpp"
+#include "transformcomponent.hpp"
 
 void TransformComponent::registerImGui() {
 	ImGui::DragFloat3("Position", glm::value_ptr(position), 0.1);

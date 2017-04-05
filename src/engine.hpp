@@ -12,13 +12,13 @@
 #include "io/hidinput.hpp"
 #include "world/world.hpp"
 
-#include "world/system/input.hpp"
-#include "world/system/physics.hpp"
-#include "world/system/render.hpp"
-#include "world/system/imgui.hpp"
-#include "world/system/lookat.hpp"
+#include "world/system/inputsystem.hpp"
+#include "world/system/physicssystem.hpp"
+#include "world/system/rendersystem.hpp"
+#include "world/system/imguisystem.hpp"
+#include "world/system/lookatsystem.hpp"
 
-#include "world/entity/camera.hpp"
+#include "world/entity/cameraentity.hpp"
 
 class Engine {
 public:
@@ -42,7 +42,7 @@ public:
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
 
 	inline World& getWorld() { return _world; }
-	inline std::shared_ptr<Camera> getCamera() { return _camera; }
+	inline std::shared_ptr<CameraEntity> getCamera() { return _camera; }
 
 private:
 	uint32_t _width = 1280;
@@ -70,7 +70,7 @@ private:
 	std::shared_ptr<HIDInput> _hidInput;
 
 	World _world;
-	std::shared_ptr<Camera> _camera;
+	std::shared_ptr<CameraEntity> _camera;
 
 	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<PhysicsSystem> _physicsSystem;

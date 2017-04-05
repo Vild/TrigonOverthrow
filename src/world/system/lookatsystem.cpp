@@ -1,7 +1,7 @@
-#include "lookat.hpp"
+#include "lookatsystem.hpp"
 
-#include "../component/lookat.hpp"
-#include "../component/transform.hpp"
+#include "../component/lookatcomponent.hpp"
+#include "../component/transformcomponent.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>

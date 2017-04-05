@@ -1,6 +1,6 @@
-#include "physics.hpp"
+#include "physicssystem.hpp"
 
-#include "../component/transform.hpp"
+#include "../component/transformcomponent.hpp"
 
 void PhysicsSystem::update(World& world, float delta) {
 	// TODO: Compute shader this?
