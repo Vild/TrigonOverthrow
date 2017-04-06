@@ -78,7 +78,7 @@ private:
 	std::unique_ptr<ImGuiSystem> _imGuiSystem;
 	std::unique_ptr<LookAtSystem> _lookAtSystem;
 
-	std::unique_ptr<BaseRenderPass> _baseRenderPass;
+	std::unique_ptr<GeometryRenderPass> _geometryRenderPass;
 
 	Engine() {}
 	virtual ~Engine();

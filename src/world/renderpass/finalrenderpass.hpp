@@ -2,9 +2,9 @@
 
 #include "renderpass.hpp"
 
-class BaseRenderPass : public RenderPass {
+class FinalRenderPass : public RenderPass {
 public:
-	BaseRenderPass();
+	FinalRenderPass();
 
 	void render(World& world);
 };
