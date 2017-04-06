@@ -1,5 +1,7 @@
 #include "ssaorenderpass.hpp"
+#include "../../engine.hpp"
 #include <random>
+#include <world/component/transformcomponent.hpp>
 
 SSAORenderSystem::SSAORenderSystem(int width, int height)
 {
@@ -24,17 +26,6 @@ SSAORenderSystem::SSAORenderSystem(int width, int height)
 
 	shaderProgram.bind();
 	generateUniformData(width, height);
-}
-
-GBuffer & SSAORenderSystem::render(GBuffer & prevBuffer, Camera & camera)
-{
-	gBuffer.bind();
-	auto colorBuffers = prevBuffer.getAttachments();
-
-	shaderProgram.setUniform("positionMap", 0);
-	shaderProgram.setUniform("normalMap", 1);
-	
-	return gBuffer;
 }
 
 float SSAORenderSystem::lerp(float a, float b, float f)
@@ -93,6 +84,18 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 
 	glm::vec2 noiseScale = { width / 4.0, height / 4.0 };
 	shaderProgram.setUniform("noiseScale", noiseScale);
+
+
+
+}
+
+void SSAORenderSystem::render(World & world)
+{
+	CameraEntity & camera = *Engine::getInstance().getCamera();
+	shaderProgram.bind();
+
+	shaderProgram.setUniform("viewMatrix", camera.getComponent<TransformComponent>()->rotation);
+	shaderProgram.setUniform("projectionMatrix", camera.getComponent<TransformComponent>()->rotation);
 
 }
 
