@@ -1,4 +1,4 @@
-#include "SSAORenderSystem.hpp"
+#include "ssaorenderpass.hpp"
 #include <random>
 
 SSAORenderSystem::SSAORenderSystem(int width, int height)
@@ -81,11 +81,18 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 		noiseData.push_back(noise);
 	}
 
-	noiseMap = std::make_unique<Texture>(width, height, GL_RGB32F, GL_RGB, GL_FLOAT, &noiseData[0]);
+	noiseMap = std::make_shared<Texture>(width, height, GL_RGB32F, GL_RGB, GL_FLOAT, &noiseData[0]);
 	noiseMap->bind()
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT)
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+
+	attachInputTexture(3, noiseMap);
+	shaderProgram.setUniform("noiseMap", 3);
+
+	glm::vec2 noiseScale = { width / 4.0, height / 4.0 };
+	shaderProgram.setUniform("noiseScale", noiseScale);
+
 }
 
