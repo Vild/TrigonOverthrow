@@ -127,7 +127,7 @@ public:
 		try {
 			_glUniform(_uniform.at(name), 1, &value);
 		} catch (std::out_of_range& e) { //-V565
-																		 // std::cerr << "Uniform is missing! Did you forget to use that variable in that shader?: " << name << std::endl;
+			// std::cerr << "Uniform is missing! Did you forget to use that variable in that shader?: " << name << std::endl;
 			// throw ShaderProgramException(std::string("Uniform is missing! Did you forget to use that variable in that shader?: ") + name);
 		}
 		return *this;
