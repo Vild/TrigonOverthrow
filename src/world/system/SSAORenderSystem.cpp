@@ -23,7 +23,7 @@ SSAORenderSystem::SSAORenderSystem(int width, int height)
 	gBuffer.attachTexture(0, width, height, GL_RED, GL_FLOAT, 1);
 
 	shaderProgram.bind();
-	generateUniformData();
+	generateUniformData(width, height);
 }
 
 GBuffer & SSAORenderSystem::render(GBuffer & prevBuffer, Camera & camera)
@@ -31,8 +31,8 @@ GBuffer & SSAORenderSystem::render(GBuffer & prevBuffer, Camera & camera)
 	gBuffer.bind();
 	auto colorBuffers = prevBuffer.getAttachments();
 
-	shaderProgram.setUniform("positionMap", colorBuffers.at(0));
-	shaderProgram.setUniform("normalMap", colorBuffers.at(1));
+	shaderProgram.setUniform("positionMap", 0);
+	shaderProgram.setUniform("normalMap", 1);
 	
 	return gBuffer;
 }
@@ -42,7 +42,7 @@ float SSAORenderSystem::lerp(float a, float b, float f)
 	return a + f * (b - a);
 }
 
-void SSAORenderSystem::generateUniformData()
+void SSAORenderSystem::generateUniformData(int width, int height)
 {
 	std::uniform_real_distribution<GLfloat> randomFlaots(0.0, 1.0);
 	std::default_random_engine generator;
@@ -80,5 +80,12 @@ void SSAORenderSystem::generateUniformData()
 
 		noiseData.push_back(noise);
 	}
+
+	noiseMap = std::make_unique<Texture>(width, height, GL_RGB32F, GL_RGB, GL_FLOAT, &noiseData[0]);
+	noiseMap->bind()
+		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT)
+		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 }
 
