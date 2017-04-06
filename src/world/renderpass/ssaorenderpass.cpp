@@ -1,7 +1,5 @@
 #include "ssaorenderpass.hpp"
-#include "../../engine.hpp"
 #include <random>
-#include <world/component/transformcomponent.hpp>
 
 SSAORenderSystem::SSAORenderSystem(int width, int height)
 {
@@ -28,6 +26,17 @@ SSAORenderSystem::SSAORenderSystem(int width, int height)
 	generateUniformData(width, height);
 }
 
+GBuffer & SSAORenderSystem::render(GBuffer & prevBuffer, Camera & camera)
+{
+	gBuffer.bind();
+	auto colorBuffers = prevBuffer.getAttachments();
+
+	shaderProgram.setUniform("positionMap", 0);
+	shaderProgram.setUniform("normalMap", 1);
+	
+	return gBuffer;
+}
+
 float SSAORenderSystem::lerp(float a, float b, float f)
 {
 	return a + f * (b - a);
@@ -35,11 +44,6 @@ float SSAORenderSystem::lerp(float a, float b, float f)
 
 void SSAORenderSystem::generateUniformData(int width, int height)
 {
-
-	shaderProgram.setUniform("positionMap", 0);
-	shaderProgram.setUniform("normalMap", 1);
-	shaderProgram.setUniform("normalMap", 2);
-
 	std::uniform_real_distribution<GLfloat> randomFlaots(0.0, 1.0);
 	std::default_random_engine generator;
 
@@ -84,19 +88,11 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT)
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 
-	attachInputTexture(2, noiseMap);
+	attachInputTexture(3, noiseMap);
+	shaderProgram.setUniform("noiseMap", 3);
 
 	glm::vec2 noiseScale = { width / 4.0, height / 4.0 };
 	shaderProgram.setUniform("noiseScale", noiseScale);
-}
-
-void SSAORenderSystem::render(World & world)
-{
-	CameraEntity & camera = *Engine::getInstance().getCamera();
-	shaderProgram.bind();
-
-	shaderProgram.setUniform("viewMatrix", camera.getComponent<TransformComponent>()->rotation);
-	shaderProgram.setUniform("projectionMatrix", camera.getComponent<TransformComponent>()->rotation);
 
 }
 
