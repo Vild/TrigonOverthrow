@@ -4,7 +4,6 @@
 #include "../../gl/gbuffer.hpp"
 #include "../../gl/shader.hpp"
 #include "../../gl/texture.hpp"
-#include "../../gl/mesh.hpp"
 #include "renderpass.hpp"
 
 class SSAORenderSystem : public RenderPass
@@ -14,10 +13,8 @@ public:
 
 	SSAORenderSystem(int width, int height);
 
-	GBuffer & render(GBuffer & prevBuffer, Camera & camera);
 
-	// Inherited via RenderPass
-	virtual void render(World & world) override;
+	GBuffer & render(GBuffer & prevBuffer, Camera & camera);
 
 private:
 	GBuffer gBuffer;
@@ -27,8 +24,4 @@ private:
 
 	float lerp(float a, float b, float c);
 	void generateUniformData(int width, int height);
-
-	void fsQuadRender();
-
-
 };
