@@ -19,8 +19,8 @@ private:
 	GBuffer gBuffer;
 	ShaderProgram shaderProgram;
 
-	Texture noiseMap;
+	std::unique_ptr<Texture> noiseMap;
 
 	float lerp(float a, float b, float c);
-	void generateUniformData();
+	void generateUniformData(int width, int height);
 };
