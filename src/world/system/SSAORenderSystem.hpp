@@ -1,7 +1,9 @@
 #pragma once
-#include <glm\glm.hpp>
+#include <vector>
+#include <glm/glm.hpp>
 #include "../../gl/gbuffer.hpp"
 #include "../../gl/shader.hpp"
+#include "../../gl/texture.hpp"
 
 class SSAORenderSystem
 {
@@ -16,4 +18,9 @@ public:
 private:
 	GBuffer gBuffer;
 	ShaderProgram shaderProgram;
+
+	Texture noiseMap;
+
+	float lerp(float a, float b, float c);
+	void generateUniformData();
 };
