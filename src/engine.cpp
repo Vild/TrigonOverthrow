@@ -121,6 +121,15 @@ int Engine::run(bool vsync) {
 		// This will update all the physics in the world
 		_physicsSystem->update(_world, delta);
 
+
+
+
+		// Particlesystem should have its own shader if no shadows should be displayed on them.
+		_particleSystem->update(_world, delta);
+
+
+
+
 		// Update lookAt
 		_lookAtSystem->update(_world, delta);
 
@@ -153,6 +162,7 @@ void Engine::_init(bool vsync) {
 	_renderSystem = std::make_unique<RenderSystem>();
 	_imGuiSystem = std::make_unique<ImGuiSystem>();
 	_lookAtSystem = std::make_unique<LookAtSystem>();
+	_particleSystem = std::make_unique<ParticleSystem>();
 }
 
 void Engine::_initSDL() {
