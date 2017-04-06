@@ -35,6 +35,11 @@ float SSAORenderSystem::lerp(float a, float b, float f)
 
 void SSAORenderSystem::generateUniformData(int width, int height)
 {
+
+	shaderProgram.setUniform("positionMap", 0);
+	shaderProgram.setUniform("normalMap", 1);
+	shaderProgram.setUniform("normalMap", 2);
+
 	std::uniform_real_distribution<GLfloat> randomFlaots(0.0, 1.0);
 	std::default_random_engine generator;
 
@@ -79,14 +84,10 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT)
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 
-	attachInputTexture(3, noiseMap);
-	shaderProgram.setUniform("noiseMap", 3);
+	attachInputTexture(2, noiseMap);
 
 	glm::vec2 noiseScale = { width / 4.0, height / 4.0 };
 	shaderProgram.setUniform("noiseScale", noiseScale);
-
-
-
 }
 
 void SSAORenderSystem::render(World & world)
