@@ -16,5 +16,5 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 	auto input = addComponent<KBMouseInputComponent>();
 
 	auto particle = addComponent<ParticleComponent>();
-	particle->addEmitter(glm::vec3(0, 1, 0));
+	particle->addEmitter(glm::vec3(0, 1, 0), 50);
 }
