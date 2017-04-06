@@ -4,8 +4,9 @@
 #include "../../gl/gbuffer.hpp"
 #include "../../gl/shader.hpp"
 #include "../../gl/texture.hpp"
+#include "renderpass.hpp"
 
-class SSAORenderSystem
+class SSAORenderSystem : public RenderPass
 {
 public:
 	typedef int Camera;
@@ -19,7 +20,7 @@ private:
 	GBuffer gBuffer;
 	ShaderProgram shaderProgram;
 
-	std::unique_ptr<Texture> noiseMap;
+	std::shared_ptr<Texture> noiseMap;
 
 	float lerp(float a, float b, float c);
 	void generateUniformData(int width, int height);
