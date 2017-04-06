@@ -52,6 +52,8 @@
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
+    <ClCompile Include="src\world\system\rendersystem.cpp" />
+    <ClCompile Include="src\world\system\SSAORenderSystem.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +95,8 @@
     <ClInclude Include="src\world\system\lookatsystem.hpp" />
     <ClInclude Include="src\world\system\particlesystem.hpp" />
     <ClInclude Include="src\world\system\physicssystem.hpp" />
+    <ClInclude Include="src\world\system\rendersystem.hpp" />
+    <ClInclude Include="src\world\system\SSAORenderSystem.hpp" />
     <ClInclude Include="src\world\system\system.hpp" />
     <ClInclude Include="src\world\world.hpp" />
   </ItemGroup>
