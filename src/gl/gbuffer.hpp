@@ -1,15 +1,10 @@
 #pragma once
 
 #include "../lib/glad.h"
-#include <vector>
+#include <map>
 #include <memory>
 
 #include "texture.hpp"
-
-struct attachment {
-	int id;
-	std::shared_ptr<Texture> texture;
-};
 
 class GBuffer {
 public:
@@ -25,10 +20,10 @@ public:
 
 	GBuffer& finalize();
 
-	const std::vector<attachment>& getAttachments();
+	inline std::map<GLuint, std::shared_ptr<Texture>>& getAttachments() { return _attachments; }
 
 private:
 	GLuint _fb;
-	std::vector<attachment> _attachments;
+	std::map<GLuint, std::shared_ptr<Texture>> _attachments;
 	GLuint _renderBuffer;
 };

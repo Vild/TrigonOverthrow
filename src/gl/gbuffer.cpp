@@ -3,6 +3,7 @@
 #include "gbuffer.hpp"
 
 #include <iostream>
+#include <vector>
 
 GBuffer::GBuffer() {
 	glGenFramebuffers(1, &_fb);
@@ -47,7 +48,7 @@ GBuffer& GBuffer::attachTexture(int id, size_t width, size_t height, GLenum data
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, texID, 0);
 
-	_attachments.push_back(attachment{id, std::make_shared<Texture>(texID)});
+	_attachments[id] = std::make_shared<Texture>(texID);
 
 	return *this;
 }
@@ -70,7 +71,7 @@ GBuffer& GBuffer::attachDepthTexture(int id, size_t width, size_t height) {
 
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
-	_attachments.push_back(attachment{id, std::make_shared<Texture>(depthTexture)});
+	_attachments[id] = std::make_shared<Texture>(depthTexture);
 
 	return *this;
 }
@@ -86,8 +87,8 @@ GBuffer& GBuffer::attachRenderBuffer(size_t width, size_t height, GLenum format)
 GBuffer& GBuffer::finalize() {
 	std::vector<GLenum> buffers;
 	if (_attachments.size()) {
-		for (size_t i = 0; i < _attachments.size(); i++)
-			buffers.push_back(GL_COLOR_ATTACHMENT0 + _attachments[i].id);
+		for (auto it = _attachments.begin(); it != _attachments.end(); ++it)
+			buffers.push_back(GL_COLOR_ATTACHMENT0 + it->first);
 		glDrawBuffers(buffers.size(), &buffers[0]);
 	}
 
@@ -97,8 +98,4 @@ GBuffer& GBuffer::finalize() {
 		throw new std::exception();
 	}
 	return *this;
-}
-
-const std::vector<attachment>& GBuffer::getAttachments() {
-	return _attachments;
 }
