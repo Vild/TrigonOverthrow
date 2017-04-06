@@ -21,9 +21,11 @@ int main(int argc, char** argv) {
 		return Engine::getInstance().run(vsync);
 	} catch (std::exception& e) {
 		fprintf(stderr, "%s\n", e.what());
+		getchar();
 		return -1;
 	} catch (const char* str) {
 		fprintf(stderr, "%s\n", str);
+		getchar();
 		return -1;
 	}
 }

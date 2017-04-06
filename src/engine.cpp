@@ -127,15 +127,13 @@ int Engine::run(bool vsync) {
 		// Particlesystem should have its own shader if no shadows should be displayed on them.
 		_particleSystem->update(_world, delta);
 
-
-
-
 		// Update lookAt
 		_lookAtSystem->update(_world, delta);
 
 		// This will render all the entities to the screen
 		_renderSystem->update(_world, delta);
 
+		_particleRenderSystem->update(_world, delta);
 		// NOTE: Make sure that the screen is binded to glBindFramebuffer, else the following code will break!
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
@@ -163,6 +161,7 @@ void Engine::_init(bool vsync) {
 	_imGuiSystem = std::make_unique<ImGuiSystem>();
 	_lookAtSystem = std::make_unique<LookAtSystem>();
 	_particleSystem = std::make_unique<ParticleSystem>();
+	_particleRenderSystem = std::make_unique<ParticleRenderSystem>();
 }
 
 void Engine::_initSDL() {
@@ -191,8 +190,8 @@ void Engine::_initGL() {
 
 	SDL_GL_SetSwapInterval(_vsync);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 
 	glViewport(0, 0, _width, _height);
 

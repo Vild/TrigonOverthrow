@@ -18,6 +18,7 @@
 #include "world/system/imguisystem.hpp"
 #include "world/system/lookatsystem.hpp"
 #include "world/system/particlesystem.hpp"
+#include "world/system/particlerendersystem.hpp"
 
 #include "world/entity/cameraentity.hpp"
 
@@ -79,6 +80,7 @@ private:
 	std::unique_ptr<ImGuiSystem> _imGuiSystem;
 	std::unique_ptr<LookAtSystem> _lookAtSystem;
 	std::unique_ptr<ParticleSystem> _particleSystem;
+	std::unique_ptr<ParticleRenderSystem> _particleRenderSystem;
 
 	Engine() {}
 	virtual ~Engine();

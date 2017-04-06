@@ -13,8 +13,7 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 	transform->scale = glm::vec3(0.001);
 	auto model = addComponent<ModelComponent>();
 	model->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player.fbx");
-	auto input = addComponent<KBMouseInputComponent>();
-
 	auto particle = addComponent<ParticleComponent>();
-	particle->addEmitter(glm::vec3(0, 1, 0), 50);
+	particle->addEmitter(glm::vec3(0, 1, 0), 5000);
+	auto input = addComponent<KBMouseInputComponent>();
 }
