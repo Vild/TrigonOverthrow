@@ -112,6 +112,7 @@ public:
 	virtual ~ShaderProgram();
 
 	ShaderProgram& attach(std::shared_ptr<ShaderUnit> unit);
+	ShaderProgram& attach(const std::string & file, ShaderType type);
 
 	void finalize();
 
