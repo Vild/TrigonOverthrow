@@ -87,6 +87,12 @@
     <ClCompile Include="src\world\entity\playerentity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\renderpass\baserenderpass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\renderpass\renderpass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\world\system\imguisystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,19 +105,24 @@
     <ClCompile Include="src\world\system\physicssystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\world.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\component\physicscomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\component\cameracomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\system\camerasystem.cpp">
     <ClCompile Include="src\world\system\rendersystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\world\renderpass\baserenderpass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world\renderpass\renderpass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world\renderpass\ssaorenderpass.cpp">
+    <ClCompile Include="src\world\system\SSAORenderSystem.cpp">
+
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -200,6 +211,15 @@
     <ClInclude Include="src\world\entity\playerentity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+
+    <ClInclude Include="src\world\renderpass\baserenderpass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\renderpass\renderpass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+
+
     <ClInclude Include="src\world\system\imguisystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -215,6 +235,21 @@
     <ClInclude Include="src\world\system\physicssystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+
+    <ClInclude Include="src\world\system\system.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\world.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\physicscomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\cameracomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\system\camerasystem.hpp">
+
     <ClInclude Include="src\world\system\rendersystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -224,13 +259,8 @@
     <ClInclude Include="src\world\world.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\renderpass\baserenderpass.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\renderpass\renderpass.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\renderpass\ssaorenderpass.hpp">
+    <ClInclude Include="src\world\system\SSAORenderSystem.hpp">
+
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
