@@ -43,12 +43,14 @@
     <ClCompile Include="src\world\entity\cameraentity.cpp" />
     <ClCompile Include="src\world\entity\entity.cpp" />
     <ClCompile Include="src\world\entity\playerentity.cpp" />
+    <ClCompile Include="src\world\renderpass\baserenderpass.cpp" />
+    <ClCompile Include="src\world\renderpass\renderpass.cpp" />
+    <ClCompile Include="src\world\renderpass\ssaorenderpass.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
     <ClCompile Include="src\world\system\rendersystem.cpp" />
-    <ClCompile Include="src\world\system\SSAORenderSystem.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -80,13 +82,15 @@
     <ClInclude Include="src\world\entity\cameraentity.hpp" />
     <ClInclude Include="src\world\entity\entity.hpp" />
     <ClInclude Include="src\world\entity\playerentity.hpp" />
+    <ClInclude Include="src\world\renderpass\baserenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\renderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\ssaorenderpass.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />
     <ClInclude Include="src\world\system\inputsystem.hpp" />
     <ClInclude Include="src\world\system\lookatsystem.hpp" />
     <ClInclude Include="src\world\system\particlesystem.hpp" />
     <ClInclude Include="src\world\system\physicssystem.hpp" />
     <ClInclude Include="src\world\system\rendersystem.hpp" />
-    <ClInclude Include="src\world\system\SSAORenderSystem.hpp" />
     <ClInclude Include="src\world\system\system.hpp" />
     <ClInclude Include="src\world\world.hpp" />
   </ItemGroup>

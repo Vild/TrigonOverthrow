@@ -105,7 +105,13 @@
     <ClCompile Include="src\world\world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\world\system\SSAORenderSystem.cpp">
+    <ClCompile Include="src\world\renderpass\baserenderpass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\renderpass\renderpass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\renderpass\ssaorenderpass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,7 +224,13 @@
     <ClInclude Include="src\world\world.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\system\SSAORenderSystem.hpp">
+    <ClInclude Include="src\world\renderpass\baserenderpass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\renderpass\renderpass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\renderpass\ssaorenderpass.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
