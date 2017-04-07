@@ -41,7 +41,6 @@ GBuffer& GBuffer::attachTexture(int id, size_t width, size_t height, GLenum data
 	glBindTexture(GL_TEXTURE_2D, texID);
 
 	GLenum formats[] = {GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	glTexImage2D(GL_TEXTURE_2D, 0, dataFormat, width, height, 0, formats[vectorSize - 1], dataType, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

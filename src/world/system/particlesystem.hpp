@@ -9,6 +9,6 @@ public:
 	ParticleSystem();
 	virtual void update(World& world, float delta);
 private:
-	ShaderProgram _program;
+	std::vector<std::shared_ptr<ShaderProgram>> _programs;
 	std::shared_ptr<GBuffer> _particleData;
 };
