@@ -6,13 +6,13 @@
 #include "../../engine.hpp"
 
 ParticleSystem::ParticleSystem() {
-	_program.bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
-		.finalize();
-	_particleData = std::make_shared<GBuffer>();
-	_particleData->bind().attachTexture(0, 512, 512, GL_RGBA32F, GL_FLOAT, 4)
-		.attachTexture(1, 512, 512, GL_RGBA32F, GL_FLOAT, 4)
-		.attachTexture(2, 512, 512, GL_RGBA32F, GL_FLOAT, 4)  // Output pos and life.
-		.attachTexture(3, 512, 512, GL_RGBA32F, GL_FLOAT, 4); // Output vel
+	//_program.bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
+	//	.finalize();
+	//_particleData = std::make_shared<GBuffer>();
+	//_particleData->bind().attachTexture(0, 512, 512, GL_RGBA32F, GL_FLOAT, 4)
+	//	.attachTexture(1, 512, 512, GL_RGBA32F, GL_FLOAT, 4)
+	//	.attachTexture(2, 512, 512, GL_RGBA32F, GL_FLOAT, 4)  // Output pos and life.
+	//	.attachTexture(3, 512, 512, GL_RGBA32F, GL_FLOAT, 4); // Output vel
 	//_program.bind().addUniform("delta");
 }
 
