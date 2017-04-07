@@ -4,6 +4,7 @@
 #include "system/physicssystem.hpp"
 #include "system/imguisystem.hpp"
 #include "system/lookatsystem.hpp"
+#include "system/camerasystem.hpp"
 
 #include "entity/cameraentity.hpp"
 
@@ -25,6 +26,7 @@ void World::_setupSystems() {
 	_systems.push_back(std::make_unique<InputSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
+	_systems.push_back(std::make_unique<CameraSystem>());
 
 	// Render passes
 	{

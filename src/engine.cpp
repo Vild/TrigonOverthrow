@@ -115,7 +115,6 @@ int Engine::run(bool vsync) {
 
 		_world->tick(delta);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
 	}
@@ -136,7 +135,7 @@ void Engine::_init(bool vsync) {
 	std::shared_ptr<Entity> target;
 	_world->addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
 	_world->addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
-	_camera->getComponent<LookAtComponent>()->target = target;
+	//_camera->getComponent<LookAtComponent>()->target = target;
 }
 
 void Engine::_initSDL() {

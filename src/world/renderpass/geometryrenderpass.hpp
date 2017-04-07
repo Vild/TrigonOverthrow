@@ -6,12 +6,7 @@
 
 class GeometryRenderPass : public RenderPass {
 public:
-	enum Attachment : GLint {
-		position = 0,
-		normal,
-		diffuseSpecular,
-		depth
-	};
+	enum Attachment : GLint { position = 0, normal, diffuseSpecular, depth };
 
 	GeometryRenderPass();
 
