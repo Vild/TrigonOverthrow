@@ -2,10 +2,12 @@
 
 #include "renderpass.hpp"
 
+#include "../../lib/glad.h"
+
 class GeometryRenderPass : public RenderPass {
 public:
-	enum class Attachment : int {
-		position,
+	enum Attachment : GLuint {
+		position = 0,
 		normal,
 		diffuseSpecular,
 		depth

@@ -8,6 +8,7 @@ in vec3 vNormal[];
 in vec3 vColor[];
 in vec2 vUV[];
 in vec3 vTangent[];
+in mat4 vM[];
 
 out vec3 gPos;
 out vec3 gNormal;
@@ -15,7 +16,6 @@ out vec3 gColor;
 out vec2 gUV;
 out mat3 gTBN;
 
-uniform mat4 m;
 uniform mat4 v;
 uniform mat4 p;
 uniform vec3 cameraPos;
@@ -37,9 +37,9 @@ void main() {
 	int i;
 
 	if (setting_doBackFaceCulling) {
-		vec3 p0 = (m * vec4(vPos[0], 1.0f)).xyz;
-		vec3 p1 = (m * vec4(vPos[1], 1.0f)).xyz;
-		vec3 p2 = (m * vec4(vPos[2], 1.0f)).xyz;
+		vec3 p0 = (vM[0] * vec4(vPos[0], 1.0f)).xyz;
+		vec3 p1 = (vM[1] * vec4(vPos[1], 1.0f)).xyz;
+		vec3 p2 = (vM[2] * vec4(vPos[2], 1.0f)).xyz;
 
 		vec3 edge0 = p1 - p0;
 		vec3 edge1 = p2 - p0;
@@ -51,10 +51,10 @@ void main() {
 	}
 
 	for (i = 0; i < 3; i++) {
-		vec4 pos = m * vec4(vPos[i], 1.0f);
+		vec4 pos = vM[i] * vec4(vPos[i], 1.0f);
 		gPos = pos.xyz;
 
-		mat3 normalMatrix = transpose(inverse(mat3(m)));
+		mat3 normalMatrix = transpose(inverse(mat3(vM[i])));
 		gNormal = normalize(normalMatrix * vNormal[i]);
 
 		gColor = vColor[i];

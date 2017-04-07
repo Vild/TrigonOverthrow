@@ -11,15 +11,7 @@
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
 #include "world/world.hpp"
-
-#include "world/system/inputsystem.hpp"
-#include "world/system/physicssystem.hpp"
-#include "world/system/imguisystem.hpp"
-#include "world/system/lookatsystem.hpp"
-
 #include "world/entity/cameraentity.hpp"
-
-#include "world/renderpass/baserenderpass.hpp"
 
 class Engine {
 public:
@@ -42,7 +34,7 @@ public:
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
 
-	inline World& getWorld() { return _world; }
+	inline std::shared_ptr<World> getWorld() { return _world; }
 	inline std::shared_ptr<CameraEntity> getCamera() { return _camera; }
 
 private:
@@ -70,15 +62,8 @@ private:
 	std::shared_ptr<MeshLoader> _meshLoader;
 	std::shared_ptr<HIDInput> _hidInput;
 
-	World _world;
+	std::shared_ptr<World> _world;
 	std::shared_ptr<CameraEntity> _camera;
-
-	std::unique_ptr<InputSystem> _inputSystem;
-	std::unique_ptr<PhysicsSystem> _physicsSystem;
-	std::unique_ptr<ImGuiSystem> _imGuiSystem;
-	std::unique_ptr<LookAtSystem> _lookAtSystem;
-
-	std::unique_ptr<GeometryRenderPass> _geometryRenderPass;
 
 	Engine() {}
 	virtual ~Engine();

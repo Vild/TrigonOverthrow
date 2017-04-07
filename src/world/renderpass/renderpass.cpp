@@ -1,7 +1,8 @@
 #include "renderpass.hpp"
 
-void RenderPass::attachInputTexture(GLuint id, std::shared_ptr<Texture> texture) {
+RenderPass& RenderPass::attachInputTexture(GLuint id, std::shared_ptr<Texture> texture) {
 	_inputs[id] = texture;
+	return *this;
 }
 
 void RenderPass::update(World& world, float delta) {

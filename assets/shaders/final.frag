@@ -15,5 +15,5 @@ void main() {
 	vec3 diffuse = texture(defDiffuseSpecular, vUV).xyz;
 	//float specular = texture(defDiffuseSpecular, vUV).w;
 
-	outColor = diffuse;
+	outColor = vec4(diffuse, 1);
 }

@@ -1,18 +1,24 @@
 #include "geometryrenderpass.hpp"
 
+#include <glm/gtx/transform.hpp>
+
 #include "../../engine.hpp"
+#include "../../lib/glad.h"
+
+#include "../component/transformcomponent.hpp"
+#include "../component/modelcomponent.hpp"
 
 GeometryRenderPass::GeometryRenderPass() {
 	auto& engine = Engine::getInstance();
 
 	_gbuffer = std::make_shared<GBuffer>();
 
-	_gbuffer
-		->attachTexture(Attachment::position, engine.getWidth(), engine.getHeight(), GL_RGB32F, GL_FLOAT, 3)
+	_gbuffer->bind()
+		.attachTexture(Attachment::position, engine.getWidth(), engine.getHeight(), GL_RGB32F, GL_FLOAT, 3)
 		.attachTexture(Attachment::normal, engine.getWidth(), engine.getHeight(), GL_RGB, GL_UNSIGNED_BYTE, 3)
 		.attachTexture(Attachment::diffuseSpecular, engine.getWidth(), engine.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, 4)
 		.attachDepthTexture(Attachment::depth, engine.getWidth(), engine.getHeight())
-		.attachRenderBuffer(engine.getWidth(), engine.getHeight(), GL_STENCIL_COMPONENT)
+		.attachRenderBuffer(engine.getWidth(), engine.getHeight(), GL_STENCIL_INDEX8, GL_STENCIL_ATTACHMENT)
 		.finalize();
 
 	_shader = std::make_shared<ShaderProgram>();
@@ -36,7 +42,7 @@ GeometryRenderPass::GeometryRenderPass() {
 }
 
 void GeometryRenderPass::render(World& world) {
-	_shader.bind();
+	_shader->bind();
 
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
@@ -65,9 +71,6 @@ void GeometryRenderPass::render(World& world) {
 		if (!transform)
 			continue;
 
-		_shader->setUniform("m", glm::translate(transform->position) * glm::scale(transform->scale) * transform->rotation);
-
-		model->render();
+		model->render(glm::translate(transform->position) * glm::scale(transform->scale) * transform->rotation);
 	}
-
 }
