@@ -64,6 +64,7 @@ struct ParticleComponent : public Component<ParticleComponent> {
 		})
 			.finalize();
 	};
+
 	virtual std::string name() { return "ParticleComponent"; }
 
 };
