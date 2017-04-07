@@ -1,7 +1,7 @@
 #include "inputsystem.hpp"
 
 #include "../component/kbmouseinputcomponent.hpp"
-#include "../component/transformcomponent.hpp"
+#include "../component/physicscomponent.hpp"
 
 #include "../../engine.hpp"
 
@@ -12,8 +12,8 @@ void InputSystem::update(World& world, float delta) {
 		if (!entity->getComponent<KBMouseInputComponent>())
 			continue;
 
-		auto transform = entity->getComponent<TransformComponent>();
-		if (!transform)
+		auto physicsComponent = entity->getComponent<PhysicsComponent>();
+		if (!physicsComponent)
 			continue;
 
 		/*float mspeed = 0.005f;
@@ -23,13 +23,14 @@ void InputSystem::update(World& world, float delta) {
 
 		glm::vec3 forward = glm::vec3(0, 0, 1); // glm::vec3(cos(_pitch) * sin(_yaw), sin(_pitch), cos(_pitch) * cos(_yaw));
 		glm::vec3 right = glm::vec3(-1, 0, 0);	// = glm::vec3(sin(_yaw - M_PI / 2.0f), 0, cos(_yaw - M_PI / 2.0f));
-		glm::vec3 up = glm::vec3(0, 1, 0);			// glm::cross(right, forward);
+		glm::vec3 up = glm::vec3(0, 1, 0);		// glm::cross(right, forward);
 
 		float accelSpeed = 1500;
 
-		transform->acceleration = -transform->velocity / 0.05f;
-		transform->acceleration += hid->getDirection().z * forward * delta * accelSpeed;
-		transform->acceleration += hid->getDirection().x * right * delta * accelSpeed;
-		transform->acceleration += hid->getDirection().y * up * delta * accelSpeed;
+		glm::vec3 inputDir = hid->getDirection();
+		physicsComponent->acceleration = -physicsComponent->velocity / 0.05f;
+		physicsComponent->acceleration += inputDir.z * forward * delta * accelSpeed;
+		physicsComponent->acceleration += inputDir.x * right * delta * accelSpeed;
+		physicsComponent->acceleration += inputDir.y * up * delta * accelSpeed;
 	}
 }

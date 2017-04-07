@@ -16,6 +16,7 @@
 #include "world/system/physicssystem.hpp"
 #include "world/system/imguisystem.hpp"
 #include "world/system/lookatsystem.hpp"
+#include "world/system/camerasystem.hpp"
 
 #include "world/entity/cameraentity.hpp"
 
@@ -77,6 +78,7 @@ private:
 	std::unique_ptr<PhysicsSystem> _physicsSystem;
 	std::unique_ptr<ImGuiSystem> _imGuiSystem;
 	std::unique_ptr<LookAtSystem> _lookAtSystem;
+	std::unique_ptr<CameraSystem> _cameraSystem;
 
 	std::unique_ptr<BaseRenderPass> _baseRenderPass;
 
