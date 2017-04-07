@@ -31,12 +31,20 @@ void LookAtSystem::update(World& world, float delta) {
 			else if (dist < lookat->minDistance)
 				transform->position -= dir * delta;
 
-			transform->rotation = glm::lookAt(transform->position, target->position, glm::vec3(0, 1, 0));
+			float pitch = asin(dir.y);
+			float yaw = acos(dir.x / cos(pitch));
+
+			transform->rotation = glm::vec3(glm::degrees(pitch), glm::degrees(yaw), 0);
 		} else if (lookat->followMode == FollowMode::followByOffset) {
 			transform->position = target->position + lookat->offsetFromTarget;
+			glm::vec3 dir = glm::normalize(target->position - transform->position);
 
-			// transform->rotation is more than just a rotation, it is also the movement in space
-			transform->rotation = glm::lookAt(transform->position, target->position, glm::vec3(0, 1, 0));
+			float pitch = asin(dir.y);
+			float yaw = acos(dir.x / cos(pitch));
+
+			transform->rotation = glm::vec3(glm::degrees(pitch), glm::degrees(yaw), 0);
 		}
+
+		transform->recalculateMatrix();
 	}
 }

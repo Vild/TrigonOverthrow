@@ -124,6 +124,9 @@ int Engine::run(bool vsync) {
 		// Update lookAt
 		_lookAtSystem->update(_world, delta);
 
+		// Camera System
+		_cameraSystem->update(_world, delta);
+
 		// This will render all the entities to the screen
 		_baseRenderPass->update(_world, delta);
 
@@ -146,12 +149,13 @@ void Engine::_init(bool vsync) {
 	std::shared_ptr<Entity> target;
 	_world.addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
 	_world.addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
-	_camera->getComponent<LookAtComponent>()->target = target;
+	//_camera->getComponent<LookAtComponent>()->target = target;
 
 	_inputSystem = std::make_unique<InputSystem>();
 	_physicsSystem = std::make_unique<PhysicsSystem>();
 	_imGuiSystem = std::make_unique<ImGuiSystem>();
 	_lookAtSystem = std::make_unique<LookAtSystem>();
+	_cameraSystem = std::make_unique<CameraSystem>();
 
 	_baseRenderPass = std::make_unique<BaseRenderPass>();
 }
