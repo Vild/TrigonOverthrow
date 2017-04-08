@@ -4,6 +4,7 @@
 #include "../../gl/gbuffer.hpp"
 #include "../../gl/shader.hpp"
 #include "../../gl/texture.hpp"
+#include "../../gl/mesh.hpp"
 #include "renderpass.hpp"
 
 class SSAORenderSystem : public RenderPass
@@ -26,6 +27,8 @@ private:
 
 	float lerp(float a, float b, float c);
 	void generateUniformData(int width, int height);
+
+	void fsQuadRender();
 
 
 };
