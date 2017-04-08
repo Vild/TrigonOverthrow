@@ -14,12 +14,13 @@
 
 #include "world/system/inputsystem.hpp"
 #include "world/system/physicssystem.hpp"
-#include "world/system/rendersystem.hpp"
 #include "world/system/imguisystem.hpp"
 #include "world/system/lookatsystem.hpp"
 #include "world/system/particlesystem.hpp"
 
 #include "world/entity/cameraentity.hpp"
+
+#include "world/renderpass/baserenderpass.hpp"
 
 class Engine {
 public:
@@ -75,10 +76,11 @@ private:
 
 	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<PhysicsSystem> _physicsSystem;
-	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<ImGuiSystem> _imGuiSystem;
 	std::unique_ptr<LookAtSystem> _lookAtSystem;
 	std::unique_ptr<ParticleSystem> _particleSystem;
+
+	std::unique_ptr<BaseRenderPass> _baseRenderPass;
 
 	Engine() {}
 	virtual ~Engine();
@@ -89,5 +91,4 @@ private:
 	void _initImGui();
 
 	void _resolutionChanged();
-	// void _updateMovement(float delta, bool updateCamera);
 };
