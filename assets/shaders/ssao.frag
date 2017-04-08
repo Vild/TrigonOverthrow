@@ -8,7 +8,7 @@ uniform sampler2D noiseMap;
 
 uniform vec2 noiseScale;
 
-uniform int nrOfSamples;
+uniform int sampleSize;
 uniform float sampleRadius;
 uniform float sampleBias;
 uniform vec3 samplePoints[64];
@@ -28,7 +28,7 @@ void main()
 
   occlusion = 0;
 
-  for(int i = 0; i < nrOfSamples; i++)
+  for(int i = 0; i < sampleSize; i++)
   {
     vec3 samplePoint = TBN * samplePoints[i];
     samplePoint = viewPosition + samplePoint * sampleRadius;
@@ -37,6 +37,9 @@ void main()
     vec2 sampleUV = (sampleProjection.xy / sampleProjection.w) * 0.5 + 0.5;
     float sampleDepth = (viewMatrix * texture(positionMap, sampleUV)).z;
 
-    occlusion += sampleDepth >= samplePoint.z + sampleBias ? 1.0 : 0.0;
+    float rangeCheck = smoothstep(0.0, 1.0, sampleRadius / abs(viewPosition.z - sampleDepth));
+    occlusion += sampleDepth >= samplePoint.z + sampleBias ? 1.0 * rangeCheck : 0.0;
   }
+
+  occlusion = 1.0 - (occlusion / sampleSize);
 }
