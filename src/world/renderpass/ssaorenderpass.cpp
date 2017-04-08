@@ -1,7 +1,7 @@
 #include "ssaorenderpass.hpp"
 #include "../../engine.hpp"
 #include <random>
-#include <world/component/transformcomponent.hpp>
+#include "../component/cameracomponent.hpp"
 
 SSAORenderSystem::SSAORenderSystem(int width, int height)
 {
@@ -24,6 +24,7 @@ SSAORenderSystem::SSAORenderSystem(int width, int height)
 
 	gBuffer.attachTexture(0, width, height, GL_RED, GL_FLOAT, 1);
 
+	
 	shaderProgram.bind();
 	generateUniformData(width, height);
 }
@@ -35,7 +36,6 @@ float SSAORenderSystem::lerp(float a, float b, float f)
 
 void SSAORenderSystem::generateUniformData(int width, int height)
 {
-
 	shaderProgram.setUniform("positionMap", 0);
 	shaderProgram.setUniform("normalMap", 1);
 	shaderProgram.setUniform("normalMap", 2);
@@ -55,8 +55,8 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 		samplePoint = glm::normalize(samplePoint);
 		samplePoint *= randomFlaots(generator);
 
-		float scale = float(i) / 64.0;
-		scale = lerp(0.1, 1.0, scale * scale);
+		float scale = float(i) / 64.0f;
+		scale = lerp(0.1f, 1.0f, scale * scale);
 
 		samplePoint *= scale;
 
@@ -88,15 +88,55 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 
 	glm::vec2 noiseScale = { width / 4.0, height / 4.0 };
 	shaderProgram.setUniform("noiseScale", noiseScale);
+
+	shaderProgram.setUniform("sampleSize", 64);
+	shaderProgram.setUniform("sampleRadius", 0.5f);
+	shaderProgram.setUniform("sampleBias", 0.025f);
+}
+
+void SSAORenderSystem::fsQuadRender()
+{
+	static bool first = true;
+	static GLuint VAO, VBO;
+
+	if (first)
+	{
+		glm::vec3 vertices[4] = {
+			{ -1,  1,  0 },
+			{  1,  1,  0 },
+			{ -1, -1,  0 },
+			{  1, -1,  0 }
+		};
+
+		glGenBuffers(1, &VAO);
+		glBindVertexArray(VAO);
+
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+
+		glBindVertexArray(0);
+
+		first = false;
+	}
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 }
 
 void SSAORenderSystem::render(World & world)
 {
 	CameraEntity & camera = *Engine::getInstance().getCamera();
+	auto cameraComponent = camera.getComponent<CameraComponent>();
+
 	shaderProgram.bind();
+	shaderProgram.setUniform("viewMatrix", cameraComponent->viewMatrix);
+	shaderProgram.setUniform("projectionMatrix", cameraComponent->projectionMatrix);
 
-	shaderProgram.setUniform("viewMatrix", camera.getComponent<TransformComponent>()->rotation);
-	shaderProgram.setUniform("projectionMatrix", camera.getComponent<TransformComponent>()->rotation);
-
+	fsQuadRender();
 }
 
