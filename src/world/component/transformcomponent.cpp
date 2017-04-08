@@ -5,21 +5,30 @@
 
 void TransformComponent::recalculateMatrix()
 {
-	matrix = glm::translate(position) * glm::scale(scale) * glm::rotate(1.0f, rotation);
+	static const glm::vec3 x(1, 0, 0);
+	static const glm::vec3 y(0, 1, 0);
+	static const glm::vec3 z(0, 0, 1);
+
+	matrix = glm::translate(position)
+		   * glm::rotate(glm::radians(rotation.z), z)
+		   * glm::rotate(glm::radians(rotation.y), y)
+		   * glm::rotate(-glm::radians(rotation.x), x)
+		   * glm::scale(scale);
 }
 
 glm::vec3 TransformComponent::getDirection()
 {
-	glm::vec3 direction;
+	static const glm::vec3 x(1, 0, 0);
+	static const glm::vec3 y(0, 1, 0);
+	static const glm::vec3 z(0, 0, 1);
 
-	float pitch = glm::radians(rotation.x);
-	float yaw = glm::radians(rotation.y);
+	glm::vec4 direction(0, 0, 1, 0);
+	direction = glm::rotate(glm::radians(rotation.z), z)
+			  * glm::rotate(glm::radians(rotation.y), y)
+			  * glm::rotate(-glm::radians(rotation.x), x)
+			  * direction;
 
-	direction.x = cos(pitch) * cos(yaw);
-	direction.y = sin(pitch);
-	direction.z = cos(pitch) * sin(yaw);
-
-	return normalize(direction);
+	return glm::vec3(direction);
 }
 
 void TransformComponent::registerImGui() {
@@ -29,19 +38,6 @@ void TransformComponent::registerImGui() {
 	dirty |= ImGui::DragFloat3("Position", glm::value_ptr(position), 0.1);
 	dirty |= ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1);
 	dirty |= ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 0.1);
-
-
-#ifndef DAN
-	glm::mat4 tmatrix = glm::transpose(matrix);
-#else
-	glm::mat4 tmatrix = matrix;
-#endif // !DAN
-
-
-	dirty |= ImGui::DragFloat4("Matrix[0]", glm::value_ptr(tmatrix[0]));
-	dirty |= ImGui::DragFloat4("Matrix[1]", glm::value_ptr(tmatrix[1]));
-	dirty |= ImGui::DragFloat4("Matrix[2]", glm::value_ptr(tmatrix[2]));
-	dirty |= ImGui::DragFloat4("Matrix[3]", glm::value_ptr(tmatrix[3]));
 
 	if (dirty)
 	{

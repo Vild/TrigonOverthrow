@@ -17,6 +17,8 @@ void PhysicsSystem::update(World& world, float delta) {
 			continue;
 
 		transformComponent->position += physicsComponent->velocity * delta + physicsComponent->acceleration * delta * delta * 0.5f;
+		transformComponent->recalculateMatrix();
+
 		physicsComponent->velocity += physicsComponent->acceleration * delta;
 	}
 }
