@@ -11,6 +11,8 @@
 #include "renderpass/geometryrenderpass.hpp"
 #include "renderpass/lightingrenderpass.hpp"
 
+#include <iostream>
+
 World::World() {
 	_setupSystems();
 }
@@ -18,6 +20,15 @@ World::World() {
 void World::tick(float delta) {
 	for (const std::unique_ptr<System>& system : _systems)
 		system->update(*this, delta);
+}
+
+void World::resize(unsigned int width, unsigned int height) {
+	for (std::unique_ptr<System>& system : _systems) {
+		RenderPass* rp = dynamic_cast<RenderPass*>(system.get());
+		if (!rp)
+			continue;
+		rp->resize(width, height);
+	}
 }
 
 void World::_setupSystems() {

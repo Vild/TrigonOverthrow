@@ -14,11 +14,13 @@ GeometryRenderPass::GeometryRenderPass() {
 
 	_gbuffer = std::make_shared<GBuffer>();
 
+	unsigned int width = engine.getWidth(), height = engine.getHeight();
+
 	_gbuffer->bind()
-		.attachTexture(Attachment::position, engine.getWidth(), engine.getHeight(), GL_RGB32F, GL_FLOAT, 3)
-		.attachTexture(Attachment::normal, engine.getWidth(), engine.getHeight(), GL_RGB, GL_UNSIGNED_BYTE, 3)
-		.attachTexture(Attachment::diffuseSpecular, engine.getWidth(), engine.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, 4)
-		.attachDepthTexture(Attachment::depth, engine.getWidth(), engine.getHeight())
+		.attachTexture(Attachment::position, width, height, GL_RGB32F, GL_FLOAT, 3)
+		.attachTexture(Attachment::normal, width, height, GL_RGB, GL_UNSIGNED_BYTE, 3)
+		.attachTexture(Attachment::diffuseSpecular, width, height, GL_RGBA, GL_UNSIGNED_BYTE, 4)
+		.attachDepthTexture(Attachment::depth, width, height)
 		.finalize();
 
 	_shader = std::make_shared<ShaderProgram>();
@@ -67,4 +69,15 @@ void GeometryRenderPass::render(World& world) {
 
 		model->render(transform->matrix);
 	}
+}
+
+void GeometryRenderPass::resize(unsigned int width, unsigned int height) {
+	auto& attachmentMap = _gbuffer->getAttachments();
+	attachmentMap[Attachment::position]->resize(width, height, GL_RGB32F, GL_RGB, GL_FLOAT);
+	attachmentMap[Attachment::normal]->resize(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+	attachmentMap[Attachment::diffuseSpecular]->resize(width, height, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+	attachmentMap[Attachment::depth]->resize(width, height, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
+
+	_gbuffer->bind();
+	glViewport(0, 0, width, height);
 }

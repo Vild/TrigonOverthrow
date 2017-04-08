@@ -10,7 +10,8 @@ public:
 
 	LightingRenderPass();
 
-	void render(World& world);
+	virtual void render(World& world);
+	virtual void resize(unsigned int width, unsigned int height);
 
 private:
 	std::shared_ptr<Mesh> _plane;

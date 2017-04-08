@@ -15,6 +15,8 @@ public:
 
 	void bind(int slot);
 
+	void resize(unsigned int width, unsigned int height, GLenum internalFormat, GLenum dataFormat, GLenum dataType);
+
 	GLuint getTexture();
 
 private:

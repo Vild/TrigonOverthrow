@@ -11,6 +11,7 @@ public:
 	GeometryRenderPass();
 
 	virtual void render(World& world);
+	virtual void resize(unsigned int width, unsigned int height);
 
 private:
 	bool _setting_base_doBackFaceCulling = false;

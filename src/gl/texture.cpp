@@ -80,6 +80,11 @@ void Texture::bind(int slot) {
 	glBindTexture(GL_TEXTURE_2D, _texture);
 }
 
+void Texture::resize(unsigned int width, unsigned int height, GLenum internalFormat, GLenum dataFormat, GLenum dataType) {
+	bind(0);
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, dataType, NULL);
+}
+
 GLuint Texture::getTexture() {
 	return _texture;
 }

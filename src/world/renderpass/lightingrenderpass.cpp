@@ -46,3 +46,8 @@ void LightingRenderPass::render(World& world) {
 	_shader->setUniform("vp", glm::mat4(1));
 	_plane->render();
 }
+
+void LightingRenderPass::resize(unsigned int width, unsigned int height) {
+	_gbuffer->bind();
+	glViewport(0, 0, width, height);
+}
