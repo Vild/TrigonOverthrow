@@ -131,7 +131,7 @@ int Engine::run(bool vsync) {
 		_lookAtSystem->update(_world, delta);
 
 		// This will render all the entities to the screen
-		_renderSystem->update(_world, delta);
+		_baseRenderPass->update(_world, delta);
 
 		_particleRenderSystem->update(_world, delta);
 		// NOTE: Make sure that the screen is binded to glBindFramebuffer, else the following code will break!
@@ -157,7 +157,7 @@ void Engine::_init(bool vsync) {
 
 	_inputSystem = std::make_unique<InputSystem>();
 	_physicsSystem = std::make_unique<PhysicsSystem>();
-	_renderSystem = std::make_unique<RenderSystem>();
+	_baseRenderPass = std::make_unique<BaseRenderPass>();
 	_imGuiSystem = std::make_unique<ImGuiSystem>();
 	_lookAtSystem = std::make_unique<LookAtSystem>();
 	_particleSystem = std::make_unique<ParticleSystem>();
