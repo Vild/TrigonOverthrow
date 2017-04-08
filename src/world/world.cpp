@@ -10,20 +10,13 @@
 #include "renderpass/geometryrenderpass.hpp"
 #include "renderpass/lightingrenderpass.hpp"
 
-#include <iostream>
-
 World::World() {
 	_setupSystems();
 }
 
 void World::tick(float delta) {
-	std::cout << "====== TICK START ======" << std::endl;
-	for (const std::unique_ptr<System>& system : _systems) {
-		std::cout << (typeid(*system).name() + 2) << std::endl;
+	for (const std::unique_ptr<System>& system : _systems)
 		system->update(*this, delta);
-	}
-
-	std::cout << "====== TICK END   ======" << std::endl << std::endl << std::endl;
 }
 
 void World::_setupSystems() {
