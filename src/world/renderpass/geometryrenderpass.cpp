@@ -18,7 +18,6 @@ GeometryRenderPass::GeometryRenderPass() {
 		.attachTexture(Attachment::normal, engine.getWidth(), engine.getHeight(), GL_RGB, GL_UNSIGNED_BYTE, 3)
 		.attachTexture(Attachment::diffuseSpecular, engine.getWidth(), engine.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, 4)
 		.attachDepthTexture(Attachment::depth, engine.getWidth(), engine.getHeight())
-		.attachRenderBuffer(engine.getWidth(), engine.getHeight(), GL_STENCIL_INDEX8, GL_STENCIL_ATTACHMENT)
 		.finalize();
 
 	_shader = std::make_shared<ShaderProgram>();
@@ -29,7 +28,6 @@ GeometryRenderPass::GeometryRenderPass() {
 	_shader->bind()
 		.addUniform("v")
 		.addUniform("p")
-		.addUniform("s")
 		.addUniform("cameraPos")
 		.addUniform("diffuseTexture")
 		.addUniform("normalTexture")
@@ -54,7 +52,6 @@ void GeometryRenderPass::render(World& world) {
 
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_shader->bind();
 
 	float _fov = 80.0f; // XXX: Extract to CameraEntity
 

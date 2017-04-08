@@ -6,7 +6,7 @@
 
 class GeometryRenderPass : public RenderPass {
 public:
-	enum Attachment : GLuint {
+	enum Attachment : GLint {
 		position = 0,
 		normal,
 		diffuseSpecular,
@@ -18,6 +18,6 @@ public:
 	virtual void render(World& world);
 
 private:
-	bool _setting_base_doBackFaceCulling = true;
+	bool _setting_base_doBackFaceCulling = false;
 	float _setting_base_defaultSpecular = 0.5f;
 };
