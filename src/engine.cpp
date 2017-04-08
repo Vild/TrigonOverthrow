@@ -149,7 +149,7 @@ void Engine::_init(bool vsync) {
 	std::shared_ptr<Entity> target;
 	_world.addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
 	_world.addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
-	//_camera->getComponent<LookAtComponent>()->target = target;
+	_camera->getComponent<LookAtComponent>()->target = target;
 
 	_inputSystem = std::make_unique<InputSystem>();
 	_physicsSystem = std::make_unique<PhysicsSystem>();

@@ -9,11 +9,6 @@ CameraComponent::CameraComponent()
 	recalculateProjectionMatrix();
 }
 
-void CameraComponent::lookAt(glm::vec3 eye, glm::vec3 center)
-{
-	viewMatrix = glm::lookAt(eye, center, up);
-}
-
 void CameraComponent::recalculateProjectionMatrix()
 {
 	projectionMatrix = glm::perspective(fov, aspect, zNear, zFar);
@@ -26,7 +21,6 @@ void CameraComponent::registerImGui() {
 	dirty |= ImGui::DragFloat("zNear", &zNear, 0.1);
 	dirty |= ImGui::DragFloat("zFar", &zFar, 0.1);
 	dirty |= ImGui::DragFloat("Aspect", &aspect, 0.1);
-	dirty |= ImGui::DragFloat3("Up", glm::value_ptr(up), 0.1);
 
 	if (dirty)
 	{

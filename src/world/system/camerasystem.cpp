@@ -1,6 +1,7 @@
 #include "camerasystem.hpp"
 #include "../component/transformcomponent.hpp"
 #include "../component/cameracomponent.hpp"
+#include <glm/gtx/transform.hpp>
 
 void CameraSystem::update(World & world, float delta)
 {
@@ -16,6 +17,11 @@ void CameraSystem::update(World & world, float delta)
 
 		glm::vec3 lookDir = transformComponent->getDirection();
 
-		cameraComponent->lookAt(transformComponent->position, transformComponent->position + lookDir);
+		static const glm::vec3 y(0, 1, 0);
+		cameraComponent->viewMatrix = glm::lookAt(
+			transformComponent->position, 
+			transformComponent->position + transformComponent->getDirection(),
+			y
+		);
 	}
 }
