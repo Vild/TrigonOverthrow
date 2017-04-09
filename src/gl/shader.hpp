@@ -19,7 +19,9 @@ enum ShaderAttributeID : GLint {
 	m, // m = mat4, Requires 4 spaces
 	_m_priv_1,
 	_m_priv_2,
-	_m_priv_3
+	_m_priv_3,
+	top,
+	neighbor
 };
 
 enum class ShaderType {

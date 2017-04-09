@@ -11,6 +11,7 @@ struct LoadedMesh {
 
 	std::shared_ptr<Mesh> mesh;
 	std::shared_ptr<Texture> texture;
+	std::shared_ptr<Texture> normalTexture;
 
 private:
 	std::shared_ptr<Mesh> _getModel(const aiScene* scene);

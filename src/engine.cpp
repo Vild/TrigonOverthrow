@@ -11,6 +11,7 @@
 #include <cmath>
 
 #include "world/entity/playerentity.hpp"
+#include "world/entity/floorentity.hpp"
 #include "world/component/lookatcomponent.hpp"
 #include "world/component/cameracomponent.hpp"
 
@@ -104,8 +105,9 @@ void Engine::_init(bool vsync) {
 
 	std::shared_ptr<Entity> target;
 	_world->addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
-	_world->addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
+	_world->addEntity(_camera = std::make_shared<CameraEntity>());
 	_camera->getComponent<LookAtComponent>()->target = target;
+	_world->addEntity(std::make_shared<FloorEntity>());
 }
 
 void Engine::_initSDL() {

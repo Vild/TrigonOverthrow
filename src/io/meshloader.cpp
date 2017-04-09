@@ -52,6 +52,7 @@ LoadedMesh::LoadedMesh(const std::string& file) {
 
 	mesh = _getModel(scene);
 	texture = _getTexture(scene, file);
+	normalTexture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
 }
 
 std::shared_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {

@@ -8,6 +8,7 @@
 #include "../../lib/glad.h"
 
 #include "../component/transformcomponent.hpp"
+#include "../component/floortransformcomponent.hpp"
 #include "../component/modelcomponent.hpp"
 #include "../component/cameracomponent.hpp"
 
@@ -42,6 +43,23 @@ GeometryRenderPass::GeometryRenderPass() {
 		.setUniform("normalTexture", 1)
 		.setUniform("setting_doBackFaceCulling", _setting_base_doBackFaceCulling)
 		.setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
+
+	_floorShader = std::make_shared<ShaderProgram>();
+	_floorShader->attach(std::make_shared<ShaderUnit>("assets/shaders/floorbase.vert", ShaderType::vertex))
+		.attach(std::make_shared<ShaderUnit>("assets/shaders/floorbase.geom", ShaderType::geometry))
+		.attach(std::make_shared<ShaderUnit>("assets/shaders/floorbase.frag", ShaderType::fragment))
+		.finalize();
+	_floorShader->bind()
+		.addUniform("v")
+		.addUniform("p")
+		.addUniform("cameraPos")
+		.addUniform("diffuseTexture")
+		.addUniform("normalTexture")
+		.addUniform("setting_doBackFaceCulling")
+		.addUniform("setting_defaultSpecular");
+	_floorShader->setUniform("diffuseTexture", 0)
+		.setUniform("normalTexture", 1)
+		.setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
 }
 
 void GeometryRenderPass::render(World& world) {
@@ -55,8 +73,12 @@ void GeometryRenderPass::render(World& world) {
 
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_shader->bind();
 
+	_floorShader->bind();
+	_floorShader->setUniform("v", cameraComponent->viewMatrix);
+	_floorShader->setUniform("p", cameraComponent->projectionMatrix);
+
+	_shader->bind();
 	_shader->setUniform("v", cameraComponent->viewMatrix);
 	_shader->setUniform("p", cameraComponent->projectionMatrix);
 
@@ -66,10 +88,19 @@ void GeometryRenderPass::render(World& world) {
 			continue;
 
 		auto transform = entity->getComponent<TransformComponent>();
-		if (!transform)
-			continue;
+		if (transform)
+			model->render(transform->matrix);
+		else {
+			auto ft = entity->getComponent<FloorTransformComponent>();
+			if (!ft)
+				continue;
+			_floorShader->bind();
+			glDisable(GL_CULL_FACE);
 
-		model->render(transform->matrix);
+			model->render(ft->matrices, ft->gridSize * ft->gridSize);
+			glEnable(GL_CULL_FACE);
+			_shader->bind();
+		}
 	}
 }
 
