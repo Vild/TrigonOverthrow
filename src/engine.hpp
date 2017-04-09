@@ -10,18 +10,12 @@
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
-#include "world/world.hpp"
 
-#include "world/system/inputsystem.hpp"
-#include "world/system/physicssystem.hpp"
-#include "world/system/imguisystem.hpp"
-#include "world/system/lookatsystem.hpp"
+#include "world/world.hpp"
 #include "world/system/particlesystem.hpp"
 #include "world/system/particlerendersystem.hpp"
 
 #include "world/entity/cameraentity.hpp"
-
-#include "world/renderpass/baserenderpass.hpp"
 
 class Engine {
 public:
@@ -35,34 +29,21 @@ public:
 
 	int run(bool vsync);
 
-	inline uint32_t& getWidth() { return _width; }
-	inline uint32_t& getHeight() { return _height; }
-	inline bool& getUpdateCamera() { return _updateCamera; }
+	inline unsigned int& getWidth() { return _width; }
+	inline unsigned int& getHeight() { return _height; }
 	inline SDL_Window* getWindow() { return _window; }
 
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
 
-	inline World& getWorld() { return _world; }
+	inline std::shared_ptr<World> getWorld() { return _world; }
 	inline std::shared_ptr<CameraEntity> getCamera() { return _camera; }
 
 private:
-	uint32_t _width = 1280;
-	uint32_t _height = 720;
-	bool _updateCamera;
+	unsigned int _width = 1280;
+	unsigned int _height = 720;
 	bool _vsync = true;
-
-	float _speed = 5.0f;
-	float _fov = 80.0f;
-
-	float _yaw = 0; // +Z (at 0, 0, 0)
-	float _pitch = 0.0f;
-
-	glm::vec3 _position = glm::vec3(0, 0, -2);
-
-	glm::mat4 _projection;
-	glm::mat4 _view;
 
 	bool _quit;
 	SDL_Window* _window;
@@ -72,17 +53,11 @@ private:
 	std::shared_ptr<MeshLoader> _meshLoader;
 	std::shared_ptr<HIDInput> _hidInput;
 
-	World _world;
+	std::shared_ptr<World> _world;
 	std::shared_ptr<CameraEntity> _camera;
 
-	std::unique_ptr<InputSystem> _inputSystem;
-	std::unique_ptr<PhysicsSystem> _physicsSystem;
-	std::unique_ptr<ImGuiSystem> _imGuiSystem;
-	std::unique_ptr<LookAtSystem> _lookAtSystem;
 	std::unique_ptr<ParticleSystem> _particleSystem;
 	std::unique_ptr<ParticleRenderSystem> _particleRenderSystem;
-
-	std::unique_ptr<BaseRenderPass> _baseRenderPass;
 
 	Engine() {}
 	virtual ~Engine();
@@ -91,6 +66,4 @@ private:
 	void _initSDL();
 	void _initGL();
 	void _initImGui();
-
-	void _resolutionChanged();
 };

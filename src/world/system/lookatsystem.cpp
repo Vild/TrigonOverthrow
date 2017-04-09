@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "lookatsystem.hpp"
 
 #include "../component/lookatcomponent.hpp"
@@ -30,13 +32,17 @@ void LookAtSystem::update(World& world, float delta) {
 				transform->position += dir * delta;
 			else if (dist < lookat->minDistance)
 				transform->position -= dir * delta;
-
-			transform->rotation = glm::lookAt(transform->position, target->position, glm::vec3(0, 1, 0));
 		} else if (lookat->followMode == FollowMode::followByOffset) {
 			transform->position = target->position + lookat->offsetFromTarget;
-
-			// transform->rotation is more than just a rotation, it is also the movement in space
-			transform->rotation = glm::lookAt(transform->position, target->position, glm::vec3(0, 1, 0));
 		}
+
+		glm::vec3 dir = glm::normalize(target->position - transform->position);
+
+		float pitch = asin(dir.y);
+		float yaw = acos(dir.x / cos(pitch));
+
+		transform->rotation = glm::vec3(glm::degrees(pitch), 90 - glm::degrees(yaw), 0);
+
+		transform->recalculateMatrix();
 	}
 }

@@ -14,8 +14,8 @@ public:
 
 	GBuffer& bind(bool read = true, bool draw = true);
 
-	GBuffer& attachTexture(int id, size_t width, size_t height, GLenum dataFormat, GLenum dataType, int vectorSize);
-	GBuffer& attachRenderBuffer(size_t width, size_t height, GLenum format = GL_DEPTH24_STENCIL8);
+	GBuffer& attachTexture(int id, size_t width, size_t height, GLenum internalFormat, GLenum dataType, int vectorSize);
+	GBuffer& attachRenderBuffer(size_t width, size_t height, GLenum format = GL_DEPTH24_STENCIL8, GLenum attachment = GL_DEPTH_STENCIL_ATTACHMENT);
 	GBuffer& attachDepthTexture(int id, size_t width, size_t height);
 
 	GBuffer& finalize();

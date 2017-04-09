@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "meshloader.hpp"
 
 #include <iostream>
@@ -58,45 +60,45 @@ std::shared_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {
 
 	unsigned int counterVertices = 0;
 	for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
-		aiMesh* mesh = scene->mMeshes[i];
-		bool hasColors = hasVertexColors(mesh, 0);
-		bool hasUV = hasTextureCoords(mesh, 0);
-		for (unsigned int j = 0; j < mesh->mNumVertices; j++) {
+		aiMesh* assimpMesh = scene->mMeshes[i];
+		bool hasColors = hasVertexColors(assimpMesh, 0);
+		bool hasUV = hasTextureCoords(assimpMesh, 0);
+		for (unsigned int j = 0; j < assimpMesh->mNumVertices; j++) {
 			Vertex vertex;
 
-			aiVector3D p = mesh->mVertices[j];
+			aiVector3D p = assimpMesh->mVertices[j];
 			vertex.position = glm::vec3{p.x, p.y, p.z};
 
-			p = mesh->mNormals[j];
+			p = assimpMesh->mNormals[j];
 			vertex.normal = glm::vec3{p.x, p.y, p.z};
 
 			if (hasColors) {
-				aiColor4D c = mesh->mColors[0][j];
+				aiColor4D c = assimpMesh->mColors[0][j];
 				vertex.color = glm::vec3{c.r, c.g, c.b};
 			} else
 				vertex.color = glm::vec3{1.f, 1.f, 1.f};
 
 			if (hasUV) {
-				aiVector3D uv = mesh->mTextureCoords[0][j];
+				aiVector3D uv = assimpMesh->mTextureCoords[0][j];
 				vertex.uv = glm::vec2{uv.x, uv.y};
 			} else
 				vertex.uv = glm::vec2{j & 2, (j / 2) % 2};
 
-			if (mesh->mTangents) {
-				p = mesh->mTangents[j];
+			if (assimpMesh->mTangents) {
+				p = assimpMesh->mTangents[j];
 				vertex.tangent = glm::vec3{p.x, p.y, p.z};
 			}
 
 			vertices.push_back(vertex);
 		}
 
-		for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
-			unsigned int* face = mesh->mFaces[j].mIndices;
+		for (unsigned int j = 0; j < assimpMesh->mNumFaces; j++) {
+			unsigned int* face = assimpMesh->mFaces[j].mIndices;
 			indices.push_back(counterVertices + face[0]);
 			indices.push_back(counterVertices + face[1]);
 			indices.push_back(counterVertices + face[2]);
 		}
-		counterVertices += mesh->mNumVertices;
+		counterVertices += assimpMesh->mNumVertices;
 	}
 
 	return std::make_shared<Mesh>(vertices, indices);

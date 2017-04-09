@@ -12,6 +12,7 @@
 
 #include "world/entity/playerentity.hpp"
 #include "world/component/lookatcomponent.hpp"
+#include "world/component/cameracomponent.hpp"
 
 Engine::~Engine() {
 	IMG_Quit();
@@ -28,7 +29,6 @@ int Engine::run(bool vsync) {
 	_quit = false;
 	uint32_t lastTime = SDL_GetTicks();
 
-	_resolutionChanged();
 	while (!_quit) {
 		SDL_Event event;
 		ImGuiIO& io = ImGui::GetIO();
@@ -45,51 +45,22 @@ int Engine::run(bool vsync) {
 				case SDLK_ESCAPE:
 					_quit = true;
 					break;
-				case SDLK_LSHIFT:
-				case SDLK_RSHIFT:
-					_speed = 10.0f;
-					break;
 				default:
 					break;
 				}
-
 				break;
 
-			case SDL_KEYUP:
-				if (io.WantCaptureKeyboard)
-					break;
-				switch (event.key.keysym.sym) {
-				case SDLK_LSHIFT:
-				case SDLK_RSHIFT:
-					_speed = 5.0f;
-					break;
-				default:
-					break;
-				}
-
-			case SDL_MOUSEBUTTONDOWN:
-				if (io.WantCaptureMouse)
-					break;
-				if (event.button.button == SDL_BUTTON_RIGHT) {
-					_updateCamera = true;
-					SDL_ShowCursor(0);
-					SDL_WarpMouseInWindow(_window, _width / 2, _height / 2);
-				}
-				break;
-
-			case SDL_MOUSEBUTTONUP:
-				if (io.WantCaptureMouse)
-					break;
-				if (event.button.button == SDL_BUTTON_RIGHT) {
-					_updateCamera = false;
-					SDL_ShowCursor(1);
-				}
-				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED || event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 					_width = event.window.data1;
 					_height = event.window.data2;
-					_resolutionChanged();
+					_world->resize(_width, _height);
+
+					{
+						std::shared_ptr<CameraComponent> cc = _camera->getComponent<CameraComponent>();
+						cc->aspect = (_width * 1.0) / _height;
+						cc->recalculateProjectionMatrix();
+					}
 				}
 				break;
 			default:
@@ -112,29 +83,10 @@ int Engine::run(bool vsync) {
 
 		_hidInput->update();
 
-		// This will add all the entities and their information to the debug UI
-		_imGuiSystem->update(_world, delta);
+		//_particleRenderSystem->update(_world, delta);
+		//// NOTE: Make sure that the screen is binded to glBindFramebuffer, else the following code will break!
 
-		// Update inputs
-		_inputSystem->update(_world, delta);
-
-		// This will update all the physics in the world
-		_physicsSystem->update(_world, delta);
-
-
-
-
-		// Particlesystem should have its own shader if no shadows should be displayed on them.
-		_particleSystem->update(_world, delta);
-
-		// Update lookAt
-		_lookAtSystem->update(_world, delta);
-
-		// This will render all the entities to the screen
-		_baseRenderPass->update(_world, delta);
-
-		_particleRenderSystem->update(_world, delta);
-		// NOTE: Make sure that the screen is binded to glBindFramebuffer, else the following code will break!
+		_world->tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
 	}
@@ -150,16 +102,13 @@ void Engine::_init(bool vsync) {
 	_meshLoader = std::make_shared<MeshLoader>();
 	_hidInput = std::make_shared<HIDInput>();
 
+	_world = std::make_shared<World>();
+
 	std::shared_ptr<Entity> target;
-	_world.addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
-	_world.addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
+	_world->addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
+	_world->addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
 	_camera->getComponent<LookAtComponent>()->target = target;
 
-	_inputSystem = std::make_unique<InputSystem>();
-	_physicsSystem = std::make_unique<PhysicsSystem>();
-	_baseRenderPass = std::make_unique<BaseRenderPass>();
-	_imGuiSystem = std::make_unique<ImGuiSystem>();
-	_lookAtSystem = std::make_unique<LookAtSystem>();
 	_particleSystem = std::make_unique<ParticleSystem>();
 	_particleRenderSystem = std::make_unique<ParticleRenderSystem>();
 }
@@ -249,10 +198,4 @@ void Engine::_initImGui() {
 	style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00f, 0.84f, 0.84f, 1.00f);
 	style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.13f, 0.40f, 0.40f, 1.00f);
 	style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.09f, 0.27f, 0.27f, 0.67f);
-}
-
-void Engine::_resolutionChanged() { // TODO: don't call all the time
-	_projection = glm::perspective(glm::radians(_fov), (float)_width / (float)_height, 0.1f, 60.0f);
-	glViewport(0, 0, _width, _height);
-	// TODO: Trigger event in world
 }

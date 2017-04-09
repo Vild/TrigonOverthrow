@@ -36,13 +36,14 @@ GBuffer& GBuffer::bind(bool read, bool draw) {
 	return *this;
 }
 
-GBuffer& GBuffer::attachTexture(int id, size_t width, size_t height, GLenum dataFormat, GLenum dataType, int vectorSize) {
+GBuffer& GBuffer::attachTexture(int id, size_t width, size_t height, GLenum internalFormat, GLenum dataType, int vectorSize) {
 	GLuint texID;
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
 	GLenum formats[] = {GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	glTexImage2D(GL_TEXTURE_2D, 0, dataFormat, width, height, 0, formats[vectorSize - 1], dataType, NULL);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, formats[vectorSize - 1], dataType, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, texID, 0);
@@ -75,11 +76,11 @@ GBuffer& GBuffer::attachDepthTexture(int id, size_t width, size_t height) {
 	return *this;
 }
 
-GBuffer& GBuffer::attachRenderBuffer(size_t width, size_t height, GLenum format) {
+GBuffer& GBuffer::attachRenderBuffer(size_t width, size_t height, GLenum format, GLenum attachment) {
 	glGenRenderbuffers(1, &_renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _renderBuffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, _renderBuffer);
 	return *this;
 }
 
