@@ -138,12 +138,6 @@ void Engine::_init(bool vsync) {
 	_world->addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
 	_camera->getComponent<LookAtComponent>()->target = target;
 
-	_inputSystem = std::make_unique<InputSystem>();
-	_physicsSystem = std::make_unique<PhysicsSystem>();
-	_imGuiSystem = std::make_unique<ImGuiSystem>();
-	_lookAtSystem = std::make_unique<LookAtSystem>();
-
-	_baseRenderPass = std::make_unique<BaseRenderPass>();
 }
 
 void Engine::_initSDL() {

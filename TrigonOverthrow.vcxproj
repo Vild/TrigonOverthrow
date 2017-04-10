@@ -45,7 +45,8 @@
     <ClCompile Include="src\world\entity\cameraentity.cpp" />
     <ClCompile Include="src\world\entity\entity.cpp" />
     <ClCompile Include="src\world\entity\playerentity.cpp" />
-    <ClCompile Include="src\world\renderpass\baserenderpass.cpp" />
+    <ClCompile Include="src\world\renderpass\geometryrenderpass.cpp" />
+    <ClCompile Include="src\world\renderpass\lightingrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\renderpass.cpp" />
     <ClCompile Include="src\world\renderpass\ssaorenderpass.cpp" />
     <ClCompile Include="src\world\system\camerasystem.cpp" />
@@ -86,7 +87,8 @@
     <ClInclude Include="src\world\entity\cameraentity.hpp" />
     <ClInclude Include="src\world\entity\entity.hpp" />
     <ClInclude Include="src\world\entity\playerentity.hpp" />
-    <ClInclude Include="src\world\renderpass\baserenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\geometryrenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\lightingrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\renderpass.hpp" />
     <ClInclude Include="src\world\renderpass\ssaorenderpass.hpp" />
     <ClInclude Include="src\world\system\camerasystem.hpp" />
