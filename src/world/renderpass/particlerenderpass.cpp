@@ -8,11 +8,12 @@
 #include <cmath>
 
 ParticleRenderPass::ParticleRenderPass() {
+	_gbuffer = std::make_shared<GBuffer>(0);
 	_shader = std::make_shared<ShaderProgram>();
-	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
+	_shader->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/particles.frag", ShaderType::fragment))
 		.finalize();
-	_shader->bind().addUniform("cameraRight_wPos")
+	_shader->addUniform("cameraRight_wPos")
 		.addUniform("cameraUp_wPos")
 		.addUniform("billboardSize")
 		.addUniform("cameraPos")
@@ -30,18 +31,17 @@ void ParticleRenderPass::render(World& world) {
 	if (!cameraComponent)
 		return;
 
-	auto lookAtComponent = camera->getComponent<LookAtComponent>();
-	if (!lookAtComponent)
+	auto transformComponent = camera->getComponent<TransformComponent>();
+	if (!transformComponent)
 		return;
 
-	float _fov = 80.0f; // XXX: Extract to CameraEntity
-
-	_shader->bind().setUniform("cameraRight_wPos", glm::vec3(-1, 0, 0))
-		.setUniform("cameraUp_wPos", glm::vec3(0, 0.894, 0.447))
-		.setUniform("cameraPos", lookAtComponent->offsetFromTarget)
+	glm::vec3 rightWPos = { cameraComponent->viewMatrix[0][0], cameraComponent->viewMatrix[0][1], cameraComponent->viewMatrix[0][2] };
+	glm::vec3 upWpos = { cameraComponent->viewMatrix[0][1], cameraComponent->viewMatrix[1][1], cameraComponent->viewMatrix[2][1] };
+	_shader->bind().setUniform("cameraRight_wPos", upWpos)
+		.setUniform("cameraUp_wPos", rightWPos)
+		.setUniform("cameraPos", transformComponent->position)
 		.setUniform("v", cameraComponent->viewMatrix)
 		.setUniform("p", cameraComponent->projectionMatrix);
-
 	for (std::shared_ptr<Entity> entity : world.getEntities()) {
 		auto particle = entity->getComponent<ParticleComponent>();
 		if (!particle)
@@ -54,12 +54,6 @@ void ParticleRenderPass::render(World& world) {
 }
 
 void ParticleRenderPass::resize(unsigned int width, unsigned int height) {
-	auto& attachmentMap = _gbuffer->getAttachments();
-	attachmentMap[Attachment::position]->resize(width, height, GL_RGB32F, GL_RGB, GL_FLOAT);
-	attachmentMap[Attachment::normal]->resize(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-	attachmentMap[Attachment::diffuseSpecular]->resize(width, height, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
-	attachmentMap[Attachment::depth]->resize(width, height, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
-	
 	_gbuffer->bind();
 	glViewport(0, 0, width, height);
 }

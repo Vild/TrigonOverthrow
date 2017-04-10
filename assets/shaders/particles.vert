@@ -20,8 +20,9 @@ uniform mat4 p;
 
 void main() {
 	// Particle center is always in origin from the beginning.
-	vNormal = vec3(0, 1, -2) - vPos;
-	vPos = vec3(0,0,0) + (vec3(cameraRight_wPos * vertPos.x * billboardSize) + vec3(cameraUp_wPos * vertPos.y * billboardSize));
+	vNormal = cameraPos - vPos;
+	//vPos = vec3(0,0,0) + (vec3(cameraRight_wPos * vertPos.x * billboardSize) + vec3(cameraUp_wPos * vertPos.y * billboardSize));
+	vPos = vertPos;
 	vColor = vertColor;
 	vUV = vertUV;
 

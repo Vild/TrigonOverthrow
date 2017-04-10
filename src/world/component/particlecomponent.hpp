@@ -52,7 +52,7 @@ struct ParticleComponent : public Component<ParticleComponent> {
 		_quad->addBuffer("m",
 			[&](GLuint id) {
 			glBindBuffer(GL_ARRAY_BUFFER, id);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * nrOfParticles, NULL, GL_STATIC_DRAW); // Will only be uploaded once
+			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * nrOfParticles, NULL, GL_DYNAMIC_DRAW);
 
 			for (int i = 0; i < 4; i++) {
 				glEnableVertexAttribArray(ShaderAttributeID::m + i);

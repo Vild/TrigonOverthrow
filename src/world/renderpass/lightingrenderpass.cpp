@@ -9,10 +9,11 @@ LightingRenderPass::LightingRenderPass() {
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/final.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/final.frag", ShaderType::fragment))
 		.finalize();
-	_shader->bind().addUniform("vp").addUniform("defPos").addUniform("defNormal").addUniform("defDiffuseSpecular");
+	_shader->bind().addUniform("vp").addUniform("defPos").addUniform("defNormal").addUniform("defDiffuseSpecular").addUniform("defDepth");
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
-		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular);
+		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
+		.setUniform("defDepth", (GLint)InputAttachment::depth);
 
 	std::vector<Vertex> vertices = {
 		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}},	//
