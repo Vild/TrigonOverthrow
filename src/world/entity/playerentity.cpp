@@ -35,3 +35,5 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 	auto input = addComponent<KBMouseInputComponent>();
 	auto physics = addComponent<PhysicsComponent>();
 }
+
+void PlayerEntity::registerImGui() {}

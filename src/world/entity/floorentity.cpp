@@ -99,3 +99,5 @@ FloorEntity::FloorEntity() : Entity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee
 	delete[] topData;
 	delete[] neighborData;
 }
+
+void FloorEntity::registerImGui() {}

@@ -5,4 +5,6 @@
 class PlayerEntity : public Entity {
 public:
 	PlayerEntity();
+
+	virtual void registerImGui();
 };
