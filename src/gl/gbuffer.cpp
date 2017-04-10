@@ -76,11 +76,11 @@ GBuffer& GBuffer::attachDepthTexture(int id, size_t width, size_t height) {
 	return *this;
 }
 
-GBuffer& GBuffer::attachRenderBuffer(size_t width, size_t height, GLenum format) {
+GBuffer& GBuffer::attachRenderBuffer(size_t width, size_t height, GLenum format, GLenum attachment) {
 	glGenRenderbuffers(1, &_renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _renderBuffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, _renderBuffer);
 	return *this;
 }
 

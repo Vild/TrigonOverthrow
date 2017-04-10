@@ -8,7 +8,7 @@
 
 class RenderPass : public System {
 public:
-	void attachInputTexture(GLuint id, std::shared_ptr<Texture> texture);
+	RenderPass& attachInputTexture(GLuint id, std::shared_ptr<Texture> texture);
 
 	// TODO: virtual void onResize() = 0;
 	virtual void render(World& world) = 0;

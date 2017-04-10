@@ -12,6 +12,7 @@
 
 #include "world/entity/playerentity.hpp"
 #include "world/component/lookatcomponent.hpp"
+#include "world/component/lookatcomponent.hpp"
 
 Engine::~Engine() {
 	IMG_Quit();
@@ -112,25 +113,9 @@ int Engine::run(bool vsync) {
 
 		_hidInput->update();
 
-		// This will add all the entities and their information to the debug UI
-		_imGuiSystem->update(_world, delta);
+		_world->tick(delta);
 
-		// Update inputs
-		_inputSystem->update(_world, delta);
-
-		// This will update all the physics in the world
-		_physicsSystem->update(_world, delta);
-
-		// Update lookAt
-		_lookAtSystem->update(_world, delta);
-
-		// Camera System
-		_cameraSystem->update(_world, delta);
-
-		// This will render all the entities to the screen
-		_baseRenderPass->update(_world, delta);
-
-		// NOTE: Make sure that the screen is binded to glBindFramebuffer, else the following code will break!
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
 	}
@@ -146,16 +131,17 @@ void Engine::_init(bool vsync) {
 	_meshLoader = std::make_shared<MeshLoader>();
 	_hidInput = std::make_shared<HIDInput>();
 
+	_world = std::make_shared<World>();
+
 	std::shared_ptr<Entity> target;
-	_world.addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
-	_world.addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
+	_world->addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
+	_world->addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
 	_camera->getComponent<LookAtComponent>()->target = target;
 
 	_inputSystem = std::make_unique<InputSystem>();
 	_physicsSystem = std::make_unique<PhysicsSystem>();
 	_imGuiSystem = std::make_unique<ImGuiSystem>();
 	_lookAtSystem = std::make_unique<LookAtSystem>();
-	_cameraSystem = std::make_unique<CameraSystem>();
 
 	_baseRenderPass = std::make_unique<BaseRenderPass>();
 }
