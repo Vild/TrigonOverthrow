@@ -11,6 +11,7 @@
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
 #include "world/world.hpp"
+
 #include "world/entity/cameraentity.hpp"
 
 class Engine {
@@ -25,9 +26,8 @@ public:
 
 	int run(bool vsync);
 
-	inline uint32_t& getWidth() { return _width; }
-	inline uint32_t& getHeight() { return _height; }
-	inline bool& getUpdateCamera() { return _updateCamera; }
+	inline unsigned int& getWidth() { return _width; }
+	inline unsigned int& getHeight() { return _height; }
 	inline SDL_Window* getWindow() { return _window; }
 
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
@@ -38,21 +38,9 @@ public:
 	inline std::shared_ptr<CameraEntity> getCamera() { return _camera; }
 
 private:
-	uint32_t _width = 1280;
-	uint32_t _height = 720;
-	bool _updateCamera;
+	unsigned int _width = 1280;
+	unsigned int _height = 720;
 	bool _vsync = true;
-
-	float _speed = 5.0f;
-	float _fov = 80.0f;
-
-	float _yaw = 0; // +Z (at 0, 0, 0)
-	float _pitch = 0.0f;
-
-	glm::vec3 _position = glm::vec3(0, 0, -2);
-
-	glm::mat4 _projection;
-	glm::mat4 _view;
 
 	bool _quit;
 	SDL_Window* _window;
@@ -72,6 +60,4 @@ private:
 	void _initSDL();
 	void _initGL();
 	void _initImGui();
-
-	void _resolutionChanged();
 };

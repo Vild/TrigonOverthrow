@@ -1,12 +1,12 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "camerasystem.hpp"
 #include "../component/transformcomponent.hpp"
 #include "../component/cameracomponent.hpp"
 #include <glm/gtx/transform.hpp>
 
-void CameraSystem::update(World & world, float delta)
-{
-	for (std::shared_ptr<Entity> entity : world.getEntities())
-	{
+void CameraSystem::update(World& world, float delta) {
+	for (std::shared_ptr<Entity> entity : world.getEntities()) {
 		auto cameraComponent = entity->getComponent<CameraComponent>();
 		if (!cameraComponent)
 			continue;
@@ -15,13 +15,9 @@ void CameraSystem::update(World & world, float delta)
 		if (!transformComponent)
 			continue;
 
-		glm::vec3 lookDir = transformComponent->getDirection();
+		// glm::vec3 lookDir = transformComponent->getDirection();
 
 		static const glm::vec3 y(0, 1, 0);
-		cameraComponent->viewMatrix = glm::lookAt(
-			transformComponent->position, 
-			transformComponent->position + transformComponent->getDirection(),
-			y
-		);
+		cameraComponent->viewMatrix = glm::lookAt(transformComponent->position, transformComponent->position + transformComponent->getDirection(), y);
 	}
 }

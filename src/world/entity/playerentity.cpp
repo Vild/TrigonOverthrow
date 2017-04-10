@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "playerentity.hpp"
 
 #include "../component/transformcomponent.hpp"
@@ -14,7 +16,6 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 
 	auto model = addComponent<ModelComponent>();
 	model->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player.fbx");
-
 	model->meshData->mesh
 		->addBuffer("m",
 								[](GLuint id) {
@@ -30,6 +31,7 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 									glBindBuffer(GL_ARRAY_BUFFER, 0);
 								})
 		.finalize();
+
 	auto input = addComponent<KBMouseInputComponent>();
 	auto physics = addComponent<PhysicsComponent>();
 }

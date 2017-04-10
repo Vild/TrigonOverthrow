@@ -42,7 +42,7 @@ public:
 			if (com)
 				break;
 		}
-		if (!com)
+		if (!com) // False positive V547 from PVS-Studio
 			return;
 
 		auto list = T::getActiveComponents();

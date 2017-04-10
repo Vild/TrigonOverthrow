@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "lookatsystem.hpp"
 
 #include "../component/lookatcomponent.hpp"
@@ -31,9 +33,7 @@ void LookAtSystem::update(World& world, float delta) {
 				transform->position += dir * delta;
 			else if (dist < lookat->minDistance)
 				transform->position -= dir * delta;
-		}
-		else if (lookat->followMode == FollowMode::followByOffset) 
-		{
+		} else if (lookat->followMode == FollowMode::followByOffset) {
 			transform->position = target->position + lookat->offsetFromTarget;
 		}
 

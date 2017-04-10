@@ -44,3 +44,6 @@ imgui.ini
 # Misc
 *~
 /docs/html/
+project.log
+project.tasks
+strace_out

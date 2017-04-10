@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "physicssystem.hpp"
 
 #include "../component/transformcomponent.hpp"
@@ -6,8 +8,7 @@
 void PhysicsSystem::update(World& world, float delta) {
 	// TODO: Compute shader this?
 
-	for (std::shared_ptr<Entity> entity : world.getEntities())
-	{
+	for (std::shared_ptr<Entity> entity : world.getEntities()) {
 		auto physicsComponent = entity->getComponent<PhysicsComponent>();
 		if (!physicsComponent)
 			continue;

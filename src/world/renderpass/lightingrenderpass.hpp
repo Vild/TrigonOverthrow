@@ -6,11 +6,12 @@
 
 class LightingRenderPass : public RenderPass {
 public:
-	enum InputAttachment : GLuint { position = 0, normal, diffuseSpecular };
+	enum InputAttachment : GLint { position = 0, normal, diffuseSpecular };
 
 	LightingRenderPass();
 
-	void render(World& world);
+	virtual void render(World& world);
+	virtual void resize(unsigned int width, unsigned int height);
 
 private:
 	std::shared_ptr<Mesh> _plane;

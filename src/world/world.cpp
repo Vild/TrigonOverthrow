@@ -1,9 +1,12 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "world.hpp"
 
 #include "system/inputsystem.hpp"
 #include "system/physicssystem.hpp"
 #include "system/imguisystem.hpp"
 #include "system/lookatsystem.hpp"
+#include "system/camerasystem.hpp"
 
 #include "entity/cameraentity.hpp"
 
@@ -17,13 +20,17 @@ World::World() {
 }
 
 void World::tick(float delta) {
-	std::cout << "====== TICK START ======" << std::endl;
-	for (const std::unique_ptr<System>& system : _systems) {
-		std::cout << (typeid(*system).name() + 2) << std::endl;
+	for (const std::unique_ptr<System>& system : _systems)
 		system->update(*this, delta);
-	}
+}
 
-	std::cout << "====== TICK END   ======" << std::endl << std::endl << std::endl;
+void World::resize(unsigned int width, unsigned int height) {
+	for (std::unique_ptr<System>& system : _systems) {
+		RenderPass* rp = dynamic_cast<RenderPass*>(system.get());
+		if (!rp)
+			continue;
+		rp->resize(width, height);
+	}
 }
 
 void World::_setupSystems() {
@@ -32,6 +39,7 @@ void World::_setupSystems() {
 	_systems.push_back(std::make_unique<InputSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
+	_systems.push_back(std::make_unique<CameraSystem>());
 
 	// Render passes
 	{

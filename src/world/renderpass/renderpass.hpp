@@ -14,6 +14,8 @@ public:
 	virtual void render(World& world) = 0;
 	virtual void update(World& world, float delta);
 
+	virtual void resize(unsigned int width, unsigned int height) = 0;
+
 	inline std::shared_ptr<GBuffer> getGBuffer() { return _gbuffer; }
 	inline std::shared_ptr<ShaderProgram> getShader() { return _shader; }
 

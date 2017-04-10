@@ -18,6 +18,7 @@ public:
 	}
 
 	void tick(float delta);
+	void resize(unsigned int width, unsigned int height);
 
 	inline std::vector<std::shared_ptr<Entity>>& getEntities() { return _entities; }
 
