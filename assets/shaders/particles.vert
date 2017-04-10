@@ -4,7 +4,6 @@
 layout (location = 0) in vec3 vertPos;
 layout (location = 2) in vec3 vertColor;
 layout (location = 3) in vec2 vertUV;
-layout (location = 5) in mat4 m;
 
 out vec3 vPos;
 out vec3 vNormal;
@@ -17,14 +16,14 @@ uniform float billboardSize; //Might hardcode it.
 uniform vec3 cameraPos;
 uniform mat4 v;
 uniform mat4 p;
+uniform sampler2D particlePos;
 
 void main() {
 	// Particle center is always in origin from the beginning.
 	vNormal = cameraPos - vPos;
-	//vPos = vec3(0,0,0) + (vec3(cameraRight_wPos * vertPos.x * billboardSize) + vec3(cameraUp_wPos * vertPos.y * billboardSize));
 	vPos = vertPos;
 	vColor = vertColor;
 	vUV = vertUV;
 
-	gl_Position = p * v * m * vec4(vPos, 1.0f);
+	gl_Position = p * v * vec4(vPos, 1.0f);
 }

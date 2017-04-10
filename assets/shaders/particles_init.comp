@@ -6,10 +6,12 @@ layout(rgba32f, binding = 2) uniform image2D pos_output;
 layout(rgba32f, binding = 3) uniform image2D vel_output;
 
 uniform float delta;
+uniform vec3 emitterPos;
+uniform vec3 emitterDir;
 
 void main(){
-  ivec3 pixel_Coords = ivec3(gl_GlobalInvocationID).xyz;
+  ivec2 pixel_Coords = ivec2(gl_GlobalInvocationID).xy;
 
-  imageStore(pos_output, pixel_coords, vec4(1,1,1,0));
-  imageStore(pos_input, pixel_coords, vec4(1,1,1,0));
+  imageStore(pos_output, pixel_Coords, vec4(1,1,1,0));
+  imageStore(vel_output, pixel_Coords, vec4(1,1,1,0));
 }

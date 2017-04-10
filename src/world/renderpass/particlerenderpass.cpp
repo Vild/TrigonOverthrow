@@ -6,6 +6,7 @@
 #include "../component/lookatcomponent.hpp"
 #include <glm/gtx/transform.hpp>
 #include <cmath>
+#include "glm/glm.hpp"
 
 ParticleRenderPass::ParticleRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>(0);
@@ -18,7 +19,8 @@ ParticleRenderPass::ParticleRenderPass() {
 		.addUniform("billboardSize")
 		.addUniform("cameraPos")
 		.addUniform("v")
-		.addUniform("p");
+		.addUniform("p")
+		.addUniform("particlePos");
 }
 
 void ParticleRenderPass::render(World& world) {
@@ -47,8 +49,8 @@ void ParticleRenderPass::render(World& world) {
 		if (!particle)
 			continue;
 		_shader->setUniform("billboardSize", particle->particleSize);
-		particle->_quad->uploadBufferArray("m", particle->matrices);
-		particle->_quad->render(particle->_nrOfParticles);
+
+		glDrawArrays(GL_POINTS, 1, 1);
 	}
 
 }
