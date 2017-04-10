@@ -1,8 +1,8 @@
 import reggae;
 
 enum CompileCommand {
-	Compile = "g++ -c -std=c++14 -O0 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always $in -o $out",
-	Link = "g++ -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lGL -lassimp $in -o $out",
+	Compile = "g++ -c -std=c++14 -O0 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -fopenmp $in -o $out",
+	Link = "g++ -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lGL -lassimp $in -o $out",
 }
 
 Target[] MakeObjects() {
