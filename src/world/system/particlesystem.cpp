@@ -30,17 +30,23 @@ ParticleSystem::ParticleSystem() {
 
 void ParticleSystem::update(World& world, float delta) {
 	for (std::shared_ptr<ParticleComponent> comp : ParticleComponent::getActiveComponents()) {
-		for (int i = 0; i < comp->_nrOfParticles; i++) {
-			comp->particles[i].lifeSpan -= delta * 1.0f;
-			if (comp->particles[i].lifeSpan <= 0) {
-				comp->particles[i].lifeSpan = ((rand()*1.0) / (float)INT_MAX) * 4 + 1;
-				comp->particles[i].velocity = glm::normalize(glm::vec3(sin(3 * i), cos(i * 0.5f), cos(i * 0.5f) + sin(8 * i) + sin(3 * i)));;
-				comp->particles[i].pos = comp->emitter->pos;
+		auto * p = &comp->particles[0];
+		auto * m = &comp->matrices[0];
+		int count = comp->_nrOfParticles;
+		glm::vec3 spawn = comp->emitter->pos;
+
+		//#pragma omp parallel for schedule(dynamic, 128)
+		for (int i = 0; i < count; i++) {
+			p[i].lifeSpan -= delta * 1.0f;
+			if (p[i].lifeSpan <= 0) {
+				p[i].lifeSpan = ((rand()*1.0) / (float)INT_MAX) * 4 + 1;
+				p[i].velocity = glm::normalize(glm::vec3(sin(3 * i), cos(i * 0.5f), cos(i * 0.5f) + sin(8 * i) + sin(3 * i)));;
+				p[i].pos = spawn;
 			}
-			comp->particles[i].velocity += comp->particles[i].velocity * delta;
-			comp->particles[i].pos += comp->particles[i].velocity * delta;
-			comp->particles[i].model = glm::translate(comp->particles[i].pos) * glm::scale(glm::vec3(0.2));
-			comp->matrices[i] = comp->particles[i].model;
+			p[i].velocity += p[i].velocity * delta;
+			p[i].pos += p[i].velocity * delta;
+			p[i].model = glm::translate(p[i].pos) * glm::scale(glm::vec3(0.2));
+			m[i] = p[i].model;
 		}
 	}
 }
