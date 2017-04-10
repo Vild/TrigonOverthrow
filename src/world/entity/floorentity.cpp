@@ -61,7 +61,7 @@ FloorEntity::FloorEntity() : Entity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee
 	model->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/box.obj");
 	model->meshData->mesh
 		->addBuffer("m",
-								[](GLuint id) {
+								[&](GLuint id) {
 									glBindBuffer(GL_ARRAY_BUFFER, id);
 									glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gridSize * gridSize, NULL, GL_DYNAMIC_DRAW);
 

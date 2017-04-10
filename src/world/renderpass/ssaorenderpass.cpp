@@ -31,7 +31,7 @@ SSAORenderSystem::SSAORenderSystem()
 	_gbuffer->bind()
 		.attachTexture(0, width, height, GL_RED, GL_FLOAT, 1)
 		.finalize();
-	
+
 
 	std::vector<Vertex> vertices = {
 		Vertex{ glm::vec3{ -1, 1, 0 }, glm::vec3{ 0, 0, -1 },{ 1.0, 1.0, 1.0 },{ 0, 1 } },	//
