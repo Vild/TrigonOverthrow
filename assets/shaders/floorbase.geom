@@ -70,7 +70,7 @@ void main() {
 		if (pos.y > 0)
 			pos = gTopY;
 		else
-			pos = vM[i] * vec4(pos.x, -1000, pos.z, 1);//gBottomY;
+			pos = gBottomY;
 
 		gPos = pos.xyz;
 

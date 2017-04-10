@@ -57,9 +57,7 @@ GeometryRenderPass::GeometryRenderPass() {
 		.addUniform("normalTexture")
 		.addUniform("setting_doBackFaceCulling")
 		.addUniform("setting_defaultSpecular");
-	_floorShader->setUniform("diffuseTexture", 0)
-		.setUniform("normalTexture", 1)
-		.setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
+	_floorShader->setUniform("diffuseTexture", 0).setUniform("normalTexture", 1).setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
 }
 
 void GeometryRenderPass::render(World& world) {

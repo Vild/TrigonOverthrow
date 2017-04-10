@@ -44,15 +44,17 @@ FloorEntity::FloorEntity() : Entity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee
 
 			float cur = topData[z * gridSize + x];
 
-			point[forwards] = z > 0 ? topData[(z - 1) * gridSize + x] : cur;
-			point[left] = x < gridSize - 1 ? topData[z * gridSize + x + 1] : cur;
-			point[right] = x > 0 ? topData[z * gridSize + x - 1] : cur;
-			point[backwards] = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : cur;
+			float minFloor = cur - 100;
 
-			point[forwards] = std::min(cur, point[forwards]);
-			point[left] = std::min(cur, point[left]);
-			point[right] = std::min(cur, point[right]);
-			point[backwards] = std::min(cur, point[backwards]);
+			point[forwards] = z > 0 ? topData[(z - 1) * gridSize + x] : minFloor;
+			point[left] = x < gridSize - 1 ? topData[z * gridSize + x + 1] : minFloor;
+			point[right] = x > 0 ? topData[z * gridSize + x - 1] : minFloor;
+			point[backwards] = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : minFloor;
+
+			point[forwards] = std::min(minFloor, point[forwards]);
+			point[left] = std::min(minFloor, point[left]);
+			point[right] = std::min(minFloor, point[right]);
+			point[backwards] = std::min(minFloor, point[backwards]);
 		}
 
 	auto model = addComponent<ModelComponent>();
