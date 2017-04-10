@@ -6,26 +6,24 @@
 #include "../../engine.hpp"
 
 ParticleSystem::ParticleSystem() {
-	//_programs.resize(2);
-	//_programs[0]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute))
-	//	.finalize();
-	//_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
-	//	.finalize();
+	_programs.resize(2);
+	_programs[0] = std::make_shared<ShaderProgram>();
+	_programs[0]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute))
+		.finalize();
+	_programs[1] = std::make_shared<ShaderProgram>();
+	_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
+		.finalize();
 
-	// TO-DO: Pong pos and vel framebuffers between computations for maximum efficineny.
+	 // TO-DO: Pong pos and vel framebuffers between computations for maximum efficineny.
 
 
-
-
-
-	//_particleData = std::make_shared<GBuffer>();
-	//_particleData->bind().attachTexture(0, 512, 512, GL_RGBA32F, GL_FLOAT, 3)
-	//	.attachTexture(1, 512, 512, GL_RGBA32F, GL_FLOAT, 4)
-	//	.attachTexture(2, 512, 512, GL_RGBA32F, GL_FLOAT, 4)  // Output pos and life.
-	//	.attachTexture(3, 512, 512, GL_RGBA32F, GL_FLOAT, 4); // Output vel
-	//_program.bind().addUniform("delta");
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	_particleData = std::make_shared<GBuffer>();
+	_particleData->bind().attachTexture(0, 512, 512, GL_RGBA32F, GL_FLOAT, 3)
+		.attachTexture(1, 512, 512, GL_RGBA32F, GL_FLOAT, 4)
+		.attachTexture(2, 512, 512, GL_RGBA32F, GL_FLOAT, 4)  // Output pos and life.
+		.attachTexture(3, 512, 512, GL_RGBA32F, GL_FLOAT, 4); // Output vel
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ParticleSystem::update(World& world, float delta) {
