@@ -83,9 +83,6 @@ int Engine::run(bool vsync) {
 
 		_hidInput->update();
 
-		//_particleRenderSystem->update(_world, delta);
-		//// NOTE: Make sure that the screen is binded to glBindFramebuffer, else the following code will break!
-
 		_world->tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
@@ -108,9 +105,6 @@ void Engine::_init(bool vsync) {
 	_world->addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
 	_world->addEntity(std::static_pointer_cast<Entity>(_camera = std::make_shared<CameraEntity>()));
 	_camera->getComponent<LookAtComponent>()->target = target;
-
-	_particleSystem = std::make_unique<ParticleSystem>();
-	_particleRenderSystem = std::make_unique<ParticleRenderSystem>();
 }
 
 void Engine::_initSDL() {

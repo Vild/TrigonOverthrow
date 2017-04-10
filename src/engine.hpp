@@ -13,7 +13,6 @@
 
 #include "world/world.hpp"
 #include "world/system/particlesystem.hpp"
-#include "world/system/particlerendersystem.hpp"
 
 #include "world/entity/cameraentity.hpp"
 
@@ -55,9 +54,6 @@ private:
 
 	std::shared_ptr<World> _world;
 	std::shared_ptr<CameraEntity> _camera;
-
-	std::unique_ptr<ParticleSystem> _particleSystem;
-	std::unique_ptr<ParticleRenderSystem> _particleRenderSystem;
 
 	Engine() {}
 	virtual ~Engine();

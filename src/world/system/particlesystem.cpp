@@ -6,11 +6,11 @@
 #include "../../engine.hpp"
 
 ParticleSystem::ParticleSystem() {
-	_programs.resize(2);
-	_programs[0]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute))
-		.finalize();
-	_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
-		.finalize();
+	//_programs.resize(2);
+	//_programs[0]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute))
+	//	.finalize();
+	//_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
+	//	.finalize();
 
 	// TO-DO: Pong pos and vel framebuffers between computations for maximum efficineny.
 
@@ -25,7 +25,7 @@ ParticleSystem::ParticleSystem() {
 	//	.attachTexture(3, 512, 512, GL_RGBA32F, GL_FLOAT, 4); // Output vel
 	//_program.bind().addUniform("delta");
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ParticleSystem::update(World& world, float delta) {
@@ -41,7 +41,6 @@ void ParticleSystem::update(World& world, float delta) {
 			comp->particles[i].pos += comp->particles[i].velocity * delta;
 			comp->particles[i].model = glm::translate(comp->particles[i].pos) * glm::scale(glm::vec3(0.2));
 			comp->matrices[i] = comp->particles[i].model;
-			//_program.bind().setUniform("delta", delta);
 		}
 	}
 }
