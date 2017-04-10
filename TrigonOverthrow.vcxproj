@@ -105,9 +105,6 @@
     <ClInclude Include="src\world\system\system.hpp" />
     <ClInclude Include="src\world\world.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{7FFEB1ED-56F5-4B19-B1FC-9038971F90EC}</ProjectGuid>
