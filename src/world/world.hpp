@@ -10,7 +10,7 @@ class World {
 public:
 	World();
 
-	template <typename T>
+	template <typename T, typename std::enable_if<std::is_base_of<Entity, T>::value>::type* = nullptr>
 	std::shared_ptr<Entity> addEntity(std::shared_ptr<T> entity) {
 		std::shared_ptr<Entity> ent = entity;
 		_entities.push_back(ent);

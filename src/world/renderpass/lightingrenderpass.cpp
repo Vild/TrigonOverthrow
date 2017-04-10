@@ -2,6 +2,10 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "lightingrenderpass.hpp"
 
+#include "../../engine.hpp"
+
+#include "../component/transformcomponent.hpp"
+
 LightingRenderPass::LightingRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>(0);
 
@@ -42,10 +46,19 @@ LightingRenderPass::LightingRenderPass() {
 }
 
 void LightingRenderPass::render(World& world) {
+	auto camera = Engine::getInstance().getCamera();
+	if (!camera)
+		return;
+
+	auto transformComponent = camera->getComponent<TransformComponent>();
+	if (!transformComponent)
+		return;
+
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_shader->bind();
 
+	_shader->setUniform("cameraPos", transformComponent->position);
 	_shader->setUniform("vp", glm::mat4(1));
 	_plane->render();
 }

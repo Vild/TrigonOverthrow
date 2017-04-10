@@ -14,6 +14,8 @@ public:
 	virtual void resize(unsigned int width, unsigned int height);
 
 private:
+	std::shared_ptr<ShaderProgram> _floorShader;
+
 	bool _setting_base_doBackFaceCulling = false;
 	float _setting_base_defaultSpecular = 0.5f;
 };
