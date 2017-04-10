@@ -10,25 +10,20 @@
 class SSAORenderSystem : public RenderPass
 {
 public:
+	enum InputAttachments { PositionMap, NormalMap, NoiseMap };
+	enum Attachments { OcclusionMap };
 	typedef int Camera;
 
-	SSAORenderSystem(int width, int height);
-
-	GBuffer & render(GBuffer & prevBuffer, Camera & camera);
-
+	SSAORenderSystem();
+	
 	// Inherited via RenderPass
 	virtual void render(World & world) override;
-
+	virtual void resize(unsigned int width, unsigned int height) override;
 private:
-	GBuffer gBuffer;
-	ShaderProgram shaderProgram;
 
 	std::shared_ptr<Texture> noiseMap;
+	std::unique_ptr<Mesh> _plane;
 
 	float lerp(float a, float b, float c);
 	void generateUniformData(int width, int height);
-
-	void fsQuadRender();
-
-
 };

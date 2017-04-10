@@ -38,7 +38,7 @@ void main()
     float sampleDepth = (viewMatrix * texture(positionMap, sampleUV)).z;
 
     float rangeCheck = smoothstep(0.0, 1.0, sampleRadius / abs(viewPosition.z - sampleDepth));
-    occlusion += sampleDepth >= samplePoint.z + sampleBias ? 1.0 * rangeCheck : 0.0;
+    occlusion += (sampleDepth >= samplePoint.z + sampleBias ? 1.0 : 0.0) * rangeCheck;
   }
 
   occlusion = 1.0 - (occlusion / sampleSize);

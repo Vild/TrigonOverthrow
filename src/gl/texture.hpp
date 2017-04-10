@@ -17,6 +17,7 @@ public:
 	GLuint getTexture();
 
 	Texture & bind(int slot = 0);
+	void resize(unsigned int width, unsigned int height, GLenum internalFormat, GLenum dataFormat, GLenum dataType);
 	Texture & setParameter(GLenum parameter, GLenum value);
 
 private:

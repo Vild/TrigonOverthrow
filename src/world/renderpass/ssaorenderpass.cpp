@@ -3,30 +3,64 @@
 #include <random>
 #include "../component/cameracomponent.hpp"
 
-SSAORenderSystem::SSAORenderSystem(int width, int height)
+SSAORenderSystem::SSAORenderSystem()
 {
-	shaderProgram
-		.attach("assets/shaders/ssao.vert", ShaderType::vertex)
+	auto& engine = Engine::getInstance();
+	int width = engine.getWidth();
+	int height = engine.getHeight();
+
+	_shader = std::make_shared<ShaderProgram>();
+	_shader->attach("assets/shaders/ssao.vert", ShaderType::vertex)
 		.attach("assets/shaders/ssao.frag", ShaderType::fragment)
 		.finalize();
 
-	shaderProgram
+	_shader->bind()
 		.addUniform("positionMap")
 		.addUniform("normalMap")
 		.addUniform("noiseMap")
 		.addUniform("noiseScale")
-		.addUniform("nrOfSamples")
+		.addUniform("sampleSize")
 		.addUniform("sampleRadius")
 		.addUniform("sampleBias")
 		.addUniform("samplePoints")
 		.addUniform("viewMatrix")
 		.addUniform("projectionMatrix");
 
-	gBuffer.attachTexture(0, width, height, GL_RED, GL_FLOAT, 1);
 
+	_gbuffer = std::make_shared<GBuffer>();
+	_gbuffer->bind()
+		.attachTexture(0, width, height, GL_RED, GL_FLOAT, 1)
+		.finalize();
 	
-	shaderProgram.bind();
+
+	std::vector<Vertex> vertices = {
+		Vertex{ glm::vec3{ -1, 1, 0 }, glm::vec3{ 0, 0, -1 },{ 1.0, 1.0, 1.0 },{ 0, 1 } },	//
+		Vertex{ glm::vec3{ 1, 1, 0 }, glm::vec3{ 0, 0, -1 },{ 1.0, 1.0, 1.0 },{ 1, 1 } },	//
+		Vertex{ glm::vec3{ 1, -1, 0 }, glm::vec3{ 0, 0, -1 },{ 1.0, 1.0, 1.0 },{ 1, 0 } },	//
+		Vertex{ glm::vec3{ -1, -1, 0 }, glm::vec3{ 0, 0, -1 },{ 1.0, 1.0, 1.0 },{ 0, 0 } }, //
+	};
+	std::vector<GLuint> indicies = { 0, 2, 1, 2, 0, 3 };
+	_plane = std::make_unique<Mesh>(vertices, indicies);
+	_plane
+		->addBuffer("m",
+			[](GLuint id) {
+		glm::mat4 mData = glm::mat4(1);
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), glm::value_ptr(mData), GL_STATIC_DRAW); // Will only be uploaded once
+
+		for (int i = 0; i < 4; i++) {
+			glEnableVertexAttribArray(ShaderAttributeID::m + i);
+			glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
+			glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}).finalize();
+
 	generateUniformData(width, height);
+
+
+
 }
 
 float SSAORenderSystem::lerp(float a, float b, float f)
@@ -36,10 +70,6 @@ float SSAORenderSystem::lerp(float a, float b, float f)
 
 void SSAORenderSystem::generateUniformData(int width, int height)
 {
-	shaderProgram.setUniform("positionMap", 0);
-	shaderProgram.setUniform("normalMap", 1);
-	shaderProgram.setUniform("normalMap", 2);
-
 	std::uniform_real_distribution<GLfloat> randomFlaots(0.0, 1.0);
 	std::default_random_engine generator;
 
@@ -63,8 +93,6 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 		samplePoints.push_back(samplePoint);
 	}
 
-	shaderProgram.setUniformArray("samplePoints", samplePoints);
-
 	std::vector<glm::vec3> noiseData;
 	for (size_t i = 0; i < 16; i++)
 	{
@@ -77,7 +105,7 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 		noiseData.push_back(noise);
 	}
 
-	noiseMap = std::make_shared<Texture>(width, height, GL_RGB32F, GL_RGB, GL_FLOAT, &noiseData[0]);
+	noiseMap = std::make_shared<Texture>(4, 4, GL_RGB32F, GL_RGB, GL_FLOAT, &noiseData[0]);
 	noiseMap->bind()
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
@@ -87,56 +115,38 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 	attachInputTexture(2, noiseMap);
 
 	glm::vec2 noiseScale = { width / 4.0, height / 4.0 };
-	shaderProgram.setUniform("noiseScale", noiseScale);
 
-	shaderProgram.setUniform("sampleSize", 64);
-	shaderProgram.setUniform("sampleRadius", 0.5f);
-	shaderProgram.setUniform("sampleBias", 0.025f);
+	_shader->setUniform("positionMap", 0);
+	_shader->setUniform("normalMap", 1);
+	_shader->setUniform("noiseMap", 2);
+
+	_shader->setUniform("noiseScale", noiseScale);
+
+	_shader->setUniform("sampleSize", 64);
+	_shader->setUniform("sampleRadius", 0.5f);
+	_shader->setUniform("sampleBias", 0.025f);
+	_shader->setUniformArray("samplePoints", samplePoints);
 }
 
-void SSAORenderSystem::fsQuadRender()
+void SSAORenderSystem::resize(unsigned int width, unsigned int height)
 {
-	static bool first = true;
-	static GLuint VAO, VBO;
+	auto& attachments = _gbuffer->getAttachments();
+	attachments[Attachments::OcclusionMap]->resize(width, height, GL_RED, GL_RED, GL_FLOAT);
 
-	if (first)
-	{
-		glm::vec3 vertices[4] = {
-			{ -1,  1,  0 },
-			{  1,  1,  0 },
-			{ -1, -1,  0 },
-			{  1, -1,  0 }
-		};
-
-		glGenBuffers(1, &VAO);
-		glBindVertexArray(VAO);
-
-		glGenBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-
-		glBindVertexArray(0);
-
-		first = false;
-	}
-
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glBindVertexArray(0);
+	_gbuffer->bind();
+	glViewport(0, 0, width, height);
 }
 
 void SSAORenderSystem::render(World & world)
 {
+	glClear(GL_COLOR_BUFFER_BIT);
 	CameraEntity & camera = *Engine::getInstance().getCamera();
 	auto cameraComponent = camera.getComponent<CameraComponent>();
 
-	shaderProgram.bind();
-	shaderProgram.setUniform("viewMatrix", cameraComponent->viewMatrix);
-	shaderProgram.setUniform("projectionMatrix", cameraComponent->projectionMatrix);
+	_shader->bind();
+	_shader->setUniform("viewMatrix", cameraComponent->viewMatrix);
+	_shader->setUniform("projectionMatrix", cameraComponent->projectionMatrix);
 
-	fsQuadRender();
+	_plane->render();
 }
 
