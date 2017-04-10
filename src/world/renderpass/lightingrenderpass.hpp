@@ -13,6 +13,9 @@ public:
 	virtual void render(World& world);
 	virtual void resize(unsigned int width, unsigned int height);
 
+	virtual void registerImGui();
+	inline virtual std::string name() { return "LightingRenderPass"; };
+
 private:
 	std::shared_ptr<Mesh> _plane;
 };

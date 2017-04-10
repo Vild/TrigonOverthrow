@@ -21,6 +21,7 @@ public:
 	void resize(unsigned int width, unsigned int height);
 
 	inline std::vector<std::shared_ptr<Entity>>& getEntities() { return _entities; }
+	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
 private:
 	std::vector<std::shared_ptr<Entity>> _entities;

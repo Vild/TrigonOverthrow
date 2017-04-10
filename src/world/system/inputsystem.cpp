@@ -36,3 +36,5 @@ void InputSystem::update(World& world, float delta) {
 		physicsComponent->acceleration += inputDir.y * up * delta * accelSpeed;
 	}
 }
+
+void InputSystem::registerImGui() {}

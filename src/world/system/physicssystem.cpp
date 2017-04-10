@@ -23,3 +23,5 @@ void PhysicsSystem::update(World& world, float delta) {
 		physicsComponent->velocity += physicsComponent->acceleration * delta;
 	}
 }
+
+void PhysicsSystem::registerImGui() {}

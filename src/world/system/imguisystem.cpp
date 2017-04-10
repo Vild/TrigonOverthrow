@@ -22,4 +22,15 @@ void ImGuiSystem::update(World& world, float delta) {
 			ImGui::TreePop();
 		}
 	}
+	ImGui::Selectable("");
+	ImGui::Text("Systems:");
+	for (std::unique_ptr<System>& system : world.getSystems()) {
+		if (ImGui::TreeNode(system->name().c_str())) {
+			ImGui::Text("Actions:");
+			system->registerImGui();
+			ImGui::TreePop();
+		}
+	}
 }
+
+void ImGuiSystem::registerImGui() {}

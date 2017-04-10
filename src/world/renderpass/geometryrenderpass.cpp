@@ -112,3 +112,5 @@ void GeometryRenderPass::resize(unsigned int width, unsigned int height) {
 	_gbuffer->bind();
 	glViewport(0, 0, width, height);
 }
+
+void GeometryRenderPass::registerImGui() {}

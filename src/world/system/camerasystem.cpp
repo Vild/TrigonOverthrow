@@ -21,3 +21,5 @@ void CameraSystem::update(World& world, float delta) {
 		cameraComponent->viewMatrix = glm::lookAt(transformComponent->position, transformComponent->position + transformComponent->getDirection(), y);
 	}
 }
+
+void CameraSystem::registerImGui() {}
