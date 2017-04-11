@@ -36,6 +36,10 @@ SSAORenderSystem::SSAORenderSystem()
 		.attachTexture(0, width, height, GL_RED, GL_FLOAT, 1)
 		.finalize();
 
+	//_gbuffer->getAttachments()[0]->bind()
+	//	.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+	//	.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
 
 	std::vector<Vertex> vertices = {
 		Vertex{ glm::vec3{ -1, 1, 0 }, glm::vec3{ 0, 0, -1 },{ 1.0, 1.0, 1.0 },{ 0, 1 } },	//
@@ -82,7 +86,7 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 	{
 		glm::vec3 samplePoint = {
 			randomFlaots(generator) * 2.0 - 1.0,
-			randomFlaots(generator),
+			randomFlaots(generator) * 2.0 - 1.0,
 			randomFlaots(generator) * 2.0 - 1.0
 		};
 
@@ -102,8 +106,8 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 	{
 		glm::vec3 noise = {
 			randomFlaots(generator) * 2.0 - 1.0,
-			0.0,
-			randomFlaots(generator) * 2.0 - 1.0
+			randomFlaots(generator) * 2.0 - 1.0,
+			0.0
 		};
 
 		noiseData.push_back(noise);

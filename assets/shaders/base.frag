@@ -18,7 +18,7 @@ uniform float setting_defaultSpecular;
 void main() {
 	defPos = gPos;
 
-	vec3 normal = normalize(texture2D(normalTexture, gUV).rgb * 2.0 - vec3(1.0));
+	vec3 normal = normalize(texture(normalTexture, gUV).rgb * 2.0 - vec3(1.0));
 	defNormal = normalize(gTBN * normal);
 
 	defDiffuseSpecular.rgb = gColor * texture(diffuseTexture, gUV).rgb;
