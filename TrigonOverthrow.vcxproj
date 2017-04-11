@@ -92,6 +92,8 @@
     <ClInclude Include="src\world\entity\floorentity.hpp" />
     <ClInclude Include="src\world\entity\playerentity.hpp" />
     <ClInclude Include="src\world\renderpass\baserenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\gaussianrenderpass.cpp" />
+    <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\geometryrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\lightingrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\renderpass.hpp" />
