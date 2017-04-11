@@ -8,3 +8,5 @@ void ModelComponent::render(const glm::mat4& m, GLenum drawMode) {
 	meshData->mesh->uploadBufferData("m", m);
 	meshData->mesh->render(1, drawMode);
 }
+
+void ModelComponent::registerImGui() {}

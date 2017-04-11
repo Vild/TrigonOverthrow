@@ -15,3 +15,15 @@ CameraEntity::CameraEntity() : Entity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d7
 	lookAt->followMode = FollowMode::followByOffset;
 	lookAt->offsetFromTarget = glm::vec3(0, 2.5, -5);
 }
+
+void CameraEntity::registerImGui() {
+	if (ImGui::Checkbox("Follow target", &_follow)) {
+		if (_follow) {
+			addComponent<LookAtComponent>(_tmpComponent);
+			_tmpComponent.reset();
+		} else {
+			_tmpComponent = getComponent<LookAtComponent>();
+			removeComponent<LookAtComponent>();
+		}
+	}
+}

@@ -47,3 +47,5 @@ void LookAtSystem::update(World& world, float delta) {
 		transform->recalculateMatrix();
 	}
 }
+
+void LookAtSystem::registerImGui() {}

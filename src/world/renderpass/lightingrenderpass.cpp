@@ -67,3 +67,5 @@ void LightingRenderPass::resize(unsigned int width, unsigned int height) {
 	_gbuffer->bind();
 	glViewport(0, 0, width, height);
 }
+
+void LightingRenderPass::registerImGui() {}

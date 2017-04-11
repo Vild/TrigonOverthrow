@@ -19,8 +19,6 @@ struct Component : public IComponent {
 public:
 	static inline std::vector<std::shared_ptr<T>>& getActiveComponents() { return _activeComponents; }
 
-	virtual void registerImGui() {}
-
 private:
 	static std::vector<std::shared_ptr<T>> _activeComponents;
 };
