@@ -22,6 +22,8 @@ public:
 
 	inline std::map<GLuint, std::shared_ptr<Texture>>& getAttachments() { return _attachments; }
 
+	std::shared_ptr<Texture>& getAttachment(int id);
+
 private:
 	GLuint _fb;
 	std::map<GLuint, std::shared_ptr<Texture>> _attachments;

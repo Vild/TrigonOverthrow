@@ -47,6 +47,7 @@
     <ClCompile Include="src\world\entity\entity.cpp" />
     <ClCompile Include="src\world\entity\floorentity.cpp" />
     <ClCompile Include="src\world\entity\playerentity.cpp" />
+    <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\geometryrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\lightingrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\renderpass.cpp" />
@@ -92,7 +93,6 @@
     <ClInclude Include="src\world\entity\floorentity.hpp" />
     <ClInclude Include="src\world\entity\playerentity.hpp" />
     <ClInclude Include="src\world\renderpass\baserenderpass.hpp" />
-    <ClInclude Include="src\world\renderpass\gaussianrenderpass.cpp" />
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\geometryrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\lightingrenderpass.hpp" />

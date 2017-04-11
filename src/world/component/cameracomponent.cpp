@@ -17,10 +17,10 @@ void CameraComponent::recalculateProjectionMatrix()
 void CameraComponent::registerImGui() {
 	bool dirty = false;
 
-	dirty |= ImGui::DragFloat("Fov", &fov, 0.1);
-	dirty |= ImGui::DragFloat("zNear", &zNear, 0.1);
-	dirty |= ImGui::DragFloat("zFar", &zFar, 0.1);
-	dirty |= ImGui::DragFloat("Aspect", &aspect, 0.1);
+	dirty |= ImGui::DragFloat("Fov", &fov, 0.1f);
+	dirty |= ImGui::DragFloat("zNear", &zNear, 0.1f);
+	dirty |= ImGui::DragFloat("zFar", &zFar, 0.1f);
+	dirty |= ImGui::DragFloat("Aspect", &aspect, 0.1f);
 
 	if (dirty)
 	{

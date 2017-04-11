@@ -99,3 +99,8 @@ GBuffer& GBuffer::finalize() {
 	}
 	return *this;
 }
+
+std::shared_ptr<Texture>& GBuffer::getAttachment(int id)
+{
+	return _attachments[id];
+}

@@ -37,9 +37,9 @@ void TransformComponent::registerImGui() {
 
 	bool dirty = false;
 
-	dirty |= ImGui::DragFloat3("Position", glm::value_ptr(position), 0.1);
-	dirty |= ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1);
-	dirty |= ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 0.1);
+	dirty |= ImGui::DragFloat3("Position", glm::value_ptr(position), 0.1f);
+	dirty |= ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);
+	dirty |= ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 0.1f);
 
 	if (dirty)
 	{
