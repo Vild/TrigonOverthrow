@@ -1,8 +1,8 @@
 #pragma once
 
 #include "system.hpp"
-#include "../src/gl/gbuffer.hpp"
-#include "../src/gl/shader.hpp"
+#include "../../gl/gbuffer.hpp"
+#include "../../gl/shader.hpp"
 
 class ParticleSystem : public System {
 public:

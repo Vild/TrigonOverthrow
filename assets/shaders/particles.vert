@@ -16,10 +16,13 @@ void main() {
 	// Particle center is always in origin from the beginning.
 
 	vUV = vec2(float(gl_InstanceID % 32) / 32.0, float(gl_InstanceID / 32) / 32.0);
-	vPos = vec3((gl_InstanceID % 32) / 2.0, (gl_InstanceID / 32)/2.0, 0);//texture(particlePos, vUV).xyz;
+	vPos = texture(particlePos, vUV).xyz;
+	//vPos.x += float(gl_InstanceID) * 0.5;
 	vNormal = cameraPos - vPos;
 	vColor = vec3(1,0,float(gl_InstanceID) / 32.0);
 
 	gl_PointSize = 2;
 	gl_Position = p * v * vec4(vPos, 1.0f);
 }
+
+//vPos = vec3((gl_InstanceID % 32) / 2.0, (gl_InstanceID / 32)/2.0, 0);

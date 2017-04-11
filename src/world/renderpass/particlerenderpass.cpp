@@ -1,7 +1,7 @@
 #include "particlerenderpass.hpp"
 #include "../component/particlecomponent.hpp"
 #include "../component/transformcomponent.hpp"
-#include "../src/engine.hpp"
+#include "../../engine.hpp"
 #include "../component/cameracomponent.hpp"
 #include "../component/lookatcomponent.hpp"
 #include <glm/gtx/transform.hpp>
@@ -18,7 +18,7 @@ ParticleRenderPass::ParticleRenderPass(World &world) {
 		.addUniform("v")
 		.addUniform("p")
 		.addUniform("particlePos");
-	_shader->setUniform("particlePos", 0);
+	_shader->setUniform("particlePos", (GLint)InputAttachment::position);
 }
 
 void ParticleRenderPass::render(World& world) {
@@ -35,8 +35,6 @@ void ParticleRenderPass::render(World& world) {
 	if (!transformComponent)
 		return;
 	
-	glm::vec3 rightWPos = { cameraComponent->viewMatrix[0][0], cameraComponent->viewMatrix[0][1], cameraComponent->viewMatrix[0][2] };
-	glm::vec3 upWpos = { cameraComponent->viewMatrix[0][1], cameraComponent->viewMatrix[1][1], cameraComponent->viewMatrix[2][1] };
 	_shader->bind()
 		.setUniform("v", cameraComponent->viewMatrix)
 		.setUniform("p", cameraComponent->projectionMatrix);
@@ -45,7 +43,7 @@ void ParticleRenderPass::render(World& world) {
 		if (!particle)
 			continue;
 		_shader->setUniform("billboardSize", particle->particleSize);
-		particle->point->render(particle->_nrOfParticles, GL_POINT);
+		particle->point->render(particle->_nrOfParticles, GL_POINTS);
 	}
 
 }
