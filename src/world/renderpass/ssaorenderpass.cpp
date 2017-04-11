@@ -5,6 +5,10 @@
 
 SSAORenderSystem::SSAORenderSystem()
 {
+	sampleSize = 64;
+	sampleRadius = 0.1f;
+	sampleBias = 0.01f;
+
 	auto& engine = Engine::getInstance();
 	int width = engine.getWidth();
 	int height = engine.getHeight();
@@ -78,8 +82,8 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 	{
 		glm::vec3 samplePoint = {
 			randomFlaots(generator) * 2.0 - 1.0,
-			randomFlaots(generator) * 2.0 - 1.0,
-			randomFlaots(generator)
+			randomFlaots(generator),
+			randomFlaots(generator) * 2.0 - 1.0
 		};
 
 		samplePoint = glm::normalize(samplePoint);
@@ -98,14 +102,14 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 	{
 		glm::vec3 noise = {
 			randomFlaots(generator) * 2.0 - 1.0,
-			randomFlaots(generator) * 2.0 - 1.0,
-			0.0
+			0.0,
+			randomFlaots(generator) * 2.0 - 1.0
 		};
 
 		noiseData.push_back(noise);
 	}
 
-	noiseMap = std::make_shared<Texture>(4, 4, GL_RGB32F, GL_RGB, GL_FLOAT, &noiseData[0]);
+	noiseMap = std::make_shared<Texture>(4, 4, GL_RGB16F, GL_RGB, GL_FLOAT, &noiseData[0]);
 	noiseMap->bind()
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
@@ -122,9 +126,9 @@ void SSAORenderSystem::generateUniformData(int width, int height)
 
 	_shader->setUniform("noiseScale", noiseScale);
 
-	_shader->setUniform("sampleSize", 64);
-	_shader->setUniform("sampleRadius", 0.5f);
-	_shader->setUniform("sampleBias", 0.025f);
+	_shader->setUniform("sampleSize", sampleSize);
+	_shader->setUniform("sampleRadius", sampleRadius);
+	_shader->setUniform("sampleBias", sampleBias);
 	_shader->setUniformArray("samplePoints", samplePoints);
 }
 
@@ -135,6 +139,23 @@ void SSAORenderSystem::resize(unsigned int width, unsigned int height)
 
 	_gbuffer->bind();
 	glViewport(0, 0, width, height);
+}
+
+void SSAORenderSystem::registerImGui()
+{
+	bool dirty = false;
+
+	dirty |= ImGui::DragInt("Sample Size", &sampleSize, 1, 0, 64);
+	dirty |= ImGui::DragFloat("Sample Radius", &sampleRadius, 0.01);
+	dirty |= ImGui::DragFloat("Sample Bias", &sampleBias, 0.001);
+
+	if (dirty)
+	{
+		_shader->bind()
+			.setUniform("sampleSize", sampleSize)
+			.setUniform("sampleRadius", sampleRadius)
+			.setUniform("sampleBias", sampleBias);
+	}
 }
 
 void SSAORenderSystem::render(World & world)

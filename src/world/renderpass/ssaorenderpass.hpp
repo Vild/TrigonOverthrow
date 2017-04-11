@@ -19,10 +19,18 @@ public:
 	// Inherited via RenderPass
 	virtual void render(World & world) override;
 	virtual void resize(unsigned int width, unsigned int height) override;
-private:
 
+	virtual void registerImGui();
+	inline virtual std::string name() { return "SSAORenderPass"; };
+private:
 	std::shared_ptr<Texture> noiseMap;
 	std::unique_ptr<Mesh> _plane;
+
+
+	GLint sampleSize;
+	GLfloat sampleRadius;
+	GLfloat sampleBias;
+
 
 	float lerp(float a, float b, float c);
 	void generateUniformData(int width, int height);

@@ -16,6 +16,13 @@ uniform vec3 samplePoints[64];
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
+float getDepth(vec3 position)
+{
+  vec4 projected = projectionMatrix * vec4(position, 1);
+  vec2 pUV = (projected.xy / projected.w) * 0.5 + 0.5;
+  return (viewMatrix * vec4(texture(positionMap, pUV).rgb, 1)).z;
+}
+
 void main()
 {
   vec3 viewPosition = vec3(viewMatrix * texture(positionMap, uv));
@@ -26,16 +33,12 @@ void main()
   vec3 bitangent = cross(normal, tangent);
   mat3 TBN = mat3(tangent, bitangent, normal);
 
-  occlusion = 0;
+  occlusion = 0.0;
 
   for(int i = 0; i < sampleSize; i++)
   {
-    vec3 samplePoint = TBN * samplePoints[i];
-    samplePoint = viewPosition + samplePoint * sampleRadius;
-
-    vec4 sampleProjection = projectionMatrix * vec4(samplePoint, 1);
-    vec2 sampleUV = (sampleProjection.xy / sampleProjection.w) * 0.5 + 0.5;
-    float sampleDepth = (viewMatrix * texture(positionMap, sampleUV)).z;
+    vec3 samplePoint = viewPosition + (/*TBN * */samplePoints[i]) * sampleRadius;
+    float sampleDepth = getDepth(samplePoint);
 
     float rangeCheck = smoothstep(0.0, 1.0, sampleRadius / abs(viewPosition.z - sampleDepth));
     occlusion += (sampleDepth >= samplePoint.z + sampleBias ? 1.0 : 0.0) * rangeCheck;
