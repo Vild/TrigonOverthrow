@@ -63,8 +63,9 @@ void World::_setupSystems() {
 				continue;
 			auto _gbuffer = particleSystem->getGBuffers();
 			
-			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::outPosition])
-				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::outVelocity]);
+			// GIT-GUD: fixed in velocity and position to be output instead.
+			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::inPosition])
+				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::inVelocity]);
 
 			break;
 		}

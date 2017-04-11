@@ -30,14 +30,15 @@ void ParticleSystem::update(World& world, float delta) {
 	for (std::shared_ptr<ParticleComponent> comp : ParticleComponent::getActiveComponents()) {
 		auto * p = &comp->particles[0];
 		int count = comp->_nrOfParticles;
-		if (comp->init) {
+		if (true||comp->init) {
 			_programs[0]->bind().setUniform("delta", delta)
 				.setUniform("emitterPos", comp->emitter->pos)
 				.setUniform("emitterDir", comp->emitter->direction);
+
 			_particleData->getAttachments()[0]->bind(0);
 			_particleData->getAttachments()[1]->bind(1);
 			glDispatchCompute(32, 32, 1);
-			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+			glMemoryBarrier(GL_ALL_BARRIER_BITS);
 			comp->init = false;
 		}
 		else {
