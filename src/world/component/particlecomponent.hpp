@@ -4,6 +4,8 @@
 
 #include "../../lib/glad.h"
 #include "glm/glm.hpp"
+#include "../../gl/mesh.hpp"
+
 struct ParticleComponent : public Component<ParticleComponent> {
 
 	struct Particle {
@@ -24,14 +26,20 @@ struct ParticleComponent : public Component<ParticleComponent> {
 
 	std::shared_ptr<Emitter> emitter;
 	std::vector<Particle> particles;
+	std::shared_ptr<Mesh> point;
 	int _nrOfParticles;
 	float particleSize;
+	bool init;
 
 	void addEmitter(glm::vec3 dir, int nrOfParticles) { 
 		emitter = std::make_shared<Emitter>(dir); 
 		_nrOfParticles = nrOfParticles;
 		particleSize = 0.4f;
 		particles.resize(nrOfParticles);
+		std::vector<Vertex> vertices = { Vertex{ glm::vec3(0,0,0) } };
+		std::vector<GLuint> indices = {0};
+		point = std::make_shared<Mesh>(vertices, indices);
+		init = true;
 	};
 
 	virtual std::string name() { return "ParticleComponent"; }

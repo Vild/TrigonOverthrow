@@ -133,8 +133,9 @@ void Engine::_initGL() {
 
 	SDL_GL_SetSwapInterval(_vsync);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	glViewport(0, 0, _width, _height);
 

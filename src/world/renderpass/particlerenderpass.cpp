@@ -8,19 +8,17 @@
 #include <cmath>
 #include "glm/glm.hpp"
 
-ParticleRenderPass::ParticleRenderPass() {
+ParticleRenderPass::ParticleRenderPass(World &world) {
 	_gbuffer = std::make_shared<GBuffer>(0);
 	_shader = std::make_shared<ShaderProgram>();
 	_shader->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/particles.frag", ShaderType::fragment))
 		.finalize();
-	_shader->addUniform("cameraRight_wPos")
-		.addUniform("cameraUp_wPos")
-		.addUniform("billboardSize")
-		.addUniform("cameraPos")
+	_shader->addUniform("cameraPos")
 		.addUniform("v")
 		.addUniform("p")
 		.addUniform("particlePos");
+	_shader->setUniform("particlePos", 0);
 }
 
 void ParticleRenderPass::render(World& world) {
@@ -36,12 +34,10 @@ void ParticleRenderPass::render(World& world) {
 	auto transformComponent = camera->getComponent<TransformComponent>();
 	if (!transformComponent)
 		return;
-
+	
 	glm::vec3 rightWPos = { cameraComponent->viewMatrix[0][0], cameraComponent->viewMatrix[0][1], cameraComponent->viewMatrix[0][2] };
 	glm::vec3 upWpos = { cameraComponent->viewMatrix[0][1], cameraComponent->viewMatrix[1][1], cameraComponent->viewMatrix[2][1] };
-	_shader->bind().setUniform("cameraRight_wPos", upWpos)
-		.setUniform("cameraUp_wPos", rightWPos)
-		.setUniform("cameraPos", transformComponent->position)
+	_shader->bind()
 		.setUniform("v", cameraComponent->viewMatrix)
 		.setUniform("p", cameraComponent->projectionMatrix);
 	for (std::shared_ptr<Entity> entity : world.getEntities()) {
@@ -49,8 +45,7 @@ void ParticleRenderPass::render(World& world) {
 		if (!particle)
 			continue;
 		_shader->setUniform("billboardSize", particle->particleSize);
-
-		glDrawArrays(GL_POINTS, 1, 1);
+		particle->point->render(particle->_nrOfParticles, GL_POINT);
 	}
 
 }

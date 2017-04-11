@@ -32,7 +32,7 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 								})
 		.finalize();
 	auto particle = addComponent<ParticleComponent>();
-	particle->addEmitter(glm::vec3(0, 1, 0), 100);
+	particle->addEmitter(glm::vec3(0, 1, 0), 1024);
 	auto input = addComponent<KBMouseInputComponent>();
 	auto physics = addComponent<PhysicsComponent>();
 }

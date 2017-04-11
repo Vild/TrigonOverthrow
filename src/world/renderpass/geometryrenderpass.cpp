@@ -69,7 +69,7 @@ void GeometryRenderPass::render(World& world) {
 		if (!transform)
 			continue;
 
-		model->render(transform->matrix);
+		//model->render(transform->matrix);
 	}
 }
 

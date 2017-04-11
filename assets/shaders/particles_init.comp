@@ -1,9 +1,7 @@
 #version 440 core
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
-layout(rgba32f, binding = 0) uniform image2D pos_input;
-layout(rgba32f, binding = 1) uniform image2D vel_input;
-layout(rgba32f, binding = 2) uniform image2D pos_output;
-layout(rgba32f, binding = 3) uniform image2D vel_output;
+layout(rgba32f, binding = 0) uniform image2D pos_output;
+layout(rgba32f, binding = 1) uniform image2D vel_output;
 
 uniform float delta;
 uniform vec3 emitterPos;
@@ -11,7 +9,9 @@ uniform vec3 emitterDir;
 
 void main(){
   ivec2 pixel_Coords = ivec2(gl_GlobalInvocationID).xy;
+  vec3 vel = emitterDir * delta;
+  vec3 pos = emitterPos + vel;
 
-  imageStore(pos_output, pixel_Coords, vec4(1,1,1,0));
-  imageStore(vel_output, pixel_Coords, vec4(1,1,1,0));
+  imageStore(pos_output, pixel_Coords, vec4(pos, 0));
+  imageStore(vel_output, pixel_Coords, vec4(vel, 0));
 }
