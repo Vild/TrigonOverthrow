@@ -9,6 +9,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <cmath>
+#include <cstdio>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "world/entity/playerentity.hpp"
 #include "world/entity/floorentity.hpp"
@@ -16,6 +21,8 @@
 #include "world/component/cameracomponent.hpp"
 
 Engine::~Engine() {
+	TTF_Quit();
+	Mix_Quit();
 	IMG_Quit();
 
 	ImGui_ImplSdlGL3_Shutdown();
@@ -110,8 +117,29 @@ void Engine::_init(bool vsync) {
 }
 
 void Engine::_initSDL() {
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-		throw "SDL could not be inited";
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		fprintf(stderr, "SDL_Init: Failed to init!\n");
+		fprintf(stderr, "SDL_Init: %s\n", SDL_GetError());
+		throw "Failed to load SDL2";
+	}
+
+	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
+		fprintf(stderr, "IMG_Init: Failed to init, requires PNG support!\n");
+		fprintf(stderr, "IMG_Init: %s\n", IMG_GetError());
+		throw "Failed to load SDL2_image";
+	}
+
+	if ((Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG) != MIX_INIT_OGG) {
+		fprintf(stderr, "Mix_Init: Failed to init, requires ogg support!\n");
+		fprintf(stderr, "Mix_Init: %s\n", Mix_GetError());
+		throw "Failed to load SDL2_mixer";
+	}
+
+	if (TTF_Init() < 0) {
+		fprintf(stderr, "TTF_GetError: Failed to init!\n");
+		fprintf(stderr, "TTF_GetError: %s\n", TTF_GetError());
+		throw "Failed to load SDL2_ttf";
+	}
 
 	_window = SDL_CreateWindow("TurtleGL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
 														 SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -140,9 +168,6 @@ void Engine::_initGL() {
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	glViewport(0, 0, _width, _height);
-
-	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG)
-		throw "Failed to load SDL_Image";
 }
 
 void Engine::_initImGui() {
