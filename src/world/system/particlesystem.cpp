@@ -20,9 +20,7 @@ ParticleSystem::ParticleSystem() {
 	textureSize = 1024;
 	_particleData = std::make_shared<GBuffer>();
 	_particleData->bind().attachTexture(Attachment::inPosition, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4) // Input pos and life
-		.attachTexture(Attachment::inVelocity, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4)  // Input vel
-		.attachTexture(Attachment::outPosition, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4)  // Output pos and life.
-		.attachTexture(Attachment::outVelocity, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4); // Output vel
+		.attachTexture(Attachment::inVelocity, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4);  // Input vel
 	 // TO-DO: Pong pos and vel framebuffers between computations for maximum efficineny.
 }
 
