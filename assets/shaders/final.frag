@@ -15,6 +15,7 @@ void main() {
 	vec3 normal = texture(defNormal, vUV).xyz;
 	vec3 diffuse = texture(defDiffuseSpecular, vUV).xyz;
 	float specular = texture(defDiffuseSpecular, vUV).w;
+	float depth = texture(defDepth, vUV).r;
 
 	outColor = vec4(diffuse, 1);
 	gl_FragDepth = depth;

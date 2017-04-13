@@ -13,7 +13,7 @@ LightingRenderPass::LightingRenderPass() {
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/final.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/final.frag", ShaderType::fragment))
 		.finalize();
-	_shader->bind().addUniform("vp").addUniform("defPos").addUniform("defNormal").addUniform("defDiffuseSpecular").addUniform("cameraPos");
+	_shader->bind().addUniform("vp").addUniform("defPos").addUniform("defNormal").addUniform("defDiffuseSpecular").addUniform("defDepth");
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
 		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
@@ -58,7 +58,6 @@ void LightingRenderPass::render(World& world) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_shader->bind();
 
-	_shader->setUniform("cameraPos", transformComponent->position);
 	_shader->setUniform("vp", glm::mat4(1));
 	_plane->render();
 }

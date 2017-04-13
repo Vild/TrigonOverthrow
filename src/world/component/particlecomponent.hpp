@@ -46,5 +46,6 @@ struct ParticleComponent : public Component<ParticleComponent> {
 	};
 
 	virtual std::string name() { return "ParticleComponent"; }
+	virtual void registerImGui() {};
 
 };

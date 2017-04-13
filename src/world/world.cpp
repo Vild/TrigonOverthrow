@@ -46,7 +46,6 @@ void World::_setupSystems() {
 	_systems.push_back(std::make_unique<ParticleSystem>());
 
 	// Render passes
-	// Gotta add particles render pass.
 	{
 		std::unique_ptr<GeometryRenderPass> geometry = std::make_unique<GeometryRenderPass>();
 		std::unique_ptr<LightingRenderPass> lighting = std::make_unique<LightingRenderPass>();

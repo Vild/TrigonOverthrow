@@ -12,16 +12,16 @@ ParticleSystem::ParticleSystem() {
 		.finalize();
 	_programs[0]->bind().addUniform("delta").addUniform("emitterPos").addUniform("emitterDir");
 
-	_programs[1] = std::make_shared<ShaderProgram>();
-	_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
-		.finalize();
-	_programs[1]->bind().addUniform("delta")
-		.addUniform("swap");
+	//_programs[1] = std::make_shared<ShaderProgram>();
+	//_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
+	//	.finalize();
+	//_programs[1]->bind().addUniform("delta")
+	//	.addUniform("swap");
 	textureSize = 1024;
 	_particleData = std::make_shared<GBuffer>();
 	_particleData->bind().attachTexture(Attachment::inPosition, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4) // Input pos and life
 		.attachTexture(Attachment::inVelocity, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4);  // Input vel
-	 // TO-DO: Pong pos and vel framebuffers between computations for maximum efficineny.
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 //#pragma omp parallel for schedule(dynamic, 128)
@@ -42,4 +42,8 @@ void ParticleSystem::update(World& world, float delta) {
 
 std::shared_ptr<GBuffer> ParticleSystem::getGBuffers() {
 	return _particleData;
+}
+
+void ParticleSystem::registerImGui() {
+	
 }

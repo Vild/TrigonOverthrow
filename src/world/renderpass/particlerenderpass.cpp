@@ -14,8 +14,7 @@ ParticleRenderPass::ParticleRenderPass(World &world) {
 	_shader->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/particles.frag", ShaderType::fragment))
 		.finalize();
-	_shader->addUniform("cameraPos")
-		.addUniform("v")
+	_shader->addUniform("v")
 		.addUniform("p")
 		.addUniform("particlePos")
 		.addUniform("particleVel")
@@ -60,3 +59,5 @@ void ParticleRenderPass::resize(unsigned int width, unsigned int height) {
 	_gbuffer->bind();
 	glViewport(0, 0, width, height);
 }
+
+void ParticleRenderPass::registerImGui() {}
