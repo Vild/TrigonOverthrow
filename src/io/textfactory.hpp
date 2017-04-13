@@ -4,6 +4,9 @@
 #include <SDL2/SDL_ttf.h>
 #include <memory>
 
+#include <glm/glm.hpp>
+#include "../gl/mesh.hpp"
+
 #include "../gl/texture.hpp"
 
 enum class FontStyle {
@@ -15,19 +18,53 @@ enum class FontStyle {
 };
 
 FontStyle operator|(FontStyle a, FontStyle b) {
-	return static_cast<FontStyle>((int)a + (int) b);
+	return static_cast<FontStyle>((int)a + (int)b);
 }
 
-class FontFactory {
-public:
-	FontFactory();
-	~FontFactory();
+struct TextBuffer {
+	glm::vec4 charRect;
+	glm::vec2 charPos;
+};
 
-	std::shared_ptr<Texture> render(const std::string& str, FontStyle fontStyle = FontStyle::normal, int outline = 0);
+
+class TextRenderer {
+public:
+
+	void render();
 
 private:
-	const std::string _fontFile = "assets/fonts/SF Theramin Gothic Bold.ttf";
+	FontFactory& _factory;
+	std::vector<
+	bool _static;
+
+
+	void _rebuild();
+
+};
+
+// assets/fonts/SF Theramin Gothic Bold.ttf
+class FontFactory {
+public:
+	FontFactory(const std::string& fontFile);
+	~FontFactory();
+
+	TextRenderer makeStaticRenderer(const std::string& str, FontStyle fontStyle = FontStyle::normal, int outline = 0);
+	TextRenderer makeDynamicRenderer(const std::string& str, FontStyle fontStyle = FontStyle::normal, int outline = 0);
+
+private:
+	struct CharInfo {
+		glm::vec2 pos;
+		glm::vec2 size;
+
+		glm::vec2 offset;
+		int xAdvanceAmount;
+	};
+
 	const int _ptSize = 30;
 
-	TTF_Font * _font;
+	TTF_Font* _font;
+	CharInfo _charInfos[256];
+	Rendere;
+
+	inline const CharInfo& _getChar(char ch) { return _charInfos[ch]; }
 };
