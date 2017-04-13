@@ -14,4 +14,5 @@ public:
 private:
 	std::vector<std::shared_ptr<ShaderProgram>> _programs;
 	std::shared_ptr<GBuffer> _particleData;
+	int textureSize = 2048;
 };

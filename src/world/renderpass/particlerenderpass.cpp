@@ -17,7 +17,9 @@ ParticleRenderPass::ParticleRenderPass(World &world) {
 	_shader->addUniform("cameraPos")
 		.addUniform("v")
 		.addUniform("p")
-		.addUniform("particlePos");
+		.addUniform("particlePos")
+		.addUniform("particleVel")
+		.addUniform("textureSize");
 	_shader->setUniform("particlePos", (GLint)InputAttachment::position)
 		.setUniform("particleVel", (GLint)InputAttachment::velocity);
 }
@@ -44,6 +46,7 @@ void ParticleRenderPass::render(World& world) {
 		if (!particle)
 			continue;
 		_shader->setUniform("billboardSize", particle->particleSize);
+		_shader->setUniform("textureSize", particle->textureSize);
 		// wait for reading/writing before rendering.
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);

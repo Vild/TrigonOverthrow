@@ -29,6 +29,7 @@ struct ParticleComponent : public Component<ParticleComponent> {
 	std::shared_ptr<Mesh> point;
 	int _nrOfParticles;
 	float particleSize;
+	int textureSize;
 	bool init;
 	bool swap;
 
