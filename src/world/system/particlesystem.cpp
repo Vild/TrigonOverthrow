@@ -17,11 +17,13 @@ ParticleSystem::ParticleSystem() {
 	//	.finalize();
 	//_programs[1]->bind().addUniform("delta")
 	//	.addUniform("swap");
-	textureSize = 1024;
+	textureSize = 32;
 	_particleData = std::make_shared<GBuffer>();
 	_particleData->bind().attachTexture(Attachment::inPosition, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4) // Input pos and life
 		.attachTexture(Attachment::inVelocity, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4);  // Input vel
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glClearColor(0, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 //#pragma omp parallel for schedule(dynamic, 128)
@@ -30,9 +32,9 @@ void ParticleSystem::update(World& world, float delta) {
 			_programs[0]->bind().setUniform("delta", delta)
 				.setUniform("emitterPos", comp->emitter->pos)
 				.setUniform("emitterDir", comp->emitter->direction)
-				.setUniform("init", comp->swap);
+				.setUniform("init", comp->init);
 			comp->textureSize = textureSize;
-			comp->swap = false;
+			comp->init = false;
 			_particleData->bindImageTexture(0, true);
 			_particleData->bindImageTexture(1, true);
 			// Barrier is in particlerenderpass.

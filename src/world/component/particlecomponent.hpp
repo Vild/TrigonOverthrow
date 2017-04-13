@@ -25,24 +25,21 @@ struct ParticleComponent : public Component<ParticleComponent> {
 	// fix particle render system and a fixed size of particles for each system.
 
 	std::shared_ptr<Emitter> emitter;
-	std::vector<Particle> particles;
 	std::shared_ptr<Mesh> point;
 	int _nrOfParticles;
 	float particleSize;
 	int textureSize;
 	bool init;
-	bool swap;
 
 	void addEmitter(glm::vec3 dir, int nrOfParticles) { 
 		emitter = std::make_shared<Emitter>(dir); 
 		_nrOfParticles = nrOfParticles;
 		particleSize = 0.4f;
-		particles.resize(nrOfParticles);
+		textureSize = nrOfParticles;
 		std::vector<Vertex> vertices = { Vertex{ glm::vec3(0,0,0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), glm::vec2(0, 0), glm::vec3(0,0,1)} };
 		std::vector<GLuint> indices = {0};
 		point = std::make_shared<Mesh>(vertices, indices);
 		init = true;
-		swap = true;
 	};
 
 	virtual std::string name() { return "ParticleComponent"; }
