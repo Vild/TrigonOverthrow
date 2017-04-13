@@ -1,16 +1,37 @@
 #version 440 core
-layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
-//layout(binding = 0, rgba32f) uniform image2D pos_input;
-//layout(binding = 1, rgba32f) uniform image2D pos_output;
-//layout(binding = 2, rgba32f) uniform image2D vel_input;
-//layout(binding = 3, rgba32f) uniform image2D vel_output;
+layout(local_size_x = 1, local_size_y = 1) in;
+layout(rgba32f, binding = 0) uniform image2D pos_input;
+layout(rgba32f, binding = 1) uniform image2D vel_input;
+layout(rgba32f, binding = 2) uniform image2D pos_output;
+layout(rgba32f, binding = 3) uniform image2D vel_output;
 
 uniform float delta;
-
+uniform bool swap;
 void main(){
-  ivec3 pixel_Coords = ivec3(gl_GlobalInvocationID).xyz;
-  //imageLoad(pos_input, pixel_Coords);
-  //vec3 updatedVel += velCoords * delta;
-  //vec4 pos = imageLoad(pos_input, pixel_Coords);
-  //imageStore(pos_output, pixel_coords, vec4(1,1,1,0));
+  ivec2 pixelCoords = ivec2(gl_GlobalInvocationID).xy;
+  vec3 inPos = vec3(0);
+  vec3 inVel = vec3(0);
+	//if(swap)
+	//{
+	//	inPos = imageLoad(pos_input, pixelCoords).xyz;
+	//	inVel = imageLoad(vel_input, pixelCoords).xyz;
+	//}
+	//else{
+	//	inPos = imageLoad(pos_output, pixelCoords).xyz;
+	//	inVel = imageLoad(vel_output, pixelCoords).xyz;
+	//}
+
+  vec3 vel = inVel * inPos * delta;
+  vec3 pos = vel * delta;
+
+	//if(swap)
+	//{
+	//  imageStore(pos_output, pixelCoords, vec4(pos, 0));
+	//  imageStore(vel_output, pixelCoords, vec4(vel, 0));
+	//}
+	//else
+	//{
+	//  imageStore(pos_input, pixelCoords, vec4(pos, 0));
+	//  imageStore(vel_input, pixelCoords, vec4(vel, 0));
+	//}
 }

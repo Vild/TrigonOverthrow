@@ -17,7 +17,7 @@ struct ParticleComponent : public Component<ParticleComponent> {
 	struct Emitter
 	{
 		Emitter(glm::vec3 dir) { direction = dir; };
-		glm::vec3 pos = glm::vec3(0);
+		glm::vec3 pos = glm::vec3(0,0,0);
 		glm::vec3 direction;
 
 	};
@@ -30,6 +30,7 @@ struct ParticleComponent : public Component<ParticleComponent> {
 	int _nrOfParticles;
 	float particleSize;
 	bool init;
+	bool swap;
 
 	void addEmitter(glm::vec3 dir, int nrOfParticles) { 
 		emitter = std::make_shared<Emitter>(dir); 
@@ -40,6 +41,7 @@ struct ParticleComponent : public Component<ParticleComponent> {
 		std::vector<GLuint> indices = {0};
 		point = std::make_shared<Mesh>(vertices, indices);
 		init = true;
+		swap = true;
 	};
 
 	virtual std::string name() { return "ParticleComponent"; }

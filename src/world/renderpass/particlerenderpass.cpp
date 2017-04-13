@@ -18,7 +18,8 @@ ParticleRenderPass::ParticleRenderPass(World &world) {
 		.addUniform("v")
 		.addUniform("p")
 		.addUniform("particlePos");
-	_shader->setUniform("particlePos", (GLint)InputAttachment::position);
+	_shader->setUniform("particlePos", (GLint)InputAttachment::position)
+		.setUniform("particleVel", (GLint)InputAttachment::velocity);
 }
 
 void ParticleRenderPass::render(World& world) {
@@ -43,6 +44,10 @@ void ParticleRenderPass::render(World& world) {
 		if (!particle)
 			continue;
 		_shader->setUniform("billboardSize", particle->particleSize);
+		// wait for reading/writing before rendering.
+
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
 		particle->point->render(particle->_nrOfParticles, GL_POINTS);
 	}
 
