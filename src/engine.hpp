@@ -10,7 +10,9 @@
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
+
 #include "world/world.hpp"
+#include "world/system/particlesystem.hpp"
 
 #include "world/entity/cameraentity.hpp"
 

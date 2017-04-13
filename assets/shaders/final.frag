@@ -8,6 +8,7 @@ in vec2 vUV;
 uniform sampler2D defPos;
 uniform sampler2D defNormal;
 uniform sampler2D defDiffuseSpecular;
+uniform sampler2D defDepth;
 
 void main() {
 	vec3 pos = texture(defPos, vUV).xyz;
@@ -16,4 +17,5 @@ void main() {
 	float specular = texture(defDiffuseSpecular, vUV).w;
 
 	outColor = vec4(diffuse, 1);
+	gl_FragDepth = depth;
 }

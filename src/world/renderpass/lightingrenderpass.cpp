@@ -16,13 +16,14 @@ LightingRenderPass::LightingRenderPass() {
 	_shader->bind().addUniform("vp").addUniform("defPos").addUniform("defNormal").addUniform("defDiffuseSpecular").addUniform("cameraPos");
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
-		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular);
+		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
+		.setUniform("defDepth", (GLint)InputAttachment::depth);
 
 	std::vector<Vertex> vertices = {
-		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}},	//
-		Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}},		//
-		Vertex{glm::vec3{1, -1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 0}},	//
-		Vertex{glm::vec3{-1, -1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 0}}, //
+		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}},
+		Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}},
+		Vertex{glm::vec3{1, -1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 0}},
+		Vertex{glm::vec3{-1, -1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 0}},
 	};
 	std::vector<GLuint> indicies = {0, 2, 1, 2, 0, 3};
 	_plane = std::make_shared<Mesh>(vertices, indicies);

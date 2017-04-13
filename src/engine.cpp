@@ -85,7 +85,6 @@ int Engine::run(bool vsync) {
 		_hidInput->update();
 
 		_world->tick(delta);
-
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
 	}
@@ -138,6 +137,7 @@ void Engine::_initGL() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	glViewport(0, 0, _width, _height);
 

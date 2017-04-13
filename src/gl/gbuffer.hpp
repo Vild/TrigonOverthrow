@@ -13,6 +13,7 @@ public:
 	virtual ~GBuffer();
 
 	GBuffer& bind(bool read = true, bool draw = true);
+	GBuffer& bindImageTexture(GLuint index, bool read = true);
 
 	GBuffer& attachTexture(int id, size_t width, size_t height, GLenum internalFormat, GLenum dataType, int vectorSize);
 	GBuffer& attachRenderBuffer(size_t width, size_t height, GLenum format = GL_DEPTH24_STENCIL8, GLenum attachment = GL_DEPTH_STENCIL_ATTACHMENT);

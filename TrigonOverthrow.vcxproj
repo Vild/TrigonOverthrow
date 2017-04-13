@@ -40,17 +40,21 @@
     <ClCompile Include="src\world\component\lightcomponent.cpp" />
     <ClCompile Include="src\world\component\lookatcomponent.cpp" />
     <ClCompile Include="src\world\component\modelcomponent.cpp" />
+    <ClCompile Include="src\world\component\particlecomponent.cpp" />
     <ClCompile Include="src\world\component\physicscomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
     <ClCompile Include="src\world\entity\cameraentity.cpp" />
     <ClCompile Include="src\world\entity\entity.cpp" />
     <ClCompile Include="src\world\entity\playerentity.cpp" />
-    <ClCompile Include="src\world\renderpass\baserenderpass.cpp" />
+    <ClCompile Include="src\world\renderpass\geometryrenderpass.cpp" />
+    <ClCompile Include="src\world\renderpass\lightingrenderpass.cpp" />
+    <ClCompile Include="src\world\renderpass\particlerenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\renderpass.cpp" />
     <ClCompile Include="src\world\system\camerasystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
+    <ClCompile Include="src\world\system\particlesystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
@@ -80,12 +84,15 @@
     <ClInclude Include="src\world\component\lightcomponent.hpp" />
     <ClInclude Include="src\world\component\lookatcomponent.hpp" />
     <ClInclude Include="src\world\component\modelcomponent.hpp" />
+    <ClInclude Include="src\world\component\particlecomponent.hpp" />
     <ClInclude Include="src\world\component\physicscomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
     <ClInclude Include="src\world\entity\cameraentity.hpp" />
     <ClInclude Include="src\world\entity\entity.hpp" />
     <ClInclude Include="src\world\entity\playerentity.hpp" />
-    <ClInclude Include="src\world\renderpass\baserenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\geometryrenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\lightingrenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\particlerenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\renderpass.hpp" />
     <ClInclude Include="src\world\system\camerasystem.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />
@@ -170,6 +177,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
@@ -188,6 +196,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link />
     <Link>
@@ -209,6 +218,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -231,6 +241,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
