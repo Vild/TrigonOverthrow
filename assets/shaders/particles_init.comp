@@ -22,22 +22,15 @@ void main(){
 
 	if(life <= 0){
 		life = 10.0f;
+		pos = emitterPos;
+		vel = emitterDir * delta;
 	}
-	else if (life <= 6.0f){
-		vel = prevVel + vec3(sin(gl_GlobalInvocationID.y * cos(gl_GlobalInvocationID.x)),
-		sin(gl_GlobalInvocationID.y * cos(gl_GlobalInvocationID.x)), 
-		0);
-		pos = prevPos + vel * delta * delta * delta;
-	}
-	else{
-		vel = prevVel + (vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x), 
-		sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * 5) + cos(gl_GlobalInvocationID.x * 0.2f), 
-		sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10))) * -2.0f;
-		pos = prevPos + vel * delta * delta;
-	}
-	life -= 1 * delta;
+	vel = prevVel + (vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x), 
+	sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * 5) + cos(gl_GlobalInvocationID.x * 0.2f), 
+	sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10))) * -2.0f;
+	pos = prevPos + vel * delta * delta;
 
-	//life -= 1 * delta;
+	life -= 1 * delta;
 	imageStore(pos_input, pixel_Coords, vec4(pos, life));
 	imageStore(vel_input, pixel_Coords, vec4(vel, 0));
 }

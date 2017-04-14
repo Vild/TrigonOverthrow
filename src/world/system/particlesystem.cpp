@@ -18,7 +18,7 @@ ParticleSystem::ParticleSystem() {
 	//	.finalize();
 	//_programs[1]->bind().addUniform("delta")
 	//	.addUniform("swap");
-	textureSize = 1024;
+	textureSize = 128;
 	_particleData = std::make_shared<GBuffer>();
 	_particleData->bind()
 		.attachTexture(Attachment::inPosition, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4)	// Input pos and life
