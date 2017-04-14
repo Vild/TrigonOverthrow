@@ -35,7 +35,6 @@ struct ParticleComponent : public Component<ParticleComponent> {
 		emitter = std::make_shared<Emitter>(dir); 
 		_nrOfParticles = nrOfParticles;
 		particleSize = 0.4f;
-		textureSize = nrOfParticles;
 		std::vector<Vertex> vertices = { Vertex{ glm::vec3(0,0,0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), glm::vec2(0, 0), glm::vec3(0,0,1)} };
 		std::vector<GLuint> indices = {0};
 		point = std::make_shared<Mesh>(vertices, indices);

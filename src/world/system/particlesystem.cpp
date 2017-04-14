@@ -17,7 +17,7 @@ ParticleSystem::ParticleSystem() {
 	//	.finalize();
 	//_programs[1]->bind().addUniform("delta")
 	//	.addUniform("swap");
-	textureSize = 32;
+	textureSize = 1024;
 	_particleData = std::make_shared<GBuffer>();
 	_particleData->bind().attachTexture(Attachment::inPosition, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4) // Input pos and life
 		.attachTexture(Attachment::inVelocity, textureSize, textureSize, GL_RGBA32F, GL_FLOAT, 4);  // Input vel
@@ -33,12 +33,12 @@ void ParticleSystem::update(World& world, float delta) {
 				.setUniform("emitterPos", comp->emitter->pos)
 				.setUniform("emitterDir", comp->emitter->direction)
 				.setUniform("init", comp->init);
-			comp->textureSize = textureSize;
 			comp->init = false;
+			comp->textureSize = textureSize;
 			_particleData->bindImageTexture(0, true);
 			_particleData->bindImageTexture(1, true);
 			// Barrier is in particlerenderpass.
-			glDispatchCompute((GLuint)textureSize, (GLuint)textureSize, 1);
+			glDispatchCompute((GLint)textureSize, (GLint)textureSize, 1);
 	}
 }
 
