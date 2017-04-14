@@ -13,6 +13,6 @@ public:
 	virtual void resize(unsigned int width, unsigned int height);
 	virtual void registerImGui();
 	inline virtual std::string name() { return "ParticleRenderPass"; };
-private:
 
+private:
 };

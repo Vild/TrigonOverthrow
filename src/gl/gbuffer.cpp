@@ -38,12 +38,11 @@ GBuffer& GBuffer::bind(bool read, bool draw) {
 
 GBuffer& GBuffer::bindImageTexture(GLuint index, bool read) {
 	if (read) { // set it to read only
- 		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
-	}
-	else {
+		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+	} else {
 		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_WRITE_ONLY | GL_READ_ONLY, GL_RGBA32F);
 	}
-	
+
 	return *this;
 }
 

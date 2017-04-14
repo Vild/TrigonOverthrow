@@ -13,6 +13,7 @@ public:
 	virtual void registerImGui();
 	inline virtual std::string name() { return "ParticleSystem"; };
 	std::shared_ptr<GBuffer> getGBuffers();
+
 private:
 	std::vector<std::shared_ptr<ShaderProgram>> _programs;
 	std::shared_ptr<GBuffer> _particleData;

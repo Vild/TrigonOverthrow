@@ -8,19 +8,14 @@
 #include <cmath>
 #include "glm/glm.hpp"
 
-ParticleRenderPass::ParticleRenderPass(World &world) {
+ParticleRenderPass::ParticleRenderPass(World& world) {
 	_gbuffer = std::make_shared<GBuffer>(0);
 	_shader = std::make_shared<ShaderProgram>();
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/particles.frag", ShaderType::fragment))
 		.finalize();
-	_shader->bind().addUniform("v")
-		.addUniform("p")
-		.addUniform("particlePos")
-		.addUniform("particleVel")
-		.addUniform("textureSize");
-	_shader->setUniform("particlePos", (GLint)InputAttachment::position)
-		.setUniform("particleVel", (GLint)InputAttachment::velocity);
+	_shader->bind().addUniform("v").addUniform("p").addUniform("particlePos").addUniform("particleVel").addUniform("textureSize");
+	_shader->setUniform("particlePos", (GLint)InputAttachment::position).setUniform("particleVel", (GLint)InputAttachment::velocity);
 }
 
 void ParticleRenderPass::render(World& world) {
@@ -37,9 +32,7 @@ void ParticleRenderPass::render(World& world) {
 	if (!transformComponent)
 		return;
 
-	_shader->bind()
-		.setUniform("v", cameraComponent->viewMatrix)
-		.setUniform("p", cameraComponent->projectionMatrix);
+	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
 	for (std::shared_ptr<Entity> entity : world.getEntities()) {
 		auto particle = entity->getComponent<ParticleComponent>();
 		if (!particle)
@@ -52,7 +45,6 @@ void ParticleRenderPass::render(World& world) {
 
 		particle->point->render(particle->_nrOfParticles, GL_POINTS);
 	}
-
 }
 
 void ParticleRenderPass::resize(unsigned int width, unsigned int height) {

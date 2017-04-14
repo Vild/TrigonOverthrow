@@ -9,7 +9,6 @@
 #include "system/camerasystem.hpp"
 #include "system/particlesystem.hpp"
 
-
 #include "entity/cameraentity.hpp"
 
 #include "renderpass/geometryrenderpass.hpp"
@@ -62,7 +61,7 @@ void World::_setupSystems() {
 			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
 			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, ssao->getAttachment(SSAORenderSystem::Attachments::OcclusionMap));
 
-		for (std::unique_ptr<System> &system : _systems) {
+		for (std::unique_ptr<System>& system : _systems) {
 			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
 			if (!particleSystem)
 				continue;
