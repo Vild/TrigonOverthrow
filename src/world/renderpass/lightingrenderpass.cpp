@@ -13,11 +13,12 @@ LightingRenderPass::LightingRenderPass() {
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/final.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/final.frag", ShaderType::fragment))
 		.finalize();
-	_shader->bind().addUniform("vp").addUniform("defPos").addUniform("defNormal").addUniform("defDiffuseSpecular").addUniform("defDepth");
+	_shader->bind().addUniform("vp").addUniform("defPos").addUniform("defNormal").addUniform("defDiffuseSpecular").addUniform("defDepth").addUniform("defOcclusionMap");
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
 		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
-		.setUniform("defDepth", (GLint)InputAttachment::depth);
+		.setUniform("defDepth", (GLint)InputAttachment::depth)
+		.setUniform("defOcclusionMap", (GLint)InputAttachment::OcclusionMap);
 
 	std::vector<Vertex> vertices = {
 		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}},
@@ -29,19 +30,19 @@ LightingRenderPass::LightingRenderPass() {
 	_plane = std::make_shared<Mesh>(vertices, indicies);
 	_plane
 		->addBuffer("m",
-								[](GLuint id) {
-									glm::mat4 mData = glm::mat4(1);
-									glBindBuffer(GL_ARRAY_BUFFER, id);
-									glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), glm::value_ptr(mData), GL_STATIC_DRAW); // Will only be uploaded once
+			[](GLuint id) {
+				glm::mat4 mData = glm::mat4(1);
+				glBindBuffer(GL_ARRAY_BUFFER, id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), glm::value_ptr(mData), GL_STATIC_DRAW); // Will only be uploaded once
 
-									for (int i = 0; i < 4; i++) {
-										glEnableVertexAttribArray(ShaderAttributeID::m + i);
-										glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-										glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-									}
+				for (int i = 0; i < 4; i++) {
+					glEnableVertexAttribArray(ShaderAttributeID::m + i);
+					glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
+					glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
+				}
 
-									glBindBuffer(GL_ARRAY_BUFFER, 0);
-								})
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			})
 		.finalize();
 }
 

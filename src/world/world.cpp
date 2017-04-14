@@ -13,6 +13,7 @@
 #include "entity/cameraentity.hpp"
 
 #include "renderpass/geometryrenderpass.hpp"
+#include "renderpass/ssaorenderpass.hpp"
 #include "renderpass/lightingrenderpass.hpp"
 #include "renderpass/particlerenderpass.hpp"
 
@@ -48,20 +49,25 @@ void World::_setupSystems() {
 	// Render passes
 	{
 		std::unique_ptr<GeometryRenderPass> geometry = std::make_unique<GeometryRenderPass>();
+		std::unique_ptr<SSAORenderSystem> ssao = std::make_unique<SSAORenderSystem>();
 		std::unique_ptr<LightingRenderPass> lighting = std::make_unique<LightingRenderPass>();
 		std::unique_ptr<ParticleRenderPass> particles = std::make_unique<ParticleRenderPass>(*this);
+
+		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::PositionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position))
+			.attachInputTexture(SSAORenderSystem::InputAttachments::NormalMap, geometry->getAttachment(GeometryRenderPass::Attachment::normal));
 
 		lighting->attachInputTexture(LightingRenderPass::InputAttachment::position, geometry->getAttachment(GeometryRenderPass::Attachment::position))
 			.attachInputTexture(LightingRenderPass::InputAttachment::normal, geometry->getAttachment(GeometryRenderPass::Attachment::normal))
 			.attachInputTexture(LightingRenderPass::InputAttachment::diffuseSpecular, geometry->getAttachment(GeometryRenderPass::Attachment::diffuseSpecular))
-			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth));
+			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
+			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, ssao->getAttachment(SSAORenderSystem::Attachments::OcclusionMap));
 
 		for (std::unique_ptr<System> &system : _systems) {
 			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
 			if (!particleSystem)
 				continue;
 			auto _gbuffer = particleSystem->getGBuffers();
-			
+
 			// GIT-GUD: fixed in velocity and position to be output instead.
 			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::inPosition])
 				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::inVelocity]);
@@ -70,6 +76,7 @@ void World::_setupSystems() {
 		}
 
 		_systems.push_back(std::move(geometry));
+		_systems.push_back(std::move(ssao));
 		_systems.push_back(std::move(lighting));
 		_systems.push_back(std::move(particles));
 	}

@@ -6,7 +6,7 @@
 
 class LightingRenderPass : public RenderPass {
 public:
-	enum InputAttachment : GLint { position = 0, normal, diffuseSpecular, depth};
+	enum InputAttachment : GLint { position = 0, normal, diffuseSpecular, depth, OcclusionMap };
 
 	LightingRenderPass();
 

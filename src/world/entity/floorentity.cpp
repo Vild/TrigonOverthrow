@@ -12,7 +12,7 @@ FloorEntity::FloorEntity() : Entity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee
 
 	auto transform = addComponent<FloorTransformComponent>();
 	transform->gridSize = gridSize;
-	transform->scale = glm::vec3(0.99, 1, 0.99);
+	transform->scale = glm::vec3(1, 0.1, 1);
 	transform->recalculateMatrices();
 
 #define frand() ((rand() * 1.0) / RAND_MAX)
