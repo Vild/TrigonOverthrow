@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "ssaorenderpass.hpp"
 #include "../../engine.hpp"
 #include <random>
@@ -137,8 +139,8 @@ void SSAORenderSystem::registerImGui() {
 
 void SSAORenderSystem::render(World& world) {
 	glClear(GL_COLOR_BUFFER_BIT);
-	CameraEntity& camera = *Engine::getInstance().getCamera();
-	auto cameraComponent = camera.getComponent<CameraComponent>();
+	auto camera = Engine::getInstance().getCamera();
+	auto cameraComponent = camera->getComponent<CameraComponent>();
 
 	_shader->bind();
 	_shader->setUniform("viewMatrix", cameraComponent->viewMatrix);
