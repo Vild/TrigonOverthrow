@@ -11,10 +11,10 @@
 ParticleRenderPass::ParticleRenderPass(World &world) {
 	_gbuffer = std::make_shared<GBuffer>(0);
 	_shader = std::make_shared<ShaderProgram>();
-	_shader->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
+	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/particles.frag", ShaderType::fragment))
 		.finalize();
-	_shader->addUniform("v")
+	_shader->bind().addUniform("v")
 		.addUniform("p")
 		.addUniform("particlePos")
 		.addUniform("particleVel")
@@ -36,7 +36,7 @@ void ParticleRenderPass::render(World& world) {
 	auto transformComponent = camera->getComponent<TransformComponent>();
 	if (!transformComponent)
 		return;
-	
+
 	_shader->bind()
 		.setUniform("v", cameraComponent->viewMatrix)
 		.setUniform("p", cameraComponent->projectionMatrix);
