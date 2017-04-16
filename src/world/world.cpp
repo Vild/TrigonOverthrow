@@ -16,6 +16,7 @@
 #include "renderpass/lightingrenderpass.hpp"
 #include "renderpass/particlerenderpass.hpp"
 #include "renderpass/gaussianrenderpass.hpp"
+#include "renderpass/textrenderpass.hpp"
 
 #include <iostream>
 
@@ -53,6 +54,7 @@ void World::_setupSystems() {
 		std::unique_ptr<GaussianRenderPass> gaussian = std::make_unique<GaussianRenderPass>();
 		std::unique_ptr<LightingRenderPass> lighting = std::make_unique<LightingRenderPass>();
 		std::unique_ptr<ParticleRenderPass> particles = std::make_unique<ParticleRenderPass>(*this);
+		std::unique_ptr<TextRenderPass> text = std::make_unique<TextRenderPass>();
 
 		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::PositionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position));
 		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::NormalMap, geometry->getAttachment(GeometryRenderPass::Attachment::normal));
@@ -83,5 +85,6 @@ void World::_setupSystems() {
 		_systems.push_back(std::move(gaussian));
 		_systems.push_back(std::move(lighting));
 		_systems.push_back(std::move(particles));
+		_systems.push_back(std::move(text));
 	}
 }

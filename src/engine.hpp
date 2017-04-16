@@ -10,6 +10,7 @@
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
+#include "io/textfactory.hpp"
 
 #include "world/world.hpp"
 #include "world/system/particlesystem.hpp"
@@ -35,6 +36,7 @@ public:
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
+	inline std::shared_ptr<TextFactory> getTextFactory() { return _textFactory; }
 
 	inline std::shared_ptr<World> getWorld() { return _world; }
 	inline std::shared_ptr<CameraEntity> getCamera() { return _camera; }
@@ -51,6 +53,7 @@ private:
 	std::shared_ptr<TextureManager> _textureManager;
 	std::shared_ptr<MeshLoader> _meshLoader;
 	std::shared_ptr<HIDInput> _hidInput;
+	std::shared_ptr<TextFactory> _textFactory;
 
 	std::shared_ptr<World> _world;
 	std::shared_ptr<CameraEntity> _camera;

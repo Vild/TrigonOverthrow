@@ -106,6 +106,7 @@ void Engine::_init(bool vsync) {
 	_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
 	_meshLoader = std::make_shared<MeshLoader>();
 	_hidInput = std::make_shared<HIDInput>();
+	_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
 
 	_world = std::make_shared<World>();
 

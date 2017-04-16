@@ -1,70 +1,73 @@
 #pragma once
 
 #include <string>
-#include <SDL2/SDL_ttf.h>
 #include <memory>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include "../gl/mesh.hpp"
 
 #include "../gl/texture.hpp"
 
-enum class FontStyle {
-	normal = TTF_STYLE_NORMAL,
-	bold = TTF_STYLE_BOLD,
-	italic = TTF_STYLE_ITALIC,
-	underline = TTF_STYLE_UNDERLINE,
-	strikethrough = TTF_STYLE_STRIKETHROUGH
-};
-
-FontStyle operator|(FontStyle a, FontStyle b) {
-	return static_cast<FontStyle>((int)a + (int)b);
-}
-
-struct TextBuffer {
+struct CharRenderInfo {
+	// charRect.xy = [startX, startY] in texture
+	// charRect.zw = [width, height] of char
+	// charPos     = [xPos, yPos]
 	glm::vec4 charRect;
 	glm::vec2 charPos;
 };
 
+struct CharInfo {
+	glm::vec2 pos;
+	glm::vec2 size;
 
-class TextRenderer {
-public:
-
-	void render();
-
-private:
-	FontFactory& _factory;
-	std::vector<
-	bool _static;
-
-
-	void _rebuild();
-
+	// glm::vec2 offset;
+	float xAdvanceAmount;
 };
 
-// assets/fonts/SF Theramin Gothic Bold.ttf
-class FontFactory {
-public:
-	FontFactory(const std::string& fontFile);
-	~FontFactory();
+class TextRenderer;
 
-	TextRenderer makeStaticRenderer(const std::string& str, FontStyle fontStyle = FontStyle::normal, int outline = 0);
-	TextRenderer makeDynamicRenderer(const std::string& str, FontStyle fontStyle = FontStyle::normal, int outline = 0);
+class TextFactory {
+public:
+	friend class TextRenderer;
+	TextFactory(const std::string& fontFile);
+	virtual ~TextFactory();
+
+	std::shared_ptr<TextRenderer> makeRenderer(const std::string& text, bool isStatic = false, unsigned int maxTextLength = 64);
+
+	inline std::shared_ptr<Texture> getFontMap() { return _fontMap; };
 
 private:
-	struct CharInfo {
-		glm::vec2 pos;
-		glm::vec2 size;
-
-		glm::vec2 offset;
-		int xAdvanceAmount;
-	};
-
 	const int _ptSize = 30;
 
-	TTF_Font* _font;
+	std::shared_ptr<Texture> _fontMap;
 	CharInfo _charInfos[256];
-	Rendere;
 
-	inline const CharInfo& _getChar(char ch) { return _charInfos[ch]; }
+	std::vector<std::shared_ptr<TextRenderer>> _renderers;
+
+	inline const CharInfo& _getChar(char ch) { return _charInfos[(int)ch]; }
+};
+
+// TODO: Turn into a interface and use a private class for the instance
+class TextRenderer {
+public:
+	/// maxTextLength will only be used when isStatic = false
+	TextRenderer(TextFactory& factory, const std::string& text, bool isStatic, unsigned int maxTextLength);
+
+	void setText(const std::string& text);
+	inline const std::string& getText() { return _text; }
+	inline bool isStatic() { return _isStatic; }
+	inline unsigned int getMaxTextLength() { return _maxTextLength; }
+	inline std::unique_ptr<Mesh>& getMesh() { return _mesh; }
+
+private:
+	TextFactory& _factory;
+	std::string _text;
+	bool _isStatic;
+	unsigned int _maxTextLength;
+
+	std::unique_ptr<Mesh> _mesh;
+	std::vector<CharRenderInfo> _renderingData;
+
+	void _rebuild(bool upload = true);
 };

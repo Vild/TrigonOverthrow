@@ -8,7 +8,8 @@ in vec2 vUV;
 uniform sampler2D fontMap;
 
 void main() {
-	vec3 charTex = texture(fontMap, vUV).xyz;
-
-	outColor = vec4(charTex * vColor, 1);
+	vec4 charTex = texture(fontMap, vUV);
+	if (charTex.a < 1)
+		discard;
+	outColor = vec4(charTex.xyz * vColor, 1);
 }
