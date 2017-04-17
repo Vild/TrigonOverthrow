@@ -1,5 +1,6 @@
 #include "gaussianrenderpass.hpp"
 #include "../../engine.hpp"
+#include <functional>
 
 GaussianRenderPass::GaussianRenderPass()
 {
@@ -7,26 +8,31 @@ GaussianRenderPass::GaussianRenderPass()
 	int width = engine.getWidth();
 	int height = engine.getHeight();
 
-	(*(_gbuffer = std::make_shared<GBuffer>()))
-		.attachTexture(0, width, height, GL_RGB, GL_UNSIGNED_BYTE, 3)
+	(*(_gbuffer = std::make_shared<GBuffer>())).bind()
+		.attachTexture(0, std::make_shared<Texture>(width, height, GL_RGB))
 		.finalize();
 
-	//(*(altBuffer = std::make_shared<GBuffer>()))
-	//	.attachTexture(0, width, height, GL_RGB, GL_UNSIGNED_BYTE, 3)
-	//	.finalize();
+	(*(altBuffer = std::make_shared<GBuffer>())).bind()
+		.attachTexture(0, std::make_shared<Texture>(width, height, GL_RGB))
+		.finalize();
 
-	//(*(_shader = std::make_shared<ShaderProgram>()))
-	//	.attach("assets/shaders/gaussian.vert", ShaderType::vertex)
-	//	.attach("assets/shaders/gaussian.frag", ShaderType::fragment)
-	//	.finalize();
+	(*(_shader = std::make_shared<ShaderProgram>()))
+		.attach("assets/shaders/gaussian.vert", ShaderType::vertex)
+		.attach("assets/shaders/gaussian.frag", ShaderType::fragment)
+		.finalize();
 
-	//_shader->bind()
-	//	.addUniform("image")
-	//	.setUniform("image", 0);
+	_shader->bind()
+		.addUniform("kernel")
+		.addUniform("kernelSize")
+		.addUniform("horizontal")
+		.addUniform("image")
+		.setUniform("image", 0);
 
-	//fsQuad = makeFsQuad();
+	fsQuad = makeFsQuad();
 
-	//setPasses(1);
+	halfWidth = 3;
+	deviation = 0.5f;
+	generateKernel();
 }
 
 std::unique_ptr<Mesh> GaussianRenderPass::makeFsQuad()
@@ -57,41 +63,70 @@ std::unique_ptr<Mesh> GaussianRenderPass::makeFsQuad()
 	return std::move(plane);
 }
 
+void GaussianRenderPass::generateKernel()
+{
+	std::vector<float> kernel;
+
+	std::function<float(int)> g = [](float dev){
+		float gConst = 1.0f / (sqrt(2 * glm::pi<float>() * dev * dev));
+		float gDiv = (2.0f * dev * dev);
+		
+		return [=](int x) -> float {
+			return gConst * pow(glm::e<float>(), -(x*x) / gDiv);
+		};
+	}(deviation);
+
+	float kernelSum = 0;	
+	for (int x = 0; x < halfWidth; x++)
+	{
+		float factor = g(x);
+		kernelSum += factor;
+		kernel.push_back(factor);
+	}
+
+	for (float& g : kernel)
+	{
+		g /= kernelSum;
+	}
+
+	_shader->bind()
+		.setUniformArray("kernel", kernel)
+		.setUniform("kernelSize", halfWidth);
+}
+
 void GaussianRenderPass::registerImGui()
 {
 	bool dirty = false;
 
-	dirty |= ImGui::DragInt("Passes", &passes, 2, 1, 61);
+	dirty |= ImGui::DragInt("Half Width", &halfWidth, 1, 1);
+	dirty |= ImGui::DragFloat("Deviation", &deviation, 0.001);
 
 	if (dirty)
 	{
-		passes += 1 - passes % 2;
+		generateKernel();
 	}
-}
-
-inline void GaussianRenderPass::setPasses(int passes) 
-{
-	this->passes = passes + 1 - passes % 2;
 }
 
 
 void GaussianRenderPass::render(World & world)
 {
-	/*static std::shared_ptr<GBuffer> buffers[] = { _gbuffer, altBuffer };
+	static std::shared_ptr<GBuffer> buffers[] = { _gbuffer, altBuffer };
 	static std::shared_ptr<Texture> images[] = { buffers[0]->getAttachment(0), buffers[1]->getAttachment(0) };
 
 	_shader->bind();
-	fsQuad->render();
 
 	bool ping = true;
-	for (int i = 1; i < passes; i++)
+	for (int i = 0; i < 2; i++)
 	{
+		_shader->setUniform("horizontal", ping);
 		buffers[ping]->bind();
-		images[!ping]->bind();
 		fsQuad->render();
+		images[ping]->bind();
 		ping = !ping;
-	}*/
+	}
 }
+
+
 
 void GaussianRenderPass::resize(unsigned int width, unsigned int height)
 {

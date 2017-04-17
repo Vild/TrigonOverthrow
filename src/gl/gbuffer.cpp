@@ -36,6 +36,14 @@ GBuffer& GBuffer::bind(bool read, bool draw) {
 	return *this;
 }
 
+GBuffer & GBuffer::attachTexture(int id, std::shared_ptr<Texture> texture)
+{
+	_attachments[id] = texture;
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, texture->getTexture(), 0);
+
+	return *this;
+}
+
 GBuffer& GBuffer::attachTexture(int id, size_t width, size_t height, GLenum internalFormat, GLenum dataType, int vectorSize) {
 	GLuint texID;
 	glGenTextures(1, &texID);

@@ -11,7 +11,7 @@ public:
 	Texture(GLuint texture);
 	Texture(unsigned int width, unsigned int height, const void* data);
 	Texture(const char imageFormat[4], const void* data, unsigned int size);
-	Texture(int width, int height, GLenum internalFormat, GLenum dataFormat, GLenum dataType, void * data);
+	Texture(int width, int height, GLenum internalFormat, GLenum dataFormat = GL_RGBA, GLenum dataType = GL_UNSIGNED_BYTE, void * data = NULL);
 	virtual ~Texture();
 
 	GLuint getTexture();
