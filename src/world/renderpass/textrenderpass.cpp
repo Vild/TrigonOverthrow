@@ -30,6 +30,7 @@ void TextRenderPass::render(World& world) {
 	Engine::getInstance().getTextFactory()->getFontMap()->bind(0);
 
 	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
 
 	for (std::shared_ptr<Entity> entity : world.getEntities()) {
 		auto text = entity->getComponent<TextComponent>();
@@ -46,6 +47,8 @@ void TextRenderPass::render(World& world) {
 
 		tr->getMesh()->render(tr->getText().size());
 	}
+
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 }
 

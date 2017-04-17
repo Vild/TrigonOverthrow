@@ -9,7 +9,7 @@ uniform sampler2D fontMap;
 
 void main() {
 	vec4 charTex = texture(fontMap, vUV);
-	if (charTex.a < 1)
+	if (charTex.a < 0.5)
 		discard;
 	outColor = vec4(charTex.xyz * vColor, 1);
 }
