@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "entity.hpp"
 
 #include "../component/lookatcomponent.hpp"
@@ -14,3 +14,4 @@ private:
 	bool _follow = true;
 	std::shared_ptr<LookAtComponent> _tmpComponent;
 };
+*/

@@ -8,7 +8,7 @@
 void PhysicsSystem::update(World& world, float delta) {
 	// TODO: Compute shader this?
 
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::shared_ptr<Entity>& entity : world.getEntities()) {
 		auto physicsComponent = entity->getComponent<PhysicsComponent>();
 		if (!physicsComponent)
 			continue;

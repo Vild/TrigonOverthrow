@@ -6,6 +6,9 @@
 #include <exception>
 #include <memory>
 #include <cmath>
+#include <typeinfo>
+#include <typeindex>
+#include <unordered_map>
 
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
@@ -16,6 +19,8 @@
 #include "world/system/particlesystem.hpp"
 
 #include "world/entity/cameraentity.hpp"
+
+#include "state/state.hpp"
 
 class Engine {
 public:
@@ -38,8 +43,20 @@ public:
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
 	inline std::shared_ptr<TextFactory> getTextFactory() { return _textFactory; }
 
-	inline std::shared_ptr<World> getWorld() { return _world; }
-	inline std::shared_ptr<CameraEntity> getCamera() { return _camera; }
+	inline std::shared_ptr<Entity>& getCamera() { return _camera; }
+	inline std::vector<std::shared_ptr<System>>& getSystems() { return _systems; }
+
+	template <typename T>
+	inline std::unique_ptr<T>& getState() {
+		return _states[std::type_index(typeid(T))];
+	}
+
+	inline const std::type_index getCurrentState() { return *_currentState; }
+
+	template <typename T>
+	inline void setCurrentState() {
+		*_currentState = std::type_index(typeid(T));
+	}
 
 private:
 	unsigned int _width = 1280;
@@ -56,7 +73,11 @@ private:
 	std::shared_ptr<TextFactory> _textFactory;
 
 	std::shared_ptr<World> _world;
-	std::shared_ptr<CameraEntity> _camera;
+	std::vector<std::shared_ptr<System>> _systems;
+	std::shared_ptr<Entity> _camera;
+
+	std::unique_ptr<std::type_index> _currentState;
+	std::unordered_map<std::type_index, std::unique_ptr<State>> _states;
 
 	Engine() {}
 	virtual ~Engine();
@@ -65,4 +86,9 @@ private:
 	void _initSDL();
 	void _initGL();
 	void _initImGui();
+
+	void _setupSystems();
+
+	void _system_tick(float delta);
+	void _system_resize(unsigned int width, unsigned int height);
 };

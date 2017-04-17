@@ -6,9 +6,9 @@
 #include <vector>
 #include <cstdint>
 
-#include "../../lib/sole/sole.hpp"
+#include "../lib/sole/sole.hpp"
 
-#include "../component/component.hpp"
+#include "component/component.hpp"
 
 // Kinda like GameObject - https://docs.unity3d.com/ScriptReference/GameObject.html
 
@@ -61,7 +61,7 @@ public:
 		}
 	}
 
-	virtual void registerImGui() = 0;
+	//virtual void registerImGui() = 0;
 
 	inline const sole::uuid& getUUID() { return _uuid; }
 	inline const std::string& getName() { return _name; }

@@ -3,6 +3,7 @@
 #include "imguisystem.hpp"
 
 #include "../../lib/imgui.h"
+#include "../../engine.hpp"
 
 void ImGuiSystem::update(World& world, float delta) {
 	ImGui::SetNextWindowPos(ImVec2(8, 48), ImGuiSetCond_Once);
@@ -11,13 +12,13 @@ void ImGuiSystem::update(World& world, float delta) {
 	ImGui::Begin("Settings Window");
 
 	ImGui::Text("Entities:");
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::shared_ptr<Entity>& entity : world.getEntities()) {
 		if (ImGui::TreeNode(entity->getName().c_str())) {
 			ImGui::Text("Actions:");
-			entity->registerImGui();
+			//entity->registerImGui();
 
 			ImGui::Text("Component:");
-			for (std::shared_ptr<IComponent> component : entity->getComponents()) {
+			for (std::shared_ptr<IComponent>& component : entity->getComponents()) {
 				if (ImGui::TreeNode(component->name().c_str())) {
 					component->registerImGui();
 					ImGui::TreePop();
@@ -29,7 +30,7 @@ void ImGuiSystem::update(World& world, float delta) {
 	}
 	ImGui::Selectable("");
 	ImGui::Text("Systems:");
-	for (std::unique_ptr<System>& system : world.getSystems()) {
+	for (std::shared_ptr<System>& system : Engine::getInstance().getSystems()) {
 		if (ImGui::TreeNode(system->name().c_str())) {
 			ImGui::Text("Actions:");
 			system->registerImGui();

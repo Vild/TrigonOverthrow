@@ -1,7 +1,7 @@
 #pragma once
 #include "component.hpp"
 #include <glm/glm.hpp>
-#include "../entity/entity.hpp"
+#include "../entity.hpp"
 
 struct CameraComponent : public Component<CameraComponent> {
 	CameraComponent();

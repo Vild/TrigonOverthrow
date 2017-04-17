@@ -15,10 +15,23 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "world/entity/playerentity.hpp"
-#include "world/entity/floorentity.hpp"
 #include "world/component/lookatcomponent.hpp"
 #include "world/component/cameracomponent.hpp"
+
+#include "world/system/inputsystem.hpp"
+#include "world/system/physicssystem.hpp"
+#include "world/system/imguisystem.hpp"
+#include "world/system/lookatsystem.hpp"
+#include "world/system/camerasystem.hpp"
+#include "world/system/particlesystem.hpp"
+
+#include "world/renderpass/geometryrenderpass.hpp"
+#include "world/renderpass/ssaorenderpass.hpp"
+#include "world/renderpass/lightingrenderpass.hpp"
+#include "world/renderpass/particlerenderpass.hpp"
+#include "world/renderpass/textrenderpass.hpp"
+
+#include "state/ingamestate.hpp"
 
 Engine::~Engine() {
 	TTF_Quit();
@@ -62,13 +75,13 @@ int Engine::run(bool vsync) {
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED || event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 					_width = event.window.data1;
 					_height = event.window.data2;
-					_world->resize(_width, _height);
+					_system_resize(_width, _height);
 
-					{
+					/*{
 						std::shared_ptr<CameraComponent> cc = _camera->getComponent<CameraComponent>();
 						cc->aspect = (_width * 1.0) / _height;
 						cc->recalculateProjectionMatrix();
-					}
+					}*/
 				}
 				break;
 			default:
@@ -91,7 +104,7 @@ int Engine::run(bool vsync) {
 
 		_hidInput->update();
 
-		_world->tick(delta);
+		_system_tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
 	}
@@ -110,11 +123,9 @@ void Engine::_init(bool vsync) {
 
 	_world = std::make_shared<World>();
 
-	std::shared_ptr<Entity> target;
-	_world->addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
-	_world->addEntity(_camera = std::make_shared<CameraEntity>());
-	_camera->getComponent<LookAtComponent>()->target = target;
-	_world->addEntity(std::make_shared<FloorEntity>());
+	_currentState = std::make_unique<std::type_index>(typeid(InGameState));
+	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
+	_setupSystems();
 }
 
 void Engine::_initSDL() {
@@ -221,4 +232,66 @@ void Engine::_initImGui() {
 	style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00f, 0.84f, 0.84f, 1.00f);
 	style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.13f, 0.40f, 0.40f, 1.00f);
 	style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.09f, 0.27f, 0.27f, 0.67f);
+}
+
+void Engine::_setupSystems() {
+	// Pure systems
+	_systems.push_back(std::make_shared<ImGuiSystem>());
+	_systems.push_back(std::make_shared<InputSystem>());
+	_systems.push_back(std::make_shared<PhysicsSystem>());
+	_systems.push_back(std::make_shared<LookAtSystem>());
+	_systems.push_back(std::make_shared<CameraSystem>());
+	_systems.push_back(std::make_shared<ParticleSystem>());
+
+	// Render passes
+	{
+		std::shared_ptr<GeometryRenderPass> geometry = std::make_shared<GeometryRenderPass>();
+		std::shared_ptr<SSAORenderSystem> ssao = std::make_shared<SSAORenderSystem>();
+		std::shared_ptr<LightingRenderPass> lighting = std::make_shared<LightingRenderPass>();
+		std::shared_ptr<ParticleRenderPass> particles = std::make_shared<ParticleRenderPass>(_states[getCurrentState()]->getWorld());
+		std::shared_ptr<TextRenderPass> text = std::make_shared<TextRenderPass>();
+
+		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::PositionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position))
+			.attachInputTexture(SSAORenderSystem::InputAttachments::NormalMap, geometry->getAttachment(GeometryRenderPass::Attachment::normal));
+
+		lighting->attachInputTexture(LightingRenderPass::InputAttachment::position, geometry->getAttachment(GeometryRenderPass::Attachment::position))
+			.attachInputTexture(LightingRenderPass::InputAttachment::normal, geometry->getAttachment(GeometryRenderPass::Attachment::normal))
+			.attachInputTexture(LightingRenderPass::InputAttachment::diffuseSpecular, geometry->getAttachment(GeometryRenderPass::Attachment::diffuseSpecular))
+			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
+			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, ssao->getAttachment(SSAORenderSystem::Attachments::OcclusionMap));
+
+		for (std::shared_ptr<System>& system : _systems) {
+			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
+			if (!particleSystem)
+				continue;
+			auto _gbuffer = particleSystem->getGBuffers();
+
+			// GIT-GUD: fixed in velocity and position to be output instead.
+			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::inPosition])
+				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::inVelocity]);
+
+			break;
+		}
+
+		_systems.push_back(geometry);
+		_systems.push_back(ssao);
+		_systems.push_back(lighting);
+		_systems.push_back(particles);
+		_systems.push_back(text);
+	}
+}
+
+void Engine::_system_tick(float delta) {
+	World& world = _states[getCurrentState()]->getWorld();
+	for (const std::shared_ptr<System>& system : _systems)
+		system->update(world, delta);
+}
+
+void Engine::_system_resize(unsigned int width, unsigned int height) {
+	for (std::shared_ptr<System>& system : _systems) {
+		RenderPass* rp = dynamic_cast<RenderPass*>(system.get());
+		if (!rp)
+			continue;
+		rp->resize(width, height);
+	}
 }

@@ -34,7 +34,7 @@ void TextRenderPass::render(World& world) {
 
 	glDisable(GL_CULL_FACE);
 
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::shared_ptr<Entity>& entity : world.getEntities()) {
 		auto text = entity->getComponent<TextComponent>();
 		if (!text)
 			continue;

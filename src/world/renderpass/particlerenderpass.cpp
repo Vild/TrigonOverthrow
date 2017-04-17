@@ -35,7 +35,7 @@ void ParticleRenderPass::render(World& world) {
 		return;
 
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::shared_ptr<Entity>& entity : world.getEntities()) {
 		auto particle = entity->getComponent<ParticleComponent>();
 		if (!particle)
 			continue;
