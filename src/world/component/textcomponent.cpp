@@ -20,4 +20,9 @@ void TextComponent::registerImGui() {
 
 	if (ImGui::InputText("Text", buffer, length, (textRenderer->isStatic() ? ImGuiInputTextFlags_ReadOnly : 0)))
 		textRenderer->setText(std::string(buffer));
+
+	if (ImGui::TreeNode("Transform")) {
+		transform.registerImGui();
+		ImGui::TreePop();
+	}
 }

@@ -5,11 +5,14 @@
 #include "../component/textcomponent.hpp"
 #include "../component/transformcomponent.hpp"
 
+#include <glm/gtx/transform.hpp>
+
 TextRenderPass::TextRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>(0);
 
 	_shader = std::make_shared<ShaderProgram>();
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/text.vert", ShaderType::vertex))
+		.attach(std::make_shared<ShaderUnit>("assets/shaders/text.geom", ShaderType::geometry))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/text.frag", ShaderType::fragment))
 		.finalize();
 	_shader->bind().addUniform("m").addUniform("vp").addUniform("fontMap");
@@ -29,7 +32,6 @@ void TextRenderPass::render(World& world) {
 	_shader->setUniform("vp", cameraComponent->projectionMatrix * cameraComponent->viewMatrix);
 	Engine::getInstance().getTextFactory()->getFontMap()->bind(0);
 
-	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
 	for (std::shared_ptr<Entity> entity : world.getEntities()) {
@@ -43,13 +45,29 @@ void TextRenderPass::render(World& world) {
 
 		auto tr = text->textRenderer;
 
-		_shader->setUniform("m", transform->matrix);
+		// XXX: text->transform.matrix * transform->matrix
+		const glm::vec3 x(1, 0, 0);
+		const glm::vec3 y(0, 1, 0);
+		const glm::vec3 z(0, 0, 1);
+
+		glm::mat4 matrix;
+		matrix = glm::translate(transform->position);
+		matrix = matrix * glm::rotate(glm::radians(transform->rotation.z), z);
+		matrix = matrix * glm::rotate(glm::radians(transform->rotation.y), y);
+		matrix = matrix * glm::rotate(-glm::radians(transform->rotation.x), x);
+
+		matrix = matrix * glm::rotate(glm::radians(text->transform.rotation.z), z);
+		matrix = matrix * glm::rotate(glm::radians(text->transform.rotation.y), y);
+		matrix = matrix * glm::rotate(-glm::radians(text->transform.rotation.x), x);
+		matrix = matrix * glm::translate(text->transform.position);
+
+		matrix = matrix * glm::scale(text->transform.scale) * glm::scale(transform->scale);
+		_shader->setUniform("m", matrix);
 
 		tr->getMesh()->render(tr->getText().size());
 	}
 
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
 }
 
 void TextRenderPass::resize(unsigned int width, unsigned int height) {}

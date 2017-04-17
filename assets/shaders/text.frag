@@ -2,14 +2,14 @@
 
 out vec4 outColor;
 
-in vec3 vColor;
-in vec2 vUV;
+in vec3 gColor;
+in vec2 gUV;
 
 uniform sampler2D fontMap;
 
 void main() {
-	vec4 charTex = texture(fontMap, vUV);
+	vec4 charTex = texture(fontMap, gUV);
 	if (charTex.a < 0.5)
 		discard;
-	outColor = vec4(charTex.xyz * vColor, 1);
+	outColor = vec4(charTex.xyz * gColor, 1);
 }

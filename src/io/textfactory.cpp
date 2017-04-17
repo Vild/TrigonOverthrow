@@ -29,14 +29,14 @@ std::shared_ptr<TextRenderer> TextFactory::makeRenderer(const std::string& text,
 }
 
 TextRenderer::TextRenderer(TextFactory& factory, const std::string& text, bool isStatic, unsigned int maxTextLength)
-	: _factory(factory), _text(text), _isStatic(isStatic), _maxTextLength(isStatic ? text.size() : maxTextLength) {
+	: _factory(factory), _text(text), _isStatic(isStatic), _maxTextLength((isStatic ? text.size() : maxTextLength) * 2) {
 	_renderingData.resize(_maxTextLength);
 	_rebuild(false);
 	const std::vector<Vertex> vertices = {
-		Vertex{glm::vec3{0, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 0}}, //
-		Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 0}}, //
-		Vertex{glm::vec3{1, 0, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}}, //
-		Vertex{glm::vec3{0, 0, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}}, //
+		Vertex{glm::vec3{0, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 0}}, //
+		Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 0}}, //
+		Vertex{glm::vec3{1, 0, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}}, //
+		Vertex{glm::vec3{0, 0, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}}, //
 	};
 	const std::vector<GLuint> indicies = {0, 2, 1, 2, 0, 3};
 	_mesh = std::make_unique<Mesh>(vertices, indicies);
@@ -52,7 +52,7 @@ TextRenderer::TextRenderer(TextFactory& factory, const std::string& text, bool i
 				glVertexAttribDivisor(ShaderAttributeID::charRect, 1);
 
 				glEnableVertexAttribArray(ShaderAttributeID::charPos);
-				glVertexAttribPointer(ShaderAttributeID::charPos, 2, GL_FLOAT, GL_FALSE, sizeof(CharRenderInfo), (GLvoid*)offsetof(CharRenderInfo, charPos));
+				glVertexAttribPointer(ShaderAttributeID::charPos, 3, GL_FLOAT, GL_FALSE, sizeof(CharRenderInfo), (GLvoid*)offsetof(CharRenderInfo, charPos));
 				glVertexAttribDivisor(ShaderAttributeID::charPos, 1);
 
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -73,15 +73,20 @@ void TextRenderer::setText(const std::string& text) {
 }
 
 void TextRenderer::_rebuild(bool upload) {
-	glm::vec2 pos{0, 0};
+	glm::vec3 pos{0, 0, 0};
+	// Calc middle
+	for (unsigned int i = 0; i < _text.size(); i++) {
+		const CharInfo& info = _factory._getChar(_text[i]);
+		pos.x -= info.xAdvanceAmount * 1.2;
+	}
+	pos /= -2;
+
 	for (unsigned int i = 0; i < _text.size(); i++) {
 		const CharInfo& info = _factory._getChar(_text[i]);
 		CharRenderInfo& rinfo = _renderingData[i];
 		rinfo.charRect = glm::vec4{info.pos, info.size};
 		rinfo.charPos = pos;
 		pos.x -= info.xAdvanceAmount * 1.2;
-		printf("rinfo.charRect = (%f, %f, %f, %f) ## rinfo.charPos = (%f, %f)\n", rinfo.charRect.x, rinfo.charRect.y, rinfo.charRect.z,
-					 rinfo.charRect.w, rinfo.charPos.x, rinfo.charPos.y);
 	}
 
 	if (upload)

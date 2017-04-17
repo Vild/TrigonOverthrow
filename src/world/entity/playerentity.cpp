@@ -14,7 +14,7 @@
 PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player") {
 	auto& engine = Engine::getInstance();
 	auto transform = addComponent<TransformComponent>();
-	transform->scale = glm::vec3(4);
+	transform->scale = glm::vec3(0.01);
 	transform->recalculateMatrix();
 	auto model = addComponent<ModelComponent>();
 	model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
@@ -38,7 +38,11 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 	auto input = addComponent<KBMouseInputComponent>();
 	auto physics = addComponent<PhysicsComponent>();
 	auto text = addComponent<TextComponent>();
-	text->textRenderer = engine.getTextFactory()->makeRenderer("\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10");
+	text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
+
+	text->transform.position = glm::vec3(0, 2, 0);
+	text->transform.scale = glm::vec3(100 * 2); // To counteract transform->scale
+	text->transform.recalculateMatrix();
 }
 
 void PlayerEntity::registerImGui() {}

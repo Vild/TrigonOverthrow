@@ -12,9 +12,9 @@
 struct CharRenderInfo {
 	// charRect.xy = [startX, startY] in texture
 	// charRect.zw = [width, height] of char
-	// charPos     = [xPos, yPos]
+	// charPos     = [xPos, yPos, zPos]
 	glm::vec4 charRect;
-	glm::vec2 charPos;
+	glm::vec3 charPos;
 };
 
 struct CharInfo {
