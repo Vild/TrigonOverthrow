@@ -30,7 +30,7 @@ void ImGuiSystem::update(World& world, float delta) {
 	}
 	ImGui::Selectable("");
 	ImGui::Text("Systems:");
-	for (std::shared_ptr<System>& system : Engine::getInstance().getSystems()) {
+	for (std::unique_ptr<System>& system : Engine::getInstance().getSystems()) {
 		if (ImGui::TreeNode(system->name().c_str())) {
 			ImGui::Text("Actions:");
 			system->registerImGui();

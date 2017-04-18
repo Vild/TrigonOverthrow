@@ -44,7 +44,7 @@ public:
 	inline std::shared_ptr<TextFactory> getTextFactory() { return _textFactory; }
 
 	inline std::shared_ptr<Entity>& getCamera() { return _camera; }
-	inline std::vector<std::shared_ptr<System>>& getSystems() { return _systems; }
+	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
 	template <typename T>
 	inline std::unique_ptr<T>& getState() {
@@ -73,7 +73,7 @@ private:
 	std::shared_ptr<TextFactory> _textFactory;
 
 	std::shared_ptr<World> _world;
-	std::vector<std::shared_ptr<System>> _systems;
+	std::vector<std::unique_ptr<System>> _systems;
 	std::shared_ptr<Entity> _camera;
 
 	std::unique_ptr<std::type_index> _currentState;

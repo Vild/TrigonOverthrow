@@ -17,28 +17,30 @@ public:
 	Entity(sole::uuid uuid, std::string name);
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-	std::shared_ptr<T> addComponent() {
-		auto c = std::make_shared<T>();
-		T::getActiveComponents().push_back(c);
+	std::unique_ptr<T>& addComponent() {
+		T::getActiveComponents().push_back(std::make_unique<T>());
+		auto& c = T::getActiveComponents().back();
 		_components.push_back(c);
 		return c;
 	}
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-	std::shared_ptr<T> addComponent(std::shared_ptr<T> c) {
-		T::getActiveComponents().push_back(c);
+	std::unique_ptr<T>& addComponent(std::unique_ptr<T> c) {
+		T::getActiveComponents().push_back(std::move(c));
+
+		auto& c = T::getActiveComponents().back();
 		_components.push_back(c);
 		return c;
 	}
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-	std::shared_ptr<T> getComponent() {
-		for (std::shared_ptr<IComponent> c : _components) {
-			std::shared_ptr<T> com = std::dynamic_pointer_cast<T>(c);
+	std::unique_ptr<T>& getComponent() {
+		for (std::unique_ptr<IComponent>& c : _components) {
+			T* com = dynamic_pointer<T>(c.get());
 			if (com)
 				return com;
 		}
-		return std::shared_ptr<T>();
+		return std::unique_ptr<T>();
 	}
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
@@ -65,10 +67,10 @@ public:
 
 	inline const sole::uuid& getUUID() { return _uuid; }
 	inline const std::string& getName() { return _name; }
-	inline std::vector<std::shared_ptr<IComponent>>& getComponents() { return _components; }
+	inline std::vector<std::unique_ptr<IComponent>&>& getComponents() { return _components; }
 
 protected:
 	sole::uuid _uuid;
 	std::string _name;
-	std::vector<std::shared_ptr<IComponent>> _components;
+	std::vector<std::unique_ptr<IComponent>&> _components;
 };

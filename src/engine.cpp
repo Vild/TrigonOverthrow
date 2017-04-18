@@ -236,20 +236,20 @@ void Engine::_initImGui() {
 
 void Engine::_setupSystems() {
 	// Pure systems
-	_systems.push_back(std::make_shared<ImGuiSystem>());
-	_systems.push_back(std::make_shared<InputSystem>());
-	_systems.push_back(std::make_shared<PhysicsSystem>());
-	_systems.push_back(std::make_shared<LookAtSystem>());
-	_systems.push_back(std::make_shared<CameraSystem>());
-	_systems.push_back(std::make_shared<ParticleSystem>());
+	_systems.push_back(std::make_unique<ImGuiSystem>());
+	_systems.push_back(std::make_unique<InputSystem>());
+	_systems.push_back(std::make_unique<PhysicsSystem>());
+	_systems.push_back(std::make_unique<LookAtSystem>());
+	_systems.push_back(std::make_unique<CameraSystem>());
+	_systems.push_back(std::make_unique<ParticleSystem>());
 
 	// Render passes
 	{
-		std::shared_ptr<GeometryRenderPass> geometry = std::make_shared<GeometryRenderPass>();
-		std::shared_ptr<SSAORenderSystem> ssao = std::make_shared<SSAORenderSystem>();
-		std::shared_ptr<LightingRenderPass> lighting = std::make_shared<LightingRenderPass>();
-		std::shared_ptr<ParticleRenderPass> particles = std::make_shared<ParticleRenderPass>(_states[getCurrentState()]->getWorld());
-		std::shared_ptr<TextRenderPass> text = std::make_shared<TextRenderPass>();
+		std::unique_ptr<GeometryRenderPass> geometry = std::make_unique<GeometryRenderPass>();
+		std::unique_ptr<SSAORenderSystem> ssao = std::make_unique<SSAORenderSystem>();
+		std::unique_ptr<LightingRenderPass> lighting = std::make_unique<LightingRenderPass>();
+		std::unique_ptr<ParticleRenderPass> particles = std::make_unique<ParticleRenderPass>(_states[getCurrentState()]->getWorld());
+		std::unique_ptr<TextRenderPass> text = std::make_unique<TextRenderPass>();
 
 		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::PositionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position))
 			.attachInputTexture(SSAORenderSystem::InputAttachments::NormalMap, geometry->getAttachment(GeometryRenderPass::Attachment::normal));
@@ -260,7 +260,7 @@ void Engine::_setupSystems() {
 			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
 			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, ssao->getAttachment(SSAORenderSystem::Attachments::OcclusionMap));
 
-		for (std::shared_ptr<System>& system : _systems) {
+		for (std::unique_ptr<System>& system : _systems) {
 			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
 			if (!particleSystem)
 				continue;
@@ -273,22 +273,22 @@ void Engine::_setupSystems() {
 			break;
 		}
 
-		_systems.push_back(geometry);
-		_systems.push_back(ssao);
-		_systems.push_back(lighting);
-		_systems.push_back(particles);
-		_systems.push_back(text);
+		_systems.push_back(std::move(geometry));
+		_systems.push_back(std::move(ssao));
+		_systems.push_back(std::move(lighting));
+		_systems.push_back(std::move(particles));
+		_systems.push_back(std::move(text));
 	}
 }
 
 void Engine::_system_tick(float delta) {
 	World& world = _states[getCurrentState()]->getWorld();
-	for (const std::shared_ptr<System>& system : _systems)
+	for (const std::unique_ptr<System>& system : _systems)
 		system->update(world, delta);
 }
 
 void Engine::_system_resize(unsigned int width, unsigned int height) {
-	for (std::shared_ptr<System>& system : _systems) {
+	for (std::unique_ptr<System>& system : _systems) {
 		RenderPass* rp = dynamic_cast<RenderPass*>(system.get());
 		if (!rp)
 			continue;
