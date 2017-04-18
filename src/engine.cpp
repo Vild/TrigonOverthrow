@@ -77,11 +77,14 @@ int Engine::run(bool vsync) {
 					_height = event.window.data2;
 					_system_resize(_width, _height);
 
-					/*{
-						std::shared_ptr<CameraComponent> cc = _camera->getComponent<CameraComponent>();
+					World& world = _states[getCurrentState()]->getWorld();
+					for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+						CameraComponent* cc = entity->getComponent<CameraComponent>();
+						if (!cc)
+							continue;
 						cc->aspect = (_width * 1.0) / _height;
 						cc->recalculateProjectionMatrix();
-					}*/
+					}
 				}
 				break;
 			default:
@@ -120,8 +123,6 @@ void Engine::_init(bool vsync) {
 	_meshLoader = std::make_shared<MeshLoader>();
 	_hidInput = std::make_shared<HIDInput>();
 	_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
-
-	_world = std::make_shared<World>();
 
 	_currentState = std::make_unique<std::type_index>(typeid(InGameState));
 	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
@@ -248,7 +249,7 @@ void Engine::_setupSystems() {
 		std::unique_ptr<GeometryRenderPass> geometry = std::make_unique<GeometryRenderPass>();
 		std::unique_ptr<SSAORenderSystem> ssao = std::make_unique<SSAORenderSystem>();
 		std::unique_ptr<LightingRenderPass> lighting = std::make_unique<LightingRenderPass>();
-		std::unique_ptr<ParticleRenderPass> particles = std::make_unique<ParticleRenderPass>(_states[getCurrentState()]->getWorld());
+		std::unique_ptr<ParticleRenderPass> particles = std::make_unique<ParticleRenderPass>();
 		std::unique_ptr<TextRenderPass> text = std::make_unique<TextRenderPass>();
 
 		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::PositionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position))

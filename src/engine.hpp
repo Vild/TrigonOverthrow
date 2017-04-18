@@ -18,8 +18,6 @@
 #include "world/world.hpp"
 #include "world/system/particlesystem.hpp"
 
-#include "world/entity/cameraentity.hpp"
-
 #include "state/state.hpp"
 
 class Engine {
@@ -43,7 +41,6 @@ public:
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
 	inline std::shared_ptr<TextFactory> getTextFactory() { return _textFactory; }
 
-	inline std::shared_ptr<Entity>& getCamera() { return _camera; }
 	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
 	template <typename T>
@@ -72,9 +69,7 @@ private:
 	std::shared_ptr<HIDInput> _hidInput;
 	std::shared_ptr<TextFactory> _textFactory;
 
-	std::shared_ptr<World> _world;
 	std::vector<std::unique_ptr<System>> _systems;
-	std::shared_ptr<Entity> _camera;
 
 	std::unique_ptr<std::type_index> _currentState;
 	std::unordered_map<std::type_index, std::unique_ptr<State>> _states;

@@ -139,8 +139,11 @@ void SSAORenderSystem::registerImGui() {
 
 void SSAORenderSystem::render(World& world) {
 	glClear(GL_COLOR_BUFFER_BIT);
-	auto camera = Engine::getInstance().getCamera();
-	auto cameraComponent = camera->getComponent<CameraComponent>();
+	//auto camera = Engine::getInstance().getCamera();
+	//auto cameraComponent = camera->getComponent<CameraComponent>();
+	auto& cameraComponent = CameraComponent::getActiveComponents()[0];
+	if (!cameraComponent)
+		return;
 
 	_shader->bind();
 	_shader->setUniform("viewMatrix", cameraComponent->viewMatrix);

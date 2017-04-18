@@ -12,35 +12,38 @@
 
 // Kinda like GameObject - https://docs.unity3d.com/ScriptReference/GameObject.html
 
+class World;
+
 class Entity {
 public:
+	/// Don't call this one directly! Always use world->addEntity
 	Entity(sole::uuid uuid, std::string name);
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-	std::unique_ptr<T>& addComponent() {
+	T* addComponent() {
 		T::getActiveComponents().push_back(std::make_unique<T>());
-		auto& c = T::getActiveComponents().back();
+		auto* c = T::getActiveComponents().back().get();
 		_components.push_back(c);
 		return c;
 	}
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-	std::unique_ptr<T>& addComponent(std::unique_ptr<T> c) {
-		T::getActiveComponents().push_back(std::move(c));
+	T* addComponent(std::unique_ptr<T> component) {
+		T::getActiveComponents().push_back(std::move(component));
 
-		auto& c = T::getActiveComponents().back();
+		auto* c = T::getActiveComponents().back().get();
 		_components.push_back(c);
 		return c;
 	}
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-	std::unique_ptr<T>& getComponent() {
-		for (std::unique_ptr<IComponent>& c : _components) {
-			T* com = dynamic_pointer<T>(c.get());
+	T* getComponent() {
+		for (IComponent* c : _components) {
+			T* com = dynamic_cast<T*>(c);
 			if (com)
 				return com;
 		}
-		return std::unique_ptr<T>();
+		return nullptr;
 	}
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
@@ -55,7 +58,7 @@ public:
 		}
 
 		for (auto it = _components.begin(); it != _components.end(); it++) {
-			auto com = std::dynamic_pointer_cast<T>(*it);
+			auto com = dynamic_cast<T*>(*it);
 			if (!com)
 				continue;
 			_components.erase(it);
@@ -63,14 +66,14 @@ public:
 		}
 	}
 
-	//virtual void registerImGui() = 0;
+	void (*registerImGui)(Entity* entity) = nullptr;
 
-	inline const sole::uuid& getUUID() { return _uuid; }
-	inline const std::string& getName() { return _name; }
-	inline std::vector<std::unique_ptr<IComponent>&>& getComponents() { return _components; }
+	inline sole::uuid& getUUID() { return _uuid; }
+	inline std::string& getName() { return _name; }
+	inline std::vector<IComponent*>& getComponents() { return _components; }
 
-protected:
+private:
 	sole::uuid _uuid;
 	std::string _name;
-	std::vector<std::unique_ptr<IComponent>&> _components;
+	std::vector<IComponent*> _components;
 };

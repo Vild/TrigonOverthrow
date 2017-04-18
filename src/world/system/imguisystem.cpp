@@ -12,13 +12,16 @@ void ImGuiSystem::update(World& world, float delta) {
 	ImGui::Begin("Settings Window");
 
 	ImGui::Text("Entities:");
-	for (std::shared_ptr<Entity>& entity : world.getEntities()) {
-		if (ImGui::TreeNode(entity->getName().c_str())) {
+	char name[255] = {0};
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+		snprintf(name, sizeof(name), "%s (%s)", entity->getName().c_str(), entity->getUUID().str().c_str());
+		if (ImGui::TreeNode(name)) {
 			ImGui::Text("Actions:");
-			//entity->registerImGui();
+			if (entity->registerImGui)
+				entity->registerImGui(entity.get());
 
 			ImGui::Text("Component:");
-			for (std::shared_ptr<IComponent>& component : entity->getComponents()) {
+			for (IComponent* component : entity->getComponents()) {
 				if (ImGui::TreeNode(component->name().c_str())) {
 					component->registerImGui();
 					ImGui::TreePop();

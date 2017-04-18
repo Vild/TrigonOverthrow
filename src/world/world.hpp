@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include "../lib/sole/sole.hpp"
 
 class Entity;
 
@@ -9,12 +10,15 @@ class World {
 public:
 	World();
 
-	void addEntity(std::shared_ptr<Entity> entity) { _entities.push_back(entity); }
+	Entity* addEntity(const sole::uuid& uuid = sole::uuid4(), const std::string& name = "Generic") {
+		_entities.push_back(std::make_unique<Entity>(uuid, name));
+		return _entities.back().get();
+	}
 
-	inline std::vector<std::shared_ptr<Entity>>& getEntities() { return _entities; }
+	inline std::vector<std::unique_ptr<Entity>>& getEntities() { return _entities; }
 
 private:
-	std::vector<std::shared_ptr<Entity>> _entities;
+	std::vector<std::unique_ptr<Entity>> _entities;
 };
 
 #include "entity.hpp"

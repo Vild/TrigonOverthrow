@@ -19,23 +19,20 @@
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
 
-	std::shared_ptr<Entity> camera;
-	std::shared_ptr<Entity> player;
-	std::shared_ptr<Entity> floor;
+	Entity* camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
+	Entity* player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
+	Entity* floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 
 	{ // Adding Camera
-		camera = std::make_shared<Entity>(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
-
-		auto transform = camera->addComponent<TransformComponent>();
-		auto cameraComponent = camera->addComponent<CameraComponent>();
+		camera->addComponent<TransformComponent>();
+		camera->addComponent<CameraComponent>();
 		auto lookAt = camera->addComponent<LookAtComponent>();
+		lookAt->target = player;
 		lookAt->followMode = FollowMode::followByOffset;
 		lookAt->offsetFromTarget = glm::vec3(0, 2.5, -5);
 	}
 
 	{ // Adding Player
-		player = std::make_shared<Entity>(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
-
 		auto transform = player->addComponent<TransformComponent>();
 		transform->scale = glm::vec3(0.01);
 		transform->recalculateMatrix();
@@ -58,8 +55,8 @@ InGameState::InGameState() {
 			.finalize();
 		auto particle = player->addComponent<ParticleComponent>();
 		particle->addEmitter(glm::vec3(0, 1, 0), 1024);
-		auto input = player->addComponent<KBMouseInputComponent>();
-		auto physics = player->addComponent<PhysicsComponent>();
+		player->addComponent<KBMouseInputComponent>();
+		player->addComponent<PhysicsComponent>();
 		auto text = player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 
@@ -69,8 +66,6 @@ InGameState::InGameState() {
 	}
 
 	{ // Adding Floor
-		floor = std::make_shared<Entity>(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
-
 		constexpr int gridSize = 8; // will be gridSize*gridSize
 
 		auto transform = floor->addComponent<FloorTransformComponent>();
@@ -163,10 +158,4 @@ InGameState::InGameState() {
 		delete[] neighborData;
 	}
 
-	camera->getComponent<LookAtComponent>()->target = player.get();
-	_world.addEntity(camera);
-	_world.addEntity(player);
-	_world.addEntity(floor);
-
-	engine.getCamera() = camera;
 }

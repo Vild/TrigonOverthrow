@@ -51,13 +51,13 @@ LightingRenderPass::LightingRenderPass() {
 }
 
 void LightingRenderPass::render(World& world) {
-	auto camera = Engine::getInstance().getCamera();
+	/*auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
 
 	auto transformComponent = camera->getComponent<TransformComponent>();
 	if (!transformComponent)
-		return;
+		return;*/
 
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

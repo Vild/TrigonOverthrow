@@ -10,7 +10,7 @@
 #include <cmath>
 #include "glm/glm.hpp"
 
-ParticleRenderPass::ParticleRenderPass(World& world) {
+ParticleRenderPass::ParticleRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>(0);
 	_shader = std::make_shared<ShaderProgram>();
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
@@ -22,20 +22,20 @@ ParticleRenderPass::ParticleRenderPass(World& world) {
 
 void ParticleRenderPass::render(World& world) {
 	// Render particles with instanced drawing.
-	auto camera = Engine::getInstance().getCamera();
+	/*auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
 
 	auto cameraComponent = camera->getComponent<CameraComponent>();
 	if (!cameraComponent)
-		return;
+		return;*/
 
-	auto transformComponent = camera->getComponent<TransformComponent>();
-	if (!transformComponent)
+	auto& cameraComponent = CameraComponent::getActiveComponents()[0];
+	if (!cameraComponent)
 		return;
 
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	for (std::shared_ptr<Entity>& entity : world.getEntities()) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto particle = entity->getComponent<ParticleComponent>();
 		if (!particle)
 			continue;

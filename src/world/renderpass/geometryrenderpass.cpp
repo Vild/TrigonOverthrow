@@ -60,11 +60,12 @@ GeometryRenderPass::GeometryRenderPass() {
 }
 
 void GeometryRenderPass::render(World& world) {
-	auto camera = Engine::getInstance().getCamera();
+/*	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
-
-	auto cameraComponent = camera->getComponent<CameraComponent>();
+*/
+	//auto cameraComponent = camera->getComponent<CameraComponent>();
+	auto& cameraComponent = CameraComponent::getActiveComponents()[0];
 	if (!cameraComponent)
 		return;
 
@@ -79,7 +80,7 @@ void GeometryRenderPass::render(World& world) {
 	_shader->setUniform("v", cameraComponent->viewMatrix);
 	_shader->setUniform("p", cameraComponent->projectionMatrix);
 
-	for (std::shared_ptr<Entity>& entity : world.getEntities()) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto model = entity->getComponent<ModelComponent>();
 		if (!model)
 			continue;

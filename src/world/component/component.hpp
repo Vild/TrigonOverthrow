@@ -17,11 +17,11 @@ struct IComponent {
 template <typename T>
 struct Component : public IComponent {
 public:
-	static inline std::vector<std::shared_ptr<T>>& getActiveComponents() { return _activeComponents; }
+	static inline std::vector<std::unique_ptr<T>>& getActiveComponents() { return _activeComponents; }
 
 private:
-	static std::vector<std::shared_ptr<T>> _activeComponents;
+	static std::vector<std::unique_ptr<T>> _activeComponents;
 };
 
 template <typename T>
-std::vector<std::shared_ptr<T>> Component<T>::_activeComponents;
+std::vector<std::unique_ptr<T>> Component<T>::_activeComponents;
