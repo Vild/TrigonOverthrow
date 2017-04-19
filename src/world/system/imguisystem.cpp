@@ -6,6 +6,8 @@
 #include "../../engine.hpp"
 
 void ImGuiSystem::update(World& world, float delta) {
+	State& state = Engine::getInstance().getState();
+
 	ImGui::SetNextWindowPos(ImVec2(8, 48), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(384, 512), ImGuiSetCond_Once);
 	ImGui::SetNextWindowCollapsed(true, ImGuiSetCond_Once);
@@ -18,7 +20,7 @@ void ImGuiSystem::update(World& world, float delta) {
 		if (ImGui::TreeNode(name)) {
 			ImGui::Text("Actions:");
 			if (entity->registerImGui)
-				entity->registerImGui(entity.get());
+				entity->registerImGui(*entity.get(), state);
 
 			ImGui::Text("Component:");
 			for (IComponent* component : entity->getComponents()) {

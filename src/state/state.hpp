@@ -5,8 +5,8 @@
 
 class State {
 public:
-	//virtual void onEnter(State& prev);
-	//virtual void onLeave(State& next);
+	virtual void onEnter(State* prev) = 0;
+	virtual void onLeave(State* next) = 0;
 
 	inline World& getWorld() { return _world; }
 

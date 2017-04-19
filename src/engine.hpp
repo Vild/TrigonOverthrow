@@ -44,15 +44,25 @@ public:
 	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
 	template <typename T>
-	inline std::unique_ptr<T>& getState() {
-		return _states[std::type_index(typeid(T))];
+	inline std::unordered_map<std::type_index, std::unique_ptr<State>>& getStates() {
+		return _states;
 	}
 
-	inline const std::type_index getCurrentState() { return *_currentState; }
+	inline State& getState() { return *_states[*_currentState]; }
+	inline State* getStatePtr() { return _states[*_currentState].get(); }
+
+	inline const std::type_index getStateType() { return *_currentState; }
 
 	template <typename T>
-	inline void setCurrentState() {
+	inline void setState() {
+		State* prev = getStatePtr();
 		*_currentState = std::type_index(typeid(T));
+		State* next = getStatePtr();
+		if (next)
+			next->onEnter(prev);
+
+		if (prev)
+			prev->onLeave(next);
 	}
 
 private:

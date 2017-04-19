@@ -13,6 +13,7 @@
 // Kinda like GameObject - https://docs.unity3d.com/ScriptReference/GameObject.html
 
 class World;
+class State;
 
 class Entity {
 public:
@@ -48,25 +49,26 @@ public:
 
 	template <typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 	void removeComponent() {
-		auto list = T::getActiveComponents();
-		for (auto it = list.begin(); it != list.end(); it++) {
-			auto com = std::dynamic_pointer_cast<T>(*it);
-			if (!com)
-				continue;
-			list.erase(it);
-			break;
-		}
-
 		for (auto it = _components.begin(); it != _components.end(); it++) {
-			auto com = dynamic_cast<T*>(*it);
+			T* com = dynamic_cast<T*>(*it);
 			if (!com)
 				continue;
 			_components.erase(it);
 			break;
 		}
+
+		auto& list = T::getActiveComponents();
+		for (auto it = list.begin(); it != list.end(); it++) {
+			T* com = dynamic_cast<T*>(it->get());
+			if (!com)
+				continue;
+			list.erase(it);
+			break;
+		}
 	}
 
-	void (*registerImGui)(Entity* entity) = nullptr;
+	typedef void (*registerImGui_f)(Entity& self, State& state);
+	registerImGui_f registerImGui = nullptr;
 
 	inline sole::uuid& getUUID() { return _uuid; }
 	inline std::string& getName() { return _name; }

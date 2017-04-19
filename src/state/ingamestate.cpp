@@ -4,6 +4,7 @@
 #include "../engine.hpp"
 
 #include "../lib/glad.h"
+#include "../lib/imgui.h"
 #include "../gl/shader.hpp"
 
 #include "../world/component/transformcomponent.hpp"
@@ -19,24 +20,22 @@
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
 
-	Entity* camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
-	Entity* player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
-	Entity* floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
+	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
+	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
+	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 
 	{ // Adding Camera
-		camera->addComponent<TransformComponent>();
-		camera->addComponent<CameraComponent>();
-		auto lookAt = camera->addComponent<LookAtComponent>();
-		lookAt->target = player;
-		lookAt->followMode = FollowMode::followByOffset;
-		lookAt->offsetFromTarget = glm::vec3(0, 2.5, -5);
+		_camera->addComponent<TransformComponent>();
+		_camera->addComponent<CameraComponent>();
+		_addLookAt();
+		_camera->registerImGui = &InGameState::_registerImGUI;
 	}
 
 	{ // Adding Player
-		auto transform = player->addComponent<TransformComponent>();
+		auto transform = _player->addComponent<TransformComponent>();
 		transform->scale = glm::vec3(0.01);
 		transform->recalculateMatrix();
-		auto model = player->addComponent<ModelComponent>();
+		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
 		model->meshData->mesh
 			->addBuffer("m",
@@ -53,11 +52,11 @@ InGameState::InGameState() {
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
 			.finalize();
-		auto particle = player->addComponent<ParticleComponent>();
+		auto particle = _player->addComponent<ParticleComponent>();
 		particle->addEmitter(glm::vec3(0, 1, 0), 1024);
-		player->addComponent<KBMouseInputComponent>();
-		player->addComponent<PhysicsComponent>();
-		auto text = player->addComponent<TextComponent>();
+		_player->addComponent<KBMouseInputComponent>();
+		_player->addComponent<PhysicsComponent>();
+		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 
 		text->transform.position = glm::vec3(0, 2, 0);
@@ -65,10 +64,10 @@ InGameState::InGameState() {
 		text->transform.recalculateMatrix();
 	}
 
-	{ // Adding Floor
+	{															// Adding Floor
 		constexpr int gridSize = 8; // will be gridSize*gridSize
 
-		auto transform = floor->addComponent<FloorTransformComponent>();
+		auto transform = _floor->addComponent<FloorTransformComponent>();
 		transform->gridSize = gridSize;
 		transform->scale = glm::vec3(1, 0.1, 1);
 		transform->recalculateMatrices();
@@ -115,7 +114,7 @@ InGameState::InGameState() {
 				point[backwards] = std::min(minFloor, point[backwards]);
 			}
 
-		auto model = floor->addComponent<ModelComponent>();
+		auto model = _floor->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/box.obj");
 		model->meshData->mesh
 			->addBuffer("m",
@@ -157,5 +156,25 @@ InGameState::InGameState() {
 		delete[] topData;
 		delete[] neighborData;
 	}
+}
 
+void InGameState::onEnter(State* prev) {}
+void InGameState::onLeave(State* next) {}
+
+void InGameState::_addLookAt() {
+	auto lookAt = _camera->addComponent<LookAtComponent>();
+	lookAt->target = _player;
+	lookAt->followMode = FollowMode::followByOffset;
+	lookAt->offsetFromTarget = glm::vec3(0, 2.5, -5);
+}
+
+void InGameState::_registerImGUI(Entity& self, State& state) {
+	static bool follow = true;
+	InGameState& this_ = static_cast<InGameState&>(state);
+	if (ImGui::Checkbox("Follow target", &follow)) {
+		if (follow)
+			this_._addLookAt();
+		else
+			self.removeComponent<LookAtComponent>();
+	}
 }

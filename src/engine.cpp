@@ -32,6 +32,7 @@
 #include "world/renderpass/textrenderpass.hpp"
 
 #include "state/ingamestate.hpp"
+#include "state/mainmenustate.hpp"
 
 Engine::~Engine() {
 	TTF_Quit();
@@ -77,7 +78,7 @@ int Engine::run(bool vsync) {
 					_height = event.window.data2;
 					_system_resize(_width, _height);
 
-					World& world = _states[getCurrentState()]->getWorld();
+					World& world = getState().getWorld();
 					for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 						CameraComponent* cc = entity->getComponent<CameraComponent>();
 						if (!cc)
@@ -110,6 +111,8 @@ int Engine::run(bool vsync) {
 		_system_tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
+		if (!getStatePtr())
+			break;
 	}
 	return 0;
 }
@@ -124,8 +127,12 @@ void Engine::_init(bool vsync) {
 	_hidInput = std::make_shared<HIDInput>();
 	_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
 
-	_currentState = std::make_unique<std::type_index>(typeid(InGameState));
+	_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
+
+	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
 	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
+	_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
+	setState<MainMenuState>();
 	_setupSystems();
 }
 
@@ -283,7 +290,7 @@ void Engine::_setupSystems() {
 }
 
 void Engine::_system_tick(float delta) {
-	World& world = _states[getCurrentState()]->getWorld();
+	World& world = getState().getWorld();
 	for (const std::unique_ptr<System>& system : _systems)
 		system->update(world, delta);
 }
