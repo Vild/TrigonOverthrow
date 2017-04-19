@@ -30,8 +30,8 @@ GaussianRenderPass::GaussianRenderPass()
 
 	fsQuad = makeFsQuad();
 
-	halfWidth = 3;
-	deviation = 0.5f;
+	kernelSize = 5;
+	sigma = 1.0f;
 	generateKernel();
 }
 
@@ -67,26 +67,21 @@ void GaussianRenderPass::generateKernel()
 {
 	std::vector<float> kernel;
 
-	std::function<float(int)> g = [](float dev){
-		float gConst = 1.0f / (sqrt(2 * glm::pi<float>() * dev * dev));
-		float gDiv = (2.0f * dev * dev);
-		
-		return [=](int x) -> float {
-			return gConst * pow(glm::e<float>(), -(x*x) / gDiv);
-		};
-	}(deviation);
+	float gConst = 1.0f / (sqrt(2 * glm::pi<float>() * pow(sigma, 2)));
+	float gDiv = (2.0f * pow(sigma, 2));
 
-	float kernelSum = 0;	
+	auto g = [&](int x)-> float {
+		static float gMult = 1.0f / (sqrt(2 * glm::pi<float>())*sigma);
+		return gMult * pow(glm::e<float>(),-(pow(x,2)/(2.0f * pow(sigma, 2))));
+	};
+
+	float kernelSum = 0;
+	int halfWidth = (kernelSize+1) / 2;
 	for (int x = 0; x < halfWidth; x++)
 	{
 		float factor = g(x);
 		kernelSum += factor;
 		kernel.push_back(factor);
-	}
-
-	for (float& g : kernel)
-	{
-		g /= kernelSum;
 	}
 
 	_shader->bind()
@@ -98,8 +93,8 @@ void GaussianRenderPass::registerImGui()
 {
 	bool dirty = false;
 
-	dirty |= ImGui::DragInt("Half Width", &halfWidth, 1, 1);
-	dirty |= ImGui::DragFloat("Deviation", &deviation, 0.001);
+	dirty |= ImGui::DragInt("Kernel Size", &kernelSize, 1, 1, 64);
+	dirty |= ImGui::DragFloat("Sigma", &sigma, 0.001, 0);
 
 	if (dirty)
 	{

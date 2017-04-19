@@ -18,14 +18,13 @@ public:
 	virtual void registerImGui() override;
 	virtual std::string name() { return "GaussianRenderPass"; };
 
-	void setPasses(int passes);
 
 private:
 	std::unique_ptr<Mesh> fsQuad;
 	std::shared_ptr<GBuffer> altBuffer;
 
-	int halfWidth;
-	float deviation;
+	int kernelSize;
+	float sigma;
 
 	std::unique_ptr<Mesh> makeFsQuad();
 
