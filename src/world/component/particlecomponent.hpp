@@ -14,8 +14,8 @@ struct ParticleComponent : public Component {
 	};
 
 	struct Emitter {
-		Emitter(glm::vec3 dir) { direction = dir; };
-		glm::vec3 pos = glm::vec3(0, 0, 0);
+		Emitter(glm::vec3 dir) { pos = dir; };
+		glm::vec3 pos;
 		glm::vec3 direction;
 	};
 	// Should have a number (1 probably) of emitters to spew out particles from.

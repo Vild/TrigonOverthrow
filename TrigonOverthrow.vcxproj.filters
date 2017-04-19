@@ -168,6 +168,9 @@
     <ClCompile Include="src\io\maploader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\entity\enemyentity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl\gbuffer.hpp">
@@ -339,6 +342,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\io\maploader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\renderpass\baserenderpass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\entity\enemyentity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
