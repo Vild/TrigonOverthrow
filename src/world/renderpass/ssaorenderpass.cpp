@@ -129,8 +129,8 @@ void SSAORenderSystem::registerImGui() {
 	bool dirty = false;
 
 	dirty |= ImGui::DragInt("Sample Size", &sampleSize, 1, 0, 64);
-	dirty |= ImGui::DragFloat("Sample Radius", &sampleRadius, 0.01);
-	dirty |= ImGui::DragFloat("Sample Bias", &sampleBias, 0.001);
+	dirty |= ImGui::DragFloat("Sample Radius", &sampleRadius, 0.01f);
+	dirty |= ImGui::DragFloat("Sample Bias", &sampleBias, 0.001f);
 
 	if (dirty) {
 		_shader->bind().setUniform("sampleSize", sampleSize).setUniform("sampleRadius", sampleRadius).setUniform("sampleBias", sampleBias);

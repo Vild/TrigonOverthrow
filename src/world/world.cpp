@@ -15,6 +15,7 @@
 #include "renderpass/ssaorenderpass.hpp"
 #include "renderpass/lightingrenderpass.hpp"
 #include "renderpass/particlerenderpass.hpp"
+#include "renderpass/gaussianrenderpass.hpp"
 
 #include <iostream>
 
@@ -61,6 +62,7 @@ void World::_setupSystems() {
 		lighting->attachInputTexture(LightingRenderPass::InputAttachment::position, geometry->getAttachment(GeometryRenderPass::Attachment::position))
 			.attachInputTexture(LightingRenderPass::InputAttachment::normal, geometry->getAttachment(GeometryRenderPass::Attachment::normal))
 			.attachInputTexture(LightingRenderPass::InputAttachment::diffuseSpecular, geometry->getAttachment(GeometryRenderPass::Attachment::diffuseSpecular))
+			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
 			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::BlurredImage));
 
 		for (std::unique_ptr<System>& system : _systems) {

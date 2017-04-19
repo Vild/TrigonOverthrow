@@ -71,7 +71,7 @@ void GaussianRenderPass::generateKernel()
 	float gDiv = (2.0f * pow(sigma, 2));
 
 	auto g = [&](int x)-> float {
-		static float gMult = 1.0f / (sqrt(2 * glm::pi<float>())*sigma);
+		static float gMult = 1.0f / (sqrt(2.0f * glm::pi<float>())*sigma);
 		return gMult * pow(glm::e<float>(),-(pow(x,2)/(2.0f * pow(sigma, 2))));
 	};
 
