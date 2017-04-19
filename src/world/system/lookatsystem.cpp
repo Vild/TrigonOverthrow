@@ -24,8 +24,7 @@ void LookAtSystem::update(World& world, float delta) {
 		if (!transform)
 			continue;
 
-		if (lookat->followMode == FollowMode::followByDistance) 
-		{
+		if (lookat->followMode == FollowMode::followByDistance) {
 			glm::vec3 dir = glm::normalize(target->position - transform->position);
 
 			float dist = glm::distance(transform->position, target->position);

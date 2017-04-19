@@ -5,6 +5,7 @@
 #include "../component/transformcomponent.hpp"
 #include "../component/modelcomponent.hpp"
 #include "../component/kbmouseinputcomponent.hpp"
+#include "../component/particlecomponent.hpp"
 #include "../component/physicscomponent.hpp"
 
 #include "../../engine.hpp"
@@ -13,7 +14,6 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 	auto transform = addComponent<TransformComponent>();
 	transform->scale = glm::vec3(0.01);
 	transform->recalculateMatrix();
-
 	auto model = addComponent<ModelComponent>();
 	model->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player.fbx");
 	model->meshData->mesh
@@ -31,7 +31,8 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 									glBindBuffer(GL_ARRAY_BUFFER, 0);
 								})
 		.finalize();
-
+	auto particle = addComponent<ParticleComponent>();
+	particle->addEmitter(glm::vec3(0, 1, 0), 15000);
 	auto input = addComponent<KBMouseInputComponent>();
 	auto physics = addComponent<PhysicsComponent>();
 }

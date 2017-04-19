@@ -1,0 +1,43 @@
+#version 440 core
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(rgba32f, binding = 0) uniform image2D pos_input;
+layout(rgba32f, binding = 1) uniform image2D vel_input;
+
+uniform float delta;
+uniform vec3 emitterPos;
+uniform vec3 emitterDir;
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void main(){
+	ivec2 pixel_Coords = ivec2(gl_GlobalInvocationID).xy;
+
+	vec3 prevPos = imageLoad(pos_input, pixel_Coords).xyz;
+	vec3 prevVel = imageLoad(vel_input, pixel_Coords).xyz;
+	float life = imageLoad(pos_input, pixel_Coords).w;
+	vec3 vel = vec3(0);
+	vec3 pos = vec3(0);
+
+	if(life <= 0){
+		life = 10.0f;
+		pos = emitterPos;
+		vel = emitterDir * delta;
+	}
+	vel = prevVel + (vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x), 
+	sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * 5) + cos(gl_GlobalInvocationID.x * 0.2f), 
+	sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10))) * -2.0f;
+	pos = prevPos + vel * delta * delta;
+
+	life -= 1 * delta;
+	imageStore(pos_input, pixel_Coords, vec4(pos, life));
+	imageStore(vel_input, pixel_Coords, vec4(vel, 0));
+}
+
+	//sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y) + cos(gl_GlobalInvocationID.y * 0.5f)
+	//cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x) + gl_GlobalInvocationID.x / gl_GlobalInvocationID.y
+	//sin(gl_GlobalInvocationID.x) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x) - sin(gl_GlobalInvocationID.x * gl_GlobalInvocationID.y)) * delta * delta
+	//vel = prevVel + ((vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * rand(pixel_Coords)) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x) / (gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * rand(pixel_Coords))), 
+	//sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * rand(pixel_Coords)) + cos(gl_GlobalInvocationID.x * 0.2f), 
+	//sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x)));

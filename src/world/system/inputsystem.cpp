@@ -25,7 +25,7 @@ void InputSystem::update(World& world, float delta) {
 
 		glm::vec3 forward = glm::vec3(0, 0, 1); // glm::vec3(cos(_pitch) * sin(_yaw), sin(_pitch), cos(_pitch) * cos(_yaw));
 		glm::vec3 right = glm::vec3(-1, 0, 0);	// = glm::vec3(sin(_yaw - M_PI / 2.0f), 0, cos(_yaw - M_PI / 2.0f));
-		glm::vec3 up = glm::vec3(0, 1, 0);		// glm::cross(right, forward);
+		glm::vec3 up = glm::vec3(0, 1, 0);			// glm::cross(right, forward);
 
 		float accelSpeed = 1500;
 

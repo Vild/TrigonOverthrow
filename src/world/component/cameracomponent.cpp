@@ -1,16 +1,14 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "cameracomponent.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-
-
-CameraComponent::CameraComponent()
-{
+CameraComponent::CameraComponent() {
 	recalculateProjectionMatrix();
 }
 
-void CameraComponent::recalculateProjectionMatrix()
-{
+void CameraComponent::recalculateProjectionMatrix() {
 	projectionMatrix = glm::perspective(fov, aspect, zNear, zFar);
 }
 
@@ -22,8 +20,7 @@ void CameraComponent::registerImGui() {
 	dirty |= ImGui::DragFloat("zFar", &zFar, 0.1f);
 	dirty |= ImGui::DragFloat("Aspect", &aspect, 0.1f);
 
-	if (dirty)
-	{
+	if (dirty) {
 		recalculateProjectionMatrix();
 	}
 }

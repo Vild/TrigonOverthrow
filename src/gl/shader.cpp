@@ -86,7 +86,7 @@ ShaderProgram& ShaderProgram::attach(std::shared_ptr<ShaderUnit> unit) {
 	return *this;
 }
 
-ShaderProgram& ShaderProgram::attach(const std::string & file, ShaderType type) {
+ShaderProgram& ShaderProgram::attach(const std::string& file, ShaderType type) {
 	return attach(std::make_shared<ShaderUnit>(file, type));
 }
 

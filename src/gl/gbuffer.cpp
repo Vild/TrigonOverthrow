@@ -36,6 +36,16 @@ GBuffer& GBuffer::bind(bool read, bool draw) {
 	return *this;
 }
 
+GBuffer& GBuffer::bindImageTexture(GLuint index, bool read) {
+	if (read) { // set it to read only
+		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+	} else {
+		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_WRITE_ONLY | GL_READ_ONLY, GL_RGBA32F);
+	}
+
+	return *this;
+}
+
 GBuffer & GBuffer::attachTexture(int id, std::shared_ptr<Texture> texture)
 {
 	_attachments[id] = texture;
@@ -71,8 +81,8 @@ GBuffer& GBuffer::attachDepthTexture(int id, size_t width, size_t height) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	GLfloat border[4] = {1, 0, 0, 0};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);

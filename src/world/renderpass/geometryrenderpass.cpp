@@ -18,7 +18,6 @@ GeometryRenderPass::GeometryRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>();
 
 	unsigned int width = engine.getWidth(), height = engine.getHeight();
-
 	_gbuffer->bind()
 		.attachTexture(Attachment::position, width, height, GL_RGB32F, GL_FLOAT, 3)
 		.attachTexture(Attachment::normal, width, height, GL_RGB, GL_UNSIGNED_BYTE, 3)
