@@ -21,7 +21,7 @@ void main(){
 	if(life <= 0){
 		life = rand(pixel_Coords);
 		pos = emitterPos;
-		vel = vec3(0,0, 1);
+		vel = emitterDir;
 	}
 	vec3 a = emitterDir * rand(pixel_Coords) * 10;
     pos += vel * delta + a * delta * delta * 0.5f;
@@ -32,7 +32,7 @@ void main(){
 	imageStore(pos_input, pixel_Coords, vec4(pos, life));
 	imageStore(vel_input, pixel_Coords, vec4(vel, 0));
 }
-	
+
 	//(vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x),
     //sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * 5) + cos(gl_GlobalInvocationID.x * 0.2f),
     //sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10))
