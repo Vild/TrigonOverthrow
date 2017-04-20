@@ -5,7 +5,7 @@
 #include "../component/kbmouseinputcomponent.hpp"
 #include "../component/particlecomponent.hpp"
 #include "../component/physicscomponent.hpp"
-
+#include "../component/hitboxcomponent.hpp"
 #include "../../engine.hpp"
 
 EnemyEntity::EnemyEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Enemy"){
@@ -32,9 +32,8 @@ EnemyEntity::EnemyEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917b
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	})
 		.finalize();
-	auto particle = addComponent<ParticleComponent>();
-	particle->addEmitter(glm::vec3(0, 1, 5), 1024);
 	auto physics = addComponent<PhysicsComponent>();
+	auto hitbox = addComponent<HitboxComponent>();
 }
 
 void EnemyEntity::registerImGui() {
