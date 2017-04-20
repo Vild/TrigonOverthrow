@@ -2,12 +2,16 @@
 
 #include "component.hpp"
 
-#include "../../utils/collisionbox.hpp"
+class Entity;
 
 struct ButtonComponent : public Component<ButtonComponent> {
+	typedef void (*ButtonCallback)(Entity* entity);
+
 	ButtonComponent();
 
-	CollisionBox2D box;
+	glm::vec2 position;
+	glm::vec2 size;
+	ButtonCallback callback;
 
 	virtual void registerImGui();
 

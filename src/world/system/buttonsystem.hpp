@@ -1,0 +1,11 @@
+#pragma once
+#include "system.hpp"
+#include "../entity.hpp"
+
+class ButtonSystem : public System {
+public:
+	virtual void update(World& world, float delta);
+
+	virtual void registerImGui();
+	inline virtual std::string name() { return "ButtonSystem"; };
+};
