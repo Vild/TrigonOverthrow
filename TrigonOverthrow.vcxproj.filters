@@ -153,6 +153,9 @@
     <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\component\directionallightcomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl\gbuffer.hpp">
@@ -306,6 +309,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\renderpass\baserenderpass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\directionallightcomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
