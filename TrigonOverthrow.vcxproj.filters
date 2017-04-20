@@ -156,6 +156,12 @@
     <ClCompile Include="src\world\component\directionallightcomponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\system\bulletphysicssystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\component\rigidbodycomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl\gbuffer.hpp">
@@ -315,6 +321,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\component\directionallightcomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\system\bulletphysicssystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\rigidbodycomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
