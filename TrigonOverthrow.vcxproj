@@ -168,18 +168,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
