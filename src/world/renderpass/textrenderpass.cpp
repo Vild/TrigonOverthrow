@@ -20,15 +20,11 @@ TextRenderPass::TextRenderPass() {
 }
 
 void TextRenderPass::render(World& world) {
-	/*auto camera = Engine::getInstance().getCamera();
+	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
 
 	auto cameraComponent = camera->getComponent<CameraComponent>();
-	if (!cameraComponent)
-		return;*/
-
-	auto& cameraComponent = CameraComponent::getActiveComponents()[0];
 	if (!cameraComponent)
 		return;
 

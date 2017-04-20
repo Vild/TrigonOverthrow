@@ -132,7 +132,7 @@ void Engine::_init(bool vsync) {
 	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
 	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
 	_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
-	setState<MainMenuState>();
+	setState<InGameState>();
 	_setupSystems();
 }
 

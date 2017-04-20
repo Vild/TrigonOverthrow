@@ -8,6 +8,7 @@ public:
 
 	virtual void onEnter(State* prev);
 	virtual void onLeave(State* next);
+	inline virtual Entity* getCamera() { return _camera; }
 
 private:
 	Entity* _camera;

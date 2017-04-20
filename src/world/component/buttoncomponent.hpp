@@ -5,6 +5,8 @@
 #include "../../utils/collisionbox.hpp"
 
 struct ButtonComponent : public Component<ButtonComponent> {
+	ButtonComponent();
+
 	CollisionBox2D box;
 
 	virtual void registerImGui();

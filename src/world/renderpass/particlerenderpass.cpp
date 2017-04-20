@@ -22,15 +22,11 @@ ParticleRenderPass::ParticleRenderPass() {
 
 void ParticleRenderPass::render(World& world) {
 	// Render particles with instanced drawing.
-	/*auto camera = Engine::getInstance().getCamera();
+	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
 
 	auto cameraComponent = camera->getComponent<CameraComponent>();
-	if (!cameraComponent)
-		return;*/
-
-	auto& cameraComponent = CameraComponent::getActiveComponents()[0];
 	if (!cameraComponent)
 		return;
 

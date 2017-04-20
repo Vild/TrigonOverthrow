@@ -43,6 +43,13 @@ public:
 
 	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
+	inline Entity* getCamera() {
+		State* s = getStatePtr();
+		if (!s)
+			return nullptr;
+		return s->getCamera();
+	}
+
 	template <typename T>
 	inline std::unordered_map<std::type_index, std::unique_ptr<State>>& getStates() {
 		return _states;

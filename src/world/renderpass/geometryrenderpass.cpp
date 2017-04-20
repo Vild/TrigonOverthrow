@@ -60,12 +60,11 @@ GeometryRenderPass::GeometryRenderPass() {
 }
 
 void GeometryRenderPass::render(World& world) {
-/*	auto camera = Engine::getInstance().getCamera();
+	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
-*/
-	//auto cameraComponent = camera->getComponent<CameraComponent>();
-	auto& cameraComponent = CameraComponent::getActiveComponents()[0];
+
+	auto cameraComponent = camera->getComponent<CameraComponent>();
 	if (!cameraComponent)
 		return;
 

@@ -6,6 +6,7 @@ struct CollisionBox2D {
 	glm::vec2 position;
 	glm::vec2 size;
 
+	CollisionBox2D() {}
 	CollisionBox2D(glm::vec2 position, glm::vec2 size) : position(position), size(size) {}
 
 	inline bool collide(const glm::vec2& point) {
