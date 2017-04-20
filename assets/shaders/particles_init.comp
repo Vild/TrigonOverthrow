@@ -19,24 +19,23 @@ void main(){
 	float life = imageLoad(pos_input, pixel_Coords).w;
 
 	if(life <= 0){
-		life = 3.0f;
+		life = rand(pixel_Coords);
 		pos = emitterPos;
-		vel = (vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x),
-  	sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * 5) + cos(gl_GlobalInvocationID.x * 0.2f),
-  	sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10))) * delta;
-	}else{
-    vel += (vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x),
-    sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * 5) + cos(gl_GlobalInvocationID.x * 0.2f),
-    sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10))) * delta;
-    pos += vel * delta + vel * delta * delta * 0.5f;
-}
+		vel = vec3(0,0, 1);
+	}
+	vec3 a = emitterDir * rand(pixel_Coords) * 10;
+    pos += vel * delta + a * delta * delta * 0.5f;
+	vel += a * delta;
 
 
-  life -= 1 * delta;
+	life -= 1 * delta;
 	imageStore(pos_input, pixel_Coords, vec4(pos, life));
 	imageStore(vel_input, pixel_Coords, vec4(vel, 0));
 }
-
+	
+	//(vec3(sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x),
+    //sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y * 5) + cos(gl_GlobalInvocationID.x * 0.2f),
+    //sin(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x * 10))
 	//sin(gl_GlobalInvocationID.x - gl_GlobalInvocationID.y) + cos(gl_GlobalInvocationID.y * 0.5f)
 	//cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x) + gl_GlobalInvocationID.x / gl_GlobalInvocationID.y
 	//sin(gl_GlobalInvocationID.x) + cos(gl_GlobalInvocationID.y + gl_GlobalInvocationID.x) - sin(gl_GlobalInvocationID.x * gl_GlobalInvocationID.y)) * delta * delta

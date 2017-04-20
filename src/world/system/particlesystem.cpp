@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "../../engine.hpp"
+#include "../component/guncomponent.hpp"
 
 ParticleSystem::ParticleSystem() {
 	_programs.resize(2);
@@ -29,6 +30,15 @@ ParticleSystem::ParticleSystem() {
 
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
+	glm::vec3 direction;
+	glm::vec3 pos;
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+		if (entity->getName() == "Player") {
+			auto gunComponent = entity->getComponent<GunComponent>();
+			direction = std::static_pointer_cast<GunComponent::RayGun>(gunComponent->gun)->ray.dir;
+			pos = std::static_pointer_cast<GunComponent::RayGun>(gunComponent->gun)->ray.o;
+		}
+	}
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto comp = entity->getComponent<ParticleComponent>();
 		if (!comp)
@@ -36,8 +46,8 @@ void ParticleSystem::update(World& world, float delta) {
 		_programs[0]
 			->bind()
 			.setUniform("delta", delta)
-			.setUniform("emitterPos", comp->emitter->pos)
-			.setUniform("emitterDir", comp->emitter->direction)
+			.setUniform("emitterPos", pos)
+			.setUniform("emitterDir", direction)
 			.setUniform("init", comp->init);
 		comp->init = false;
 		comp->textureSize = textureSize;

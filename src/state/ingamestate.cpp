@@ -16,6 +16,9 @@
 #include "../world/component/textcomponent.hpp"
 #include "../world/component/floortransformcomponent.hpp"
 #include "../world/component/modelcomponent.hpp"
+#include "../world/component/hitboxcomponent.hpp"
+#include "../world/component/guncomponent.hpp"
+
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -23,6 +26,7 @@ InGameState::InGameState() {
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
+	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
 
 	{ // Adding Camera
 		_camera->addComponent<TransformComponent>();
@@ -33,10 +37,12 @@ InGameState::InGameState() {
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();
-		transform->scale = glm::vec3(0.01);
+		transform->scale = glm::vec3(0.3);
+		transform->rotation = glm::vec3(90, 180, 0);
 		transform->recalculateMatrix();
 		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
+		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
 		model->meshData->mesh
 			->addBuffer("m",
 									[](GLuint id) {
@@ -56,11 +62,53 @@ InGameState::InGameState() {
 		particle->addEmitter(glm::vec3(0, 1, 0), 1024);
 		_player->addComponent<KBMouseInputComponent>();
 		_player->addComponent<PhysicsComponent>();
+
+		auto gun = _player->addComponent<GunComponent>();
+		gun->addGun(GunComponent::GunType::RAYGUN, transform->position, transform->getDirection());
+
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 
 		text->transform.position = glm::vec3(0, 2, 0);
 		text->transform.scale = glm::vec3(100 * 2); // To counteract transform->scale
+		text->transform.recalculateMatrix();
+	}
+
+	{
+		auto transform = _enemy->addComponent<TransformComponent>();
+		transform->scale = glm::vec3(0.3);
+		transform->position = glm::vec3(0, 0.2, 5);
+		transform->recalculateMatrix();
+		auto model = _enemy->addComponent<ModelComponent>();
+		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy.fbx");
+		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
+		model->meshData->mesh
+			->addBuffer("m",
+				[](GLuint id) {
+			glBindBuffer(GL_ARRAY_BUFFER, id);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+
+			for (int i = 0; i < 4; i++) {
+				glEnableVertexAttribArray(ShaderAttributeID::m + i);
+				glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
+				glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
+			}
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		})
+			.finalize();
+
+		auto hitbox = _enemy->addComponent<HitboxComponent>();
+		hitbox->addHitbox(HitboxComponent::SPHERE, transform->position);
+		_enemy->addComponent<PhysicsComponent>();
+
+
+		auto text = _enemy->addComponent<TextComponent>();
+		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
+
+		text->transform.position = glm::vec3(0, 2, 5);
+		text->transform.rotation = glm::vec3(0, 0, 90);
+		text->transform.scale = glm::vec3(0); // To counteract transform->scale
 		text->transform.recalculateMatrix();
 	}
 

@@ -14,6 +14,7 @@ private:
 	Entity* _camera;
 	Entity* _player;
 	Entity* _floor;
+	Entity* _enemy;
 
 	void _addLookAt();
 

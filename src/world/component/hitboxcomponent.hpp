@@ -13,7 +13,7 @@ struct HitboxComponent : public Component<HitboxComponent> {
 
 	struct HitboxSphere : public Hitbox {
 		glm::vec3 center;
-		float radius;
+		float radius2;
 	};
 
 	struct HitboxAABB : public Hitbox{
@@ -25,4 +25,5 @@ struct HitboxComponent : public Component<HitboxComponent> {
 
 	void addHitbox(HitboxType type, glm::vec3 pos);
 	virtual void registerImGui();
+	virtual std::string name() { return "HitboxComponent"; }
 };

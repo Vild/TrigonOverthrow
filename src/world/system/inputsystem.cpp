@@ -44,6 +44,10 @@ void InputSystem::update(World& world, float delta) {
 		physicsComponent->acceleration += inputDir.z * forward * accelSpeed;
 		physicsComponent->acceleration += inputDir.x * right * accelSpeed;
 		physicsComponent->acceleration += inputDir.y * up * accelSpeed;
+		
+		//auto gun = entity->getComponent<GunComponent>();
+		//if (hid->getKey(SDL_SCANCODE_F))
+		//	gun->shoot;
 	}
 }
 
