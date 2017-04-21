@@ -25,25 +25,21 @@ void LookAtSystem::update(World& world, float delta) {
 			continue;
 
 		if (lookat->followMode == FollowMode::followByDistance) {
-			glm::vec3 dir = glm::normalize(target->position - transform->position);
+			glm::vec3 dir = glm::normalize(target->getPosition() - transform->getPosition());
 
-			float dist = glm::distance(transform->position, target->position);
+			float dist = glm::distance(transform->getPosition(), target->getPosition());
+
 			if (dist > lookat->maxDistance)
-				transform->position += dir * delta;
+				transform->move(dir * delta);
 			else if (dist < lookat->minDistance)
-				transform->position -= dir * delta;
+				transform->move(-dir * delta);
+
 		} else if (lookat->followMode == FollowMode::followByOffset) {
-			transform->position = target->position + lookat->offsetFromTarget;
+			transform->setPosition(target->getPosition() + lookat->offsetFromTarget);
 		}
 
-		glm::vec3 dir = glm::normalize(target->position - transform->position);
-
-		float pitch = asin(dir.y);
-		float yaw = acos(dir.x / cos(pitch));
-
-		transform->rotation = glm::vec3(glm::degrees(pitch), 90 - glm::degrees(yaw), 0);
-
-		transform->recalculateMatrix();
+		glm::vec3 dir = glm::normalize(target->getPosition() - transform->getPosition());
+		transform->setDirection(dir);
 	}
 }
 
