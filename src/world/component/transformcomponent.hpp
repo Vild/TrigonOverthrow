@@ -18,6 +18,7 @@ public:
 
 	void setScale(const glm::vec3 & scale);
 	void setPosition(const glm::vec3 & position);
+	void setRotation(const glm::quat & rotation);
 	void setDirection(const glm::vec3 & direction, const glm::vec3 & up = {0, 1, 0});
 
 	void move(const glm::vec3 & delta);
