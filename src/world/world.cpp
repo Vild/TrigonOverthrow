@@ -8,6 +8,7 @@
 #include "system/lookatsystem.hpp"
 #include "system/camerasystem.hpp"
 #include "system/particlesystem.hpp"
+#include "system/bulletphysicssystem.hpp"
 
 #include "entity/cameraentity.hpp"
 
@@ -41,6 +42,7 @@ void World::_setupSystems() {
 	// Pure systems
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
+	_systems.push_back(std::make_unique<BulletPhyisicsSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
