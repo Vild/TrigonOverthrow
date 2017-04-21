@@ -38,6 +38,11 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 
 		btMotionState * state = rigidbody->getMotionState();
 		btTransform t; state->getWorldTransform(t);
+		
+		btQuaternion btQ = t.getRotation();
+		glm::quat q = {btQ.getW(), btQ.getX(), btQ.getY(), btQ.getZ()};
+
+
 	
 
 	}

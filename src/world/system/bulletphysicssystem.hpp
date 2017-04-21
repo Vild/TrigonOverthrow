@@ -23,4 +23,6 @@ private:
 	btCollisionConfiguration * collisionConfig;
 	btBroadphaseInterface * broadphaseInterface;
 	btConstraintSolver * constraintSolver;
+
+	std::vector<std::shared_ptr<RigidBodyComponent>> bodies;
 };
