@@ -70,8 +70,13 @@ void GaussianRenderPass::generateKernel() {
 	int halfWidth = (kernelSize + 1) / 2;
 	for (int x = 0; x < halfWidth; x++) {
 		float factor = g(x);
-		kernelSum += factor;
+		kernelSum += factor * (x == 0 ? 1 : 2);
 		kernel.push_back(factor);
+	}
+
+	for (auto & k : kernel)
+	{
+		k /= kernelSum;
 	}
 
 	_shader->bind().setUniformArray("kernel", kernel).setUniform("kernelSize", halfWidth);
