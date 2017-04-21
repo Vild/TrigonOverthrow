@@ -46,3 +46,4 @@ imgui.ini
 project.log
 project.tasks
 strace_out
+/lib/Bullet3-2.86.1
