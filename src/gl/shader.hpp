@@ -20,8 +20,16 @@ enum ShaderAttributeID : GLint {
 	_m_priv_1,
 	_m_priv_2,
 	_m_priv_3,
-	top,
-	neighbor
+	// Custom object stuff
+	_custom_start,
+
+	// Floor
+	top = _custom_start,
+	neighbor,
+
+	// Text
+	charRect = _custom_start,
+	charPos
 };
 
 enum class ShaderType {

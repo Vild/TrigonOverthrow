@@ -8,7 +8,7 @@ class ParticleRenderPass : public RenderPass {
 public:
 	enum InputAttachment { position = 0, velocity };
 
-	ParticleRenderPass(World& world);
+	ParticleRenderPass();
 	virtual void render(World& world);
 	virtual void resize(unsigned int width, unsigned int height);
 	virtual void registerImGui();

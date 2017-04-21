@@ -81,7 +81,7 @@ Texture& Texture::bind(int slot) {
 	return *this;
 }
 
-void Texture::resize(unsigned int width, unsigned int height, GLenum internalFormat, GLenum dataFormat = NULL, GLenum dataType = NULL) {
+void Texture::resize(unsigned int width, unsigned int height, GLenum internalFormat, GLenum dataFormat, GLenum dataType) {
 	bind(0);
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, dataType, NULL);
 }
@@ -105,7 +105,7 @@ void Texture::_setData(GLenum format, GLuint w, GLuint h, const void* pixels) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, format, GL_UNSIGNED_BYTE, pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, format, GL_UNSIGNED_BYTE, pixels);
 }
 
 Texture::Texture(int width, int height, GLenum internalFormat, GLenum dataFormat, GLenum dataType, void* data) {

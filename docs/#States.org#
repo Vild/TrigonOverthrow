@@ -1,0 +1,55 @@
+
+#+begin_src plantuml :file States.png
+scale 1.5
+class World {
++tick(delta)
++onResize()
+
+-entities: unique_ptr<Entity>[]
+-systems: shared_ptr<System>[]
+}
+
+class State {
++State()
++getWorld(): World&
++onEnter(State& prev):
++onLeave(State& next):
+}
+
+class MainMenuState
+class SettingsState
+class InGameState
+State <|-left- MainMenuState
+State <|-left- SettingsState
+State <|-left- InGameState
+
+class Engine {
+-states: map<type_info, unique_ptr<State>>
+-currentState: States
+-systems: map<type_info, shared_ptr<System>>
+
++getSystem<T>(): shared_ptr<System>
++switchState<T>()
+}
+class System
+class RenderPass extends System
+class Entity
+
+Engine --> World : State.getWorld().tick()
+
+World "*" o-- "1" Entity
+
+Engine "*" o--- "1" State
+
+World "*" o-- "*" System
+
+System -- World : For each entity
+
+State "1" o-- "1" World
+
+State -up-> Engine : ChangeState(...)
+
+#+end_src
+
+#+RESULTS:
+[[file:States.png]]

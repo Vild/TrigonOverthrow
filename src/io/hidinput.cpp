@@ -7,36 +7,30 @@
 
 #include "../engine.hpp"
 
+HIDInput::HIDInput() {
+	_kbState = SDL_GetKeyboardState(&_keyCount);
+}
+
 void HIDInput::update() {
-	/*auto& engine = Engine::getInstance();
-	if (engine.getUpdateCamera()) {
-		int x, y;
-		SDL_GetMouseState(&x, &y);
+	auto& engine = Engine::getInstance();
+
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	if (_lockMouseCenter) {
 		SDL_WarpMouseInWindow(engine.getWindow(), engine.getWidth() / 2, engine.getHeight() / 2);
-
 		_xyDiff = glm::ivec2(engine.getWidth() / 2 - x, engine.getHeight() / 2 - y);
-	} else*/
-	_xyDiff = glm::ivec2(0, 0);
+	} else {
+		_xyDiff = glm::ivec2(_xy.x - x, _xy.y - y);
+	}
 
-	_direction = glm::vec3(0);
+	_xy = glm::ivec2(x, y);
+
 	ImGuiIO& io = ImGui::GetIO();
-	if (io.WantCaptureKeyboard)
-		return;
+	_keyboardBlock = io.WantCaptureKeyboard;
+}
 
-	const uint8_t* state = SDL_GetKeyboardState(NULL);
-
-	if (state[SDL_SCANCODE_W])
-		_direction.z++;
-	if (state[SDL_SCANCODE_S])
-		_direction.z--;
-
-	if (state[SDL_SCANCODE_A])
-		_direction.x--;
-	if (state[SDL_SCANCODE_D])
-		_direction.x++;
-
-	if (state[SDL_SCANCODE_SPACE])
-		_direction.y++;
-	if (state[SDL_SCANCODE_LCTRL])
-		_direction.y--;
+bool& HIDInput::lockMouseCenter() {
+	auto& engine = Engine::getInstance();
+	SDL_WarpMouseInWindow(engine.getWindow(), engine.getWidth() / 2, engine.getHeight() / 2);
+	return _lockMouseCenter;
 }

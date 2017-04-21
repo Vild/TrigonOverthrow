@@ -10,7 +10,7 @@
 void InputSystem::update(World& world, float delta) {
 	std::shared_ptr<HIDInput> hid = Engine::getInstance().getHIDInput();
 
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		if (!entity->getComponent<KBMouseInputComponent>())
 			continue;
 
@@ -18,22 +18,32 @@ void InputSystem::update(World& world, float delta) {
 		if (!physicsComponent)
 			continue;
 
-		/*float mspeed = 0.005f;
-		_yaw += mspeed * hid->getXYDiff().x;
-		_pitch += mspeed * hid->getXYDiff().y;
-		_pitch = glm::clamp(_pitch, (float)-M_PI / 2, (float)M_PI / 2);*/
+		// TODO: calculate this?
+		glm::vec3 forward = glm::vec3(0, 0, 1);
+		glm::vec3 right = glm::vec3(-1, 0, 0);
+		glm::vec3 up = glm::vec3(0, 1, 0);
 
-		glm::vec3 forward = glm::vec3(0, 0, 1); // glm::vec3(cos(_pitch) * sin(_yaw), sin(_pitch), cos(_pitch) * cos(_yaw));
-		glm::vec3 right = glm::vec3(-1, 0, 0);	// = glm::vec3(sin(_yaw - M_PI / 2.0f), 0, cos(_yaw - M_PI / 2.0f));
-		glm::vec3 up = glm::vec3(0, 1, 0);			// glm::cross(right, forward);
+		glm::vec3 inputDir;
+		if (hid->getKey(SDL_SCANCODE_W))
+			inputDir.z++;
+		if (hid->getKey(SDL_SCANCODE_S))
+			inputDir.z--;
 
-		float accelSpeed = 1500;
+		if (hid->getKey(SDL_SCANCODE_A))
+			inputDir.x--;
+		if (hid->getKey(SDL_SCANCODE_D))
+			inputDir.x++;
 
-		glm::vec3 inputDir = hid->getDirection();
+		if (hid->getKey(SDL_SCANCODE_SPACE))
+			inputDir.y++;
+		if (hid->getKey(SDL_SCANCODE_LCTRL))
+			inputDir.y--;
+
+		float accelSpeed = 100;
 		physicsComponent->acceleration = -physicsComponent->velocity / 0.05f;
-		physicsComponent->acceleration += inputDir.z * forward * delta * accelSpeed;
-		physicsComponent->acceleration += inputDir.x * right * delta * accelSpeed;
-		physicsComponent->acceleration += inputDir.y * up * delta * accelSpeed;
+		physicsComponent->acceleration += inputDir.z * forward * accelSpeed;
+		physicsComponent->acceleration += inputDir.x * right * accelSpeed;
+		physicsComponent->acceleration += inputDir.y * up * accelSpeed;
 	}
 }
 

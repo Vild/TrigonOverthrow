@@ -2,7 +2,7 @@
 
 #include "component.hpp"
 
-#include "../entity/entity.hpp"
+#include "../entity.hpp"
 #include <memory>
 #include <glm/glm.hpp>
 
@@ -12,7 +12,7 @@ enum class FollowMode : int {
 };
 
 struct LookAtComponent : public Component<LookAtComponent> {
-	std::shared_ptr<Entity> target;
+	Entity* target;
 
 	FollowMode followMode = FollowMode::followByDistance;
 

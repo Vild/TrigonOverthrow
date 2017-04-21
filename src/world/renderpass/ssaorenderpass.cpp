@@ -141,6 +141,8 @@ void SSAORenderSystem::render(World& world) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	auto camera = Engine::getInstance().getCamera();
 	auto cameraComponent = camera->getComponent<CameraComponent>();
+	if (!cameraComponent)
+		return;
 
 	_shader->bind();
 	_shader->setUniform("viewMatrix", cameraComponent->viewMatrix);
