@@ -86,7 +86,7 @@ void GeometryRenderPass::render(World& world) {
 
 		auto transform = entity->getComponent<TransformComponent>();
 		if (transform)
-			model->render(transform->matrix);
+			model->render(transform->getMatrix());
 		else {
 			auto ft = entity->getComponent<FloorTransformComponent>();
 			if (!ft)

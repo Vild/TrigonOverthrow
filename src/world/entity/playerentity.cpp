@@ -12,8 +12,8 @@
 
 PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player") {
 	auto transform = addComponent<TransformComponent>();
-	transform->scale = glm::vec3(0.01);
-	transform->recalculateMatrix();
+	transform->setScale(glm::vec3(0.01f));
+
 	auto model = addComponent<ModelComponent>();
 	model->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player.fbx");
 	model->meshData->mesh
