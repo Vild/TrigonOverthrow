@@ -1,8 +1,9 @@
 #pragma once
 #include "system.hpp"
-
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
+#include <vector>
+#include "../component/rigidbodycomponent.hpp"
 
 class BulletPhyisicsSystem : public System
 {
@@ -14,7 +15,7 @@ public:
 	virtual void registerImGui() override;
 	virtual std::string name() override;
 
-	void addRigidBody(btRigidBody * rigidBody);
+	void addRigidBody(std::shared_ptr<RigidBodyComponent> rigidBody);
 
 private:
 	btDynamicsWorld * world;
