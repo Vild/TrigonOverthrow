@@ -4,6 +4,7 @@
 
 #include "../component/kbmouseinputcomponent.hpp"
 #include "../component/physicscomponent.hpp"
+#include "../component/guncomponent.hpp"
 
 #include "../../engine.hpp"
 
@@ -45,9 +46,17 @@ void InputSystem::update(World& world, float delta) {
 		physicsComponent->acceleration += inputDir.x * right * accelSpeed;
 		physicsComponent->acceleration += inputDir.y * up * accelSpeed;
 		
-		//auto gun = entity->getComponent<GunComponent>();
-		//if (hid->getKey(SDL_SCANCODE_F))
-		//	gun->shoot;
+		if (entity->getName() == "Player") {
+			auto gunComponent = entity->getComponent<GunComponent>();
+			if (hid->getKey(SDL_SCANCODE_F) && gunComponent->cooldown <= 0) {
+				gunComponent->shoot = true;
+				gunComponent->drawShot = true;
+				gunComponent->cooldown = gunComponent->cooldownLength;
+				printf("Shots fired!\n");
+			}
+			else
+				gunComponent->cooldown -= 1 * delta;
+		}
 	}
 }
 

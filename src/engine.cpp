@@ -267,9 +267,9 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<PhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
-	_systems.push_back(std::make_unique<ParticleSystem>());
 	_systems.push_back(std::make_unique<ButtonSystem>());
 	_systems.push_back(std::make_unique<GunSystem>());
+	_systems.push_back(std::make_unique<ParticleSystem>());
 
 	// Render passes
 	{

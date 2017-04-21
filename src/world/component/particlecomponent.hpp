@@ -26,7 +26,6 @@ struct ParticleComponent : public Component {
 	int _nrOfParticles;
 	float particleSize;
 	int textureSize;
-	bool init;
 
 	void addEmitter(glm::vec3 dir, int nrOfParticles) {
 		emitter = std::make_shared<Emitter>(dir);
@@ -35,7 +34,6 @@ struct ParticleComponent : public Component {
 		std::vector<Vertex> vertices = {Vertex{glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), glm::vec2(0, 0), glm::vec3(0, 0, 1)}};
 		std::vector<GLuint> indices = {0};
 		point = std::make_shared<Mesh>(vertices, indices);
-		init = true;
 	};
 
 	virtual std::string name() { return "ParticleComponent"; }

@@ -59,7 +59,7 @@ InGameState::InGameState() {
 									})
 			.finalize();
 		auto particle = _player->addComponent<ParticleComponent>();
-		particle->addEmitter(glm::vec3(0, 1, 0), 1024);
+		particle->addEmitter(transform->getDirection(), 1024);
 		_player->addComponent<KBMouseInputComponent>();
 		_player->addComponent<PhysicsComponent>();
 
@@ -107,7 +107,7 @@ InGameState::InGameState() {
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
 
 		text->transform.position = glm::vec3(0, 2, 5);
-		text->transform.rotation = glm::vec3(0, 0, 90);
+		text->transform.rotation = glm::vec3(0, 0, 0);
 		text->transform.scale = glm::vec3(0); // To counteract transform->scale
 		text->transform.recalculateMatrix();
 	}

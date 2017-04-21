@@ -10,6 +10,10 @@ void GunComponent::addGun(GunComponent::GunType inType, glm::vec3 inO, glm::vec3
 		raygun->ray.o = inO;
 		raygun->ray.dir = inDir;
 		raygun->bounceCount = 0;
+		cooldownLength = 120;
+		cooldown = cooldownLength;
+		shoot = false;
+		drawShot = false;
 		gun = raygun;
 		break;
 	}

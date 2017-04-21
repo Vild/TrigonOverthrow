@@ -26,6 +26,12 @@ struct GunComponent : public Component<GunComponent> {
 
 	std::shared_ptr<Gun> gun;
 	GunType type;
+	
+	int cooldown;
+	int cooldownLength;
+
+	bool shoot;
+	bool drawShot;
 
 	void addGun(GunType inType, glm::vec3 inO, glm::vec3 inDir);
 	void registerImGui();
