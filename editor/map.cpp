@@ -5,10 +5,10 @@ Map::Map(Vector2i mapSize, Vector2f blockSize) {
 
 	this->renderTex.create(this->size.x * blockSize.x, this->size.y * blockSize.y);
 
-	for (ssize_t row = 0; row < mapSize.x; row++) {
+	for (int row = 0; row < mapSize.x; row++) {
 		this->mapData.push_back(std::vector<int>());
 
-		for (ssize_t col = 0; col < mapSize.y; col++) {
+		for (int col = 0; col < mapSize.y; col++) {
 			this->mapData[row].push_back(255);
 		}
 	}
@@ -24,8 +24,8 @@ void Map::Save(std::string fileName) {
 
 	RectangleShape block;
 
-	for (ssize_t row = 0; row < this->size.x; row++) {
-		for (ssize_t col = 0; col < this->size.y; col++) {
+	for (unsigned int row = 0; row < this->size.x; row++) {
+		for (unsigned int col = 0; col < this->size.y; col++) {
 			block.setFillColor(Color(this->mapData[row][col], this->mapData[row][col], this->mapData[row][col], 255));
 			block.setPosition(Vector2f(row * block.getSize().x, col * block.getSize().y));
 			renderTex.draw(block);
@@ -37,8 +37,8 @@ void Map::Save(std::string fileName) {
 	sf::Image image;
 	image.create(size.x, size.y, sf::Color::Black);
 
-	for (ssize_t row = 0; row < this->size.x; row++) {
-		for (ssize_t col = 0; col < this->size.y; col++) {
+	for (unsigned int row = 0; row < this->size.x; row++) {
+		for (unsigned int col = 0; col < this->size.y; col++) {
 			image.setPixel(row, col, Color(mapData[row][col], mapData[row][col], mapData[row][col], 255));
 		}
 	}
@@ -48,7 +48,7 @@ void Map::Save(std::string fileName) {
 	// SAVE OBJECT DATA
 	std::ofstream out;
 
-	out.open("maps/" + filesName + ".toobj");
+	out.open("maps/" + fileName + ".toobj");
 
 	if (out.is_open()) {
 		for (size_t i = 0; i < this->enemySpawners.size(); i++) {
@@ -63,8 +63,8 @@ void Map::Save(std::string fileName) {
 void Map::Draw(RenderTarget& target) {
 	this->renderTex.clear(Color::White);
 
-	for (ssize_t row = 0; row < this->size.x; row++) {
-		for (ssize_t col = 0; col < this->size.y; col++) {
+	for (unsigned int row = 0; row < this->size.x; row++) {
+		for (unsigned int col = 0; col < this->size.y; col++) {
 			block.setFillColor(Color(this->mapData[row][col], this->mapData[row][col], this->mapData[row][col], 255));
 			block.setPosition(Vector2f(row * block.getSize().x, col * block.getSize().y));
 			renderTex.draw(block);
