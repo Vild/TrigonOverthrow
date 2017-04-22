@@ -15,4 +15,6 @@ private:
 	Entity* _title;
 	Entity* _play;
 	Entity* _quit;
+
+	static void _onButtonCallback(Entity& entity, State& state);
 };

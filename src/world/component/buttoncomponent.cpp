@@ -5,6 +5,6 @@
 ButtonComponent::ButtonComponent() {}
 
 void ButtonComponent::registerImGui() {
-	ImGui::DragFloat2("Position", glm::value_ptr(box.position));
-	ImGui::DragFloat2("Size", glm::value_ptr(box.size));
+	ImGui::DragFloat2("Position", glm::value_ptr(position));
+	ImGui::DragFloat2("Size", glm::value_ptr(size));
 }

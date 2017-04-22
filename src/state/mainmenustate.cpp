@@ -10,6 +10,7 @@
 #include "../world/component/modelcomponent.hpp"
 
 #include "../engine.hpp"
+#include "../state/ingamestate.hpp"
 
 MainMenuState::MainMenuState() {
 	std::shared_ptr<TextFactory> tf = Engine::getInstance().getTextFactory();
@@ -21,6 +22,7 @@ MainMenuState::MainMenuState() {
 	{
 		_camera->addComponent<TransformComponent>()->recalculateMatrix();
 		_camera->addComponent<CameraComponent>();
+
 		auto lookAt = _camera->addComponent<LookAtComponent>();
 		lookAt->target = _play;
 		lookAt->followMode = FollowMode::followByOffset;
@@ -31,6 +33,7 @@ MainMenuState::MainMenuState() {
 		auto transform = _title->addComponent<TransformComponent>();
 		transform->position = glm::vec3{0, 0.4, 0};
 		transform->recalculateMatrix();
+
 		auto text = _title->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer("Trigon", false, 10);
 		text->transform.position = glm::vec3{-0.3, 0, 0};
@@ -40,7 +43,13 @@ MainMenuState::MainMenuState() {
 	{
 		auto transform = _play->addComponent<TransformComponent>();
 		transform->recalculateMatrix();
-		/*auto button =*/_play->addComponent<ButtonComponent>();
+
+		auto button = _play->addComponent<ButtonComponent>();
+		button->position = glm::vec2(-3, -3);
+		button->size = glm::vec2(6, 6);
+
+		button->callback = &MainMenuState::_onButtonCallback;
+
 		auto text = _play->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer("Play", false, 10);
 		text->transform.position = glm::vec3{-0.15, -0.2, 0};
@@ -51,7 +60,12 @@ MainMenuState::MainMenuState() {
 		auto transform = _quit->addComponent<TransformComponent>();
 		transform->position = glm::vec3{0, -0.75, 0};
 		transform->recalculateMatrix();
-		/*auto button =*/_quit->addComponent<ButtonComponent>();
+
+		auto button = _quit->addComponent<ButtonComponent>();
+		button->position = glm::vec2(-3, -3);
+		button->size = glm::vec2(6, 6);
+		button->callback = &MainMenuState::_onButtonCallback;
+
 		auto text = _quit->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer("Quit", false, 10);
 		text->transform.position = glm::vec3{-0.15, 0, 0};
@@ -61,3 +75,12 @@ MainMenuState::MainMenuState() {
 
 void MainMenuState::onEnter(State* prev) {}
 void MainMenuState::onLeave(State* next) {}
+
+void MainMenuState::_onButtonCallback(Entity& entity, State& state) {
+	MainMenuState& self = static_cast<MainMenuState&>(state);
+	Engine& engine = Engine::getInstance();
+	if (&entity == self._play)
+		engine.setState<InGameState>();
+	else if (&entity == self._quit)
+		engine.quit();
+}

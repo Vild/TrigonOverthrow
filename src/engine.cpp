@@ -53,6 +53,21 @@ int Engine::run(bool vsync) {
 	uint32_t lastTime = SDL_GetTicks();
 
 	while (!_quit) {
+		if (*_nextState != std::type_index(typeid(Engine))) {
+			State* prev = getStatePtr();
+			*_currentState = *_nextState;
+			*_nextState = std::type_index(typeid(Engine));
+			State* next = getStatePtr();
+			if (next)
+				next->onEnter(prev);
+
+			if (prev)
+				prev->onLeave(next);
+
+			if (!next)
+				break;
+		}
+
 		SDL_Event event;
 		ImGuiIO& io = ImGui::GetIO();
 		while (SDL_PollEvent(&event)) {
@@ -112,8 +127,6 @@ int Engine::run(bool vsync) {
 		_system_tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
-		if (!getStatePtr())
-			break;
 	}
 	return 0;
 }
@@ -130,6 +143,7 @@ void Engine::_init(bool vsync) {
 	_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
 
 	_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
+	_nextState = std::make_unique<std::type_index>(std::type_index(typeid(Engine)));
 
 	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
 	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();

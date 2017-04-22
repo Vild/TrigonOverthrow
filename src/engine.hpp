@@ -63,16 +63,9 @@ public:
 	inline const std::type_index getStateType() { return *_currentState; }
 
 	template <typename T>
-	inline void setState() {
-		State* prev = getStatePtr();
-		*_currentState = std::type_index(typeid(T));
-		State* next = getStatePtr();
-		if (next)
-			next->onEnter(prev);
+	inline void setState() { *_nextState = std::type_index(typeid(T)); }
 
-		if (prev)
-			prev->onLeave(next);
-	}
+	inline void quit() { *_nextState = std::type_index(typeid(nullptr)); }
 
 private:
 	unsigned int _width = 1280;
@@ -92,6 +85,7 @@ private:
 	std::vector<std::unique_ptr<System>> _systems;
 
 	std::unique_ptr<std::type_index> _currentState;
+	std::unique_ptr<std::type_index> _nextState;
 	std::unordered_map<std::type_index, std::unique_ptr<State>> _states;
 
 	Engine() {}

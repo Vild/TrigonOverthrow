@@ -2,10 +2,13 @@
 
 #include "component.hpp"
 
+#include <glm/glm.hpp>
+
 class Entity;
+class State;
 
 struct ButtonComponent : public Component<ButtonComponent> {
-	typedef void (*ButtonCallback)(Entity* entity);
+	typedef void (*ButtonCallback)(Entity& entity, State& state);
 
 	ButtonComponent();
 
