@@ -42,6 +42,7 @@ void ParticleSystem::update(World& world, float delta) {
 		if (entity->getName() == "Player") {
 			auto gunComponent = entity->getComponent<GunComponent>();
 			if (gunComponent->drawShot) {
+				printf("cockcokcokc\n");
 				auto raygun = std::static_pointer_cast<GunComponent::RayGun>(gunComponent->gun);
 				direction = raygun->ray.dir;
 				pos = raygun->ray.o;

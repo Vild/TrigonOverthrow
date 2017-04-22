@@ -40,7 +40,6 @@ void ParticleRenderPass::render(World& world) {
 		// wait for reading/writing before rendering.
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
-
 		particle->point->render(particle->_nrOfParticles, GL_POINTS);
 	}
 }
