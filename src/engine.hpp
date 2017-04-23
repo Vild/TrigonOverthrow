@@ -39,6 +39,7 @@ public:
 
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
+	inline std::shared_ptr<MapLoader> getMapLoader() { return _mapLoader; }
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
 	inline std::shared_ptr<TextFactory> getTextFactory() { return _textFactory; }
 
@@ -83,8 +84,8 @@ private:
 	SDL_GLContext _context;
 
 	std::shared_ptr<TextureManager> _textureManager;
-	std::shared_ptr<MapLoader> _mapLoader;
 	std::shared_ptr<MeshLoader> _meshLoader;
+	std::shared_ptr<MapLoader> _mapLoader;
 	std::shared_ptr<HIDInput> _hidInput;
 	std::shared_ptr<TextFactory> _textFactory;
 

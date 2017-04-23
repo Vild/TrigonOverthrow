@@ -65,31 +65,33 @@ InGameState::InGameState() {
 	}
 
 	{															// Adding Floor
-		constexpr int gridSize = 8; // will be gridSize*gridSize
-
+		// How to fix support for non-uniform sizes of the map. E.g 2 in height and 6 in width.
+		std::vector<Uint8> map = Engine::getInstance().getMapLoader()->getMap("maps/sunkentemple.png");
 		auto transform = _floor->addComponent<FloorTransformComponent>();
-		transform->gridSize = gridSize;
+		transform->gridSize = Engine::getInstance().getMapLoader()->getHeight();
 		transform->scale = glm::vec3(1, 0.1, 1);
 		transform->recalculateMatrices();
+
+		int gridSize = transform->gridSize;
 
 #define frand() ((rand() * 1.0) / RAND_MAX)
 		float* topData = new float[gridSize * gridSize];
 
 		for (int z = 0; z < gridSize; z++)
 			for (int x = 0; x < gridSize; x++) {
-				topData[z * gridSize + x] = frand() * 2 - 1;
+				topData[z * gridSize + x] = float(map[z * gridSize + x]/float(5));
 			}
 
-		for (int z = 0; z < gridSize; z++)
-			for (int x = 0; x < gridSize; x++) {
-				auto p = topData[z * gridSize + x];
-				const auto& forwards = z > 0 ? topData[(z - 1) * gridSize + x] : p;
-				const auto& left = x < gridSize - 1 ? topData[z * gridSize + x + 1] : p;
-				const auto& right = x > 0 ? topData[z * gridSize + x - 1] : p;
-				const auto& backwards = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : p;
-
-				p = ((forwards + left + right + backwards) + p * 2) / 6;
-			}
+		//for (int z = 0; z < gridSize; z++)
+		//	for (int x = 0; x < gridSize; x++) {
+		//		auto p = topData[z * gridSize + x];
+		//		const auto& forwards = z > 0 ? topData[(z - 1) * gridSize + x] : p;
+		//		const auto& left = x < gridSize - 1 ? topData[z * gridSize + x + 1] : p;
+		//		const auto& right = x > 0 ? topData[z * gridSize + x - 1] : p;
+		//		const auto& backwards = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : p;
+		//
+		//		p = ((forwards + left + right + backwards) + p * 2) / 6;
+		//	}
 
 		glm::vec4* neighborData = new glm::vec4[gridSize * gridSize];
 		for (int z = 0; z < gridSize; z++)
