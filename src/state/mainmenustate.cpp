@@ -51,8 +51,8 @@ MainMenuState::MainMenuState() {
 		transform->recalculateMatrix();
 
 		auto button = _play->addComponent<ButtonComponent>();
-		button->size = glm::vec3{1, 1, 1};
-		button->position = button->size * glm::vec3(-1);
+		button->size = glm::vec3{2, 2, 2};
+		button->position = button->size * glm::vec3(-0.5);
 		button->callback = &MainMenuState::_onButtonCallback;
 
 		auto text = _play->addComponent<TextComponent>();
@@ -72,8 +72,8 @@ MainMenuState::MainMenuState() {
 		transform->recalculateMatrix();
 
 		auto button = _quit->addComponent<ButtonComponent>();
-		button->size = glm::vec3{1, 1, 1};
-		button->position = button->size * glm::vec3(-1);
+		button->size = glm::vec3{2, 2, 2};
+		button->position = button->size * glm::vec3(-0.5);
 		button->callback = &MainMenuState::_onButtonCallback;
 
 		auto text = _quit->addComponent<TextComponent>();

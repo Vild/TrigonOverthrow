@@ -23,8 +23,8 @@ void ButtonSystem::update(World& world, float delta) {
 	const glm::ivec2 xy = hid->getXY();
 	unsigned int w = engine.getWidth(), h = engine.getHeight();
 
-	const glm::vec4 rayStartNDC = glm::vec4(1.0 - (2.0 * xy.x) / w, 1.0 - (2.0 * xy.y) / h, -1, 1);
-	const glm::vec4 rayEndNDC = glm::vec4(1.0 - (2.0 * xy.x) / w, 1.0 - (2.0 * xy.y) / h, 0, 1);
+	const glm::vec4 rayStartNDC = glm::vec4((2.0 * xy.x) / w - 1.0, (2.0 * xy.y) / h - 1.0, -1, 1);
+	const glm::vec4 rayEndNDC = glm::vec4((2.0 * xy.x) / w - 1.0, (2.0 * xy.y) / h - 1.0, 0, 1);
 	const glm::mat4 invM = glm::inverse(cameraComponent->projectionMatrix * cameraComponent->viewMatrix);
 
 	glm::vec4 rayStartWorld = invM * rayStartNDC;
@@ -33,7 +33,7 @@ void ButtonSystem::update(World& world, float delta) {
 	rayEndWorld /= rayEndWorld.w;
 
 	const glm::vec3 origin = glm::vec3(rayStartWorld);
-	const glm::vec3 dir = glm::normalize(rayEndWorld - rayStartWorld);
+	const glm::vec3 dir = glm::normalize(glm::vec3(rayEndWorld - rayStartWorld));
 
 	Entity* entityHit = nullptr;
 	float distanceHit = std::numeric_limits<float>::infinity();
@@ -64,6 +64,8 @@ void ButtonSystem::update(World& world, float delta) {
 
 		glm::mat3 axies = glm::mat3(transform->matrix);
 
+		float t;
+
 		for (int i = 0; i < 3; i++) {
 			float e = glm::dot(axies[i], toCenter);
 			float f = glm::dot(axies[i], dir);
@@ -81,20 +83,22 @@ void ButtonSystem::update(World& world, float delta) {
 					tmax = t2;
 
 				if (tmin > tmax)
-					return;
+					goto breakLoop;
 			} else if (-e + minPos[i] > 0 || -e + maxPos[i] < 0)
-				return;
+				goto breakLoop;
 		}
 
-		float t = (tmin > 0) ? tmin : tmax;
+		t = (tmin > 0) ? tmin : tmax;
 
-		if (t < 0)
-			return;
+		if (t < 0) {
+		breakLoop:
+			continue;
+		}
 
+		printf("Is over: %s t: %f\n", entity->getName().c_str(), t);
 		if (t < distanceHit) {
 			distanceHit = t;
 			entityHit = entity.get();
-			printf("Is over: %s t: %f\n", entityHit->getName().c_str(), t);
 		}
 	}
 
@@ -102,7 +106,7 @@ void ButtonSystem::update(World& world, float delta) {
 		// XXX: HACK HACK HACK
 		if (!hackCB)
 			return;
-		hackCB(nullptr, Engine::getInstance().getState(), hid->getMouseState());
+		return hackCB(nullptr, Engine::getInstance().getState(), hid->getMouseState());
 	}
 	auto button = entityHit->getComponent<ButtonComponent>();
 	if (!button->callback)
