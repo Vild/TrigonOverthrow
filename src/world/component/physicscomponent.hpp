@@ -2,7 +2,7 @@
 #include "component.hpp"
 #include <glm/glm.hpp>
 
-struct PhysicsComponent : public Component<PhysicsComponent> {
+struct PhysicsComponent : public Component {
 	glm::vec3 velocity = glm::vec3{0, 0, 0};
 	glm::vec3 acceleration = glm::vec3{0, 0, 0};
 

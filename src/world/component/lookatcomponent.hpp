@@ -11,7 +11,7 @@ enum class FollowMode : int {
 	followByOffset		/// This mode will follow the target at a specified offset. This means that the rotation will always be constant
 };
 
-struct LookAtComponent : public Component<LookAtComponent> {
+struct LookAtComponent : public Component {
 	Entity* target;
 
 	FollowMode followMode = FollowMode::followByDistance;

@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-struct KBMouseInputComponent : public Component<KBMouseInputComponent> {
+struct KBMouseInputComponent : public Component {
 	virtual void registerImGui();
 	virtual std::string name() { return "KBMouseInputComponent"; }
 };

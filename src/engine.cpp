@@ -24,6 +24,7 @@
 #include "world/system/lookatsystem.hpp"
 #include "world/system/camerasystem.hpp"
 #include "world/system/particlesystem.hpp"
+#include "world/system/buttonsystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -266,6 +267,7 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
 	_systems.push_back(std::make_unique<ParticleSystem>());
+	_systems.push_back(std::make_unique<ButtonSystem>());
 
 	// Render passes
 	{

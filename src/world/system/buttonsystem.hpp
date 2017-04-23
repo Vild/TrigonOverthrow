@@ -8,4 +8,7 @@ public:
 
 	virtual void registerImGui();
 	inline virtual std::string name() { return "ButtonSystem"; };
+
+private:
+	constexpr static float _epsilon = 1e-8;
 };

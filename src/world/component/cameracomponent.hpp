@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include "../entity.hpp"
 
-struct CameraComponent : public Component<CameraComponent> {
+struct CameraComponent : public Component {
 	CameraComponent();
 
 	glm::mat4 viewMatrix;

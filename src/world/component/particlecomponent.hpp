@@ -6,7 +6,7 @@
 #include "glm/glm.hpp"
 #include "../../gl/mesh.hpp"
 
-struct ParticleComponent : public Component<ParticleComponent> {
+struct ParticleComponent : public Component {
 	struct Particle {
 		glm::vec3 pos = glm::vec3(0);
 		glm::vec3 velocity = glm::vec3(0);

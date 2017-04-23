@@ -6,6 +6,8 @@
 
 #include "../../engine.hpp"
 
+#include <iostream>
+
 void ButtonSystem::update(World& world, float delta) {
 	Engine& engine = Engine::getInstance();
 	auto camera = engine.getCamera();
@@ -16,30 +18,96 @@ void ButtonSystem::update(World& world, float delta) {
 	if (!cameraComponent)
 		return;
 
-	const glm::ivec2 xy = engine.getHIDInput()->getXY();
+	std::shared_ptr<HIDInput> hid = engine.getHIDInput();
+
+	const glm::ivec2 xy = hid->getXY();
 	unsigned int w = engine.getWidth(), h = engine.getHeight();
 
-	// Entity* hit = nullptr;
-	// float zHit = std::numeric_limits<float>::infinity();
+	const glm::vec4 rayStartNDC = glm::vec4(1.0 - (2.0 * xy.x) / w, 1.0 - (2.0 * xy.y) / h, -1, 1);
+	const glm::vec4 rayEndNDC = glm::vec4(1.0 - (2.0 * xy.x) / w, 1.0 - (2.0 * xy.y) / h, 0, 1);
+	const glm::mat4 invM = glm::inverse(cameraComponent->projectionMatrix * cameraComponent->viewMatrix);
 
-	const glm::vec2 rayNDC = glm::vec2{(2.0 * xy.x) / w - 1.0, 1.0 - (2.0 * xy.y) / h};
-	const glm::vec4 rayClip = glm::vec4(rayNDC, -1, 1);
-	const glm::vec4 rayEye = glm::vec4(glm::vec2(inverse(cameraComponent->projectionMatrix) * rayClip), -1, 0);
-	const glm::vec3 rayWorld = glm::normalize(glm::vec3(inverse(cameraComponent->viewMatrix) * rayEye));
+	glm::vec4 rayStartWorld = invM * rayStartNDC;
+	glm::vec4 rayEndWorld = invM * rayEndNDC;
+	rayStartWorld /= rayStartWorld.w;
+	rayEndWorld /= rayEndWorld.w;
+
+	const glm::vec3 origin = glm::vec3(rayStartWorld);
+	const glm::vec3 dir = glm::normalize(rayEndWorld - rayStartWorld);
+
+	Entity* entityHit = nullptr;
+	float distanceHit = std::numeric_limits<float>::infinity();
+
+	// XXX: HACK HACK
+	ButtonComponent::ButtonCallback hackCB = nullptr;
 
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto button = entity->getComponent<ButtonComponent>();
 		if (!button)
-			return;
+			continue;
 
 		auto transform = entity->getComponent<TransformComponent>();
 		if (!transform)
+			continue;
+
+		// XXX: HACK HACK
+		if (button->callback)
+			hackCB = button->callback;
+
+		glm::vec3 minPos = button->position;
+		glm::vec3 maxPos = button->position + button->size;
+
+		float tmin = -std::numeric_limits<float>::infinity();
+		float tmax = std::numeric_limits<float>::infinity();
+
+		glm::vec3 toCenter = glm::vec3(transform->matrix[3]) - origin;
+
+		glm::mat3 axies = glm::mat3(transform->matrix);
+
+		for (int i = 0; i < 3; i++) {
+			float e = glm::dot(axies[i], toCenter);
+			float f = glm::dot(axies[i], dir);
+
+			if (abs(f) > _epsilon) {
+				float t1 = (e + minPos[i]) / f;
+				float t2 = (e + maxPos[i]) / f;
+				if (t1 > t2)
+					std::swap(t1, t2);
+
+				if (t1 > tmin)
+					tmin = t1;
+
+				if (t2 < tmax)
+					tmax = t2;
+
+				if (tmin > tmax)
+					return;
+			} else if (-e + minPos[i] > 0 || -e + maxPos[i] < 0)
+				return;
+		}
+
+		float t = (tmin > 0) ? tmin : tmax;
+
+		if (t < 0)
 			return;
 
-		const glm::vec3 rayWorld = glm::normalize(glm::vec3(inverse(cameraComponent->viewMatrix) * rayEye));
-
-
+		if (t < distanceHit) {
+			distanceHit = t;
+			entityHit = entity.get();
+			printf("Is over: %s t: %f\n", entityHit->getName().c_str(), t);
+		}
 	}
+
+	if (!entityHit) {
+		// XXX: HACK HACK HACK
+		if (!hackCB)
+			return;
+		hackCB(nullptr, Engine::getInstance().getState(), hid->getMouseState());
+	}
+	auto button = entityHit->getComponent<ButtonComponent>();
+	if (!button->callback)
+		return;
+	button->callback(entityHit, Engine::getInstance().getState(), hid->getMouseState());
 }
 
 void ButtonSystem::registerImGui() {}

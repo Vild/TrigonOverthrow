@@ -29,7 +29,10 @@ ParticleSystem::ParticleSystem() {
 
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
-	for (std::unique_ptr<ParticleComponent>& comp : ParticleComponent::getActiveComponents()) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+		auto comp = entity->getComponent<ParticleComponent>();
+		if (!comp)
+			continue;
 		_programs[0]
 			->bind()
 			.setUniform("delta", delta)

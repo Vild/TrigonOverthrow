@@ -2,6 +2,8 @@
 
 #include "state.hpp"
 
+#include "../io/hidinput.hpp"
+
 class MainMenuState : public State {
 public:
 	MainMenuState();
@@ -12,9 +14,13 @@ public:
 
 private:
 	Entity* _camera;
+	Entity* _target;
 	Entity* _title;
 	Entity* _play;
 	Entity* _quit;
 
-	static void _onButtonCallback(Entity& entity, State& state);
+	void _toggleBox(Entity& entity);
+
+	static void _registerImGUI(Entity& self, State& state);
+	static void _onButtonCallback(Entity* entity, State& state, MouseState mouse);
 };

@@ -4,16 +4,18 @@
 
 #include <glm/glm.hpp>
 
+#include "../../io/hidinput.hpp"
+
 class Entity;
 class State;
 
-struct ButtonComponent : public Component<ButtonComponent> {
-	typedef void (*ButtonCallback)(Entity& entity, State& state);
+struct ButtonComponent : public Component {
+	typedef void (*ButtonCallback)(Entity* entity, State& state, MouseState mouse);
 
 	ButtonComponent();
 
-	glm::vec2 position;
-	glm::vec2 size;
+	glm::vec3 position;
+	glm::vec3 size;
 	ButtonCallback callback;
 
 	virtual void registerImGui();

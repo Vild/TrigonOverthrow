@@ -64,6 +64,9 @@ void TextRenderer::setText(const std::string& text) {
 	if (_isStatic)
 		return;
 
+	if (text == _text)
+		return;
+
 	if (text.size() > _maxTextLength)
 		_text = text.substr(0, _maxTextLength);
 	else
