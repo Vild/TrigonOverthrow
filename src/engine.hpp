@@ -14,6 +14,7 @@
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
 #include "io/textfactory.hpp"
+#include "io/maploader.hpp"
 
 #include "world/world.hpp"
 #include "world/system/particlesystem.hpp"
@@ -82,6 +83,7 @@ private:
 	SDL_GLContext _context;
 
 	std::shared_ptr<TextureManager> _textureManager;
+	std::shared_ptr<MapLoader> _mapLoader;
 	std::shared_ptr<MeshLoader> _meshLoader;
 	std::shared_ptr<HIDInput> _hidInput;
 	std::shared_ptr<TextFactory> _textFactory;

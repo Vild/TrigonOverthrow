@@ -25,6 +25,7 @@
     <ClCompile Include="src\gl\shader.cpp" />
     <ClCompile Include="src\gl\texture.cpp" />
     <ClCompile Include="src\io\hidinput.cpp" />
+    <ClCompile Include="src\io\maploader.cpp" />
     <ClCompile Include="src\io\meshloader.cpp" />
     <ClCompile Include="src\io\textfactory.cpp" />
     <ClCompile Include="src\io\texturemanager.cpp" />
@@ -74,6 +75,7 @@
     <ClInclude Include="src\gl\shader.hpp" />
     <ClInclude Include="src\gl\texture.hpp" />
     <ClInclude Include="src\io\hidinput.hpp" />
+    <ClInclude Include="src\io\maploader.hpp" />
     <ClInclude Include="src\io\meshloader.hpp" />
     <ClInclude Include="src\io\textfactory.hpp" />
     <ClInclude Include="src\io\texturemanager.hpp" />
