@@ -24,8 +24,8 @@ void Map::Save(std::string fileName) {
 
 	RectangleShape block;
 
-	for (unsigned int row = 0; row < this->size.x; row++) {
-		for (unsigned int col = 0; col < this->size.y; col++) {
+	for (int row = 0; row < this->size.x; row++) {
+		for (int col = 0; col < this->size.y; col++) {
 			block.setFillColor(Color(this->mapData[row][col], this->mapData[row][col], this->mapData[row][col], 255));
 			block.setPosition(Vector2f(row * block.getSize().x, col * block.getSize().y));
 			renderTex.draw(block);
@@ -37,8 +37,8 @@ void Map::Save(std::string fileName) {
 	sf::Image image;
 	image.create(size.x, size.y, sf::Color::Black);
 
-	for (unsigned int row = 0; row < this->size.x; row++) {
-		for (unsigned int col = 0; col < this->size.y; col++) {
+	for (int row = 0; row < this->size.x; row++) {
+		for (int col = 0; col < this->size.y; col++) {
 			image.setPixel(row, col, Color(mapData[row][col], mapData[row][col], mapData[row][col], 255));
 		}
 	}
@@ -63,8 +63,8 @@ void Map::Save(std::string fileName) {
 void Map::Draw(RenderTarget& target) {
 	this->renderTex.clear(Color::White);
 
-	for (unsigned int row = 0; row < this->size.x; row++) {
-		for (unsigned int col = 0; col < this->size.y; col++) {
+	for (int row = 0; row < this->size.x; row++) {
+		for (int col = 0; col < this->size.y; col++) {
 			block.setFillColor(Color(this->mapData[row][col], this->mapData[row][col], this->mapData[row][col], 255));
 			block.setPosition(Vector2f(row * block.getSize().x, col * block.getSize().y));
 			renderTex.draw(block);
