@@ -14,6 +14,7 @@ public:
 
 	glm::mat4 getMatrix();
 	glm::vec3 getPosition();
+	glm::quat getRotation();
 	glm::vec3 getDirection();
 
 	void setScale(const glm::vec3 & scale);
@@ -22,6 +23,9 @@ public:
 	void setDirection(const glm::vec3 & direction, const glm::vec3 & up = {0, 1, 0});
 
 	void move(const glm::vec3 & delta);
+
+	virtual void registerImGui();
+	virtual std::string name();
 
 private:
 	bool dirty;
@@ -33,7 +37,5 @@ private:
 
 	void recalculateMatrix();
 	
-	virtual void registerImGui();
 
-	virtual std::string name() { return "TransformComponent"; }
 };

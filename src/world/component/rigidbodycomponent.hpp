@@ -18,11 +18,13 @@ public:
 	btMotionState * getMotionState();
 
 	void setMass(btScalar mass);
+	void setFriction(btScalar friction);
 	void setHitboxHalfSize(const glm::vec3 & size);
 
 private:
 	btRigidBody * rigidBody;
 
+	btScalar friction;
 	btScalar mass;
 	btMotionState * state;
 	btBoxShape * shape;

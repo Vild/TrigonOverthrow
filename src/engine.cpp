@@ -24,6 +24,7 @@
 #include "world/system/lookatsystem.hpp"
 #include "world/system/camerasystem.hpp"
 #include "world/system/particlesystem.hpp"
+#include "world/system/bulletphysicssystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -130,11 +131,11 @@ void Engine::_init(bool vsync) {
 
 	_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
 
+	_setupSystems();
 	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
 	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
 	_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
 	setState<InGameState>();
-	_setupSystems();
 }
 
 void Engine::_initSDL() {
@@ -248,6 +249,7 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
+	_systems.push_back(std::make_unique<BulletPhyisicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
 	_systems.push_back(std::make_unique<ParticleSystem>());
@@ -289,6 +291,7 @@ void Engine::_setupSystems() {
 		_systems.push_back(std::move(ssao));
 		_systems.push_back(std::move(gaussian));
 		_systems.push_back(std::move(lighting));
+
 		_systems.push_back(std::move(particles));
 		_systems.push_back(std::move(text));
 	}

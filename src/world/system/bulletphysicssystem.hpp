@@ -15,7 +15,7 @@ public:
 	virtual void registerImGui() override;
 	virtual std::string name() override;
 
-	void addRigidBody(std::shared_ptr<RigidBodyComponent> rigidBody);
+	void addRigidBody(RigidBodyComponent *  rigidBody);
 
 private:
 	btDynamicsWorld * world;
@@ -24,5 +24,9 @@ private:
 	btBroadphaseInterface * broadphaseInterface;
 	btConstraintSolver * constraintSolver;
 
-	std::vector<std::shared_ptr<RigidBodyComponent>> bodies;
+	std::vector<RigidBodyComponent*> bodies;
+
+	std::unique_ptr<btRigidBody> planeBody;
+	std::unique_ptr<btMotionState> planeState;
+	std::unique_ptr<btStaticPlaneShape> planeShape;
 };

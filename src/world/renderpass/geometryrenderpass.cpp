@@ -98,6 +98,10 @@ void GeometryRenderPass::render(World& world) {
 			glEnable(GL_CULL_FACE);
 			_shader->bind();
 		}
+
+#ifdef DEBUG
+		auto rigidBody = entity
+#endif
 	}
 }
 

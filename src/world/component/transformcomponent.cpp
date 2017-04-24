@@ -29,6 +29,11 @@ glm::vec3 TransformComponent::getPosition()
 	return position;
 }
 
+glm::quat TransformComponent::getRotation()
+{
+	return rotation;
+}
+
 void TransformComponent::recalculateMatrix() {
 	dirty = false;
 	matrix = glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
@@ -49,14 +54,13 @@ void TransformComponent::setPosition(const glm::vec3 & position)
 void TransformComponent::setRotation(const glm::quat & rotation)
 {
 	this->rotation = rotation;
-	dirty = false;
+	dirty = true;
 }
 
 void TransformComponent::setDirection(const glm::vec3 & direction, const glm::vec3 & up)
 {
 	static const glm::vec3 O = { 0,0,0 };
-	glm::vec3 dir = {direction.x, direction.y, direction.z};
-	glm::mat3 m = glm::lookAt(O, dir, up);
+	glm::mat3 m = glm::lookAt(O, direction, up);
 	rotation = glm::quat_cast(m);
 	dirty = true;
 }
@@ -79,4 +83,7 @@ void TransformComponent::registerImGui() {
 
 	dirty |= ImGui::DragFloat3("Position", glm::value_ptr(position), 0.1f);
 	dirty |= ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);
+
 }
+
+inline std::string TransformComponent::name() { return "TransformComponent"; }

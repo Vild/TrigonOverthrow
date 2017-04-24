@@ -7,6 +7,8 @@
 #include "../lib/imgui.h"
 #include "../gl/shader.hpp"
 
+#include "../world/system/bulletphysicssystem.hpp"
+
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
 #include "../world/component/lookatcomponent.hpp"
@@ -19,6 +21,8 @@
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
+	BulletPhyisicsSystem * bulletphyiscs = engine.getSystem<BulletPhyisicsSystem>();
+	
 
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
@@ -33,8 +37,8 @@ InGameState::InGameState() {
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();
-		transform->scale = glm::vec3(0.01);
-		transform->recalculateMatrix();
+		transform->setScale(glm::vec3(0.01));
+
 		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
 		model->meshData->mesh
@@ -55,16 +59,20 @@ InGameState::InGameState() {
 		auto particle = _player->addComponent<ParticleComponent>();
 		particle->addEmitter(glm::vec3(0, 1, 0), 1024);
 		_player->addComponent<KBMouseInputComponent>();
-		_player->addComponent<PhysicsComponent>();
+
+		//_player->addComponent<PhysicsComponent>();
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
+		text->transform.setPosition(glm::vec3(0, 200, 0));
+		text->transform.setScale(glm::vec3(100 * 2)); // To counteract transform->scale
 
-		text->transform.position = glm::vec3(0, 2, 0);
-		text->transform.scale = glm::vec3(100 * 2); // To counteract transform->scale
-		text->transform.recalculateMatrix();
+		auto rigidbody = _player->addComponent<RigidBodyComponent>();
+		rigidbody->setMass(1);
+		//rigidbody->setFriction(2);
+		bulletphyiscs->addRigidBody(rigidbody);
 	}
 
-	{															// Adding Floor
+	{// Adding Floor
 		constexpr int gridSize = 8; // will be gridSize*gridSize
 
 		auto transform = _floor->addComponent<FloorTransformComponent>();

@@ -43,6 +43,9 @@ public:
 
 	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
+	template<typename T>
+	T* getSystem();
+
 	inline Entity* getCamera() {
 		State* s = getStatePtr();
 		if (!s)
@@ -104,3 +107,20 @@ private:
 	void _system_tick(float delta);
 	void _system_resize(unsigned int width, unsigned int height);
 };
+
+template<typename T>
+T* Engine::getSystem()
+{
+	T* ptr = nullptr;
+
+	int i = 0, size = _systems.size();
+	while (ptr == nullptr && i < size)
+	{
+		ptr = dynamic_cast<T*>(_systems[i++].get());
+	}
+
+	if (ptr == nullptr)
+		throw std::exception("system does not exist");
+
+	return ptr;
+}

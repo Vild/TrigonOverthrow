@@ -4,6 +4,16 @@
 #include <Bullet3Common\b3Transform.h>
 #include <glm\gtc\type_ptr.hpp>
 
+inline glm::vec3 cast(btVector3 const & v)
+{
+	return {v.x(), v.y(), v.z()};
+}
+
+inline glm::quat cast(btQuaternion const & q)
+{
+	return {q.w(), q.x(), q.y(), q.z() };
+}
+
 BulletPhyisicsSystem::BulletPhyisicsSystem()
 {
 	collisionConfig = new btDefaultCollisionConfiguration();
@@ -12,7 +22,13 @@ BulletPhyisicsSystem::BulletPhyisicsSystem()
 	broadphaseInterface = new btDbvtBroadphase();
 	
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphaseInterface, constraintSolver, collisionConfig);
-	world->setGravity({ 0, -10.f, 0 });
+	world->setGravity({ 0, -9.82f, 0 });
+
+	planeShape = std::make_unique<btStaticPlaneShape>(btVector3(0, 1, 0), 0);
+	planeState = std::make_unique<btDefaultMotionState>();
+	planeBody = std::make_unique<btRigidBody>(0, planeState.get(), planeShape.get());
+
+	world->addRigidBody(planeBody.get());
 }
 
 BulletPhyisicsSystem::~BulletPhyisicsSystem()
@@ -28,7 +44,7 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 {
 	world->stepSimulation(delta);
 
-	for (std::shared_ptr<Entity> entity : w.getEntities()) 
+	for (std::unique_ptr<Entity>& entity : w.getEntities()) 
 	{
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
 		if (!rigidbody) continue;
@@ -38,15 +54,12 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 
 		btMotionState * state = rigidbody->getMotionState();
 		btTransform t; state->getWorldTransform(t);
-		
-		btQuaternion btQ = t.getRotation();
-		glm::quat q = {btQ.getW(), btQ.getX(), btQ.getY(), btQ.getZ()};
 
-		btScalar m[16]; t.getOpenGLMatrix(m);
-		glm::vec3 pos = {m[3], m[13], m[23]};
+		btVector3 o = t.getOrigin();
+		btQuaternion q = t.getRotation();
 
-		transform->setPosition(pos);
-		transform->setRotation(q);
+		transform->setPosition(cast(o));
+		transform->setRotation(cast(q));
 	}
 }
 
@@ -59,7 +72,7 @@ std::string BulletPhyisicsSystem::name()
 	return "BulletPhyisicsSystem";
 }
 
-void BulletPhyisicsSystem::addRigidBody(std::shared_ptr<RigidBodyComponent> rigidBody)
+void BulletPhyisicsSystem::addRigidBody(RigidBodyComponent * rigidBody)
 {
 	world->addRigidBody(rigidBody->getRigidBody());
 }

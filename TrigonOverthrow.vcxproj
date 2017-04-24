@@ -53,10 +53,6 @@
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
-    <ClCompile Include="src\world\entity\cameraentity.cpp" />
-    <ClCompile Include="src\world\entity\entity.cpp" />
-    <ClCompile Include="src\world\entity\floorentity.cpp" />
-    <ClCompile Include="src\world\entity\playerentity.cpp" />
     <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\geometryrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\lightingrenderpass.cpp" />
@@ -112,11 +108,6 @@
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
-    <ClInclude Include="src\world\entity\cameraentity.hpp" />
-    <ClInclude Include="src\world\entity\entity.hpp" />
-    <ClInclude Include="src\world\entity\floorentity.hpp" />
-    <ClInclude Include="src\world\entity\playerentity.hpp" />
-    <ClInclude Include="src\world\renderpass\baserenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\geometryrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\lightingrenderpass.hpp" />
@@ -240,7 +231,7 @@
     <Link />
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;assimp-vc140-mt.lib;Bullet2FileLoader.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet2FileLoader.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -286,7 +277,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;assimp-vc140-mt.lib;Bullet2FileLoader.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet2FileLoader.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>

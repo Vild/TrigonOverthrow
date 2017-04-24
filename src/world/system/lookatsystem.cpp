@@ -38,7 +38,14 @@ void LookAtSystem::update(World& world, float delta) {
 			transform->setPosition(target->getPosition() + lookat->offsetFromTarget);
 		}
 
-		glm::vec3 dir = glm::normalize(target->getPosition() - transform->getPosition());
+		glm::vec3 tpos = target->getPosition();
+		glm::vec3 cpos = transform->getPosition();
+
+		glm::vec3 dir = glm::normalize(tpos - cpos);
+		
+		dir.x *= -1;
+		dir.y *= tpos.z > cpos.z ? 1 : -1;		
+
 		transform->setDirection(dir);
 	}
 }
