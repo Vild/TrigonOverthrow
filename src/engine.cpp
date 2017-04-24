@@ -179,7 +179,7 @@ void Engine::_initSDL() {
 		throw "Failed to load SDL2_ttf";
 	}
 
-	_window = SDL_CreateWindow("TurtleGL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
+	_window = SDL_CreateWindow("Trigon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
 														 SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	if (!_window)
 		throw "Failed to create window";
