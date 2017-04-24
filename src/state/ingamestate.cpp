@@ -18,6 +18,8 @@
 #include "../world/component/modelcomponent.hpp"
 #include "../world/component/hitboxcomponent.hpp"
 #include "../world/component/guncomponent.hpp"
+#include "../world/component/lifecomponent.hpp"
+
 
 
 InGameState::InGameState() {
@@ -63,6 +65,8 @@ InGameState::InGameState() {
 		_player->addComponent<KBMouseInputComponent>();
 		_player->addComponent<PhysicsComponent>();
 
+		auto life = _player->addComponent<LifeComponent>();
+
 		auto gun = _player->addComponent<GunComponent>();
 		gun->addGun(GunComponent::GunType::RAYGUN, transform->position, transform->getDirection());
 
@@ -72,6 +76,7 @@ InGameState::InGameState() {
 		text->transform.position = glm::vec3(0, 2, 0);
 		text->transform.scale = glm::vec3(100 * 2); // To counteract transform->scale
 		text->transform.recalculateMatrix();
+
 	}
 
 	{
@@ -102,6 +107,7 @@ InGameState::InGameState() {
 		hitbox->addHitbox(HitboxComponent::SPHERE, transform->position);
 		_enemy->addComponent<PhysicsComponent>();
 
+		auto life = _enemy->addComponent<LifeComponent>();
 
 		auto text = _enemy->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");

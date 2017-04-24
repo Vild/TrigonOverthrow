@@ -58,10 +58,14 @@ public:
 
 	inline sole::uuid& getUUID() { return _uuid; }
 	inline std::string& getName() { return _name; }
+	inline void makeDead() { dead = true;  }
+	inline bool isDead() { return dead; }
 	inline std::vector<std::unique_ptr<Component>>& getComponents() { return _components; }
 
 private:
 	sole::uuid _uuid;
 	std::string _name;
 	std::vector<std::unique_ptr<Component>> _components;
+	
+	bool dead;
 };

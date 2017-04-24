@@ -7,7 +7,7 @@ public:
 
 
 
-	void testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType, std::shared_ptr<GunComponent::Gun> gun);
+	bool testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType, std::shared_ptr<GunComponent::Gun> gun);
 
 	virtual void update(World& world, float delta);
 	virtual void registerImGui();

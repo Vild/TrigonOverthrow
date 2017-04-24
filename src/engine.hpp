@@ -17,8 +17,7 @@
 #include "io/maploader.hpp"
 
 #include "world/world.hpp"
-#include "world/system/particlesystem.hpp"
-
+#include "../src/world/system/system.hpp"
 #include "state/state.hpp"
 
 class Engine {

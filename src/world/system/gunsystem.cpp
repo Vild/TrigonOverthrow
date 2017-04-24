@@ -1,6 +1,7 @@
 #include "gunsystem.hpp"
 #include "../component/transformcomponent.hpp"
 #include "../component/guncomponent.hpp"
+#include "../component/lifecomponent.hpp"
 
 void GunSystem::update(World& world, float delta) {
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
@@ -26,7 +27,10 @@ void GunSystem::update(World& world, float delta) {
 					if (!hitbox)
 						continue;
 
-					testAgainst(target, hitbox->type, gunComp->gun);
+					if (testAgainst(target, hitbox->type, gunComp->gun))
+						printf("I HIT SOMETHING BOSSS\n");
+						if (target->getComponent<LifeComponent>())
+							target->getComponent<LifeComponent>()->currHP -= 1;
 				}
 				gunComp->shoot = false;
 			}
@@ -34,7 +38,8 @@ void GunSystem::update(World& world, float delta) {
 	}
 }
 
-void GunSystem::testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType, std::shared_ptr<GunComponent::Gun> gun) {
+bool GunSystem::testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType, std::shared_ptr<GunComponent::Gun> gun) {
+	bool hit = false;
 	switch (inType)
 	{
 	case HitboxComponent::SPHERE: {
@@ -44,10 +49,10 @@ void GunSystem::testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::Hi
 		glm::vec3 L = hitbox->center - raygun->ray.o;
 		float tca = glm::dot(L, raygun->ray.dir);
 		if (tca < 0)
-			return;
+			return false;
 		float d2 = glm::dot(L, L) - tca * tca;
 		if (d2 > hitbox->radius2)
-			return;
+			return false;
 		float thc = sqrt(hitbox->radius2 - d2);
 		t0 = tca - thc;
 		t1 = tca + thc;
@@ -57,7 +62,7 @@ void GunSystem::testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::Hi
 		if (t0 < 0) {
 			t0 = t1;
 			if (t0 < 0)
-				return;
+				return false;
 		}
 
 		raygun->ray.t[0] = raygun->ray.o + t0 * raygun->ray.dir;
@@ -65,6 +70,7 @@ void GunSystem::testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::Hi
 		gun = raygun;
 		printf("Entry: %f %f %f\n, Exit: %f %f %f\n\n", raygun->ray.t[0].x, raygun->ray.t[0].y, raygun->ray.t[0].z,
 			raygun->ray.t[1].x, raygun->ray.t[1].y, raygun->ray.t[1].z);
+		hit = true;
 		break;
 	}
 	case HitboxComponent::TETRAHEDRON: {
@@ -78,6 +84,7 @@ void GunSystem::testAgainst(std::unique_ptr<Entity>& target, HitboxComponent::Hi
 	default:
 		break;
 	}
+	return hit;
 }
 
 

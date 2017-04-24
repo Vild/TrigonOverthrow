@@ -26,6 +26,8 @@
 #include "world/system/particlesystem.hpp"
 #include "world/system/buttonsystem.hpp"
 #include "world/system/gunsystem.hpp"
+#include "world/system/lifesystem.hpp"
+
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -129,6 +131,13 @@ int Engine::run(bool vsync) {
 		_system_tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
+
+		std::vector<std::unique_ptr<Entity>>& entities = getState().getWorld().getEntities();
+		for (std::vector<std::unique_ptr<Entity>>::reverse_iterator rit = entities.rbegin(); rit != entities.rend(); ++rit) {
+			if ((*rit)->isDead())
+				entities.erase(--rit.base());
+		}
+
 	}
 	return 0;
 }
@@ -270,6 +279,7 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<ButtonSystem>());
 	_systems.push_back(std::make_unique<GunSystem>());
 	_systems.push_back(std::make_unique<ParticleSystem>());
+	_systems.push_back(std::make_unique<LifeSystem>());
 
 	// Render passes
 	{
