@@ -55,7 +55,7 @@ void TransformComponent::setRotation(const glm::quat & rotation)
 void TransformComponent::setDirection(const glm::vec3 & direction, const glm::vec3 & up)
 {
 	static const glm::vec3 O = { 0,0,0 };
-	glm::vec3 dir = {-direction.x, direction.y, direction.z};
+	glm::vec3 dir = {direction.x, direction.y, direction.z};
 	glm::mat3 m = glm::lookAt(O, dir, up);
 	rotation = glm::quat_cast(m);
 	dirty = true;

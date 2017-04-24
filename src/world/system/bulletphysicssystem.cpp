@@ -42,9 +42,11 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 		btQuaternion btQ = t.getRotation();
 		glm::quat q = {btQ.getW(), btQ.getX(), btQ.getY(), btQ.getZ()};
 
+		btScalar m[16]; t.getOpenGLMatrix(m);
+		glm::vec3 pos = {m[3], m[13], m[23]};
 
-	
-
+		transform->setPosition(pos);
+		transform->setRotation(q);
 	}
 }
 

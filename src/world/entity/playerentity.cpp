@@ -7,6 +7,7 @@
 #include "../component/kbmouseinputcomponent.hpp"
 #include "../component/particlecomponent.hpp"
 #include "../component/physicscomponent.hpp"
+#include "../component/rigidbodycomponent.hpp"
 
 #include "../../engine.hpp"
 
@@ -35,6 +36,7 @@ PlayerEntity::PlayerEntity() : Entity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-191
 	particle->addEmitter(glm::vec3(0, 1, 0), 1024);
 	auto input = addComponent<KBMouseInputComponent>();
 	auto physics = addComponent<PhysicsComponent>();
+	//auto rigidbody = addComponent<RigidBodyComponent>();
 }
 
 void PlayerEntity::registerImGui() {}
