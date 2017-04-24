@@ -150,9 +150,6 @@
     <ClCompile Include="src\state\state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\collisionbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\world\component\buttoncomponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -175,6 +172,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\system\gunsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\component\hitboxcomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\system\buttonsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -332,9 +335,6 @@
     <ClInclude Include="src\state\state.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\collisionbox.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\world\component\buttoncomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -357,6 +357,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\system\gunsystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\hitboxcomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\system\buttonsystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

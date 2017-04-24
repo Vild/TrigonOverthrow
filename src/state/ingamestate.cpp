@@ -114,7 +114,7 @@ InGameState::InGameState() {
 
 	{															// Adding Floor
 		// How to fix support for non-uniform sizes of the map. E.g 2 in height and 6 in width.
-		std::vector<Uint8> map = Engine::getInstance().getMapLoader()->getMap("maps/sunkentemple.png");
+		std::vector<Uint8> map = Engine::getInstance().getMapLoader()->getMap("maps/smileyface.png");
 		auto transform = _floor->addComponent<FloorTransformComponent>();
 		transform->gridSize = Engine::getInstance().getMapLoader()->getHeight();
 		transform->scale = glm::vec3(1, 0.1, 1);

@@ -3,7 +3,7 @@
 #include "glm/glm.hpp"
 
 
-struct GunComponent : public Component<GunComponent> {
+struct GunComponent : public Component {
 	enum GunType : int {RAYGUN = 0, ENERGYGUN};
 
 	struct Gun {

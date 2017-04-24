@@ -4,7 +4,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
 
-struct HitboxComponent : public Component<HitboxComponent> {
+struct HitboxComponent : public Component {
 	enum HitboxType : int {SPHERE = 0, TETRAHEDRON, AABB};
 
 	struct Hitbox {
