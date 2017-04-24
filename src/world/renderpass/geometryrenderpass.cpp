@@ -79,7 +79,7 @@ void GeometryRenderPass::render(World& world) {
 	_shader->setUniform("v", cameraComponent->viewMatrix);
 	_shader->setUniform("p", cameraComponent->projectionMatrix);
 
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto model = entity->getComponent<ModelComponent>();
 		if (!model)
 			continue;

@@ -10,7 +10,7 @@
 #include <cmath>
 #include "glm/glm.hpp"
 
-ParticleRenderPass::ParticleRenderPass(World& world) {
+ParticleRenderPass::ParticleRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>(0);
 	_shader = std::make_shared<ShaderProgram>();
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
@@ -30,12 +30,8 @@ void ParticleRenderPass::render(World& world) {
 	if (!cameraComponent)
 		return;
 
-	auto transformComponent = camera->getComponent<TransformComponent>();
-	if (!transformComponent)
-		return;
-
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto particle = entity->getComponent<ParticleComponent>();
 		if (!particle)
 			continue;

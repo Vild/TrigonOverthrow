@@ -11,7 +11,7 @@
 #include <glm/glm.hpp>
 
 void LookAtSystem::update(World& world, float delta) {
-	for (std::shared_ptr<Entity> entity : world.getEntities()) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto lookat = entity->getComponent<LookAtComponent>();
 		if (!lookat || !lookat->target)
 			continue;

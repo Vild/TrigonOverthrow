@@ -9,13 +9,35 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <cmath>
+#include <cstdio>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
-#include "world/entity/playerentity.hpp"
-#include "world/entity/floorentity.hpp"
 #include "world/component/lookatcomponent.hpp"
 #include "world/component/cameracomponent.hpp"
 
+#include "world/system/inputsystem.hpp"
+#include "world/system/physicssystem.hpp"
+#include "world/system/imguisystem.hpp"
+#include "world/system/lookatsystem.hpp"
+#include "world/system/camerasystem.hpp"
+#include "world/system/particlesystem.hpp"
+
+#include "world/renderpass/geometryrenderpass.hpp"
+#include "world/renderpass/ssaorenderpass.hpp"
+#include "world/renderpass/gaussianrenderpass.hpp"
+#include "world/renderpass/lightingrenderpass.hpp"
+#include "world/renderpass/particlerenderpass.hpp"
+#include "world/renderpass/textrenderpass.hpp"
+
+#include "state/ingamestate.hpp"
+#include "state/mainmenustate.hpp"
+
 Engine::~Engine() {
+	TTF_Quit();
+	Mix_Quit();
 	IMG_Quit();
 
 	ImGui_ImplSdlGL3_Shutdown();
@@ -55,10 +77,13 @@ int Engine::run(bool vsync) {
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED || event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 					_width = event.window.data1;
 					_height = event.window.data2;
-					_world->resize(_width, _height);
+					_system_resize(_width, _height);
 
-					{
-						std::shared_ptr<CameraComponent> cc = _camera->getComponent<CameraComponent>();
+					World& world = getState().getWorld();
+					for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+						CameraComponent* cc = entity->getComponent<CameraComponent>();
+						if (!cc)
+							continue;
 						cc->aspect = (_width * 1.0) / _height;
 						cc->recalculateProjectionMatrix();
 					}
@@ -84,9 +109,11 @@ int Engine::run(bool vsync) {
 
 		_hidInput->update();
 
-		_world->tick(delta);
+		_system_tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
+		if (!getStatePtr())
+			break;
 	}
 	return 0;
 }
@@ -99,19 +126,41 @@ void Engine::_init(bool vsync) {
 	_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
 	_meshLoader = std::make_shared<MeshLoader>();
 	_hidInput = std::make_shared<HIDInput>();
+	_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
 
-	_world = std::make_shared<World>();
+	_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
 
-	std::shared_ptr<Entity> target;
-	_world->addEntity(target = std::static_pointer_cast<Entity>(std::make_shared<PlayerEntity>()));
-	_world->addEntity(_camera = std::make_shared<CameraEntity>());
-	_camera->getComponent<LookAtComponent>()->target = target;
-	_world->addEntity(std::make_shared<FloorEntity>());
+	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
+	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
+	_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
+	setState<InGameState>();
+	_setupSystems();
 }
 
 void Engine::_initSDL() {
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-		throw "SDL could not be inited";
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		fprintf(stderr, "SDL_Init: Failed to init!\n");
+		fprintf(stderr, "SDL_Init: %s\n", SDL_GetError());
+		throw "Failed to load SDL2";
+	}
+
+	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
+		fprintf(stderr, "IMG_Init: Failed to init, requires PNG support!\n");
+		fprintf(stderr, "IMG_Init: %s\n", IMG_GetError());
+		throw "Failed to load SDL2_image";
+	}
+
+	if ((Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG) != MIX_INIT_OGG) {
+		fprintf(stderr, "Mix_Init: Failed to init, requires ogg support!\n");
+		fprintf(stderr, "Mix_Init: %s\n", Mix_GetError());
+		throw "Failed to load SDL2_mixer";
+	}
+
+	if (TTF_Init() < 0) {
+		fprintf(stderr, "TTF_GetError: Failed to init!\n");
+		fprintf(stderr, "TTF_GetError: %s\n", TTF_GetError());
+		throw "Failed to load SDL2_ttf";
+	}
 
 	_window = SDL_CreateWindow("TurtleGL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
 														 SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -140,9 +189,6 @@ void Engine::_initGL() {
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	glViewport(0, 0, _width, _height);
-
-	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG)
-		throw "Failed to load SDL_Image";
 }
 
 void Engine::_initImGui() {
@@ -195,4 +241,70 @@ void Engine::_initImGui() {
 	style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00f, 0.84f, 0.84f, 1.00f);
 	style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.13f, 0.40f, 0.40f, 1.00f);
 	style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.09f, 0.27f, 0.27f, 0.67f);
+}
+
+void Engine::_setupSystems() {
+	// Pure systems
+	_systems.push_back(std::make_unique<ImGuiSystem>());
+	_systems.push_back(std::make_unique<InputSystem>());
+	_systems.push_back(std::make_unique<PhysicsSystem>());
+	_systems.push_back(std::make_unique<LookAtSystem>());
+	_systems.push_back(std::make_unique<CameraSystem>());
+	_systems.push_back(std::make_unique<ParticleSystem>());
+
+	// Render passes
+	{
+		std::unique_ptr<GeometryRenderPass> geometry = std::make_unique<GeometryRenderPass>();
+		std::unique_ptr<SSAORenderSystem> ssao = std::make_unique<SSAORenderSystem>();
+		std::unique_ptr<GaussianRenderPass> gaussian = std::make_unique<GaussianRenderPass>();
+		std::unique_ptr<LightingRenderPass> lighting = std::make_unique<LightingRenderPass>();
+		std::unique_ptr<ParticleRenderPass> particles = std::make_unique<ParticleRenderPass>();
+		std::unique_ptr<TextRenderPass> text = std::make_unique<TextRenderPass>();
+
+		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::PositionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position))
+			.attachInputTexture(SSAORenderSystem::InputAttachments::NormalMap, geometry->getAttachment(GeometryRenderPass::Attachment::normal));
+
+		gaussian->attachInputTexture(GaussianRenderPass::InputAttachments::Image, ssao->getAttachment(SSAORenderSystem::Attachments::OcclusionMap));
+
+		lighting->attachInputTexture(LightingRenderPass::InputAttachment::position, geometry->getAttachment(GeometryRenderPass::Attachment::position))
+			.attachInputTexture(LightingRenderPass::InputAttachment::normal, geometry->getAttachment(GeometryRenderPass::Attachment::normal))
+			.attachInputTexture(LightingRenderPass::InputAttachment::diffuseSpecular, geometry->getAttachment(GeometryRenderPass::Attachment::diffuseSpecular))
+			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
+			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::BlurredImage));
+
+		for (std::unique_ptr<System>& system : _systems) {
+			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
+			if (!particleSystem)
+				continue;
+			auto _gbuffer = particleSystem->getGBuffers();
+
+			// GIT-GUD: fixed in velocity and position to be output instead.
+			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::inPosition])
+				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::inVelocity]);
+
+			break;
+		}
+
+		_systems.push_back(std::move(geometry));
+		_systems.push_back(std::move(ssao));
+		_systems.push_back(std::move(gaussian));
+		_systems.push_back(std::move(lighting));
+		_systems.push_back(std::move(particles));
+		_systems.push_back(std::move(text));
+	}
+}
+
+void Engine::_system_tick(float delta) {
+	World& world = getState().getWorld();
+	for (const std::unique_ptr<System>& system : _systems)
+		system->update(world, delta);
+}
+
+void Engine::_system_resize(unsigned int width, unsigned int height) {
+	for (std::unique_ptr<System>& system : _systems) {
+		RenderPass* rp = dynamic_cast<RenderPass*>(system.get());
+		if (!rp)
+			continue;
+		rp->resize(width, height);
+	}
 }

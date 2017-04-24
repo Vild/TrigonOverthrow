@@ -1,6 +1,6 @@
 #pragma once
 #include "system.hpp"
-#include "../entity/entity.hpp"
+#include "../entity.hpp"
 
 class CameraSystem : public System {
 public:
