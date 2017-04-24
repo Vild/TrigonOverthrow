@@ -92,10 +92,8 @@ void GeometryRenderPass::render(World& world) {
 			if (!ft)
 				continue;
 			_floorShader->bind();
-			glDisable(GL_CULL_FACE);
 
 			model->render(ft->matrices, ft->gridSize * ft->gridSize);
-			glEnable(GL_CULL_FACE);
 			_shader->bind();
 		}
 	}

@@ -1,9 +1,9 @@
 import reggae;
 
 enum CompileCommand {
-	Compile = "g++ -c -std=c++14 -O0 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -fopenmp $in -o $out",
-	LinkTrigon = "g++ -std=c++14 -O0 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp $in -o $out",
-	LinkEditor = "g++ -std=c++14 -O0 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -fopenmp -lm -ldl -lsfml-graphics -lsfml-system -lsfml-window $in -o $out",
+	Compile = "g++ -c -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp $in -o $out",
+	LinkTrigon = "g++ -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp $in -o $out",
+	LinkEditor = "g++ -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lsfml-graphics -lsfml-system -lsfml-window $in -o $out",
 }
 
 Target[] MakeObjects(string src)() {
