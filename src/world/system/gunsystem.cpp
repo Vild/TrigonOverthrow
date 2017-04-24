@@ -30,7 +30,7 @@ void GunSystem::update(World& world, float delta) {
 					if (testAgainst(target, hitbox->type, gunComp->gun))
 						printf("I HIT SOMETHING BOSSS\n");
 						if (target->getComponent<LifeComponent>())
-							target->getComponent<LifeComponent>()->currHP -= 1;
+							target->getComponent<LifeComponent>()->currHP -= 4;
 				}
 				gunComp->shoot = false;
 			}
