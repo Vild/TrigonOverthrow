@@ -11,6 +11,8 @@ void LifeSystem::update(World& world, float delta) {
 			entity->makeDead();
 		if(entity->getName() == "Enemy")
 			printf("MaxHP: %i, currHP: %i\n", lifeComp->maxHP, lifeComp->currHP);
+
+		// TO-DO: Projectiles are spawned as entities, and their HP should be lowered each second.
 	}
 }
 
