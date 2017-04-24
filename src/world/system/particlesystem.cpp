@@ -41,7 +41,7 @@ void ParticleSystem::update(World& world, float delta) {
 
 		if (entity->getName() == "Player") {
 			auto gunComponent = entity->getComponent<GunComponent>();
-			//if (gunComponent->drawShot) {
+			if (gunComponent->drawShot) {
 				auto raygun = std::static_pointer_cast<GunComponent::RayGun>(gunComponent->gun);
 				direction = raygun->ray.dir;
 				pos = raygun->ray.o;
@@ -57,8 +57,7 @@ void ParticleSystem::update(World& world, float delta) {
 				_particleData->bindImageTexture(1, true);
 				// Barrier is in particlerenderpass.
 				glDispatchCompute((GLint)_textureSize, (GLint)_textureSize, 1);
-				gunComponent->drawShot = false;
-			//}
+			}
 		}
 	}
 }

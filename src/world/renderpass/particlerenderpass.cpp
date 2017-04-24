@@ -3,6 +3,7 @@
 #include "particlerenderpass.hpp"
 #include "../component/particlecomponent.hpp"
 #include "../component/transformcomponent.hpp"
+#include "../component/guncomponent.hpp"
 #include "../../engine.hpp"
 #include "../component/cameracomponent.hpp"
 #include "../component/lookatcomponent.hpp"
@@ -40,6 +41,9 @@ void ParticleRenderPass::render(World& world) {
 		// wait for reading/writing before rendering.
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+		if (entity->getName() == "Player")
+			entity->getComponent<GunComponent>()->drawShot = false;
+
 		particle->point->render(particle->_nrOfParticles, GL_POINTS);
 	}
 }
