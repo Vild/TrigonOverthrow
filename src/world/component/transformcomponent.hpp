@@ -10,6 +10,8 @@ struct TransformComponent : public Component {
 	glm::vec3 rotation = glm::vec3(0, 0, 0);
 	glm::mat4 matrix = glm::mat4();
 
+	virtual ~TransformComponent();
+
 	void recalculateMatrix();
 	glm::vec3 getDirection();
 

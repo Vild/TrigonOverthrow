@@ -25,6 +25,8 @@ GaussianRenderPass::GaussianRenderPass() {
 	generateKernel();
 }
 
+GaussianRenderPass::~GaussianRenderPass() {}
+
 std::unique_ptr<Mesh> GaussianRenderPass::makeFsQuad() {
 	std::vector<Vertex> vertices = {
 		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}},	//
@@ -74,8 +76,7 @@ void GaussianRenderPass::generateKernel() {
 		kernel.push_back(factor);
 	}
 
-	for (auto & k : kernel)
-	{
+	for (auto& k : kernel) {
 		k /= kernelSum;
 	}
 

@@ -19,7 +19,6 @@
 #include "../world/component/hitboxcomponent.hpp"
 #include "../world/component/guncomponent.hpp"
 
-
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
 
@@ -84,24 +83,23 @@ InGameState::InGameState() {
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
 		model->meshData->mesh
 			->addBuffer("m",
-				[](GLuint id) {
-			glBindBuffer(GL_ARRAY_BUFFER, id);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+									[](GLuint id) {
+										glBindBuffer(GL_ARRAY_BUFFER, id);
+										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
-			for (int i = 0; i < 4; i++) {
-				glEnableVertexAttribArray(ShaderAttributeID::m + i);
-				glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-				glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-			}
+										for (int i = 0; i < 4; i++) {
+											glEnableVertexAttribArray(ShaderAttributeID::m + i);
+											glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
+											glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
+										}
 
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		})
+										glBindBuffer(GL_ARRAY_BUFFER, 0);
+									})
 			.finalize();
 
 		auto hitbox = _enemy->addComponent<HitboxComponent>();
 		hitbox->addHitbox(HitboxComponent::SPHERE, transform->position);
 		_enemy->addComponent<PhysicsComponent>();
-
 
 		auto text = _enemy->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
@@ -112,7 +110,7 @@ InGameState::InGameState() {
 		text->transform.recalculateMatrix();
 	}
 
-	{															// Adding Floor
+	{ // Adding Floor
 		// How to fix support for non-uniform sizes of the map. E.g 2 in height and 6 in width.
 		std::vector<Uint8> map = Engine::getInstance().getMapLoader()->getMap("maps/smileyface.png");
 		auto transform = _floor->addComponent<FloorTransformComponent>();
@@ -127,10 +125,10 @@ InGameState::InGameState() {
 
 		for (int z = 0; z < gridSize; z++)
 			for (int x = 0; x < gridSize; x++) {
-				topData[z * gridSize + x] = float(map[z * gridSize + x]/float(5));
+				topData[z * gridSize + x] = float(map[z * gridSize + x] / float(5));
 			}
 
-		//for (int z = 0; z < gridSize; z++)
+		// for (int z = 0; z < gridSize; z++)
 		//	for (int x = 0; x < gridSize; x++) {
 		//		auto p = topData[z * gridSize + x];
 		//		const auto& forwards = z > 0 ? topData[(z - 1) * gridSize + x] : p;
@@ -207,6 +205,8 @@ InGameState::InGameState() {
 		delete[] neighborData;
 	}
 }
+
+InGameState::~InGameState() {}
 
 void InGameState::onEnter(State* prev) {}
 void InGameState::onLeave(State* next) {}

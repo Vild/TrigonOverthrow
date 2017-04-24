@@ -11,6 +11,8 @@ HIDInput::HIDInput() {
 	_kbState = SDL_GetKeyboardState(&_keyCount);
 }
 
+HIDInput::~HIDInput() {}
+
 void HIDInput::update() {
 	auto& engine = Engine::getInstance();
 

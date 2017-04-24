@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+ButtonSystem::~ButtonSystem() {}
+
 void ButtonSystem::update(World& world, float delta) {
 	Engine& engine = Engine::getInstance();
 	auto camera = engine.getCamera();

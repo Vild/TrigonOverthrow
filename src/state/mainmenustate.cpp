@@ -86,6 +86,8 @@ MainMenuState::MainMenuState() {
 	}
 }
 
+MainMenuState::~MainMenuState() {}
+
 void MainMenuState::onEnter(State* prev) {}
 void MainMenuState::onLeave(State* next) {}
 

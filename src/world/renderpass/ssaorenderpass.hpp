@@ -14,6 +14,7 @@ public:
 	typedef int Camera;
 
 	SSAORenderSystem();
+	virtual ~SSAORenderSystem();
 
 	// Inherited via RenderPass
 	virtual void render(World& world) override;

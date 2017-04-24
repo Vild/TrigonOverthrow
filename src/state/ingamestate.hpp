@@ -5,6 +5,7 @@
 class InGameState : public State {
 public:
 	InGameState();
+	virtual ~InGameState();
 
 	virtual void onEnter(State* prev);
 	virtual void onLeave(State* next);

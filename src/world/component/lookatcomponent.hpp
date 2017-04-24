@@ -23,6 +23,8 @@ struct LookAtComponent : public Component {
 	// for FollowMode::followByOffset
 	glm::vec3 offsetFromTarget;
 
+	virtual ~LookAtComponent();
+
 	virtual void registerImGui();
 	virtual std::string name() { return "LookAtComponent"; }
 };

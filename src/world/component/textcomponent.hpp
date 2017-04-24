@@ -13,6 +13,8 @@ struct TextComponent : public Component {
 	// XXX: Hack, fix?
 	TransformComponent transform;
 
+	virtual ~TextComponent();
+
 	virtual void registerImGui();
 
 	virtual std::string name() { return "TextComponent"; }

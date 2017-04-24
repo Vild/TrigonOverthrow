@@ -5,6 +5,8 @@
 #include "../component/cameracomponent.hpp"
 #include <glm/gtx/transform.hpp>
 
+CameraSystem::~CameraSystem() {}
+
 void CameraSystem::update(World& world, float delta) {
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto cameraComponent = entity->getComponent<CameraComponent>();

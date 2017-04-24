@@ -5,6 +5,7 @@
 
 struct CameraComponent : public Component {
 	CameraComponent();
+	virtual ~CameraComponent();
 
 	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;

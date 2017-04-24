@@ -9,6 +9,8 @@ public:
 	enum Attachment : GLint { inPosition = 0, inVelocity, outPosition, outVelocity };
 
 	ParticleSystem();
+	virtual ~ParticleSystem();
+
 	virtual void update(World& world, float delta);
 	virtual void registerImGui();
 	inline virtual std::string name() { return "ParticleSystem"; };

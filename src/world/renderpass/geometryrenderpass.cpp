@@ -59,6 +59,8 @@ GeometryRenderPass::GeometryRenderPass() {
 	_floorShader->setUniform("diffuseTexture", 0).setUniform("normalTexture", 1).setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
 }
 
+GeometryRenderPass::~GeometryRenderPass() {}
+
 void GeometryRenderPass::render(World& world) {
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
