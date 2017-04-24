@@ -52,11 +52,9 @@ void InputSystem::update(World& world, float delta) {
 				gunComponent->shoot = true;
 				gunComponent->drawShot = true;
 				gunComponent->cooldown = gunComponent->cooldownLength;
-				printf("Shots fired!\n");
 			}
 			else if(gunComponent->cooldown > 0)
 				gunComponent->cooldown -= 1 * delta;
-			printf("%i\n", gunComponent->cooldown);
 		}
 	}
 }

@@ -11,7 +11,7 @@
 ParticleSystem::ParticleSystem() {
 	_programs.resize(2);
 	_programs[0] = std::make_shared<ShaderProgram>();
-	_programs[0]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_laser_init.comp", ShaderType::compute)).finalize();
+	_programs[0]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute)).finalize();
 	_programs[0]->bind().addUniform("delta").addUniform("emitterPos").addUniform("emitterDir").addUniform("entryPos");
 
 	//_programs[1] = std::make_shared<ShaderProgram>();
@@ -41,8 +41,7 @@ void ParticleSystem::update(World& world, float delta) {
 
 		if (entity->getName() == "Player") {
 			auto gunComponent = entity->getComponent<GunComponent>();
-			if (gunComponent->drawShot) {
-				printf("cockcokcokc\n");
+			//if (gunComponent->drawShot) {
 				auto raygun = std::static_pointer_cast<GunComponent::RayGun>(gunComponent->gun);
 				direction = raygun->ray.dir;
 				pos = raygun->ray.o;
@@ -59,7 +58,7 @@ void ParticleSystem::update(World& world, float delta) {
 				// Barrier is in particlerenderpass.
 				glDispatchCompute((GLint)_textureSize, (GLint)_textureSize, 1);
 				gunComponent->drawShot = false;
-			}
+			//}
 		}
 	}
 }
