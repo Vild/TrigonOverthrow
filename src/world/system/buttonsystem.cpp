@@ -95,7 +95,7 @@ void ButtonSystem::update(World& world, float delta) {
 			continue;
 		}
 
-		printf("Is over: %s t: %f\n", entity->getName().c_str(), t);
+		//printf("Is over: %s t: %f\n", entity->getName().c_str(), t);
 		if (t < distanceHit) {
 			distanceHit = t;
 			entityHit = entity.get();
