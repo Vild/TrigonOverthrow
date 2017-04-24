@@ -23,6 +23,7 @@
     <ClCompile Include="src\gl\gbuffer.cpp" />
     <ClCompile Include="src\gl\mesh.cpp" />
     <ClCompile Include="src\gl\shader.cpp" />
+    <ClCompile Include="src\gl\simplemesh.cpp" />
     <ClCompile Include="src\gl\texture.cpp" />
     <ClCompile Include="src\io\hidinput.cpp" />
     <ClCompile Include="src\io\meshloader.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
+    <ClCompile Include="src\world\renderpass\bulletdebugrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\geometryrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\lightingrenderpass.cpp" />
@@ -74,6 +76,7 @@
     <ClInclude Include="src\gl\gbuffer.hpp" />
     <ClInclude Include="src\gl\mesh.hpp" />
     <ClInclude Include="src\gl\shader.hpp" />
+    <ClInclude Include="src\gl\simplemesh.hpp" />
     <ClInclude Include="src\gl\texture.hpp" />
     <ClInclude Include="src\io\hidinput.hpp" />
     <ClInclude Include="src\io\meshloader.hpp" />
@@ -108,6 +111,7 @@
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
+    <ClInclude Include="src\world\renderpass\bulletdebugrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\geometryrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\lightingrenderpass.hpp" />

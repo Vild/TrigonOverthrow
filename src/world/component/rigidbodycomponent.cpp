@@ -49,6 +49,11 @@ btMotionState * RigidBodyComponent::getMotionState()
 	return state;
 }
 
+glm::vec3 RigidBodyComponent::getHitboxHalfSize()
+{
+	return hitboxHalfSize;
+}
+
 void RigidBodyComponent::setMass(btScalar mass)
 {
 	this->mass = mass;

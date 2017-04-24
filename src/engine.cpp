@@ -32,6 +32,7 @@
 #include "world/renderpass/lightingrenderpass.hpp"
 #include "world/renderpass/particlerenderpass.hpp"
 #include "world/renderpass/textrenderpass.hpp"
+#include "world/renderpass/bulletdebugrenderpass.hpp"
 
 #include "state/ingamestate.hpp"
 #include "state/mainmenustate.hpp"
@@ -291,9 +292,10 @@ void Engine::_setupSystems() {
 		_systems.push_back(std::move(ssao));
 		_systems.push_back(std::move(gaussian));
 		_systems.push_back(std::move(lighting));
-
 		_systems.push_back(std::move(particles));
 		_systems.push_back(std::move(text));
+
+		_systems.push_back(std::make_unique<BulletDebugRenderPass>());
 	}
 }
 

@@ -16,6 +16,7 @@ public:
 
 	btRigidBody * getRigidBody();
 	btMotionState * getMotionState();
+	glm::vec3 getHitboxHalfSize();
 
 	void setMass(btScalar mass);
 	void setFriction(btScalar friction);

@@ -36,6 +36,14 @@ private:
 	glm::mat4 matrix;
 
 	void recalculateMatrix();
-	
-
 };
+
+inline glm::vec3 cast(btVector3 const & v)
+{
+	return { v.x(), v.y(), v.z() };
+}
+
+inline glm::quat cast(btQuaternion const & q)
+{
+	return { q.w(), q.x(), q.y(), q.z() };
+}
