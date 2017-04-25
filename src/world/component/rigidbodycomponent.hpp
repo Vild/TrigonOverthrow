@@ -4,7 +4,7 @@
 #include <btBulletCollisionCommon.h>
 #include <glm/glm.hpp>
 
-class RigidBodyComponent : public Component<RigidBodyComponent>
+class RigidBodyComponent : public Component
 {
 public:
 	RigidBodyComponent();

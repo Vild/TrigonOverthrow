@@ -42,6 +42,9 @@
     <ClCompile Include="src\io\hidinput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\io\maploader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\io\meshloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,9 +81,6 @@
     <ClCompile Include="src\state\state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\collisionbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\world\component\buttoncomponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -91,6 +91,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\component\floortransformcomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\component\guncomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\component\hitboxcomponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp">
@@ -147,7 +153,13 @@
     <ClCompile Include="src\world\system\bulletphysicssystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\system\buttonsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\world\system\camerasystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\system\gunsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\system\imguisystem.cpp">
@@ -163,6 +175,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\system\physicssystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\system\system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\entity.cpp">
@@ -204,6 +219,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\io\hidinput.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\maploader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\io\meshloader.hpp">
@@ -257,9 +275,6 @@
     <ClInclude Include="src\state\state.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\collisionbox.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\world\component\buttoncomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -270,6 +285,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\component\floortransformcomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\guncomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\hitboxcomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\component\kbmouseinputcomponent.hpp">
@@ -326,7 +347,13 @@
     <ClInclude Include="src\world\system\bulletphysicssystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\world\system\buttonsystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\world\system\camerasystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\system\gunsystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\system\imguisystem.hpp">

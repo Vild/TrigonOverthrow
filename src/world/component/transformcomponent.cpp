@@ -48,6 +48,11 @@ glm::vec3 TransformComponent::getDirection() {
 	return glm::mat3_cast(rotation) * forward;
 }
 
+glm::vec3 TransformComponent::getScale()
+{
+	return scale;
+}
+
 void TransformComponent::setPosition(const glm::vec3 & position)
 {
 	this->position = position;
