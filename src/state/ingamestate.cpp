@@ -68,7 +68,7 @@ InGameState::InGameState() {
 		auto life = _player->addComponent<LifeComponent>();
 
 		auto gun = _player->addComponent<GunComponent>();
-		gun->addGun(GunComponent::GunType::RAYGUN, transform->position, transform->getDirection());
+		gun->addGun(GunComponent::GunType::RAYGUN, 60); // 60 is the the cooldown rate per frame.
 
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
@@ -106,8 +106,9 @@ InGameState::InGameState() {
 		auto hitbox = _enemy->addComponent<HitboxComponent>();
 		hitbox->addHitbox(HitboxComponent::SPHERE, transform->position);
 		_enemy->addComponent<PhysicsComponent>();
-
+		
 		auto life = _enemy->addComponent<LifeComponent>();
+		life->currHP = life->maxHP = 5;
 
 		auto text = _enemy->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");

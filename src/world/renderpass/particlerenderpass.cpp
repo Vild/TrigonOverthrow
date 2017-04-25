@@ -41,9 +41,6 @@ void ParticleRenderPass::render(World& world) {
 		// wait for reading/writing before rendering.
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
-		if (entity->getName() == "Player")
-			entity->getComponent<GunComponent>()->drawShot = false;
-
 		particle->point->render(particle->_nrOfParticles, GL_POINTS);
 	}
 }

@@ -50,11 +50,7 @@ void InputSystem::update(World& world, float delta) {
 			auto gunComponent = entity->getComponent<GunComponent>();
 			if (hid->getKey(SDL_SCANCODE_F) && gunComponent->cooldown <= 0) {
 				gunComponent->shoot = true;
-				gunComponent->drawShot = true;
-				gunComponent->cooldown = gunComponent->cooldownLength;
 			}
-			else if(gunComponent->cooldown > 0)
-				gunComponent->cooldown -= 1 * delta;
 		}
 	}
 }
