@@ -141,6 +141,15 @@ int Engine::run(bool vsync) {
 
 		{
 			std::vector<std::unique_ptr<Entity>>& entities = getState().getWorld().getEntities();
+			// Rigidbody entities in bulletphysicssystem.
+			for (std::unique_ptr<Entity>& entity : entities) {
+				auto rgbComponent = entity->getComponent<RigidBodyComponent>();
+				if (!rgbComponent)
+					continue;
+				if (entity->isDead())
+					getSystem<BulletPhyisicsSystem>()->removeRigidBody(rgbComponent);
+			}
+			// Entities in world.
 			entities.erase(
 				std::remove_if(
 					entities.begin(),
@@ -150,11 +159,6 @@ int Engine::run(bool vsync) {
 				entities.end()
 			);
 		}
-		
-		{
-			auto rgbEntities = getSystem<BulletPhyisicsSystem>();
-		}
-
 	}
 	return 0;
 }

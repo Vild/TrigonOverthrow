@@ -70,7 +70,6 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	auto rigidbody = projectile->addComponent<RigidBodyComponent>();
 	rigidbody->setHitboxHalfSize(projTransComp->getScale());
 	rigidbody->setMass(1);
-	rigidbody->setPosition(projTransComp->getPosition() + glm::vec3(0,0, rigidbody->getHitboxHalfSize().z));
 	Engine::getInstance().getSystem<BulletPhyisicsSystem>()->addRigidBody(rigidbody);
 }
 

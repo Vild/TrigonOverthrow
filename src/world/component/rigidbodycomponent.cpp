@@ -72,7 +72,3 @@ void RigidBodyComponent::setHitboxHalfSize(const glm::vec3 & size)
 	shape = new btBoxShape({ size.x, size.y, size.z });
 	rigidBody->setCollisionShape(shape);
 }
-
-void RigidBodyComponent::setPosition(const glm::vec3& pos) {
-	rigidBody->translate(btVector3(pos.x, pos.y, pos.z));
-}

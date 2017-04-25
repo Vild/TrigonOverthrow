@@ -21,7 +21,6 @@ public:
 	void setMass(btScalar mass);
 	void setFriction(btScalar friction);
 	void setHitboxHalfSize(const glm::vec3 & size);
-	void setPosition(const glm::vec3& pos);
 
 private:
 	btRigidBody * rigidBody;
