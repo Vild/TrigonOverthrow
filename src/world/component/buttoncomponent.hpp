@@ -13,6 +13,7 @@ struct ButtonComponent : public Component {
 	typedef void (*ButtonCallback)(Entity* entity, State& state, MouseState mouse);
 
 	ButtonComponent();
+	virtual ~ButtonComponent();
 
 	glm::vec3 position;
 	glm::vec3 size;

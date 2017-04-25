@@ -21,7 +21,7 @@ MainMenuState::MainMenuState() {
 	_quit = _world.addEntity(sole::uuid4(), "Quit");
 
 	{
-		_camera->addComponent<TransformComponent>()->recalculateMatrix();
+		//_camera->addComponent<TransformComponent>()->recalculateMatrix();
 		_camera->addComponent<CameraComponent>();
 
 		auto lookAt = _camera->addComponent<LookAtComponent>();
@@ -30,25 +30,25 @@ MainMenuState::MainMenuState() {
 		lookAt->offsetFromTarget = glm::vec3{0, 0, -4};
 	}
 
-	{ _target->addComponent<TransformComponent>()->recalculateMatrix(); }
+	//{ _target->addComponent<TransformComponent>()->recalculateMatrix(); }
 
 	{
 		auto transform = _title->addComponent<TransformComponent>();
-		transform->position = glm::vec3{0, 0.4, 0};
-		transform->recalculateMatrix();
+		transform->setPosition({0, 0.4, 0});
+		//transform->recalculateMatrix();
 
 		auto text = _title->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer("Trigon", false, 10);
-		text->transform.position = glm::vec3{-0.3, 0, 0};
-		text->transform.scale = glm::vec3{5, 5, 5};
+		text->transform.setPosition({-0.3, 0, 0});
+		text->transform.setScale({5, 5, 5});
 	}
 
 	{
 		auto transform = _play->addComponent<TransformComponent>();
 		// transform->position = glm::vec3{0, -0.2, 0};
-		transform->position = glm::vec3{-0.5625, -0.5625 - 0.2, 0};
-		transform->scale = glm::vec3{1.125, 3 * 1.0 / 16, 3 * 1.0 / 16};
-		transform->recalculateMatrix();
+		transform->setPosition({-0.5625, -0.5625 - 0.2, 0});
+		transform->setScale({1.125, 3 * 1.0 / 16, 3 * 1.0 / 16});
+		//transform->recalculateMatrix();
 
 		auto button = _play->addComponent<ButtonComponent>();
 		button->size = glm::vec3{2, 2, 2};
@@ -57,8 +57,8 @@ MainMenuState::MainMenuState() {
 
 		auto text = _play->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer(" Play ", false, 6);
-		text->transform.position = glm::vec3{0, 0, 0};
-		text->transform.scale = glm::vec3{3, 3, 3} / transform->scale;
+		text->transform.setPosition({0, 0, 0});
+		text->transform.setScale(glm::vec3{3, 3, 3} / transform->getScale());
 
 		_play->registerImGui = &MainMenuState::_registerImGUI;
 		_toggleBox(*_play);
@@ -67,9 +67,9 @@ MainMenuState::MainMenuState() {
 	{
 		auto transform = _quit->addComponent<TransformComponent>();
 		// transform->position = glm::vec3{0, -0.75, 0};
-		transform->position = glm::vec3{-0.5625, -0.5625 - 0.75, 0};
-		transform->scale = glm::vec3{1.125, 1.0 / 16, 1.0 / 16};
-		transform->recalculateMatrix();
+		transform->setPosition({-0.5625, -0.5625 - 0.75, 0});
+		transform->setScale({1.125, 1.0 / 16, 1.0 / 16});
+		//transform->recalculateMatrix();
 
 		auto button = _quit->addComponent<ButtonComponent>();
 		button->size = glm::vec3{2, 2, 2};
@@ -78,13 +78,15 @@ MainMenuState::MainMenuState() {
 
 		auto text = _quit->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer(" Quit ", false, 6);
-		text->transform.position = glm::vec3{0, 0, 0};
-		text->transform.scale = glm::vec3{3, 3, 3} / transform->scale;
+		text->transform.setPosition({ 0, 0, 0 });
+		text->transform.setScale(glm::vec3{3, 3, 3} / transform->getScale());
 
 		_quit->registerImGui = &MainMenuState::_registerImGUI;
 		_toggleBox(*_quit);
 	}
 }
+
+MainMenuState::~MainMenuState() {}
 
 void MainMenuState::onEnter(State* prev) {}
 void MainMenuState::onLeave(State* next) {}

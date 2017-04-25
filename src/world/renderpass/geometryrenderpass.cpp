@@ -59,6 +59,8 @@ GeometryRenderPass::GeometryRenderPass() {
 	_floorShader->setUniform("diffuseTexture", 0).setUniform("normalTexture", 1).setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
 }
 
+GeometryRenderPass::~GeometryRenderPass() {}
+
 void GeometryRenderPass::render(World& world) {
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
@@ -86,7 +88,7 @@ void GeometryRenderPass::render(World& world) {
 
 		auto transform = entity->getComponent<TransformComponent>();
 		if (transform)
-			model->render(transform->matrix);
+			model->render(transform->getMatrix());
 		else {
 			auto ft = entity->getComponent<FloorTransformComponent>();
 			if (!ft)
@@ -96,6 +98,10 @@ void GeometryRenderPass::render(World& world) {
 			model->render(ft->matrices, ft->gridSize * ft->gridSize);
 			_shader->bind();
 		}
+
+#ifdef DEBUG
+		auto rigidBody = entity
+#endif
 	}
 }
 

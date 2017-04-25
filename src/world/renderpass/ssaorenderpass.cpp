@@ -64,6 +64,8 @@ SSAORenderSystem::SSAORenderSystem() {
 	generateUniformData(width, height);
 }
 
+SSAORenderSystem::~SSAORenderSystem() {}
+
 float SSAORenderSystem::lerp(float a, float b, float f) {
 	return a + f * (b - a);
 }

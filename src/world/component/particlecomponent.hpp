@@ -27,6 +27,8 @@ struct ParticleComponent : public Component {
 	float particleSize;
 	int textureSize;
 
+	virtual ~ParticleComponent();
+
 	void addEmitter(glm::vec3 dir, int nrOfParticles) {
 		emitter = std::make_shared<Emitter>(dir);
 		_nrOfParticles = nrOfParticles;

@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+ButtonSystem::~ButtonSystem() {}
+
 void ButtonSystem::update(World& world, float delta) {
 	Engine& engine = Engine::getInstance();
 	auto camera = engine.getCamera();
@@ -60,9 +62,9 @@ void ButtonSystem::update(World& world, float delta) {
 		float tmin = -std::numeric_limits<float>::infinity();
 		float tmax = std::numeric_limits<float>::infinity();
 
-		glm::vec3 toCenter = glm::vec3(transform->matrix[3]) - origin;
+		glm::vec3 toCenter = glm::vec3(transform->getMatrix()[3]) - origin;
 
-		glm::mat3 axies = glm::mat3(transform->matrix);
+		glm::mat3 axies = glm::mat3(transform->getMatrix());
 
 		float t;
 

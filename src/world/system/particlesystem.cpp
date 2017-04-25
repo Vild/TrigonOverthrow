@@ -29,6 +29,8 @@ ParticleSystem::ParticleSystem() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+ParticleSystem::~ParticleSystem() {}
+
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
 	// Gotta change how this system works abit. 

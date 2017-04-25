@@ -2,12 +2,11 @@
 #include "component.hpp"
 #include "glm/glm.hpp"
 
-
 struct GunComponent : public Component {
-	enum GunType : int {RAYGUN = 0, ENERGYGUN};
+	enum GunType : int { RAYGUN = 0, ENERGYGUN };
 
 	GunType type;
-	
+
 	int cooldown;
 	int cooldownLength;
 

@@ -5,9 +5,7 @@ MapLoader::MapLoader() {
 	_imageData = nullptr;
 }
 
-MapLoader::~MapLoader() {
-	
-}
+MapLoader::~MapLoader() {}
 
 std::vector<Uint8> MapLoader::getMap(const std::string& filename) {
 	// Don't need _data member variable. Might have a list of maps instead.

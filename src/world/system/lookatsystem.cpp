@@ -10,6 +10,8 @@
 
 #include <glm/glm.hpp>
 
+LookAtSystem::~LookAtSystem() {}
+
 void LookAtSystem::update(World& world, float delta) {
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto lookat = entity->getComponent<LookAtComponent>();
@@ -25,25 +27,28 @@ void LookAtSystem::update(World& world, float delta) {
 			continue;
 
 		if (lookat->followMode == FollowMode::followByDistance) {
-			glm::vec3 dir = glm::normalize(target->position - transform->position);
+			glm::vec3 dir = glm::normalize(target->getPosition() - transform->getPosition());
 
-			float dist = glm::distance(transform->position, target->position);
+			float dist = glm::distance(transform->getPosition(), target->getPosition());
+
 			if (dist > lookat->maxDistance)
-				transform->position += dir * delta;
+				transform->move(dir * delta);
 			else if (dist < lookat->minDistance)
-				transform->position -= dir * delta;
+				transform->move(-dir * delta);
+
 		} else if (lookat->followMode == FollowMode::followByOffset) {
-			transform->position = target->position + lookat->offsetFromTarget;
+			transform->setPosition(target->getPosition() + lookat->offsetFromTarget);
 		}
 
-		glm::vec3 dir = glm::normalize(target->position - transform->position);
+		glm::vec3 tpos = target->getPosition();
+		glm::vec3 cpos = transform->getPosition();
 
-		float pitch = asin(dir.y);
-		float yaw = acos(dir.x / cos(pitch));
+		glm::vec3 dir = glm::normalize(tpos - cpos);
+		
+		dir.x *= -1;
+		dir.y *= tpos.z > cpos.z ? 1 : -1;		
 
-		transform->rotation = glm::vec3(glm::degrees(pitch), 90 - glm::degrees(yaw), 0);
-
-		transform->recalculateMatrix();
+		transform->setDirection(dir);
 	}
 }
 

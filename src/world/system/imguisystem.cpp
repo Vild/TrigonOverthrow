@@ -5,6 +5,8 @@
 #include "../../lib/imgui.h"
 #include "../../engine.hpp"
 
+ImGuiSystem::~ImGuiSystem() {}
+
 void ImGuiSystem::update(World& world, float delta) {
 	State& state = Engine::getInstance().getState();
 

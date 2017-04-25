@@ -8,6 +8,8 @@ CameraComponent::CameraComponent() {
 	recalculateProjectionMatrix();
 }
 
+CameraComponent::~CameraComponent() {}
+
 void CameraComponent::recalculateProjectionMatrix() {
 	projectionMatrix = glm::perspective(fov, aspect, zNear, zFar);
 }

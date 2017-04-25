@@ -7,6 +7,7 @@
 class MainMenuState : public State {
 public:
 	MainMenuState();
+	virtual ~MainMenuState();
 
 	virtual void onEnter(State* prev);
 	virtual void onLeave(State* next);

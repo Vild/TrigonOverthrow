@@ -8,6 +8,8 @@
 #include "../src/gl/mesh.hpp"
 #include "../src/engine.hpp"
 
+GunSystem::~GunSystem() {}
+
 void GunSystem::update(World& world, float delta) {
 	std::vector<Entity*> toAdd;
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
@@ -63,11 +65,6 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 		.finalize();
 }
 
-
-//physicsComponent->acceleration = -physicsComponent->velocity / 0.05f;
-//physicsComponent->acceleration += inputDir.z * forward * accelSpeed;
-//physicsComponent->acceleration += inputDir.x * right * accelSpeed;
-//physicsComponent->acceleration += inputDir.y * up * accelSpeed;
 
 
 //bool GunSystem::fireRay(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType) {

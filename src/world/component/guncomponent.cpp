@@ -1,5 +1,6 @@
 #include "guncomponent.hpp"
 
+GunComponent::~GunComponent() {}
 
 void GunComponent::addGun(GunComponent::GunType inType, int inCooldown) {
 	type = inType;
@@ -8,6 +9,4 @@ void GunComponent::addGun(GunComponent::GunType inType, int inCooldown) {
 	shoot = false;
 }
 
-void GunComponent::registerImGui() {
-	
-}
+void GunComponent::registerImGui() {}

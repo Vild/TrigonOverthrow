@@ -5,6 +5,8 @@
 
 class State {
 public:
+	virtual ~State() = 0;
+
 	virtual void onEnter(State* prev) = 0;
 	virtual void onLeave(State* next) = 0;
 
@@ -14,3 +16,5 @@ public:
 protected:
 	World _world;
 };
+
+inline State::~State() {}

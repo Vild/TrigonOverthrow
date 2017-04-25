@@ -21,6 +21,8 @@ ParticleRenderPass::ParticleRenderPass() {
 	_shader->setUniform("particlePos", (GLint)InputAttachment::position).setUniform("particleVel", (GLint)InputAttachment::velocity);
 }
 
+ParticleRenderPass::~ParticleRenderPass() {}
+
 void ParticleRenderPass::render(World& world) {
 	// Render particles with instanced drawing.
 	auto camera = Engine::getInstance().getCamera();

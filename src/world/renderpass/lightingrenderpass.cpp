@@ -50,6 +50,8 @@ LightingRenderPass::LightingRenderPass() {
 		.finalize();
 }
 
+LightingRenderPass::~LightingRenderPass() {}
+
 void LightingRenderPass::render(World& world) {
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)

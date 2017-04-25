@@ -1,8 +1,9 @@
 #include "hitboxcomponent.hpp"
 
+HitboxComponent::~HitboxComponent() {}
+
 void HitboxComponent::addHitbox(HitboxComponent::HitboxType type, glm::vec3 pos) {
-	switch (type)
-	{
+	switch (type) {
 	case HitboxComponent::SPHERE: {
 		this->type = type;
 		std::shared_ptr<HitboxSphere> tempSphere = std::make_shared<HitboxSphere>();
@@ -12,11 +13,9 @@ void HitboxComponent::addHitbox(HitboxComponent::HitboxType type, glm::vec3 pos)
 		break;
 	}
 	case HitboxComponent::TETRAHEDRON: {
-
 		break;
 	}
 	case HitboxComponent::AABB: {
-
 		break;
 	}
 	default:
@@ -24,6 +23,4 @@ void HitboxComponent::addHitbox(HitboxComponent::HitboxType type, glm::vec3 pos)
 	}
 }
 
-void HitboxComponent::registerImGui() {
-	
-}
+void HitboxComponent::registerImGui() {}
