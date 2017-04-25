@@ -2,7 +2,10 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "lightingrenderpass.hpp"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "../../engine.hpp"
+#include "../../lib/imgui.h"
 
 #include "../component/transformcomponent.hpp"
 
@@ -19,12 +22,21 @@ LightingRenderPass::LightingRenderPass() {
 		.addUniform("defNormal")
 		.addUniform("defDiffuseSpecular")
 		.addUniform("defDepth")
-		.addUniform("defOcclusionMap");
+		.addUniform("defOcclusionMap")
+		.addUniform("cameraPos")
+		.addUniform("setting_dirLight.direction")
+		.addUniform("setting_dirLight.ambient")
+		.addUniform("setting_dirLight.diffuse")
+		.addUniform("setting_dirLight.specular");
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
 		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
 		.setUniform("defDepth", (GLint)InputAttachment::depth)
-		.setUniform("defOcclusionMap", (GLint)InputAttachment::OcclusionMap);
+		.setUniform("defOcclusionMap", (GLint)InputAttachment::OcclusionMap)
+		.setUniform("setting_dirLight.direction", _dirLight.direction)
+		.setUniform("setting_dirLight.ambient", _dirLight.ambient)
+		.setUniform("setting_dirLight.diffuse", _dirLight.diffuse)
+		.setUniform("setting_dirLight.specular", _dirLight.specular);
 
 	std::vector<Vertex> vertices = {
 		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}}, Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}},
@@ -63,7 +75,7 @@ void LightingRenderPass::render(World& world) {
 
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_shader->bind();
+	_shader->bind().setUniform("cameraPos", transformComponent->position);
 
 	_shader->setUniform("vp", glm::mat4(1));
 	_plane->render();
@@ -74,4 +86,15 @@ void LightingRenderPass::resize(unsigned int width, unsigned int height) {
 	glViewport(0, 0, width, height);
 }
 
-void LightingRenderPass::registerImGui() {}
+void LightingRenderPass::registerImGui() {
+	_shader->bind();
+
+	if (ImGui::DragFloat3("DirLight Direction", glm::value_ptr(_dirLight.direction), 0.1))
+		_shader->setUniform("setting_dirLight.direction", _dirLight.direction);
+	if (ImGui::DragFloat3("DirLight Ambient", glm::value_ptr(_dirLight.ambient), 0.1, 0, 1))
+		_shader->setUniform("setting_dirLight.ambient", _dirLight.ambient);
+	if (ImGui::DragFloat3("DirLight Diffuse", glm::value_ptr(_dirLight.diffuse), 0.1, 0, 1))
+		_shader->setUniform("setting_dirLight.diffuse", _dirLight.diffuse);
+	if (ImGui::DragFloat3("DirLight Specular", glm::value_ptr(_dirLight.specular), 0.1, 0, 1))
+		_shader->setUniform("setting_dirLight.specular", _dirLight.specular);
+}

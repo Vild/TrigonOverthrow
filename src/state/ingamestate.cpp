@@ -180,7 +180,7 @@ InGameState::InGameState() {
 			}
 
 		auto model = _floor->addComponent<ModelComponent>();
-		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/box.obj");
+		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/box.fbx");
 		model->meshData->mesh
 			->addBuffer("m",
 									[&](GLuint id) {
