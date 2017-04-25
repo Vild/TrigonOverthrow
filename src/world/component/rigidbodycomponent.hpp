@@ -1,5 +1,6 @@
 #pragma once
 #include "component.hpp"
+#include "transformcomponent.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 #include <glm/glm.hpp>
@@ -21,6 +22,7 @@ public:
 	void setMass(btScalar mass);
 	void setFriction(btScalar friction);
 	void setHitboxHalfSize(const glm::vec3 & size);
+	void setTransform(TransformComponent * transform);
 
 private:
 	btRigidBody * rigidBody;

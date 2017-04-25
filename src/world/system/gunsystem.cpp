@@ -46,20 +46,13 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	auto currRdbComp = me->getComponent<RigidBodyComponent>();
 	auto projRdbComp = projectile->addComponent<RigidBodyComponent>();
 	
-	auto projMs = projRdbComp->getMotionState();
-
-	btTransform projRdbTrans = currRdbComp->getRigidBody()->getWorldTransform();
-
-	printf("x: %f, y: %f, z: %f\n", cast(projRdbTrans.getOrigin()).x, cast(projRdbTrans.getOrigin()).y, cast(projRdbTrans.getOrigin()).z);
-
-
 	projRdbComp->setHitboxHalfSize(currRdbComp->getHitboxHalfSize() * 0.5f);
 	projRdbComp->setMass(1);
 	projRdbComp->setFriction(0);
 	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * 5.0f));
-	projRdbComp->getRigidBody()->setWorldTransform(projRdbTrans);
+	projRdbComp->setTransform(transProj);
+	projRdbComp->getRigidBody()->setGravity(cast(glm::vec3(0)));
 
-	//projMs->setWorldTransform(projRdbTrans);
 	//rdbComp->getRigidBody()->applyCentralImpulse(cast(glm::vec3(4)));
 
 	auto projLifeComp = projectile->addComponent<LifeComponent>();
