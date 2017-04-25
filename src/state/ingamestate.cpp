@@ -78,11 +78,8 @@ InGameState::InGameState() {
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setMass(1);
 		//rigidbody->setFriction(2);
+		rigidbody->setTransform(transform);
 
-		rigidbody->getMotionState()->setWorldTransform(btTransform(
-			cast(transform->getRotation()),
-			cast(transform->getPosition())
-		));
 		bulletphyiscs->addRigidBody(rigidbody);
 	}
 

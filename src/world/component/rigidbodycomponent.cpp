@@ -73,3 +73,11 @@ void RigidBodyComponent::setHitboxHalfSize(const glm::vec3 & size)
 	shape = new btBoxShape({ size.x, size.y, size.z });
 	rigidBody->setCollisionShape(shape);
 }
+
+void RigidBodyComponent::setTransform(TransformComponent * transform)
+{
+	state->setWorldTransform(btTransform(
+		cast(transform->getRotation()),
+		cast(transform->getPosition())
+	));
+}
