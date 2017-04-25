@@ -76,7 +76,7 @@ void RigidBodyComponent::setHitboxHalfSize(const glm::vec3 & size)
 
 void RigidBodyComponent::setTransform(TransformComponent * transform)
 {
-	state->setWorldTransform(btTransform(
+	rigidBody->setCenterOfMassTransform(btTransform(
 		cast(transform->getRotation()),
 		cast(transform->getPosition())
 	));
