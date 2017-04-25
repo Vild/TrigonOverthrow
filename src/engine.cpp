@@ -139,16 +139,22 @@ int Engine::run(bool vsync) {
 		SDL_GL_SwapWindow(_window);
 
 
+		{
+			std::vector<std::unique_ptr<Entity>>& entities = getState().getWorld().getEntities();
+			entities.erase(
+				std::remove_if(
+					entities.begin(),
+					entities.end(),
+					[](const std::unique_ptr<Entity>& e) -> bool { return e->isDead(); }
+				),
+				entities.end()
+			);
+		}
 		
-		std::vector<std::unique_ptr<Entity>>& entities = getState().getWorld().getEntities();
-		entities.erase(
-			std::remove_if(
-				entities.begin(),
-				entities.end(),
-				[](const std::unique_ptr<Entity>& e) -> bool { return e->isDead(); }
-			),
-			entities.end()
-		);
+		{
+			auto rgbEntities = getSystem<BulletPhyisicsSystem>();
+		}
+
 	}
 	return 0;
 }

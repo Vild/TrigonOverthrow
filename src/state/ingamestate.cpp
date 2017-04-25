@@ -70,7 +70,7 @@ InGameState::InGameState() {
 		auto life = _player->addComponent<LifeComponent>();
 
 		auto gun = _player->addComponent<GunComponent>();
-		gun->addGun(GunComponent::GunType::RAYGUN, 60); // 60 is the the cooldown rate per frame.
+		gun->addGun(GunComponent::GunType::RAYGUN, 30); // 60 is the the cooldown rate per frame.
 
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");

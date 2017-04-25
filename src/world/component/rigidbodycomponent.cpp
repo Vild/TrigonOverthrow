@@ -10,7 +10,6 @@ RigidBodyComponent::RigidBodyComponent()
 	friction = 0.0f;
 	state = new btDefaultMotionState();
 	shape = new btBoxShape({ 1,1,1 });
-
 	rigidBody = new btRigidBody(mass, state, shape);
 	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
@@ -72,4 +71,8 @@ void RigidBodyComponent::setHitboxHalfSize(const glm::vec3 & size)
 	delete shape; 
 	shape = new btBoxShape({ size.x, size.y, size.z });
 	rigidBody->setCollisionShape(shape);
+}
+
+void RigidBodyComponent::setPosition(const glm::vec3& pos) {
+	rigidBody->translate(btVector3(pos.x, pos.y, pos.z));
 }

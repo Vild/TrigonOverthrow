@@ -60,6 +60,13 @@ void InputSystem::update(World& world, float delta) {
 			inputDir.z * accelSpeed
 		});
 
+		if (entity->getName() == "Player") {
+			auto gun = entity->getComponent<GunComponent>();
+			if (hid->getKey(SDL_SCANCODE_F) && gun->cooldown <= 0) {
+				gun->shoot = true;
+			}
+		}
+
 		btVector3 v = rigidBody.getLinearVelocity();
 		if (v.length2() > maxVelocty2)
 		{
