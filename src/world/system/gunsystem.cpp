@@ -35,17 +35,33 @@ void GunSystem::update(World& world, float delta) {
 }
 
 void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
-	auto currTransform = me->getComponent<TransformComponent>();
+	auto transComp = me->getComponent<TransformComponent>();
+	auto transProj = projectile->addComponent<TransformComponent>();
+
+	transProj->setPosition(transComp->getPosition());
+	transProj->setRotation(transComp->getRotation());
+	transProj->setScale(transComp->getScale() * 0.5f);
+	transProj->setDirection(glm::vec3(0,0,1)); // should be transComp->getDirection() instead of 0,0,1 but the direction is weird.
+
+	auto currRdbComp = me->getComponent<RigidBodyComponent>();
+	auto projRdbComp = projectile->addComponent<RigidBodyComponent>();
 	
-	auto projTransComp = projectile->addComponent<TransformComponent>();
-	projTransComp->setPosition(currTransform->getPosition());
-	projTransComp->setRotation(currTransform->getRotation());
-	projTransComp->setScale(glm::vec3(0.2f));
-	
-	auto projPhysComp = projectile->addComponent<PhysicsComponent>();
-	projPhysComp->acceleration = glm::vec3(0,0,1);
-	projPhysComp->velocity = projPhysComp->acceleration * glm::vec3(2);
-	
+	auto projMs = projRdbComp->getMotionState();
+
+	btTransform projRdbTrans = currRdbComp->getRigidBody()->getWorldTransform();
+
+	printf("x: %f, y: %f, z: %f\n", cast(projRdbTrans.getOrigin()).x, cast(projRdbTrans.getOrigin()).y, cast(projRdbTrans.getOrigin()).z);
+
+
+	projRdbComp->setHitboxHalfSize(currRdbComp->getHitboxHalfSize() * 0.5f);
+	projRdbComp->setMass(1);
+	projRdbComp->setFriction(0);
+	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * 5.0f));
+	projRdbComp->getRigidBody()->setWorldTransform(projRdbTrans);
+
+	//projMs->setWorldTransform(projRdbTrans);
+	//rdbComp->getRigidBody()->applyCentralImpulse(cast(glm::vec3(4)));
+
 	auto projLifeComp = projectile->addComponent<LifeComponent>();
 	projLifeComp->currHP = projLifeComp->maxHP = 2;
 
@@ -67,10 +83,7 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	})
 		.finalize();
 
-	auto rigidbody = projectile->addComponent<RigidBodyComponent>();
-	rigidbody->setHitboxHalfSize(projTransComp->getScale());
-	rigidbody->setMass(1);
-	Engine::getInstance().getSystem<BulletPhyisicsSystem>()->addRigidBody(rigidbody);
+	Engine::getInstance().getSystem<BulletPhyisicsSystem>()->addRigidBody(projRdbComp);
 }
 
 
