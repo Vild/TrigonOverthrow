@@ -40,6 +40,10 @@
 #include "state/mainmenustate.hpp"
 
 Engine::~Engine() {
+
+	_systems.clear();
+	_states.clear();
+
 	TTF_Quit();
 	Mix_Quit();
 	IMG_Quit();

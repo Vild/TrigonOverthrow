@@ -23,6 +23,25 @@ BulletPhyisicsSystem::BulletPhyisicsSystem()
 
 BulletPhyisicsSystem::~BulletPhyisicsSystem()
 {
+	//auto & objs = world->getCollisionObjectArray();
+	//for (int i = 0; i < objs.size(); i++)
+	//{
+	//	world->removeCollisionObject(objs[i]);
+	//}
+
+	//for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
+	//{
+	//	btCollisionObject* obj = world->getCollisionObjectArray()[i];
+	//	//btRigidBody* body = btRigidBody::upcast(obj);
+	//	//if (body && body->getMotionState())
+	//	//{
+	//	//	delete body->getMotionState();
+	//	//}
+	//	world->removeCollisionObject(obj);
+	//	//delete obj;
+	//}
+
+
 	delete world;
 	delete broadphaseInterface;
 	delete constraintSolver;
@@ -65,4 +84,5 @@ std::string BulletPhyisicsSystem::name()
 void BulletPhyisicsSystem::addRigidBody(RigidBodyComponent * rigidBody)
 {
 	world->addRigidBody(rigidBody->getRigidBody());
+	bodies.push_back(rigidBody->getRigidBody());
 }
