@@ -5,6 +5,8 @@
 struct GunComponent : public Component {
 	enum GunType : int { RAYGUN = 0, ENERGYGUN };
 
+	virtual ~GunComponent();
+
 	GunType type;
 
 	int cooldown;

@@ -43,7 +43,7 @@ void ParticleSystem::update(World& world, float delta) {
 			continue;
 
 		direction = entity->getComponent<TransformComponent>()->getDirection();
-		pos = entity->getComponent<TransformComponent>()->position;
+		pos = entity->getComponent<TransformComponent>()->getPosition();
 		_programs[0]
 			->bind()
 			.setUniform("delta", delta)

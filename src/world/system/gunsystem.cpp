@@ -34,10 +34,9 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	auto currTransform = me->getComponent<TransformComponent>();
 	
 	auto projTransComp = projectile->addComponent<TransformComponent>();
-	projTransComp->position = currTransform->position;
-	projTransComp->rotation = currTransform->rotation;
-	projTransComp->scale = glm::vec3(0.3f);
-	projTransComp->recalculateMatrix();
+	projTransComp->setPosition(currTransform->getPosition());
+	projTransComp->setRotation(currTransform->getRotation());
+	projTransComp->setScale(glm::vec3(0.2f));
 	
 	auto projPhysComp = projectile->addComponent<PhysicsComponent>();
 	projPhysComp->acceleration = glm::vec3(0,0,1);

@@ -19,7 +19,7 @@ class Entity {
 public:
 	/// Don't call this one directly! Always use world->addEntity
 	Entity(sole::uuid uuid, std::string name);
-	virtual ~Entity();
+	virtual ~Entity() {};
 
 	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	T* addComponent() {

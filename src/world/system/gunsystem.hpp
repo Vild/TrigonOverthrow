@@ -5,6 +5,7 @@
 
 class GunSystem : public System {
 public:
+	virtual ~GunSystem();
 	virtual void update(World& world, float delta);
 	virtual void registerImGui();
 	inline virtual std::string name() { return "ParticleSystem"; };
