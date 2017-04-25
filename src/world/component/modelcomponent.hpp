@@ -7,8 +7,10 @@
 
 #include "../../lib/glad.h"
 
-struct ModelComponent : public Component<ModelComponent> {
+struct ModelComponent : public Component {
 	std::shared_ptr<LoadedMesh> meshData;
+
+	virtual ~ModelComponent();
 
 	virtual void render(const glm::mat4& m, GLenum drawMode = GL_TRIANGLES);
 

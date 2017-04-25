@@ -5,6 +5,8 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 
+TransformComponent::~TransformComponent() {}
+
 void TransformComponent::recalculateMatrix() {
 	static const glm::vec3 x(1, 0, 0);
 	static const glm::vec3 y(0, 1, 0);

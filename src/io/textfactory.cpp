@@ -60,8 +60,13 @@ TextRenderer::TextRenderer(TextFactory& factory, const std::string& text, bool i
 		.finalize();
 }
 
+TextRenderer::~TextRenderer() {}
+
 void TextRenderer::setText(const std::string& text) {
 	if (_isStatic)
+		return;
+
+	if (text == _text)
 		return;
 
 	if (text.size() > _maxTextLength)

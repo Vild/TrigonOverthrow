@@ -4,6 +4,8 @@
 
 class InputSystem : public System {
 public:
+	virtual ~InputSystem();
+
 	void update(World& world, float delta);
 
 	virtual void registerImGui();

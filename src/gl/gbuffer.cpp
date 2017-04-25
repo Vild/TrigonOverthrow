@@ -46,8 +46,7 @@ GBuffer& GBuffer::bindImageTexture(GLuint index, bool read) {
 	return *this;
 }
 
-GBuffer & GBuffer::attachTexture(int id, std::shared_ptr<Texture> texture)
-{
+GBuffer& GBuffer::attachTexture(int id, std::shared_ptr<Texture> texture) {
 	_attachments[id] = texture;
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, texture->getTexture(), 0);
 
@@ -118,7 +117,6 @@ GBuffer& GBuffer::finalize() {
 	return *this;
 }
 
-std::shared_ptr<Texture>& GBuffer::getAttachment(int id)
-{
+std::shared_ptr<Texture>& GBuffer::getAttachment(int id) {
 	return _attachments[id];
 }

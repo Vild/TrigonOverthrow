@@ -4,20 +4,19 @@
 #include "../../gl/gbuffer.hpp"
 #include "../../gl/texture.hpp"
 
-class GaussianRenderPass : public RenderPass
-{
+class GaussianRenderPass : public RenderPass {
 public:
 	GaussianRenderPass();
+	virtual ~GaussianRenderPass();
 
 	enum InputAttachments { Image };
 	enum Attachments { BlurredImage };
 
-	virtual void render(World & world) override;
+	virtual void render(World& world) override;
 	virtual void resize(unsigned int width, unsigned int height) override;
 
 	virtual void registerImGui() override;
 	virtual std::string name() { return "GaussianRenderPass"; };
-
 
 private:
 	std::unique_ptr<Mesh> fsQuad;

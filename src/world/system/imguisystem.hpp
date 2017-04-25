@@ -4,6 +4,8 @@
 
 class ImGuiSystem : public System {
 public:
+	virtual ~ImGuiSystem();
+
 	void update(World& world, float delta);
 
 	virtual void registerImGui();

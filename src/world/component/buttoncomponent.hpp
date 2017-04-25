@@ -2,12 +2,22 @@
 
 #include "component.hpp"
 
-#include "../../utils/collisionbox.hpp"
+#include <glm/glm.hpp>
 
-struct ButtonComponent : public Component<ButtonComponent> {
+#include "../../io/hidinput.hpp"
+
+class Entity;
+class State;
+
+struct ButtonComponent : public Component {
+	typedef void (*ButtonCallback)(Entity* entity, State& state, MouseState mouse);
+
 	ButtonComponent();
+	virtual ~ButtonComponent();
 
-	CollisionBox2D box;
+	glm::vec3 position;
+	glm::vec3 size;
+	ButtonCallback callback;
 
 	virtual void registerImGui();
 

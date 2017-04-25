@@ -5,6 +5,8 @@
 #include "../../lib/imgui.h"
 #include "../../engine.hpp"
 
+ImGuiSystem::~ImGuiSystem() {}
+
 void ImGuiSystem::update(World& world, float delta) {
 	State& state = Engine::getInstance().getState();
 
@@ -16,14 +18,14 @@ void ImGuiSystem::update(World& world, float delta) {
 	ImGui::Text("Entities:");
 	char name[255] = {0};
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		snprintf(name, sizeof(name), "%s (%s)", entity->getName().c_str(), entity->getUUID().str().c_str());
+		snprintf(name, sizeof(name), "%s (%s)##%p", entity->getName().c_str(), entity->getUUID().str().c_str(), (void*)entity.get());
 		if (ImGui::TreeNode(name)) {
 			ImGui::Text("Actions:");
 			if (entity->registerImGui)
 				entity->registerImGui(*entity.get(), state);
 
 			ImGui::Text("Component:");
-			for (IComponent* component : entity->getComponents()) {
+			for (std::unique_ptr<Component>& component : entity->getComponents()) {
 				if (ImGui::TreeNode(component->name().c_str())) {
 					component->registerImGui();
 					ImGui::TreePop();

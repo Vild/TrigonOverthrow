@@ -7,11 +7,13 @@
 #include "../../io/textfactory.hpp"
 #include <glm/glm.hpp>
 
-struct TextComponent : public Component<TextComponent> {
+struct TextComponent : public Component {
 	std::shared_ptr<TextRenderer> textRenderer;
 
 	// XXX: Hack, fix?
 	TransformComponent transform;
+
+	virtual ~TextComponent();
 
 	virtual void registerImGui();
 

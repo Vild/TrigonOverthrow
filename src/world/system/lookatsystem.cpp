@@ -10,6 +10,8 @@
 
 #include <glm/glm.hpp>
 
+LookAtSystem::~LookAtSystem() {}
+
 void LookAtSystem::update(World& world, float delta) {
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto lookat = entity->getComponent<LookAtComponent>();

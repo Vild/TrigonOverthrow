@@ -2,6 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "modelcomponent.hpp"
 
+ModelComponent::~ModelComponent() {}
+
 void ModelComponent::render(const glm::mat4& m, GLenum drawMode) {
 	meshData->texture->bind(0);
 	meshData->normalTexture->bind(1);

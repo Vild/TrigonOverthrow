@@ -19,6 +19,8 @@ TextRenderPass::TextRenderPass() {
 	_shader->setUniform("fontMap", 0);
 }
 
+TextRenderPass::~TextRenderPass() {}
+
 void TextRenderPass::render(World& world) {
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)

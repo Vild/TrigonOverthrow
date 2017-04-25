@@ -4,6 +4,8 @@
 
 class LookAtSystem : public System {
 public:
+	virtual ~LookAtSystem();
+
 	virtual void update(World& world, float delta);
 
 	virtual void registerImGui();

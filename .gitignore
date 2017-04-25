@@ -21,6 +21,7 @@
 *.out
 *.app
 /trigonoverthrow
+/trigoneditor
 
 # Build Folder
 /build/
