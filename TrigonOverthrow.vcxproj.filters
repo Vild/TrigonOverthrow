@@ -36,9 +36,6 @@
     <ClCompile Include="src\gl\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gl\simplemesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\gl\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -114,16 +111,10 @@
     <ClCompile Include="src\world\component\physicscomponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\world\component\rigidbodycomponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\world\component\textcomponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\component\transformcomponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world\renderpass\bulletdebugrenderpass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp">
@@ -145,9 +136,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\renderpass\textrenderpass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world\system\bulletphysicssystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\world\system\camerasystem.cpp">
@@ -201,9 +189,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gl\shader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gl\simplemesh.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gl\texture.hpp">
@@ -296,16 +281,10 @@
     <ClInclude Include="src\world\component\physicscomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\component\rigidbodycomponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\world\component\textcomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\component\transformcomponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\renderpass\bulletdebugrenderpass.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp">
@@ -327,9 +306,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\renderpass\textrenderpass.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\system\bulletphysicssystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\system\camerasystem.hpp">

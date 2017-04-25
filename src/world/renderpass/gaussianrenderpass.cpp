@@ -58,9 +58,6 @@ std::unique_ptr<Mesh> GaussianRenderPass::makeFsQuad() {
 void GaussianRenderPass::generateKernel() {
 	std::vector<float> kernel;
 
-	// float gConst = 1.0f / (sqrt(2 * glm::pi<float>() * pow(sigma, 2)));
-	// float gDiv = (2.0f * pow(sigma, 2));
-
 	auto g = [&](int x) -> float {
 		static float gMult = 1.0f / (sqrt(2.0f * glm::pi<float>()) * sigma);
 		return gMult * pow(glm::e<float>(), -(pow(x, 2) / (2.0f * pow(sigma, 2))));
