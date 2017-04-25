@@ -56,6 +56,8 @@ void BulletDebugRenderPass::render(World & world)
 {
 	auto camera = Engine::getInstance().getCamera()->getComponent<CameraComponent>();
 
+	//glClear(GL_DEPTH_BUFFER_BIT);
+
 	_shader->bind()
 		.setUniform("v", camera->viewMatrix)
 		.setUniform("p", camera->projectionMatrix);

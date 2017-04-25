@@ -275,17 +275,14 @@ void Engine::_setupSystems() {
 			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
 			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::BlurredImage));
 
-		for (std::unique_ptr<System>& system : _systems) {
-			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
-			if (!particleSystem)
-				continue;
+		
+		{// GIT-GUD: fixed in velocity and position to be output instead.
+			auto particleSystem = getSystem<ParticleSystem>();
 			auto _gbuffer = particleSystem->getGBuffers();
 
-			// GIT-GUD: fixed in velocity and position to be output instead.
-			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::inPosition])
-				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::inVelocity]);
-
-			break;
+			(*particles)
+				.attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachment(ParticleSystem::Attachment::inPosition))
+				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachment(ParticleSystem::Attachment::inVelocity));
 		}
 
 		_systems.push_back(std::move(geometry));
