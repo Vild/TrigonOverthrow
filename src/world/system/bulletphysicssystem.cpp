@@ -84,5 +84,9 @@ std::string BulletPhyisicsSystem::name()
 void BulletPhyisicsSystem::addRigidBody(RigidBodyComponent * rigidBody)
 {
 	world->addRigidBody(rigidBody->getRigidBody());
-	bodies.push_back(rigidBody->getRigidBody());
+}
+
+void BulletPhyisicsSystem::removeRigidBody(RigidBodyComponent * rigidBody)
+{
+	world->removeRigidBody(rigidBody->getRigidBody());
 }
