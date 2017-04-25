@@ -17,6 +17,7 @@ public:
 	virtual std::string name() override;
 
 	void addRigidBody(RigidBodyComponent *  rigidBody);
+	void removeRigidBody(RigidBodyComponent *  rigidBody);
 
 private:
 	btDynamicsWorld * world;
