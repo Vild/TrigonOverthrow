@@ -23,6 +23,7 @@
     <ClCompile Include="src\gl\gbuffer.cpp" />
     <ClCompile Include="src\gl\mesh.cpp" />
     <ClCompile Include="src\gl\shader.cpp" />
+    <ClCompile Include="src\gl\simplemesh.cpp" />
     <ClCompile Include="src\gl\texture.cpp" />
     <ClCompile Include="src\io\hidinput.cpp" />
     <ClCompile Include="src\io\maploader.cpp" />
@@ -51,9 +52,11 @@
     <ClCompile Include="src\world\component\modelcomponent.cpp" />
     <ClCompile Include="src\world\component\particlecomponent.cpp" />
     <ClCompile Include="src\world\component\physicscomponent.cpp" />
+    <ClCompile Include="src\world\component\rigidbodycomponent.cpp" />
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
+    <ClCompile Include="src\world\renderpass\bulletdebugrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\geometryrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\lightingrenderpass.cpp" />
@@ -61,15 +64,16 @@
     <ClCompile Include="src\world\renderpass\renderpass.cpp" />
     <ClCompile Include="src\world\renderpass\ssaorenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\textrenderpass.cpp" />
+    <ClCompile Include="src\world\system\bulletphysicssystem.cpp" />
     <ClCompile Include="src\world\system\buttonsystem.cpp" />
     <ClCompile Include="src\world\system\camerasystem.cpp" />
     <ClCompile Include="src\world\system\gunsystem.cpp" />
-    <ClCompile Include="src\world\system\hitboxsystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
     <ClCompile Include="src\world\system\particlesystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
+    <ClCompile Include="src\world\system\system.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +81,7 @@
     <ClInclude Include="src\gl\gbuffer.hpp" />
     <ClInclude Include="src\gl\mesh.hpp" />
     <ClInclude Include="src\gl\shader.hpp" />
+    <ClInclude Include="src\gl\simplemesh.hpp" />
     <ClInclude Include="src\gl\texture.hpp" />
     <ClInclude Include="src\io\hidinput.hpp" />
     <ClInclude Include="src\io\maploader.hpp" />
@@ -109,10 +114,11 @@
     <ClInclude Include="src\world\component\modelcomponent.hpp" />
     <ClInclude Include="src\world\component\particlecomponent.hpp" />
     <ClInclude Include="src\world\component\physicscomponent.hpp" />
+    <ClInclude Include="src\world\component\rigidbodycomponent.hpp" />
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
-    <ClInclude Include="src\world\renderpass\baserenderpass.hpp" />
+    <ClInclude Include="src\world\renderpass\bulletdebugrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\geometryrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\lightingrenderpass.hpp" />
@@ -120,10 +126,10 @@
     <ClInclude Include="src\world\renderpass\renderpass.hpp" />
     <ClInclude Include="src\world\renderpass\ssaorenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\textrenderpass.hpp" />
+    <ClInclude Include="src\world\system\bulletphysicssystem.hpp" />
     <ClInclude Include="src\world\system\buttonsystem.hpp" />
     <ClInclude Include="src\world\system\camerasystem.hpp" />
     <ClInclude Include="src\world\system\gunsystem.hpp" />
-    <ClInclude Include="src\world\system\hitboxsystem.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />
     <ClInclude Include="src\world\system\inputsystem.hpp" />
     <ClInclude Include="src\world\system\lookatsystem.hpp" />
@@ -186,18 +192,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
     <IntDir>$(SolutionDir)build/$(Configuration)/temp/</IntDir>
+    <LibraryPath>$(SolutionDir)lib\Bullet3-2.86.1\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\Bullet3-2.86.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -210,7 +224,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -230,7 +244,7 @@
     <Link />
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -253,7 +267,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -276,7 +290,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>

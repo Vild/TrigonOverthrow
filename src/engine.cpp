@@ -26,6 +26,7 @@
 #include "world/system/particlesystem.hpp"
 #include "world/system/buttonsystem.hpp"
 #include "world/system/gunsystem.hpp"
+#include "world/system/bulletphysicssystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -33,6 +34,7 @@
 #include "world/renderpass/lightingrenderpass.hpp"
 #include "world/renderpass/particlerenderpass.hpp"
 #include "world/renderpass/textrenderpass.hpp"
+#include "world/renderpass/bulletdebugrenderpass.hpp"
 
 #include "state/ingamestate.hpp"
 #include "state/mainmenustate.hpp"
@@ -147,11 +149,11 @@ void Engine::_init(bool vsync) {
 	_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
 	_nextState = std::make_unique<std::type_index>(std::type_index(typeid(Engine)));
 
+	_setupSystems();
 	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
 	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
 	_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
-	setState<MainMenuState>();
-	_setupSystems();
+	setState<InGameState>();
 }
 
 void Engine::_initSDL() {
@@ -265,6 +267,7 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
+	_systems.push_back(std::make_unique<BulletPhyisicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
 	_systems.push_back(std::make_unique<ButtonSystem>());
@@ -291,17 +294,14 @@ void Engine::_setupSystems() {
 			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
 			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::BlurredImage));
 
-		for (std::unique_ptr<System>& system : _systems) {
-			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
-			if (!particleSystem)
-				continue;
+		
+		{// GIT-GUD: fixed in velocity and position to be output instead.
+			auto particleSystem = getSystem<ParticleSystem>();
 			auto _gbuffer = particleSystem->getGBuffers();
 
-			// GIT-GUD: fixed in velocity and position to be output instead.
-			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::inPosition])
-				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::inVelocity]);
-
-			break;
+			(*particles)
+				.attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachment(ParticleSystem::Attachment::inPosition))
+				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachment(ParticleSystem::Attachment::inVelocity));
 		}
 
 		_systems.push_back(std::move(geometry));
@@ -310,6 +310,8 @@ void Engine::_setupSystems() {
 		_systems.push_back(std::move(lighting));
 		_systems.push_back(std::move(particles));
 		_systems.push_back(std::move(text));
+
+		_systems.push_back(std::make_unique<BulletDebugRenderPass>());
 	}
 }
 

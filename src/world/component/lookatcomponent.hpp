@@ -8,7 +8,8 @@
 
 enum class FollowMode : int {
 	followByDistance, /// This mode will have a calculated rotation
-	followByOffset		/// This mode will follow the target at a specified offset. This means that the rotation will always be constant
+	followByOffset,		/// This mode will follow the target at a specified offset. This means that the rotation will always be constant
+	staticPosition
 };
 
 struct LookAtComponent : public Component {

@@ -19,6 +19,9 @@ void LookAtComponent::registerImGui() {
 	ImGui::RadioButton("Distance", (int*)&followMode, (int)FollowMode::followByDistance);
 	ImGui::SameLine();
 	ImGui::RadioButton("Offset", (int*)&followMode, (int)FollowMode::followByOffset);
+	ImGui::SameLine();
+	ImGui::RadioButton("Static", (int*)&followMode, (int)FollowMode::staticPosition);
+
 
 	if (followMode == FollowMode::followByDistance) {
 		ImGui::DragFloat("Min distance", &minDistance);

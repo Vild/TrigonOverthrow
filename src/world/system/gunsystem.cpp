@@ -16,7 +16,7 @@ void GunSystem::update(World& world, float delta) {
 
 		if (entity->getName() == "Player") {
 			std::shared_ptr<GunComponent::RayGun> raygun = std::static_pointer_cast<GunComponent::RayGun>(gunComp->gun);
-			raygun->ray.o = transform->position;
+			raygun->ray.o = transform->getPosition();
 			// raygun->ray.dir = transform->getDirection();
 			raygun->ray.dir = glm::vec3(0, 0, 1);
 			if (gunComp->shoot) {
