@@ -12,7 +12,7 @@ enum class FollowMode : int {
 	staticPosition
 };
 
-struct LookAtComponent : public Component<LookAtComponent> {
+struct LookAtComponent : public Component {
 	Entity* target;
 
 	FollowMode followMode = FollowMode::followByDistance;
@@ -23,6 +23,8 @@ struct LookAtComponent : public Component<LookAtComponent> {
 
 	// for FollowMode::followByOffset
 	glm::vec3 offsetFromTarget;
+
+	virtual ~LookAtComponent();
 
 	virtual void registerImGui();
 	virtual std::string name() { return "LookAtComponent"; }

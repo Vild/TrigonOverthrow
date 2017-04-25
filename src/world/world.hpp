@@ -9,6 +9,7 @@ class Entity;
 class World {
 public:
 	World();
+	virtual ~World();
 
 	Entity* addEntity(const sole::uuid& uuid = sole::uuid4(), const std::string& name = "Generic") {
 		_entities.push_back(std::make_unique<Entity>(uuid, name));

@@ -1,11 +1,12 @@
 import reggae;
 
 enum CompileCommand {
-	Compile = "g++ -c -std=c++14 -O0 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -fopenmp $in -o $out",
-	Link = "g++ -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp $in -o $out",
+	Compile = "g++ -c -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp $in -o $out",
+	LinkTrigon = "g++ -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp $in -o $out",
+	LinkEditor = "g++ -std=c++14 -O3 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lsfml-graphics -lsfml-system -lsfml-window $in -o $out",
 }
 
-Target[] MakeObjects() {
+Target[] MakeObjects(string src)() {
 	import std.file : dirEntries, SpanMode;
 	import std.process : executeShell;
 	import std.algorithm : map;
@@ -14,7 +15,7 @@ Target[] MakeObjects() {
 
 	Target[] objs;
 
-	foreach (f; chain(dirEntries("src/", "*.cpp", SpanMode.breadth), dirEntries("src/", "*.c", SpanMode.breadth)).filter!(x => !x.isDir)) {
+	foreach (f; chain(dirEntries(src, "*.cpp", SpanMode.breadth), dirEntries(src, "*.c", SpanMode.breadth)).filter!(x => !x.isDir)) {
 		auto exec = executeShell("g++ -MM " ~ f);
 		if (exec.status) {
 			import std.stdio;
@@ -30,9 +31,8 @@ Target[] MakeObjects() {
 }
 
 Build myBuild() {
-	auto objs = MakeObjects();
+	auto trigonoverthrow = Target("trigonoverthrow", CompileCommand.LinkTrigon, MakeObjects!"src/");
+	auto editor = Target("trigoneditor", CompileCommand.LinkEditor, MakeObjects!"editor/");
 
-	auto raycast = Target("trigonoverthrow", CompileCommand.Link, objs);
-
-	return Build(raycast);
+	return Build(trigonoverthrow, editor);
 }

@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+TextComponent::~TextComponent() {}
+
 void TextComponent::registerImGui() {
 	if (!textRenderer)
 		return;

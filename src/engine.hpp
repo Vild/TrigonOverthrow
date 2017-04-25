@@ -14,6 +14,7 @@
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
 #include "io/textfactory.hpp"
+#include "io/maploader.hpp"
 
 #include "world/world.hpp"
 #include "world/system/particlesystem.hpp"
@@ -38,6 +39,7 @@ public:
 
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
+	inline std::shared_ptr<MapLoader> getMapLoader() { return _mapLoader; }
 	inline std::shared_ptr<HIDInput> getHIDInput() { return _hidInput; }
 	inline std::shared_ptr<TextFactory> getTextFactory() { return _textFactory; }
 
@@ -64,16 +66,9 @@ public:
 	inline const std::type_index getStateType() { return *_currentState; }
 
 	template <typename T>
-	inline void setState() {
-		State* prev = getStatePtr();
-		*_currentState = std::type_index(typeid(T));
-		State* next = getStatePtr();
-		if (next)
-			next->onEnter(prev);
+	inline void setState() { *_nextState = std::type_index(typeid(T)); }
 
-		if (prev)
-			prev->onLeave(next);
-	}
+	inline void quit() { *_nextState = std::type_index(typeid(nullptr)); }
 
 private:
 	unsigned int _width = 1280;
@@ -86,12 +81,14 @@ private:
 
 	std::shared_ptr<TextureManager> _textureManager;
 	std::shared_ptr<MeshLoader> _meshLoader;
+	std::shared_ptr<MapLoader> _mapLoader;
 	std::shared_ptr<HIDInput> _hidInput;
 	std::shared_ptr<TextFactory> _textFactory;
 
 	std::vector<std::unique_ptr<System>> _systems;
 
 	std::unique_ptr<std::type_index> _currentState;
+	std::unique_ptr<std::type_index> _nextState;
 	std::unordered_map<std::type_index, std::unique_ptr<State>> _states;
 
 	Engine() {}

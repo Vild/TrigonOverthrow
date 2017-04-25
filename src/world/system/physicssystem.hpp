@@ -4,6 +4,8 @@
 
 class PhysicsSystem : public System {
 public:
+	virtual ~PhysicsSystem();
+
 	virtual void update(World& world, float delta);
 
 	virtual void registerImGui();

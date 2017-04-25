@@ -24,6 +24,8 @@
 #include "world/system/lookatsystem.hpp"
 #include "world/system/camerasystem.hpp"
 #include "world/system/particlesystem.hpp"
+#include "world/system/buttonsystem.hpp"
+#include "world/system/gunsystem.hpp"
 #include "world/system/bulletphysicssystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
@@ -55,6 +57,21 @@ int Engine::run(bool vsync) {
 	uint32_t lastTime = SDL_GetTicks();
 
 	while (!_quit) {
+		if (*_nextState != std::type_index(typeid(Engine))) {
+			State* prev = getStatePtr();
+			*_currentState = *_nextState;
+			*_nextState = std::type_index(typeid(Engine));
+			State* next = getStatePtr();
+			if (next)
+				next->onEnter(prev);
+
+			if (prev)
+				prev->onLeave(next);
+
+			if (!next)
+				break;
+		}
+
 		SDL_Event event;
 		ImGuiIO& io = ImGui::GetIO();
 		while (SDL_PollEvent(&event)) {
@@ -114,8 +131,6 @@ int Engine::run(bool vsync) {
 		_system_tick(delta);
 		ImGui::Render();
 		SDL_GL_SwapWindow(_window);
-		if (!getStatePtr())
-			break;
 	}
 	return 0;
 }
@@ -127,10 +142,12 @@ void Engine::_init(bool vsync) {
 	_initImGui();
 	_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
 	_meshLoader = std::make_shared<MeshLoader>();
+	_mapLoader = std::make_shared<MapLoader>();
 	_hidInput = std::make_shared<HIDInput>();
 	_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
 
 	_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
+	_nextState = std::make_unique<std::type_index>(std::type_index(typeid(Engine)));
 
 	_setupSystems();
 	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
@@ -164,7 +181,7 @@ void Engine::_initSDL() {
 		throw "Failed to load SDL2_ttf";
 	}
 
-	_window = SDL_CreateWindow("TurtleGL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
+	_window = SDL_CreateWindow("Trigon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
 														 SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	if (!_window)
 		throw "Failed to create window";
@@ -253,6 +270,8 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<BulletPhyisicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
+	_systems.push_back(std::make_unique<ButtonSystem>());
+	_systems.push_back(std::make_unique<GunSystem>());
 	_systems.push_back(std::make_unique<ParticleSystem>());
 
 	// Render passes

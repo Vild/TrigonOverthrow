@@ -4,6 +4,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+LookAtComponent::~LookAtComponent() {}
+
 void LookAtComponent::registerImGui() {
 	ImGui::Text("Targeting:");
 	ImGui::SameLine();

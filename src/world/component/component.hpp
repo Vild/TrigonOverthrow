@@ -7,21 +7,12 @@
 #include "../../lib/imgui.h"
 
 /// Used to identifying a Component
-struct IComponent {
+struct Component {
+	virtual ~Component() = 0;
+
 	virtual std::string name() = 0;
 
 	virtual void registerImGui() = 0;
 };
 
-/// Used for extending and getting all the active components
-template <typename T>
-struct Component : public IComponent {
-public:
-	static inline std::vector<std::unique_ptr<T>>& getActiveComponents() { return _activeComponents; }
-
-private:
-	static std::vector<std::unique_ptr<T>> _activeComponents;
-};
-
-template <typename T>
-std::vector<std::unique_ptr<T>> Component<T>::_activeComponents;
+inline Component::~Component() {}

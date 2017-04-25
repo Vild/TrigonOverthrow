@@ -5,8 +5,11 @@
 #include "../component/kbmouseinputcomponent.hpp"
 #include "../component/physicscomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
+#include "../component/guncomponent.hpp"
 
 #include "../../engine.hpp"
+
+InputSystem::~InputSystem() {}
 
 void InputSystem::update(World& world, float delta) {
 	std::shared_ptr<HIDInput> hid = Engine::getInstance().getHIDInput();

@@ -3,6 +3,7 @@
 #include "particlerenderpass.hpp"
 #include "../component/particlecomponent.hpp"
 #include "../component/transformcomponent.hpp"
+#include "../component/guncomponent.hpp"
 #include "../../engine.hpp"
 #include "../component/cameracomponent.hpp"
 #include "../component/lookatcomponent.hpp"
@@ -19,6 +20,8 @@ ParticleRenderPass::ParticleRenderPass() {
 	_shader->bind().addUniform("v").addUniform("p").addUniform("particlePos").addUniform("particleVel").addUniform("textureSize");
 	_shader->setUniform("particlePos", (GLint)InputAttachment::position).setUniform("particleVel", (GLint)InputAttachment::velocity);
 }
+
+ParticleRenderPass::~ParticleRenderPass() {}
 
 void ParticleRenderPass::render(World& world) {
 	// Render particles with instanced drawing.
@@ -40,6 +43,8 @@ void ParticleRenderPass::render(World& world) {
 		// wait for reading/writing before rendering.
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+		if (entity->getName() == "Player")
+			entity->getComponent<GunComponent>()->drawShot = false;
 
 		particle->point->render(particle->_nrOfParticles, GL_POINTS);
 	}

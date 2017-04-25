@@ -59,6 +59,8 @@ GeometryRenderPass::GeometryRenderPass() {
 	_floorShader->setUniform("diffuseTexture", 0).setUniform("normalTexture", 1).setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
 }
 
+GeometryRenderPass::~GeometryRenderPass() {}
+
 void GeometryRenderPass::render(World& world) {
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
@@ -92,10 +94,8 @@ void GeometryRenderPass::render(World& world) {
 			if (!ft)
 				continue;
 			_floorShader->bind();
-			glDisable(GL_CULL_FACE);
 
 			model->render(ft->matrices, ft->gridSize * ft->gridSize);
-			glEnable(GL_CULL_FACE);
 			_shader->bind();
 		}
 

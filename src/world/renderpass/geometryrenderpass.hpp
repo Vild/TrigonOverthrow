@@ -9,6 +9,7 @@ public:
 	enum Attachment : GLint { position = 0, normal, diffuseSpecular, depth };
 
 	GeometryRenderPass();
+	virtual ~GeometryRenderPass();
 
 	virtual void render(World& world);
 	virtual void resize(unsigned int width, unsigned int height);

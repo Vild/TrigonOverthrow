@@ -53,6 +53,7 @@ class TextRenderer {
 public:
 	/// maxTextLength will only be used when isStatic = false
 	TextRenderer(TextFactory& factory, const std::string& text, bool isStatic, unsigned int maxTextLength);
+	virtual ~TextRenderer();
 
 	void setText(const std::string& text);
 	inline const std::string& getText() { return _text; }

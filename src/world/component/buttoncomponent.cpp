@@ -4,7 +4,9 @@
 
 ButtonComponent::ButtonComponent() {}
 
+ButtonComponent::~ButtonComponent() {}
+
 void ButtonComponent::registerImGui() {
-	ImGui::DragFloat2("Position", glm::value_ptr(box.position));
-	ImGui::DragFloat2("Size", glm::value_ptr(box.size));
+	ImGui::DragFloat3("Position", glm::value_ptr(position));
+	ImGui::DragFloat3("Size", glm::value_ptr(size));
 }

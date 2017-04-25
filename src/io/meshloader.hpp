@@ -8,6 +8,7 @@
 
 struct LoadedMesh {
 	LoadedMesh(const std::string& file);
+	virtual ~LoadedMesh();
 
 	std::shared_ptr<Mesh> mesh;
 	std::shared_ptr<Texture> texture;
