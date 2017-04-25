@@ -10,6 +10,7 @@ class BulletPhyisicsSystem : public System
 public:
 	BulletPhyisicsSystem();
 	virtual ~BulletPhyisicsSystem();
+
 	// Inherited via System
 	virtual void update(World & world, float delta) override;
 	virtual void registerImGui() override;
@@ -24,7 +25,7 @@ private:
 	btBroadphaseInterface * broadphaseInterface;
 	btConstraintSolver * constraintSolver;
 
-	std::vector<RigidBodyComponent*> bodies;
+	std::vector<btRigidBody*> bodies;
 
 	std::unique_ptr<btRigidBody> planeBody;
 	std::unique_ptr<btMotionState> planeState;
