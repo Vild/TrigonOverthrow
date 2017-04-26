@@ -5,11 +5,11 @@
 #include <vector>
 #include "../component/rigidbodycomponent.hpp"
 
-class BulletPhyisicsSystem : public System
+class BulletPhysicsSystem : public System
 {
 public:
-	BulletPhyisicsSystem();
-	virtual ~BulletPhyisicsSystem();
+	BulletPhysicsSystem();
+	virtual ~BulletPhysicsSystem();
 
 	// Inherited via System
 	virtual void update(World & world, float delta) override;
@@ -18,6 +18,7 @@ public:
 
 	void addRigidBody(RigidBodyComponent *  rigidBody);
 	void removeRigidBody(RigidBodyComponent *  rigidBody);
+	btDynamicsWorld* getWorld() { return world; }
 
 private:
 	btDynamicsWorld * world;

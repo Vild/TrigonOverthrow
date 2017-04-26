@@ -54,6 +54,7 @@
     <ClCompile Include="src\world\component\modelcomponent.cpp" />
     <ClCompile Include="src\world\component\particlecomponent.cpp" />
     <ClCompile Include="src\world\component\physicscomponent.cpp" />
+    <ClCompile Include="src\world\component\projectilecomponent.cpp" />
     <ClCompile Include="src\world\component\rigidbodycomponent.cpp" />
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
@@ -76,6 +77,7 @@
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
     <ClCompile Include="src\world\system\particlesystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
+    <ClCompile Include="src\world\system\projectilesystem.cpp" />
     <ClCompile Include="src\world\system\system.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
@@ -119,6 +121,7 @@
     <ClInclude Include="src\world\component\modelcomponent.hpp" />
     <ClInclude Include="src\world\component\particlecomponent.hpp" />
     <ClInclude Include="src\world\component\physicscomponent.hpp" />
+    <ClInclude Include="src\world\component\projectilecomponent.hpp" />
     <ClInclude Include="src\world\component\rigidbodycomponent.hpp" />
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
@@ -141,6 +144,7 @@
     <ClInclude Include="src\world\system\lookatsystem.hpp" />
     <ClInclude Include="src\world\system\particlesystem.hpp" />
     <ClInclude Include="src\world\system\physicssystem.hpp" />
+    <ClInclude Include="src\world\system\projectilesystem.hpp" />
     <ClInclude Include="src\world\system\system.hpp" />
     <ClInclude Include="src\world\world.hpp" />
   </ItemGroup>
@@ -246,6 +250,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link />
     <Link>

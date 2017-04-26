@@ -24,7 +24,7 @@
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
-	BulletPhyisicsSystem * bulletphyiscs = engine.getSystem<BulletPhyisicsSystem>();
+	BulletPhysicsSystem * bulletphyiscs = engine.getSystem<BulletPhysicsSystem>();
 	
 
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");

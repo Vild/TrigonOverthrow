@@ -4,7 +4,7 @@
 #include "../component/lifecomponent.hpp"
 #include "../component/physicscomponent.hpp"
 #include "../component/modelcomponent.hpp"
-#include "../component/rigidbodycomponent.hpp"
+#include "../component/projectilecomponent.hpp"
 
 #include "../system/bulletphysicssystem.hpp"
 
@@ -38,28 +38,28 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	auto transComp = me->getComponent<TransformComponent>();
 	auto transProj = projectile->addComponent<TransformComponent>();
 
-	transProj->setPosition(transComp->getPosition());
 	transProj->setRotation(transComp->getRotation());
-	transProj->setScale(transComp->getScale() * 0.5f);
+	transProj->setScale(glm::vec3(0.075, 0.075, 0.25));
 	transProj->setDirection(glm::vec3(0,0,1)); // should be transComp->getDirection() instead of 0,0,1 but the direction is weird.
+	transProj->setPosition(transComp->getPosition() + transProj->getDirection());
 
 	auto currRdbComp = me->getComponent<RigidBodyComponent>();
 	auto projRdbComp = projectile->addComponent<RigidBodyComponent>();
 	
-	projRdbComp->setHitboxHalfSize(currRdbComp->getHitboxHalfSize() * 0.5f);
+	projRdbComp->setHitboxHalfSize(transProj->getScale());
 	projRdbComp->setMass(1);
 	projRdbComp->setFriction(0);
 	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * 5.0f));
 	projRdbComp->setTransform(transProj);
-	projRdbComp->getRigidBody()->setGravity(cast(glm::vec3(0)));
-
-	//rdbComp->getRigidBody()->applyCentralImpulse(cast(glm::vec3(4)));
 
 	auto projLifeComp = projectile->addComponent<LifeComponent>();
 	projLifeComp->currHP = projLifeComp->maxHP = 2;
 
+	auto projComp = projectile->addComponent<ProjectileComponent>();
+
 	auto modelComp = projectile->addComponent<ModelComponent>();
-	modelComp->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player.fbx");
+	modelComp->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player_projectile.fbx");
+	modelComp->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/white_texture.png");
 	modelComp->meshData->mesh
 		->addBuffer("m",
 			[](GLuint id) {
@@ -76,9 +76,8 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	})
 		.finalize();
 
-	Engine::getInstance().getSystem<BulletPhyisicsSystem>()->addRigidBody(projRdbComp);
+	Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp);
 }
-
 
 
 //bool GunSystem::fireRay(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType) {

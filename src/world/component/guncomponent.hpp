@@ -1,5 +1,6 @@
 #pragma once
 #include "component.hpp"
+#include "modelcomponent.hpp"
 #include "glm/glm.hpp"
 
 struct GunComponent : public Component {
@@ -8,10 +9,8 @@ struct GunComponent : public Component {
 	virtual ~GunComponent();
 
 	GunType type;
-
 	int cooldown;
 	int cooldownLength;
-
 	bool shoot;
 
 	void addGun(GunType inType, int inCooldown);

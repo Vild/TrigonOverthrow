@@ -1,10 +1,11 @@
 #include "bulletphysicssystem.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/transformcomponent.hpp"
+#include "../component/projectilecomponent.hpp"
 #include <Bullet3Common\b3Transform.h>
 #include <glm\gtc\type_ptr.hpp>
 
-BulletPhyisicsSystem::BulletPhyisicsSystem()
+BulletPhysicsSystem::BulletPhysicsSystem()
 {
 	collisionConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -21,7 +22,7 @@ BulletPhyisicsSystem::BulletPhyisicsSystem()
 	world->addRigidBody(planeBody.get());
 }
 
-BulletPhyisicsSystem::~BulletPhyisicsSystem()
+BulletPhysicsSystem::~BulletPhysicsSystem()
 {
 	//auto & objs = world->getCollisionObjectArray();
 	//for (int i = 0; i < objs.size(); i++)
@@ -49,7 +50,7 @@ BulletPhyisicsSystem::~BulletPhyisicsSystem()
 	delete collisionConfig;
 }
 
-void BulletPhyisicsSystem::update(World & w, float delta)
+void BulletPhysicsSystem::update(World & w, float delta)
 {
 	world->stepSimulation(delta);
 
@@ -60,6 +61,10 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 
 		auto transform = entity->getComponent<TransformComponent>();
 		if (!transform) continue;
+		
+		auto projComp = entity->getComponent<ProjectileComponent>();
+		if (projComp)
+			rigidbody->getRigidBody()->setGravity(btVector3(0,0,0));
 
 		btMotionState * state = rigidbody->getMotionState();
 		btTransform t; state->getWorldTransform(t);
@@ -72,21 +77,21 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 	}
 }
 
-void BulletPhyisicsSystem::registerImGui()
+void BulletPhysicsSystem::registerImGui()
 {
 }
 
-std::string BulletPhyisicsSystem::name()
+std::string BulletPhysicsSystem::name()
 {
 	return "BulletPhyisicsSystem";
 }
 
-void BulletPhyisicsSystem::addRigidBody(RigidBodyComponent * rigidBody)
+void BulletPhysicsSystem::addRigidBody(RigidBodyComponent * rigidBody)
 {
 	world->addRigidBody(rigidBody->getRigidBody());
 }
 
-void BulletPhyisicsSystem::removeRigidBody(RigidBodyComponent * rigidBody)
+void BulletPhysicsSystem::removeRigidBody(RigidBodyComponent * rigidBody)
 {
 	world->removeRigidBody(rigidBody->getRigidBody());
 }

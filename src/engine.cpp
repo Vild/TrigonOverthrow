@@ -28,6 +28,7 @@
 #include "world/system/gunsystem.hpp"
 #include "world/system/lifesystem.hpp"
 #include "world/system/bulletphysicssystem.hpp"
+#include "world/system/projectilesystem.hpp"
 
 
 #include "world/renderpass/geometryrenderpass.hpp"
@@ -147,7 +148,7 @@ int Engine::run(bool vsync) {
 				if (!rgbComponent)
 					continue;
 				if (entity->isDead())
-					getSystem<BulletPhyisicsSystem>()->removeRigidBody(rgbComponent);
+					getSystem<BulletPhysicsSystem>()->removeRigidBody(rgbComponent);
 			}
 			// Entities in world.
 			entities.erase(
@@ -295,13 +296,14 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
-	_systems.push_back(std::make_unique<BulletPhyisicsSystem>());
+	_systems.push_back(std::make_unique<BulletPhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
 	_systems.push_back(std::make_unique<ButtonSystem>());
 	_systems.push_back(std::make_unique<GunSystem>());
 	_systems.push_back(std::make_unique<ParticleSystem>());
 	_systems.push_back(std::make_unique<LifeSystem>());
+	_systems.push_back(std::make_unique<ProjectileSystem>());
 
 	// Render passes
 	{

@@ -8,9 +8,9 @@ public:
 	virtual ~GunSystem();
 	virtual void update(World& world, float delta);
 	virtual void registerImGui();
-	inline virtual std::string name() { return "ParticleSystem"; };
+	inline virtual std::string name() { return "GunSystem"; };
 
 private:
-	bool fireRay(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType);
+	//bool fireRay(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType);
 	void fireProjectile(Entity* me, Entity* projectile);
 };
