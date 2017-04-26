@@ -13,6 +13,7 @@
 LookAtSystem::~LookAtSystem() {}
 
 void LookAtSystem::update(World& world, float delta) {
+	rmt_ScopedCPUSample(LookAtSystem, RMTSF_None);
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto lookat = entity->getComponent<LookAtComponent>();
 		if (!lookat || !lookat->target)
@@ -44,9 +45,9 @@ void LookAtSystem::update(World& world, float delta) {
 		glm::vec3 cpos = transform->getPosition();
 
 		glm::vec3 dir = glm::normalize(tpos - cpos);
-		
+
 		dir.x *= -1;
-		dir.y *= tpos.z > cpos.z ? 1 : -1;		
+		dir.y *= tpos.z > cpos.z ? 1 : -1;
 
 		transform->setDirection(dir);
 	}

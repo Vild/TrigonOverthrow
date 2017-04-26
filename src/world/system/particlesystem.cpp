@@ -32,6 +32,7 @@ ParticleSystem::~ParticleSystem() {}
 
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
+	rmt_ScopedCPUSample(ParticleSystem, RMTSF_None);
 	// Gotta change how this system works abit.
 	glm::vec3 direction;
 	glm::vec3 pos;

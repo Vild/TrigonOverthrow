@@ -10,6 +10,8 @@
 #include <typeindex>
 #include <unordered_map>
 
+#include "lib/Remotery.h"
+
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
@@ -45,7 +47,7 @@ public:
 
 	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
-	template<typename T>
+	template <typename T>
 	T* getSystem();
 
 	inline Entity* getCamera() {
@@ -66,7 +68,9 @@ public:
 	inline const std::type_index getStateType() { return *_currentState; }
 
 	template <typename T>
-	inline void setState() { *_nextState = std::type_index(typeid(T)); }
+	inline void setState() {
+		*_nextState = std::type_index(typeid(T));
+	}
 
 	inline void quit() { *_nextState = std::type_index(typeid(nullptr)); }
 
@@ -74,6 +78,8 @@ private:
 	unsigned int _width = 1280;
 	unsigned int _height = 720;
 	bool _vsync = true;
+
+	Remotery* rmt;
 
 	bool _quit;
 	SDL_Window* _window;
@@ -105,19 +111,17 @@ private:
 	void _system_resize(unsigned int width, unsigned int height);
 };
 
-template<typename T>
-T* Engine::getSystem()
-{
+template <typename T>
+T* Engine::getSystem() {
 	T* ptr = nullptr;
 
 	int i = 0, size = _systems.size();
-	while (ptr == nullptr && i < size)
-	{
+	while (ptr == nullptr && i < size) {
 		ptr = dynamic_cast<T*>(_systems[i++].get());
 	}
 
 	if (ptr == nullptr)
-		throw std::exception("system does not exist");
+		throw "system does not exist";
 
 	return ptr;
 }

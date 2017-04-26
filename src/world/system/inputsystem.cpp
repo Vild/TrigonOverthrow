@@ -12,6 +12,7 @@
 InputSystem::~InputSystem() {}
 
 void InputSystem::update(World& world, float delta) {
+	rmt_ScopedCPUSample(InputSystem, RMTSF_None);
 	std::shared_ptr<HIDInput> hid = Engine::getInstance().getHIDInput();
 
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
@@ -25,9 +26,9 @@ void InputSystem::update(World& world, float delta) {
 		btRigidBody & rigidBody = *rigidBodyComponent->getRigidBody();
 
 		// TODO: calculate this?
-		glm::vec3 forward = glm::vec3(0, 0, 1);
-		glm::vec3 right = glm::vec3(-1, 0, 0);
-		glm::vec3 up = glm::vec3(0, 1, 0);
+		//glm::vec3 forward = glm::vec3(0, 0, 1);
+		//glm::vec3 right = glm::vec3(-1, 0, 0);
+		//glm::vec3 up = glm::vec3(0, 1, 0);
 
 		glm::vec3 inputDir;
 		if (hid->getKey(SDL_SCANCODE_W))

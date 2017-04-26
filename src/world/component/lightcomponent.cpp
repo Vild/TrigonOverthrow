@@ -3,3 +3,5 @@
 #include "lightcomponent.hpp"
 
 LightComponent::~LightComponent() {}
+
+void LightComponent::registerImGui() {}

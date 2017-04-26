@@ -22,6 +22,8 @@ TextRenderPass::TextRenderPass() {
 TextRenderPass::~TextRenderPass() {}
 
 void TextRenderPass::render(World& world) {
+	rmt_ScopedCPUSample(TextRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(TextRenderPass);
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
@@ -53,8 +55,8 @@ void TextRenderPass::render(World& world) {
 		const glm::vec3 z(0, 0, 1);
 
 
-		glm::vec3 position = transform->getPosition();
-		glm::quat rotation = transform->getRotation();
+		//glm::vec3 position = transform->getPosition();
+		//glm::quat rotation = transform->getRotation();
 
 		glm::mat4 matrix = transform->getMatrix() * text->transform.getMatrix();
 		////matrix = glm::translate(transform->position);

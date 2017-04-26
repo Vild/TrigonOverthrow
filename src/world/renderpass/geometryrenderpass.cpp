@@ -76,6 +76,8 @@ GeometryRenderPass::GeometryRenderPass() {
 GeometryRenderPass::~GeometryRenderPass() {}
 
 void GeometryRenderPass::render(World& world) {
+	rmt_ScopedCPUSample(GeometryRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(GeometryRenderPass);
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;

@@ -26,6 +26,7 @@ BulletDebugRenderPass::BulletDebugRenderPass()
 		.addVertex({  1,-1, 1 }).addVertex({  1, 1, 1 }) // FRONT RIGHT		
 	.finalize(512);
 
+
 	_gbuffer = std::make_shared<GBuffer>(0);
 
 	(*(_shader = std::make_shared<ShaderProgram>()))
@@ -54,6 +55,8 @@ inline std::string BulletDebugRenderPass::name()
 
 void BulletDebugRenderPass::render(World & world)
 {
+	rmt_ScopedCPUSample(BulletDebugRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(BulletDebugRenderPass);
 	auto camera = Engine::getInstance().getCamera()->getComponent<CameraComponent>();
 
 	//glClear(GL_DEPTH_BUFFER_BIT);
