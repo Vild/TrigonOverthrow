@@ -144,7 +144,6 @@ InGameState::InGameState() {
 
 		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(box);
 
-
 		int width = Engine::getInstance().getMapLoader()->getWidth();
 		for (int i = 0; i < map.size(); i++)
 		{
@@ -154,15 +153,14 @@ InGameState::InGameState() {
 
 			Entity * tile  = _world.addEntity(sole::uuid4(), "FloorTile");
 
-			auto transform = tile->addComponent<TransformComponent>();
+			TransformComponent * transform = tile->addComponent<TransformComponent>();
 			transform->setPosition({x, h - 0.5, y});
 
-			auto rigidbody = tile->addComponent<RigidBodyComponent>();
+			RigidBodyComponent * rigidbody = tile->addComponent<RigidBodyComponent>();
 			rigidbody->setTransform(transform);
 			rigidbody->setHitboxHalfSize({ 0.5,0.5,0.5 });
 
 			bulletphyiscs->addRigidBody(rigidbody);
-
 			ismc->addInstance(transform);
 		}
 

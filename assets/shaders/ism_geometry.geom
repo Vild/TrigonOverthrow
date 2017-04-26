@@ -21,7 +21,7 @@ void main()
   for (int i = 0; i < 3; i++)
   {
     o_position = i_position[i];
-    gl_Position = u_view * u_projection * vec4(o_position, 1);
+    gl_Position = u_projection * u_view * vec4(o_position, 1);
     EmitVertex();
   }
 

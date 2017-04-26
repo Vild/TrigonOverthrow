@@ -61,8 +61,8 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 		auto transform = entity->getComponent<TransformComponent>();
 		if (!transform) continue;
 
-		btMotionState * state = rigidbody->getMotionState();
-		btTransform t; state->getWorldTransform(t);
+		
+		btTransform t = rigidbody->getRigidBody()->getWorldTransform();
 
 		btVector3 o = t.getOrigin();
 		btQuaternion q = t.getRotation();
