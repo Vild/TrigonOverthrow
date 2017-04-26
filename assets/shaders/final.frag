@@ -44,6 +44,6 @@ void main() {
 	vec3 d = setting_dirLight.diffuse * diff * diffuse;
 	vec3 s = vec3(0); //setting_dirLight.specular * spec * specular;
 
-	outColor = vec4(normal, 1);//vec4(a + d + s, 1);// * occlusion;
+	outColor = vec4(a + d + s, 1) * occlusion;
 	gl_FragDepth = depth;
 }
