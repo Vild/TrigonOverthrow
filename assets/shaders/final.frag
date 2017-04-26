@@ -19,9 +19,23 @@ struct DirLight {
 	vec3 specular;
 };
 
+struct PointLight {
+	vec3 position;
+	float constant;
+
+	vec3 ambient;
+	float linear;
+
+	vec3 diffuse;
+	float quadratic;
+
+	vec3 specular;
+};
+
 uniform vec3 cameraPos;
 
-uniform DirLight setting_dirLight;
+uniform DirLight dirLight;
+uniform PointLight pointLight[16];
 uniform float settings_shininess = 1f;
 
 void main() {
@@ -33,16 +47,16 @@ void main() {
 	float occlusion = texture(defOcclusionMap, vUV).r;
 
 	vec3 viewDir = normalize(cameraPos - pos);
-	vec3 lightDir = normalize(-setting_dirLight.direction);
+	vec3 lightDir = normalize(-dirLight.direction);
 	// Diffuse shading
 	float diff = max(dot(normal, lightDir), 0.0);
 	// Specular shading
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), settings_shininess);
 	// Combine results
-	vec3 a = setting_dirLight.ambient * diffuse;
-	vec3 d = setting_dirLight.diffuse * diff * diffuse;
-	vec3 s = vec3(0); //setting_dirLight.specular * spec * specular;
+	vec3 a = dirLight.ambient * diffuse;
+	vec3 d = dirLight.diffuse * diff * diffuse;
+	vec3 s = vec3(0); //dirLight.specular * spec * specular;
 
 	outColor = vec4(a + d + s, 1) * occlusion;
 	gl_FragDepth = depth;

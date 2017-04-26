@@ -24,19 +24,19 @@ LightingRenderPass::LightingRenderPass() {
 		.addUniform("defDepth")
 		.addUniform("defOcclusionMap")
 		.addUniform("cameraPos")
-		.addUniform("setting_dirLight.direction")
-		.addUniform("setting_dirLight.ambient")
-		.addUniform("setting_dirLight.diffuse")
-		.addUniform("setting_dirLight.specular");
+		.addUniform("dirLight.direction")
+		.addUniform("dirLight.ambient")
+		.addUniform("dirLight.diffuse")
+		.addUniform("dirLight.specular");
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
 		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
 		.setUniform("defDepth", (GLint)InputAttachment::depth)
 		.setUniform("defOcclusionMap", (GLint)InputAttachment::OcclusionMap)
-		.setUniform("setting_dirLight.direction", _dirLight.direction)
-		.setUniform("setting_dirLight.ambient", _dirLight.ambient)
-		.setUniform("setting_dirLight.diffuse", _dirLight.diffuse)
-		.setUniform("setting_dirLight.specular", _dirLight.specular);
+		.setUniform("dirLight.direction", _dirLight.direction)
+		.setUniform("dirLight.ambient", _dirLight.ambient)
+		.setUniform("dirLight.diffuse", _dirLight.diffuse)
+		.setUniform("dirLight.specular", _dirLight.specular);
 
 	std::vector<Vertex> vertices = {
 		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}}, Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}},
@@ -92,11 +92,11 @@ void LightingRenderPass::registerImGui() {
 	_shader->bind();
 
 	if (ImGui::DragFloat3("DirLight Direction", glm::value_ptr(_dirLight.direction), 0.1))
-		_shader->setUniform("setting_dirLight.direction", _dirLight.direction);
+		_shader->setUniform("dirLight.direction", _dirLight.direction);
 	if (ImGui::DragFloat3("DirLight Ambient", glm::value_ptr(_dirLight.ambient), 0.1, 0, 1))
-		_shader->setUniform("setting_dirLight.ambient", _dirLight.ambient);
+		_shader->setUniform("dirLight.ambient", _dirLight.ambient);
 	if (ImGui::DragFloat3("DirLight Diffuse", glm::value_ptr(_dirLight.diffuse), 0.1, 0, 1))
-		_shader->setUniform("setting_dirLight.diffuse", _dirLight.diffuse);
+		_shader->setUniform("dirLight.diffuse", _dirLight.diffuse);
 	if (ImGui::DragFloat3("DirLight Specular", glm::value_ptr(_dirLight.specular), 0.1, 0, 1))
-		_shader->setUniform("setting_dirLight.specular", _dirLight.specular);
+		_shader->setUniform("dirLight.specular", _dirLight.specular);
 }
