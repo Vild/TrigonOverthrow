@@ -75,7 +75,7 @@ void LightingRenderPass::render(World& world) {
 
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_shader->bind().setUniform("cameraPos", transformComponent->position);
+	_shader->bind().setUniform("cameraPos", transformComponent->getPosition());
 
 	_shader->setUniform("vp", glm::mat4(1));
 	_plane->render();

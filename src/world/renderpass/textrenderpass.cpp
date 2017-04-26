@@ -53,8 +53,8 @@ void TextRenderPass::render(World& world) {
 		const glm::vec3 z(0, 0, 1);
 
 
-		glm::vec3 position = transform->getPosition();
-		glm::quat rotation = transform->getRotation();
+		//glm::vec3 position = transform->getPosition();
+		//glm::quat rotation = transform->getRotation();
 
 		glm::mat4 matrix = transform->getMatrix() * text->transform.getMatrix();
 		////matrix = glm::translate(transform->position);

@@ -25,9 +25,9 @@ void InputSystem::update(World& world, float delta) {
 		btRigidBody & rigidBody = *rigidBodyComponent->getRigidBody();
 
 		// TODO: calculate this?
-		glm::vec3 forward = glm::vec3(0, 0, 1);
-		glm::vec3 right = glm::vec3(-1, 0, 0);
-		glm::vec3 up = glm::vec3(0, 1, 0);
+		//glm::vec3 forward = glm::vec3(0, 0, 1);
+		//glm::vec3 right = glm::vec3(-1, 0, 0);
+		//glm::vec3 up = glm::vec3(0, 1, 0);
 
 		glm::vec3 inputDir;
 		if (hid->getKey(SDL_SCANCODE_W))

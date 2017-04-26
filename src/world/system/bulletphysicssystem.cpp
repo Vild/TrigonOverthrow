@@ -1,8 +1,8 @@
 #include "bulletphysicssystem.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/transformcomponent.hpp"
-#include <Bullet3Common\b3Transform.h>
-#include <glm\gtc\type_ptr.hpp>
+#include <Bullet3Common/b3Transform.h>
+#include <glm/gtc/type_ptr.hpp>
 
 BulletPhyisicsSystem::BulletPhyisicsSystem()
 {
@@ -10,7 +10,7 @@ BulletPhyisicsSystem::BulletPhyisicsSystem()
 	dispatcher = new btCollisionDispatcher(collisionConfig);
 	constraintSolver = new btSequentialImpulseConstraintSolver();
 	broadphaseInterface = new btDbvtBroadphase();
-	
+
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphaseInterface, constraintSolver, collisionConfig);
 	world->setGravity({ 0, -9.82f, 0 });
 
@@ -53,7 +53,7 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 {
 	world->stepSimulation(delta);
 
-	for (std::unique_ptr<Entity>& entity : w.getEntities()) 
+	for (std::unique_ptr<Entity>& entity : w.getEntities())
 	{
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
 		if (!rigidbody) continue;
