@@ -207,6 +207,12 @@
     <ClCompile Include="src\world\system\projectilesystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\component\ghostobjectcomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\system\ghostobjectsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl\gbuffer.hpp">
@@ -411,6 +417,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\world\system\projectilesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\ghostobjectcomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\system\ghostobjectsystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

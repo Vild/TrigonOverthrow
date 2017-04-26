@@ -45,6 +45,7 @@
     <ClCompile Include="src\world\component\component.cpp" />
     <ClCompile Include="src\world\component\dynamicmodelcomponent.cpp" />
     <ClCompile Include="src\world\component\floortransformcomponent.cpp" />
+    <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
     <ClCompile Include="src\world\component\hitboxcomponent.cpp" />
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp" />
@@ -70,6 +71,7 @@
     <ClCompile Include="src\world\system\bulletphysicssystem.cpp" />
     <ClCompile Include="src\world\system\buttonsystem.cpp" />
     <ClCompile Include="src\world\system\camerasystem.cpp" />
+    <ClCompile Include="src\world\system\ghostobjectsystem.cpp" />
     <ClCompile Include="src\world\system\gunsystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
     <ClCompile Include="src\world\system\inputsystem.cpp" />
@@ -112,6 +114,7 @@
     <ClInclude Include="src\world\component\component.hpp" />
     <ClInclude Include="src\world\component\dynamicmodelcomponent.hpp" />
     <ClInclude Include="src\world\component\floortransformcomponent.hpp" />
+    <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
     <ClInclude Include="src\world\component\hitboxcomponent.hpp" />
     <ClInclude Include="src\world\component\kbmouseinputcomponent.hpp" />
@@ -137,6 +140,7 @@
     <ClInclude Include="src\world\system\bulletphysicssystem.hpp" />
     <ClInclude Include="src\world\system\buttonsystem.hpp" />
     <ClInclude Include="src\world\system\camerasystem.hpp" />
+    <ClInclude Include="src\world\system\ghostobjectsystem.hpp" />
     <ClInclude Include="src\world\system\gunsystem.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />
     <ClInclude Include="src\world\system\inputsystem.hpp" />
