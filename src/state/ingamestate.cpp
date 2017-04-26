@@ -20,6 +20,7 @@
 #include "../world/component/modelcomponent.hpp"
 #include "../world/component/hitboxcomponent.hpp"
 #include "../world/component/guncomponent.hpp"
+#include "../world/component/instancedsimplemeshcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -40,8 +41,9 @@ InGameState::InGameState() {
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();
+		transform->setPosition(glm::vec3(3));
 		transform->setScale(glm::vec3(0.3));
-		transform->setDirection({ 0,1,0 });
+		transform->setDirection({ 0,0,1 });
 
 		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
@@ -77,8 +79,7 @@ InGameState::InGameState() {
 		auto rigidbody = _player->addComponent<RigidBodyComponent>();
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setMass(1);
-		//rigidbody->setFriction(2);
-		rigidbody->setTransform(transform);
+		rigidbody->setFriction(1);
 
 		bulletphyiscs->addRigidBody(rigidbody);
 	}
@@ -121,8 +122,9 @@ InGameState::InGameState() {
 		auto rigidbody = _enemy->addComponent<RigidBodyComponent>();
 
 		rigidbody->setHitboxHalfSize(transform->getScale());
-		rigidbody->setMass(3);
+		rigidbody->setMass(1);
 		rigidbody->setFriction(1);
+		rigidbody->setTransform(transform);
 
 		bulletphyiscs->addRigidBody(rigidbody);
 	}
@@ -130,96 +132,95 @@ InGameState::InGameState() {
 	{ // Adding Floor
 		// How to fix support for non-uniform sizes of the map. E.g 2 in height and 6 in width.
 		std::vector<Uint8> map = Engine::getInstance().getMapLoader()->getMap("maps/smileyface.png");
-		auto transform = _floor->addComponent<FloorTransformComponent>();
-		transform->gridSize = Engine::getInstance().getMapLoader()->getHeight();
-		transform->scale = glm::vec3(1, 0.1, 1);
-		transform->recalculateMatrices();
+		Entity * room = _world.addEntity(sole::uuid4(), "Room");
 
-		int gridSize = transform->gridSize;
+		std::unique_ptr<SimpleMesh> box = std::make_unique<SimpleMesh>();
+		box->setDrawMode(GL_TRIANGLE_STRIP)
+			.addVertex({ -0.5, 0.5, -0.5 })
+			.addVertex({ -0.5, 0.5,  0.5 })
+			.addVertex({  0.5, 0.5, -0.5 })
+			.addVertex({  0.5, 0.5,  0.5 })
+		.finalize(256);
 
-#define frand() ((rand() * 1.0) / RAND_MAX)
-		float* topData = new float[gridSize * gridSize];
+		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(box);
 
-		for (int z = 0; z < gridSize; z++)
-			for (int x = 0; x < gridSize; x++) {
-				topData[z * gridSize + x] = float(map[z * gridSize + x] / float(5));
-			}
 
-		// for (int z = 0; z < gridSize; z++)
-		//	for (int x = 0; x < gridSize; x++) {
-		//		auto p = topData[z * gridSize + x];
-		//		const auto& forwards = z > 0 ? topData[(z - 1) * gridSize + x] : p;
-		//		const auto& left = x < gridSize - 1 ? topData[z * gridSize + x + 1] : p;
-		//		const auto& right = x > 0 ? topData[z * gridSize + x - 1] : p;
-		//		const auto& backwards = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : p;
-		//
-		//		p = ((forwards + left + right + backwards) + p * 2) / 6;
-		//	}
+		int width = Engine::getInstance().getMapLoader()->getWidth();
+		for (int i = 0; i < map.size(); i++)
+		{
+			int x = i % width;
+			int y = i / width;
+			float h = float(map[i]) / 255.0f;
 
-		glm::vec4* neighborData = new glm::vec4[gridSize * gridSize];
-		for (int z = 0; z < gridSize; z++)
-			for (int x = 0; x < gridSize; x++) {
-				// See floorbase.geom
-				enum Side { forwards = 0, left = 1, right = 2, backwards = 3 };
+			Entity * tile  = _world.addEntity(sole::uuid4(), "FloorTile");
 
-				glm::vec4& point = neighborData[z * gridSize + x];
+			auto transform = tile->addComponent<TransformComponent>();
+			transform->setPosition({x, h - 0.5, y});
 
-				float cur = topData[z * gridSize + x];
+			auto rigidbody = tile->addComponent<RigidBodyComponent>();
+			rigidbody->setTransform(transform);
+			rigidbody->setHitboxHalfSize({ 0.5,0.5,0.5 });
 
-				float minFloor = cur - 100;
+			bulletphyiscs->addRigidBody(rigidbody);
 
-				point[forwards] = z > 0 ? topData[(z - 1) * gridSize + x] : minFloor;
-				point[left] = x < gridSize - 1 ? topData[z * gridSize + x + 1] : minFloor;
-				point[right] = x > 0 ? topData[z * gridSize + x - 1] : minFloor;
-				point[backwards] = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : minFloor;
+			ismc->addInstance(transform);
+		}
 
-				point[forwards] = std::min(minFloor, point[forwards]);
-				point[left] = std::min(minFloor, point[left]);
-				point[right] = std::min(minFloor, point[right]);
-				point[backwards] = std::min(minFloor, point[backwards]);
-			}
-
-		auto model = _floor->addComponent<ModelComponent>();
-		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/box.obj");
-		model->meshData->mesh
-			->addBuffer("m",
-									[&](GLuint id) {
-										glBindBuffer(GL_ARRAY_BUFFER, id);
-										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gridSize * gridSize, NULL, GL_DYNAMIC_DRAW);
-
-										for (int i = 0; i < 4; i++) {
-											glEnableVertexAttribArray(ShaderAttributeID::m + i);
-											glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-											glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-										}
-
-										glBindBuffer(GL_ARRAY_BUFFER, 0);
-									})
-			.addBuffer("top",
-								 [&](GLuint id) {
-									 glBindBuffer(GL_ARRAY_BUFFER, id);
-									 glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * gridSize * gridSize, topData, GL_STATIC_DRAW);
-
-									 glEnableVertexAttribArray(ShaderAttributeID::top);
-									 glVertexAttribPointer(ShaderAttributeID::top, 1, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
-									 glVertexAttribDivisor(ShaderAttributeID::top, 1);
-
-									 glBindBuffer(GL_ARRAY_BUFFER, 0);
-								 })
-			.addBuffer("neighbor",
-								 [&](GLuint id) {
-									 glBindBuffer(GL_ARRAY_BUFFER, id);
-									 glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * gridSize * gridSize, neighborData, GL_STATIC_DRAW);
-
-									 glEnableVertexAttribArray(ShaderAttributeID::neighbor);
-									 glVertexAttribPointer(ShaderAttributeID::neighbor, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), NULL);
-									 glVertexAttribDivisor(ShaderAttributeID::neighbor, 1);
-
-									 glBindBuffer(GL_ARRAY_BUFFER, 0);
-								 })
-			.finalize();
-		delete[] topData;
-		delete[] neighborData;
+//		auto transform = _floor->addComponent<FloorTransformComponent>();
+//		transform->gridSize = Engine::getInstance().getMapLoader()->getHeight();
+//		transform->scale = glm::vec3(1, 0.1, 1);
+//		transform->recalculateMatrices();
+//
+//		int gridSize = transform->gridSize;
+//
+//#define frand() ((rand() * 1.0) / RAND_MAX)
+//		float* topData = new float[gridSize * gridSize];
+//
+//		for (int z = 0; z < gridSize; z++)
+//			for (int x = 0; x < gridSize; x++) {
+//				topData[z * gridSize + x] = float(map[z * gridSize + x] / float(5));
+//			}
+//
+//		// for (int z = 0; z < gridSize; z++)
+//		//	for (int x = 0; x < gridSize; x++) {
+//		//		auto p = topData[z * gridSize + x];
+//		//		const auto& forwards = z > 0 ? topData[(z - 1) * gridSize + x] : p;
+//		//		const auto& left = x < gridSize - 1 ? topData[z * gridSize + x + 1] : p;
+//		//		const auto& right = x > 0 ? topData[z * gridSize + x - 1] : p;
+//		//		const auto& backwards = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : p;
+//		//
+//		//		p = ((forwards + left + right + backwards) + p * 2) / 6;
+//		//	}
+//
+//		auto model = _floor->addComponent<ModelComponent>();
+//		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/box.obj");
+//		model->meshData->mesh
+//			->addBuffer("m",
+//									[&](GLuint id) {
+//										glBindBuffer(GL_ARRAY_BUFFER, id);
+//										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gridSize * gridSize, NULL, GL_DYNAMIC_DRAW);
+//
+//										for (int i = 0; i < 4; i++) {
+//											glEnableVertexAttribArray(ShaderAttributeID::m + i);
+//											glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
+//											glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
+//										}
+//
+//										glBindBuffer(GL_ARRAY_BUFFER, 0);
+//									})
+//			.addBuffer("top",
+//								 [&](GLuint id) {
+//									 glBindBuffer(GL_ARRAY_BUFFER, id);
+//									 glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * gridSize * gridSize, topData, GL_STATIC_DRAW);
+//
+//									 glEnableVertexAttribArray(ShaderAttributeID::top);
+//									 glVertexAttribPointer(ShaderAttributeID::top, 1, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
+//									 glVertexAttribDivisor(ShaderAttributeID::top, 1);
+//
+//									 glBindBuffer(GL_ARRAY_BUFFER, 0);
+//									});
+//			.finalize();
+//		delete[] topData;
 	}
 }
 

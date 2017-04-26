@@ -12,7 +12,7 @@ RigidBodyComponent::RigidBodyComponent()
 	shape = new btBoxShape({ 1,1,1 });
 
 	rigidBody = new btRigidBody(mass, state, shape);
-	rigidBody->setActivationState(DISABLE_DEACTIVATION);
+	//rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 RigidBodyComponent::~RigidBodyComponent()
@@ -76,7 +76,7 @@ void RigidBodyComponent::setHitboxHalfSize(const glm::vec3 & size)
 
 void RigidBodyComponent::setTransform(TransformComponent * transform)
 {
-	rigidBody->setCenterOfMassTransform(btTransform(
+	rigidBody->setWorldTransform(btTransform(
 		cast(transform->getRotation()),
 		cast(transform->getPosition())
 	));

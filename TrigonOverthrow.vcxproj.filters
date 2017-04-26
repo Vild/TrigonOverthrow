@@ -192,6 +192,9 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\component\instancedsimplemeshcomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\world\component\floortransformcomponent.hpp">
@@ -381,6 +384,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\component\instancedsimplemeshcomponent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

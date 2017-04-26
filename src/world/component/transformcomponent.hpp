@@ -28,6 +28,7 @@ public:
 	virtual void registerImGui();
 	virtual std::string name();
 
+
 private:
 	bool dirty;
 

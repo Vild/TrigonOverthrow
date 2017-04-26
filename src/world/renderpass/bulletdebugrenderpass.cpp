@@ -24,7 +24,7 @@ BulletDebugRenderPass::BulletDebugRenderPass()
 		.addVertex({  1,-1,-1 }).addVertex({  1, 1,-1 }) // BACK RIGHT
 		.addVertex({ -1,-1, 1 }).addVertex({ -1, 1, 1 }) // FRONT LETT
 		.addVertex({  1,-1, 1 }).addVertex({  1, 1, 1 }) // FRONT RIGHT		
-	.finalize();
+	.finalize(512);
 
 	_gbuffer = std::make_shared<GBuffer>(0);
 

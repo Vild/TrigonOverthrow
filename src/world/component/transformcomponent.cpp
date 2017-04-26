@@ -100,3 +100,4 @@ void TransformComponent::registerImGui() {
 }
 
 inline std::string TransformComponent::name() { return "TransformComponent"; }
+

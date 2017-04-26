@@ -18,7 +18,7 @@ BulletPhyisicsSystem::BulletPhyisicsSystem()
 	planeState = std::make_unique<btDefaultMotionState>();
 	planeBody = std::make_unique<btRigidBody>(0, planeState.get(), planeShape.get());
 
-	world->addRigidBody(planeBody.get());
+	//world->addRigidBody(planeBody.get());
 }
 
 BulletPhyisicsSystem::~BulletPhyisicsSystem()
