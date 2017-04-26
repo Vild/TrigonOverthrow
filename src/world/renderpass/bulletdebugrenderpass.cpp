@@ -23,7 +23,7 @@ BulletDebugRenderPass::BulletDebugRenderPass()
 		.addVertex({ -1,-1,-1 }).addVertex({ -1, 1,-1 }) // BACK LEFT
 		.addVertex({  1,-1,-1 }).addVertex({  1, 1,-1 }) // BACK RIGHT
 		.addVertex({ -1,-1, 1 }).addVertex({ -1, 1, 1 }) // FRONT LETT
-		.addVertex({  1,-1, 1 }).addVertex({  1, 1, 1 }) // FRONT RIGHT		
+		.addVertex({  1,-1, 1 }).addVertex({  1, 1, 1 }) // FRONT RIGHT
 	.finalize();
 
 	_gbuffer = std::make_shared<GBuffer>(0);
@@ -54,6 +54,8 @@ inline std::string BulletDebugRenderPass::name()
 
 void BulletDebugRenderPass::render(World & world)
 {
+	rmt_ScopedCPUSample(BulletDebugRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(BulletDebugRenderPass);
 	auto camera = Engine::getInstance().getCamera()->getComponent<CameraComponent>();
 
 	//glClear(GL_DEPTH_BUFFER_BIT);

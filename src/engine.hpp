@@ -10,6 +10,8 @@
 #include <typeindex>
 #include <unordered_map>
 
+#include "lib/Remotery.h"
+
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
 #include "io/hidinput.hpp"
@@ -76,6 +78,8 @@ private:
 	unsigned int _width = 1280;
 	unsigned int _height = 720;
 	bool _vsync = true;
+
+	Remotery* rmt;
 
 	bool _quit;
 	SDL_Window* _window;

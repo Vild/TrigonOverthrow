@@ -92,6 +92,8 @@ void GaussianRenderPass::registerImGui() {
 }
 
 void GaussianRenderPass::render(World& world) {
+	rmt_ScopedCPUSample(GaussianRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(GaussianRenderPass);
 	static std::shared_ptr<GBuffer> buffers[] = {_gbuffer, altBuffer};
 	static std::shared_ptr<Texture> images[] = {buffers[0]->getAttachment(0), buffers[1]->getAttachment(0)};
 

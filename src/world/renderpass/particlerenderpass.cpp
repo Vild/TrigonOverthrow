@@ -24,6 +24,8 @@ ParticleRenderPass::ParticleRenderPass() {
 ParticleRenderPass::~ParticleRenderPass() {}
 
 void ParticleRenderPass::render(World& world) {
+	rmt_ScopedCPUSample(ParticleRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(ParticleRenderPass);
 	// Render particles with instanced drawing.
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)

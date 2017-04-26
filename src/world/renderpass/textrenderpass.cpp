@@ -22,6 +22,8 @@ TextRenderPass::TextRenderPass() {
 TextRenderPass::~TextRenderPass() {}
 
 void TextRenderPass::render(World& world) {
+	rmt_ScopedCPUSample(TextRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(TextRenderPass);
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;

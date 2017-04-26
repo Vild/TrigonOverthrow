@@ -5,6 +5,7 @@
 GunSystem::~GunSystem() {}
 
 void GunSystem::update(World& world, float delta) {
+	rmt_ScopedCPUSample(GunSystem, RMTSF_None);
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto gunComp = entity->getComponent<GunComponent>();
 		if (!gunComp)
