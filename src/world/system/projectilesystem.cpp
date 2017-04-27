@@ -12,10 +12,10 @@ void ProjectileSystem::update(World& world, float delta) {
 		const btCollisionObject* obA = contactManifold->getBody0();
 		const btCollisionObject* obB = contactManifold->getBody1();
 		
-		if (!static_cast<Entity*>(obA->getUserPointer())->getComponent<ProjectileComponent>()) {
-			if (!static_cast<Entity*>(obB->getUserPointer())->getComponent<ProjectileComponent>())
-				continue;
-		}
+		//if (!static_cast<Entity*>(obA->getUserPointer())->getComponent<ProjectileComponent>()) {
+		//	if (!static_cast<Entity*>(obB->getUserPointer())->getComponent<ProjectileComponent>())
+		//		continue;
+		//}
 
 		//printf("OHGODNOPLEASESTOP\n");
 		int numContacts = contactManifold->getNumContacts();
@@ -25,7 +25,7 @@ void ProjectileSystem::update(World& world, float delta) {
 				const btVector3& ptA = pt.getPositionWorldOnA();
 				const btVector3& ptB = pt.getPositionWorldOnB();
 				const btVector3& normalOnB = pt.m_normalWorldOnB;
-				printf("Projectile collided with\n");
+				//printf("Projectile collided with\n");
 			}
 		}
 	}

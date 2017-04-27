@@ -46,8 +46,8 @@ Engine::~Engine() {
 	_systems.clear();
 	_states.clear();
 
-	rmt_UnbindOpenGL();
-	rmt_DestroyGlobalInstance(rmt);
+	//rmt_UnbindOpenGL();
+	//rmt_DestroyGlobalInstance(rmt);
 
 	TTF_Quit();
 	Mix_Quit();
