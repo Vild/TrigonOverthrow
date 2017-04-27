@@ -1,6 +1,7 @@
 #include "ghostobjectsystem.hpp"
 #include "../component/ghostobjectcomponent.hpp"
-
+#include "bulletphysicssystem.hpp"
+#include "../../engine.hpp"
 GhostObjectSystem::GhostObjectSystem() {
 	
 }
@@ -14,7 +15,6 @@ void GhostObjectSystem::update(World & world, float delta){
 		auto ghostObjComp = entity->getComponent<GhostObjectComponent>();
 		if (!ghostObjComp)
 			continue;
-
 	}
 }
 

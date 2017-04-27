@@ -82,8 +82,10 @@ InGameState::InGameState() {
 		rigidbody->setMass(1);
 		//rigidbody->setFriction(2);
 		rigidbody->setTransform(transform);
-
-		bulletphyiscs->addRigidBody(rigidbody);
+		rigidbody->getRigidBody()->setUserPointer(_player);
+		bulletphyiscs->addRigidBody(rigidbody,
+			BulletPhysicsSystem::CollisionType::COL_PLAYER,
+			BulletPhysicsSystem::playerCollidesWith);
 	}
 
 	{
@@ -125,12 +127,14 @@ InGameState::InGameState() {
 		text->transform.setScale({0.1, 0.1, 0.1}); // To counteract transform->scale
 
 		auto rigidbody = _enemy->addComponent<RigidBodyComponent>();
-
+		rigidbody->getRigidBody()->setUserPointer(_enemy);
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setMass(3);
 		rigidbody->setFriction(1);
 
-		bulletphyiscs->addRigidBody(rigidbody);
+		bulletphyiscs->addRigidBody(rigidbody,
+			BulletPhysicsSystem::CollisionType::COL_ENEMY,
+			BulletPhysicsSystem::enemyCollidesWith);
 	}
 
 	{ // Adding Floor

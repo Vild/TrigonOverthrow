@@ -4,7 +4,7 @@ GhostObjectComponent::GhostObjectComponent() {
 	hitboxHalfSize = { 1,1,1 };
 	_friction = 0.0f;
 	_shape = new btBoxShape({ 1,1,1 });
-	_ghostObject = new btGhostObject();
+	_ghostObject = new btPairCachingGhostObject();
 	_ghostObject->setActivationState(DISABLE_DEACTIVATION);
 }
 
@@ -13,7 +13,7 @@ GhostObjectComponent::~GhostObjectComponent() {
 	delete _ghostObject;
 }
 
-btGhostObject * GhostObjectComponent::getGhostObject()
+btPairCachingGhostObject * GhostObjectComponent::getGhostObject()
 {
 	return _ghostObject;
 }

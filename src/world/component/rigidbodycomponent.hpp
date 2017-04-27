@@ -4,7 +4,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 #include <glm/glm.hpp>
-
+#include "../entity.hpp"
 class RigidBodyComponent : public Component
 {
 public:

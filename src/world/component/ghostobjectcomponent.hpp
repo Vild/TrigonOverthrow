@@ -16,13 +16,13 @@ public:
 	virtual void registerImGui() override {}
 
 	glm::vec3 hitboxHalfSize;
-	btGhostObject * getGhostObject();
+	btPairCachingGhostObject * getGhostObject();
 	glm::vec3 getHitboxHalfSize();
 
 	void setFriction(btScalar friction);
 	void setHitboxHalfSize(const glm::vec3 & size);
 private:
-	btGhostObject * _ghostObject;
+	btPairCachingGhostObject * _ghostObject;
 
 	btScalar _friction;
 	btBoxShape* _shape;

@@ -45,12 +45,14 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	transProj->setPosition(transComp->getPosition() + transProj->getDirection());
 
 	auto currRdbComp = me->getComponent<RigidBodyComponent>();
-	auto projRdbComp = projectile->addComponent<GhostObjectComponent>();
-	
+	auto projRdbComp = projectile->addComponent<RigidBodyComponent>();
+	projRdbComp->getRigidBody()->setUserPointer(projectile);
+
 	projRdbComp->setHitboxHalfSize(transProj->getScale());
+	projRdbComp->setMass(1);
 	projRdbComp->setFriction(0);
-	//projRdbComp->getGhostObject()->(cast(transProj->getDirection() * 5.0f));
-	//projRdbComp->setTransform(transProj);
+	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * 6.0f));
+	projRdbComp->setTransform(transProj);
 
 	auto projLifeComp = projectile->addComponent<LifeComponent>();
 	projLifeComp->currHP = projLifeComp->maxHP = 2;
@@ -76,7 +78,9 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	})
 		.finalize();
 
-	//Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp);
+	Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, 
+		BulletPhysicsSystem::CollisionType::COL_PROJECTILE,
+		BulletPhysicsSystem::projectileCollidesWith);
 }
 
 

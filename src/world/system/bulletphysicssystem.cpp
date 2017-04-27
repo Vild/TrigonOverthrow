@@ -3,6 +3,7 @@
 #include "../component/transformcomponent.hpp"
 #include "../component/projectilecomponent.hpp"
 #include <Bullet3Common\b3Transform.h>
+#include <BulletCollision\CollisionDispatch\btGhostObject.h>
 #include <glm\gtc\type_ptr.hpp>
 
 BulletPhysicsSystem::BulletPhysicsSystem()
@@ -18,8 +19,7 @@ BulletPhysicsSystem::BulletPhysicsSystem()
 	planeShape = std::make_unique<btStaticPlaneShape>(btVector3(0, 1, 0), 0);
 	planeState = std::make_unique<btDefaultMotionState>();
 	planeBody = std::make_unique<btRigidBody>(0, planeState.get(), planeShape.get());
-
-	world->addRigidBody(planeBody.get());
+	world->addRigidBody(planeBody.get(), COL_WALL, wallCollidesWith);
 }
 
 BulletPhysicsSystem::~BulletPhysicsSystem()
@@ -86,9 +86,9 @@ std::string BulletPhysicsSystem::name()
 	return "BulletPhyisicsSystem";
 }
 
-void BulletPhysicsSystem::addRigidBody(RigidBodyComponent * rigidBody)
+void BulletPhysicsSystem::addRigidBody(RigidBodyComponent * rigidBody, int group, int mask)
 {
-	world->addRigidBody(rigidBody->getRigidBody());
+	world->addRigidBody(rigidBody->getRigidBody(), group, mask);
 }
 
 void BulletPhysicsSystem::removeRigidBody(RigidBodyComponent * rigidBody)
