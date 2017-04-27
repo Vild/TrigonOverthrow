@@ -171,6 +171,9 @@ int Engine::run(bool vsync) {
 		{
 			rmt_ScopedCPUSample(ImGuiRender, RMTSF_None);
 			rmt_ScopedOpenGLSample(ImGuiRender);
+			// static bool debug = true;
+			// ImGui::ShowMetricsWindow(&debug);
+
 			ImGui::Render();
 		}
 		{

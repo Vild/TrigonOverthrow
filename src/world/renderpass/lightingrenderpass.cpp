@@ -10,6 +10,25 @@
 #include "../component/transformcomponent.hpp"
 
 LightingRenderPass::LightingRenderPass() {
+	_ambient = glm::vec3(0.1, 0.1, 0.1);
+	_dirLight = DirLight{
+		.diffuse = glm::vec3(1, 1, 1),				//
+		.specular = glm::vec3(0.5, 0.5, 0.5), //
+		.direction = glm::vec3(0, -1, 0)			//
+	};
+
+	for (int i = 0; i < POINT_LIGHTS; i++) {
+		_pointLights[i] = PointLight{
+			.diffuse = glm::vec3{(i % 8) / 8.0, (i % 16) / 16.0, (i % 2) / 2.0}, //
+			.specular = glm::vec3{0.0, 0.0, 0.0},																 //
+
+			.position = glm::vec3{i, 1, i}, //
+			.constant = float{1},					 //
+			.linear = float{0.7},					 //
+			.quadratic = float{1.8},			 //
+		};
+	}
+
 	_gbuffer = std::make_shared<GBuffer>(0);
 
 	_shader = std::make_shared<ShaderProgram>();
@@ -24,19 +43,41 @@ LightingRenderPass::LightingRenderPass() {
 		.addUniform("defDepth")
 		.addUniform("defOcclusionMap")
 		.addUniform("cameraPos")
-		.addUniform("dirLight.direction")
+		.addUniform("ambient")
 		.addUniform("dirLight.ambient")
 		.addUniform("dirLight.diffuse")
-		.addUniform("dirLight.specular");
+		.addUniform("dirLight.specular")
+		.addUniform("dirLight.direction");
+
+	for (int i = 0; i < POINT_LIGHTS; i++) {
+		_shader->addUniform("pointLights[" + std::to_string(i) + "].diffuse")
+			.addUniform("pointLights[" + std::to_string(i) + "].specular")
+
+			.addUniform("pointLights[" + std::to_string(i) + "].position")
+			.addUniform("pointLights[" + std::to_string(i) + "].constant")
+			.addUniform("pointLights[" + std::to_string(i) + "].linear")
+			.addUniform("pointLights[" + std::to_string(i) + "].quadratic");
+	}
+
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
 		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
 		.setUniform("defDepth", (GLint)InputAttachment::depth)
 		.setUniform("defOcclusionMap", (GLint)InputAttachment::OcclusionMap)
-		.setUniform("dirLight.direction", _dirLight.direction)
-		.setUniform("dirLight.ambient", _dirLight.ambient)
+		.setUniform("ambient", _ambient)
 		.setUniform("dirLight.diffuse", _dirLight.diffuse)
-		.setUniform("dirLight.specular", _dirLight.specular);
+		.setUniform("dirLight.specular", _dirLight.specular)
+		.setUniform("dirLight.direction", _dirLight.direction);
+
+	for (int i = 0; i < POINT_LIGHTS; i++) {
+		_shader->setUniform("pointLights[" + std::to_string(i) + "].diffuse", _pointLights[i].diffuse)
+			.setUniform("pointLights[" + std::to_string(i) + "].specular", _pointLights[i].specular)
+
+			.setUniform("pointLights[" + std::to_string(i) + "].position", _pointLights[i].position)
+			.setUniform("pointLights[" + std::to_string(i) + "].constant", _pointLights[i].constant)
+			.setUniform("pointLights[" + std::to_string(i) + "].linear", _pointLights[i].linear)
+			.setUniform("pointLights[" + std::to_string(i) + "].quadratic", _pointLights[i].quadratic);
+	}
 
 	std::vector<Vertex> vertices = {
 		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}}, Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}},
@@ -91,12 +132,45 @@ void LightingRenderPass::resize(unsigned int width, unsigned int height) {
 void LightingRenderPass::registerImGui() {
 	_shader->bind();
 
-	if (ImGui::DragFloat3("DirLight Direction", glm::value_ptr(_dirLight.direction), 0.1))
-		_shader->setUniform("dirLight.direction", _dirLight.direction);
-	if (ImGui::DragFloat3("DirLight Ambient", glm::value_ptr(_dirLight.ambient), 0.1, 0, 1))
-		_shader->setUniform("dirLight.ambient", _dirLight.ambient);
-	if (ImGui::DragFloat3("DirLight Diffuse", glm::value_ptr(_dirLight.diffuse), 0.1, 0, 1))
+	if (ImGui::ColorEdit3("Ambient", glm::value_ptr(_ambient)))
+		_shader->setUniform("ambient", _ambient);
+
+	ImGui::Text("Directional Light");
+	if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(_dirLight.diffuse)))
 		_shader->setUniform("dirLight.diffuse", _dirLight.diffuse);
-	if (ImGui::DragFloat3("DirLight Specular", glm::value_ptr(_dirLight.specular), 0.1, 0, 1))
+	if (ImGui::ColorEdit3("Specular", glm::value_ptr(_dirLight.specular)))
 		_shader->setUniform("dirLight.specular", _dirLight.specular);
+	if (ImGui::DragFloat3("Direction", glm::value_ptr(_dirLight.direction), 0.1))
+		_shader->setUniform("dirLight.direction", _dirLight.direction);
+
+	for (int i = 0; i < POINT_LIGHTS; i++) {
+		auto& light = _pointLights[i];
+		const ImVec4 color = ImColor(light.diffuse.x, light.diffuse.y, light.diffuse.z, 1.0);
+		ImVec4 invert = color;
+		invert.x = 1 - invert.x;
+		invert.y = 1 - invert.y;
+		invert.z = 1 - invert.z;
+
+		std::string name = std::string("Light") + std::to_string(i);
+		ImGui::PushStyleColor(ImGuiCol_Header, color);
+		ImGui::PushStyleColor(ImGuiCol_Text, invert);
+		if (ImGui::CollapsingHeader(name.c_str())) {
+			ImGui::PopStyleColor(2);
+			ImGui::Text((std::string("Editing Light #") + std::to_string(i)).c_str());
+
+			if (ImGui::ColorEdit3("Diffuse##diffuse", glm::value_ptr(light.diffuse)))
+				_shader->setUniform("pointLights[" + std::to_string(i) + "].diffuse", light.diffuse);
+			if (ImGui::ColorEdit3("Specular##specular", glm::value_ptr(light.specular)))
+				_shader->setUniform("pointLights[" + std::to_string(i) + "].specular", light.specular);
+			if (ImGui::DragFloat3("Position##position", glm::value_ptr(light.position), 0.1))
+				_shader->setUniform("pointLights[" + std::to_string(i) + "].position", light.position);
+			if (ImGui::DragFloat("Constant##constant", &light.constant, 0.1))
+				_shader->setUniform("pointLights[" + std::to_string(i) + "].constant", light.constant);
+			if (ImGui::DragFloat("Linear##linear", &light.linear, 0.1))
+				_shader->setUniform("pointLights[" + std::to_string(i) + "].linear", light.linear);
+			if (ImGui::DragFloat("Quadratic##quadratic", &light.quadratic, 0.1))
+				_shader->setUniform("pointLights[" + std::to_string(i) + "].quadratic", light.quadratic);
+		} else
+			ImGui::PopStyleColor(2);
+	}
 }
