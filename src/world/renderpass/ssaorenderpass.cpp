@@ -140,6 +140,8 @@ void SSAORenderSystem::registerImGui() {
 }
 
 void SSAORenderSystem::render(World& world) {
+	rmt_ScopedCPUSample(SSAORenderSystem, RMTSF_None);
+	rmt_ScopedOpenGLSample(SSAORenderSystem);
 	glClear(GL_COLOR_BUFFER_BIT);
 	auto camera = Engine::getInstance().getCamera();
 	auto cameraComponent = camera->getComponent<CameraComponent>();

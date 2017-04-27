@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "../../lib/imgui.h"
+#include "../../lib/Remotery.h"
 
 /// Used to identifying a Component
 struct Component {

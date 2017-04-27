@@ -19,6 +19,7 @@ public:
 
 private:
 	std::shared_ptr<ShaderProgram> _floorShader;
+	std::unique_ptr<ShaderProgram> ismShader;
 
 	bool _setting_base_doBackFaceCulling = false;
 	float _setting_base_defaultSpecular = 0.5f;

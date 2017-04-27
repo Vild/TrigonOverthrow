@@ -8,6 +8,7 @@
 CameraSystem::~CameraSystem() {}
 
 void CameraSystem::update(World& world, float delta) {
+	rmt_ScopedCPUSample(CameraSystem, RMTSF_None);
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto cameraComponent = entity->getComponent<CameraComponent>();
 		if (!cameraComponent)

@@ -35,6 +35,7 @@
     <ClCompile Include="src\lib\imgui_demo.cpp" />
     <ClCompile Include="src\lib\imgui_draw.cpp" />
     <ClCompile Include="src\lib\imgui_impl_sdl_gl3.cpp" />
+    <ClCompile Include="src\lib\Remotery.c" />
     <ClCompile Include="src\lib\sole\sole.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\state\ingamestate.cpp" />
@@ -48,6 +49,7 @@
     <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
     <ClCompile Include="src\world\component\hitboxcomponent.cpp" />
+    <ClCompile Include="src\world\component\instancedsimplemeshcomponent.cpp" />
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp" />
     <ClCompile Include="src\world\component\lifecomponent.cpp" />
     <ClCompile Include="src\world\component\lightcomponent.cpp" />
@@ -101,6 +103,7 @@
     <ClInclude Include="src\lib\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="src\lib\imgui_internal.h" />
     <ClInclude Include="src\lib\KHR\khrplatform.h" />
+    <ClInclude Include="src\lib\Remotery.h" />
     <ClInclude Include="src\lib\sole\sole.fwd.hpp" />
     <ClInclude Include="src\lib\sole\sole.hpp" />
     <ClInclude Include="src\lib\stb_rect_pack.h" />
@@ -117,6 +120,7 @@
     <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
     <ClInclude Include="src\world\component\hitboxcomponent.hpp" />
+    <ClInclude Include="src\world\component\instancedsimplemeshcomponent.hpp" />
     <ClInclude Include="src\world\component\kbmouseinputcomponent.hpp" />
     <ClInclude Include="src\world\component\lifecomponent.hpp" />
     <ClInclude Include="src\world\component\lightcomponent.hpp" />
@@ -235,6 +239,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
@@ -277,6 +282,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -300,6 +306,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -6,27 +6,36 @@
 
 // Note! When making changes here add them also to FloorTransformComponent
 
-class TransformComponent : public Component
-{
+class TransformComponent : public Component {
 public:
 	TransformComponent();
 	virtual ~TransformComponent();
 
-	glm::mat4 getMatrix();
-	glm::vec3 getPosition();
-	glm::quat getRotation();
-	glm::vec3 getDirection();
-	glm::vec3 getScale();
+	inline glm::mat4 getMatrix() {
+		if (dirty)
+			recalculateMatrix();
+		return matrix;
+	}
+	inline glm::vec3 getPosition() { return position; }
 
-	void setScale(const glm::vec3 & scale);
-	void setPosition(const glm::vec3 & position);
-	void setRotation(const glm::quat & rotation);
-	void setDirection(const glm::vec3 & direction, const glm::vec3 & up = {0, 1, 0});
+	inline glm::quat getRotation() { return rotation; }
+	inline glm::vec3 getDirection() {
+		static const glm::vec3 forward = {0, 0, -1};
+		return glm::mat3_cast(rotation) * forward;
+	}
 
-	void move(const glm::vec3 & delta);
+	inline glm::vec3 getScale() { return scale; }
+
+	void setScale(const glm::vec3& scale);
+	void setPosition(const glm::vec3& position);
+	void setRotation(const glm::quat& rotation);
+	void setDirection(const glm::vec3& direction, const glm::vec3& up = {0, 1, 0});
+
+	void move(const glm::vec3& delta);
 
 	virtual void registerImGui();
-	virtual std::string name();
+	inline std::string name() { return "TransformComponent"; }
+
 
 private:
 	bool dirty;
@@ -39,23 +48,18 @@ private:
 	void recalculateMatrix();
 };
 
-inline glm::vec3 cast(btVector3 const & v)
-{
-	return { v.x(), v.y(), v.z() };
+inline glm::vec3 cast(btVector3 const& v) {
+	return {v.x(), v.y(), v.z()};
 }
 
-inline glm::quat cast(btQuaternion const & q)
-{
-	return { q.w(), q.x(), q.y(), q.z() };
+inline glm::quat cast(btQuaternion const& q) {
+	return {q.w(), q.x(), q.y(), q.z()};
 }
 
-inline btVector3 cast(glm::vec3 const & v)
-{
-	return { v.x, v.y, v.z };
+inline btVector3 cast(glm::vec3 const& v) {
+	return {v.x, v.y, v.z};
 }
 
-inline btQuaternion cast(glm::quat const & q)
-{
+inline btQuaternion cast(glm::quat const& q) {
 	return {q.x, q.y, q.z, q.w};
 }
-

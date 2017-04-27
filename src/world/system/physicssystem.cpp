@@ -8,6 +8,7 @@
 PhysicsSystem::~PhysicsSystem() {}
 
 void PhysicsSystem::update(World& world, float delta) {
+	rmt_ScopedCPUSample(PhysicsSystem, RMTSF_None);
 	// TODO: Compute shader this?
 
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {

@@ -24,6 +24,8 @@ public:
 	void setHitboxHalfSize(const glm::vec3 & size);
 	void setTransform(TransformComponent * transform);
 
+	void setActivationState(int newState);
+
 private:
 	btRigidBody * rigidBody;
 
