@@ -136,11 +136,11 @@ void LightingRenderPass::registerImGui() {
 		_shader->setUniform("ambient", _ambient);
 
 	ImGui::Text("Directional Light");
-	if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(_dirLight.diffuse)))
+	if (ImGui::ColorEdit3("Diffuse##DirLight", glm::value_ptr(_dirLight.diffuse)))
 		_shader->setUniform("dirLight.diffuse", _dirLight.diffuse);
-	if (ImGui::ColorEdit3("Specular", glm::value_ptr(_dirLight.specular)))
+	if (ImGui::ColorEdit3("Specular##DirLight", glm::value_ptr(_dirLight.specular)))
 		_shader->setUniform("dirLight.specular", _dirLight.specular);
-	if (ImGui::DragFloat3("Direction", glm::value_ptr(_dirLight.direction), 0.1))
+	if (ImGui::DragFloat3("Direction##DirLight", glm::value_ptr(_dirLight.direction), 0.1))
 		_shader->setUniform("dirLight.direction", _dirLight.direction);
 
 	for (int i = 0; i < POINT_LIGHTS; i++) {
@@ -158,17 +158,17 @@ void LightingRenderPass::registerImGui() {
 			ImGui::PopStyleColor(2);
 			ImGui::Text((std::string("Editing Light #") + std::to_string(i)).c_str());
 
-			if (ImGui::ColorEdit3("Diffuse##diffuse", glm::value_ptr(light.diffuse)))
+			if (ImGui::ColorEdit3(("Diffuse##diffuse" + name).c_str(), glm::value_ptr(light.diffuse)))
 				_shader->setUniform("pointLights[" + std::to_string(i) + "].diffuse", light.diffuse);
-			if (ImGui::ColorEdit3("Specular##specular", glm::value_ptr(light.specular)))
+			if (ImGui::ColorEdit3(("Specular##specular" + name).c_str(), glm::value_ptr(light.specular)))
 				_shader->setUniform("pointLights[" + std::to_string(i) + "].specular", light.specular);
-			if (ImGui::DragFloat3("Position##position", glm::value_ptr(light.position), 0.1))
+			if (ImGui::DragFloat3(("Position##position" + name).c_str(), glm::value_ptr(light.position), 0.1))
 				_shader->setUniform("pointLights[" + std::to_string(i) + "].position", light.position);
-			if (ImGui::DragFloat("Constant##constant", &light.constant, 0.1))
+			if (ImGui::DragFloat(("Constant##constant" + name).c_str(), &light.constant, 0.1))
 				_shader->setUniform("pointLights[" + std::to_string(i) + "].constant", light.constant);
-			if (ImGui::DragFloat("Linear##linear", &light.linear, 0.1))
+			if (ImGui::DragFloat(("Linear##linear" + name).c_str(), &light.linear, 0.1))
 				_shader->setUniform("pointLights[" + std::to_string(i) + "].linear", light.linear);
-			if (ImGui::DragFloat("Quadratic##quadratic", &light.quadratic, 0.1))
+			if (ImGui::DragFloat(("Quadratic##quadratic" + name).c_str(), &light.quadratic, 0.1))
 				_shader->setUniform("pointLights[" + std::to_string(i) + "].quadratic", light.quadratic);
 		} else
 			ImGui::PopStyleColor(2);

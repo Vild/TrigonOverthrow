@@ -37,7 +37,7 @@ private:
 		float quadratic;
 	};
 
-	static const int POINT_LIGHTS = 16;
+	static const int POINT_LIGHTS = 64;
 
 	std::shared_ptr<Mesh> _plane;
 

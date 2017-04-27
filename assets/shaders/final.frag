@@ -31,7 +31,7 @@ struct PointLight {
 uniform vec3 cameraPos;
 
 uniform vec3 ambient;
-#define POINT_LIGHTS 16
+#define POINT_LIGHTS 64
 uniform DirLight dirLight;
 uniform PointLight pointLights[POINT_LIGHTS];
 uniform float settings_shininess = 1;
@@ -81,12 +81,12 @@ void main() {
 
 	vec3 result = ambient * diffuse;
 
-	result += calcDirLight(dirLight, pos, normal, diffuse, specular);
+	//result += calcDirLight(dirLight, pos, normal, diffuse, specular);
 
 	for (int i = 0; i < POINT_LIGHTS; i++)
 		result += calcPointLight(pointLights[i], pos, normal, diffuse, specular);
 
-	//result *= occlusion;
+	result *= occlusion;
 	outColor = vec4(result, 1);
 	gl_FragDepth = depth;
 }

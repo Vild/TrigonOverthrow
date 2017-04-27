@@ -19,6 +19,8 @@ void ImGuiSystem::update(World& world, float delta) {
 	ImGui::Text("Entities:");
 	char name[255] = {0};
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+		if (entity->getHide())
+			continue;
 		snprintf(name, sizeof(name), "%s (%s)##%p", entity->getName().c_str(), entity->getUUID().str().c_str(), (void*)entity.get());
 		if (ImGui::TreeNode(name)) {
 			ImGui::Text("Actions:");

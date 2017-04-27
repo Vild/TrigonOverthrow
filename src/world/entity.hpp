@@ -27,8 +27,8 @@ public:
 		return static_cast<T*>(_components.back().get());
 	}
 
-	//template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
-	//T* addComponent(std::unique_ptr<T> component) {
+	// template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
+	// T* addComponent(std::unique_ptr<T> component) {
 	//	_components.push_back(std::move(component));
 	//	return static_cast<T*>(_components.back().get());
 	//}
@@ -59,14 +59,16 @@ public:
 
 	inline sole::uuid& getUUID() { return _uuid; }
 	inline std::string& getName() { return _name; }
-	inline void makeDead() { dead = true;  }
-	inline bool isDead() { return dead; }
+	inline void makeDead() { _dead = true;  }
+	inline bool isDead() { return _dead; }
 	inline std::vector<std::unique_ptr<Component>>& getComponents() { return _components; }
+	inline bool& getHide() { return _hide; }
 
 private:
 	sole::uuid _uuid;
 	std::string _name;
 	std::vector<std::unique_ptr<Component>> _components;
-	
-	bool dead;
+
+	bool _dead = false;
+	bool _hide = false;
 };

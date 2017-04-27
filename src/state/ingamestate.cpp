@@ -28,7 +28,6 @@ InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
 	BulletPhysicsSystem * bulletphyiscs = engine.getSystem<BulletPhysicsSystem>();
 
-
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
@@ -45,7 +44,7 @@ InGameState::InGameState() {
 		auto transform = _player->addComponent<TransformComponent>();
 		transform->setPosition(glm::vec3(3));
 		transform->setScale(glm::vec3(0.3));
-		transform->setDirection({ 0,0,1 });
+		transform->setDirection({0, 0, 1});
 
 		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
@@ -125,8 +124,8 @@ InGameState::InGameState() {
 		auto text = _enemy->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
 
-		text->transform.setPosition({ 0, 2, 5 });
-		//text->transform.rotation = glm::vec3(0, 0, 0);
+		text->transform.setPosition({0, 2, 5});
+		// text->transform.rotation = glm::vec3(0, 0, 0);
 		text->transform.setScale({0.1, 0.1, 0.1}); // To counteract transform->scale
 
 		auto rigidbody = _enemy->addComponent<RigidBodyComponent>(_enemy, 1.0f, 1.0f);
@@ -194,6 +193,7 @@ InGameState::InGameState() {
 			float h = float(map[i]) / 255.0f;
 
 			Entity * tile  = _world.addEntity(sole::uuid4(), "FloorTile");
+			tile->getHide() = true;
 
 			TransformComponent * transform = tile->addComponent<TransformComponent>();
 			transform->setPosition({ x, h - 0.5, y });

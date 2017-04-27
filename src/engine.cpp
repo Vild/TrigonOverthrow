@@ -373,11 +373,7 @@ void Engine::_setupSystems() {
 		_systems.push_back(std::move(lighting));
 		_systems.push_back(std::move(particles));
 		_systems.push_back(std::move(text));
-
-#ifdef _DEBUG
 		_systems.push_back(std::make_unique<BulletDebugRenderPass>());
-#endif // _DEBUG
-
 	}
 }
 
