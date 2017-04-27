@@ -12,7 +12,6 @@ RigidBodyComponent::RigidBodyComponent()
 	shape = new btBoxShape({ 1,1,1 });
 
 	rigidBody = new btRigidBody(mass, state, shape);
-	//rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 RigidBodyComponent::~RigidBodyComponent()
@@ -80,4 +79,9 @@ void RigidBodyComponent::setTransform(TransformComponent * transform)
 		cast(transform->getRotation()),
 		cast(transform->getPosition())
 	));
+}
+
+void RigidBodyComponent::setActivationState(int newState)
+{
+	rigidBody->setActivationState(newState);
 }

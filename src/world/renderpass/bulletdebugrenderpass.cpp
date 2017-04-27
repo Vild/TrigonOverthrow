@@ -8,6 +8,8 @@
 
 BulletDebugRenderPass::BulletDebugRenderPass()
 {
+	enable = false;
+
 	wireFrame.setDrawMode(GL_LINES)
 		// Bottom
 		.addVertex({ -1,-1,-1 }).addVertex({  1,-1,-1 }) // TOP
@@ -46,6 +48,7 @@ BulletDebugRenderPass::~BulletDebugRenderPass()
 
 void BulletDebugRenderPass::registerImGui()
 {
+	ImGui::Checkbox("Enable", &enable);
 }
 
 inline std::string BulletDebugRenderPass::name()
@@ -57,7 +60,10 @@ void BulletDebugRenderPass::render(World & world)
 {
 	rmt_ScopedCPUSample(BulletDebugRenderPass, RMTSF_None);
 	rmt_ScopedOpenGLSample(BulletDebugRenderPass);
+	if (!enable) return;
+
 	auto camera = Engine::getInstance().getCamera()->getComponent<CameraComponent>();
+
 
 	//glClear(GL_DEPTH_BUFFER_BIT);
 

@@ -69,6 +69,7 @@ GeometryRenderPass::GeometryRenderPass() {
 	ismShader->bind()
 		.addUniform("u_view")
 		.addUniform("u_projection")
+		.addUniform("u_cameraPos")
 		.addUniform("u_diffuseSpec")
 		.setUniform("u_diffuseSpec", glm::vec4(1));
 }
@@ -121,6 +122,7 @@ void GeometryRenderPass::render(World& world) {
 			ismShader->bind()
 				.setUniform("u_view", cameraComponent->viewMatrix)
 				.setUniform("u_projection", cameraComponent->projectionMatrix);
+				//.setUniform("u_cameraPos", cameraComponent->posit);
 
 			ism->render();
 		}

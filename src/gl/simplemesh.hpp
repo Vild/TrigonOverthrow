@@ -12,6 +12,7 @@ public:
 	SimpleMesh& setDrawMode(GLenum mode);
 	SimpleMesh& addVertex(const glm::vec3 & vertex);
 
+
 	void finalize(int maxInstances = 0);
 	void draw();
 	void draw(std::vector<glm::mat4> & instances);

@@ -12,7 +12,16 @@ uniform mat4 u_projection;
 
 vec3 calcNormal()
 {
-  return vec3(0, 1, 0);
+  vec3 p0 = i_position[0].xyz;
+  vec3 p1 = i_position[1].xyz;
+  vec3 p2 = i_position[2].xyz;
+
+  vec3 edge0 = p1 - p0;
+  vec3 edge1 = p2 - p0;
+
+  vec3 normal = cross(edge0, edge1);
+
+  return normalize(normal);
 }
 
 void main()

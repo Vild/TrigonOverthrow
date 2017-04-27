@@ -26,6 +26,7 @@ SimpleMesh & SimpleMesh::addVertex(const glm::vec3 & vertex)
 	return *this;
 }
 
+
 void SimpleMesh::finalize(int maxInstances)
 {
 	this->maxInstances = maxInstances;

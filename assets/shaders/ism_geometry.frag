@@ -13,5 +13,4 @@ void main()
   o_position = i_position;
   o_normal = i_normal;
   o_diffuseSpec = u_diffuseSpec;
-
 }
