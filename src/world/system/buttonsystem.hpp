@@ -4,6 +4,8 @@
 
 class ButtonSystem : public System {
 public:
+	virtual ~ButtonSystem();
+
 	virtual void update(World& world, float delta);
 
 	virtual void registerImGui();

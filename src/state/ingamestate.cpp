@@ -7,6 +7,8 @@
 #include "../lib/imgui.h"
 #include "../gl/shader.hpp"
 
+#include "../world/system/bulletphysicssystem.hpp"
+
 #include "../world/component/luacomponent.hpp"
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
@@ -19,10 +21,12 @@
 #include "../world/component/modelcomponent.hpp"
 #include "../world/component/hitboxcomponent.hpp"
 #include "../world/component/guncomponent.hpp"
-
+#include "../world/component/instancedsimplemeshcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
+	BulletPhyisicsSystem * bulletphyiscs = engine.getSystem<BulletPhyisicsSystem>();
+	
 
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
@@ -37,12 +41,14 @@ InGameState::InGameState() {
 	}
 
 	{ // Adding Player
-		auto transform = _player->addComponent<TransformComponent>();
 		auto playerLua = _player->addComponent<LuaComponent>();
 		playerLua->loadFile("assets/scripts/enemy.lua");
-		transform->scale = glm::vec3(0.3);
-		transform->rotation = glm::vec3(90, 180, 0);
-		transform->recalculateMatrix();
+
+		auto transform = _player->addComponent<TransformComponent>();
+		transform->setPosition(glm::vec3(3));
+		transform->setScale(glm::vec3(0.3));
+		transform->setDirection({ 0,0,1 });
+
 		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
@@ -64,119 +70,38 @@ InGameState::InGameState() {
 		auto particle = _player->addComponent<ParticleComponent>();
 		particle->addEmitter(transform->getDirection(), 1024);
 		_player->addComponent<KBMouseInputComponent>();
-		_player->addComponent<PhysicsComponent>();
+		//_player->addComponent<PhysicsComponent>();
 
 		auto gun = _player->addComponent<GunComponent>();
-		gun->addGun(GunComponent::GunType::RAYGUN, transform->position, transform->getDirection());
+		gun->addGun(GunComponent::GunType::RAYGUN, transform->getPosition(), transform->getDirection());
 
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
+		text->transform.setPosition(glm::vec3(0, 200, 0));
+		text->transform.setScale(glm::vec3(100 * 2)); // To counteract transform->scale
 
-		text->transform.position = glm::vec3(0, 2, 0);
-		text->transform.scale = glm::vec3(100 * 2); // To counteract transform->scale
-		text->transform.recalculateMatrix();
+		auto rigidbody = _player->addComponent<RigidBodyComponent>();
+		rigidbody->setHitboxHalfSize(transform->getScale());
+		rigidbody->setMass(1);
+		rigidbody->setFriction(1);
+		rigidbody->setActivationState(DISABLE_DEACTIVATION);
+
+		bulletphyiscs->addRigidBody(rigidbody);
 	}
 
 	{ //Adding enemy
 		auto transform = _enemy->addComponent<TransformComponent>();
-		transform->scale = glm::vec3(0.3);
-		transform->position = glm::vec3(0, 0.2, 5);
-		transform->recalculateMatrix();
+		transform->setScale(glm::vec3(0.3));
+		transform->setPosition(glm::vec3(0, 0.2, 5));
+
 		auto model = _enemy->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy.fbx");
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
 		model->meshData->mesh
 			->addBuffer("m",
-				[](GLuint id) {
-			glBindBuffer(GL_ARRAY_BUFFER, id);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-
-			for (int i = 0; i < 4; i++) {
-				glEnableVertexAttribArray(ShaderAttributeID::m + i);
-				glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-				glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-			}
-
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		})
-			.finalize();
-
-		auto hitbox = _enemy->addComponent<HitboxComponent>();
-		hitbox->addHitbox(HitboxComponent::SPHERE, transform->position);
-		_enemy->addComponent<PhysicsComponent>();
-
-
-		auto text = _enemy->addComponent<TextComponent>();
-		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
-
-		text->transform.position = glm::vec3(0, 2, 5);
-		text->transform.rotation = glm::vec3(0, 0, 0);
-		text->transform.scale = glm::vec3(0); // To counteract transform->scale
-		text->transform.recalculateMatrix();
-		
-		auto enemyLua = _enemy->addComponent<LuaComponent>();
-		enemyLua->loadFile("assets/scripts/enemy.lua");
-	}
-
-	{															// Adding Floor
-		// How to fix support for non-uniform sizes of the map. E.g 2 in height and 6 in width.
-		std::vector<Uint8> map = Engine::getInstance().getMapLoader()->getMap("maps/smileyface.png");
-		auto transform = _floor->addComponent<FloorTransformComponent>();
-		transform->gridSize = Engine::getInstance().getMapLoader()->getHeight();
-		transform->scale = glm::vec3(1, 0.1, 1);
-		transform->recalculateMatrices();
-
-		int gridSize = transform->gridSize;
-
-#define frand() ((rand() * 1.0) / RAND_MAX)
-		float* topData = new float[gridSize * gridSize];
-
-		for (int z = 0; z < gridSize; z++)
-			for (int x = 0; x < gridSize; x++) {
-				topData[z * gridSize + x] = float(map[z * gridSize + x]/float(5));
-			}
-
-		//for (int z = 0; z < gridSize; z++)
-		//	for (int x = 0; x < gridSize; x++) {
-		//		auto p = topData[z * gridSize + x];
-		//		const auto& forwards = z > 0 ? topData[(z - 1) * gridSize + x] : p;
-		//		const auto& left = x < gridSize - 1 ? topData[z * gridSize + x + 1] : p;
-		//		const auto& right = x > 0 ? topData[z * gridSize + x - 1] : p;
-		//		const auto& backwards = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : p;
-		//
-		//		p = ((forwards + left + right + backwards) + p * 2) / 6;
-		//	}
-
-		glm::vec4* neighborData = new glm::vec4[gridSize * gridSize];
-		for (int z = 0; z < gridSize; z++)
-			for (int x = 0; x < gridSize; x++) {
-				// See floorbase.geom
-				enum Side { forwards = 0, left = 1, right = 2, backwards = 3 };
-
-				glm::vec4& point = neighborData[z * gridSize + x];
-
-				float cur = topData[z * gridSize + x];
-
-				float minFloor = cur - 100;
-
-				point[forwards] = z > 0 ? topData[(z - 1) * gridSize + x] : minFloor;
-				point[left] = x < gridSize - 1 ? topData[z * gridSize + x + 1] : minFloor;
-				point[right] = x > 0 ? topData[z * gridSize + x - 1] : minFloor;
-				point[backwards] = z < gridSize - 1 ? topData[(z + 1) * gridSize + x] : minFloor;
-
-				point[forwards] = std::min(minFloor, point[forwards]);
-				point[left] = std::min(minFloor, point[left]);
-				point[right] = std::min(minFloor, point[right]);
-				point[backwards] = std::min(minFloor, point[backwards]);
-			}
-
-		auto model = _floor->addComponent<ModelComponent>();
-		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/box.obj");
-		model->meshData->mesh
-			->addBuffer("m",
-									[&](GLuint id) {
+									[](GLuint id) {
 										glBindBuffer(GL_ARRAY_BUFFER, id);
-										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * gridSize * gridSize, NULL, GL_DYNAMIC_DRAW);
+										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
 										for (int i = 0; i < 4; i++) {
 											glEnableVertexAttribArray(ShaderAttributeID::m + i);
@@ -186,33 +111,102 @@ InGameState::InGameState() {
 
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
-			.addBuffer("top",
-								 [&](GLuint id) {
-									 glBindBuffer(GL_ARRAY_BUFFER, id);
-									 glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * gridSize * gridSize, topData, GL_STATIC_DRAW);
-
-									 glEnableVertexAttribArray(ShaderAttributeID::top);
-									 glVertexAttribPointer(ShaderAttributeID::top, 1, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
-									 glVertexAttribDivisor(ShaderAttributeID::top, 1);
-
-									 glBindBuffer(GL_ARRAY_BUFFER, 0);
-								 })
-			.addBuffer("neighbor",
-								 [&](GLuint id) {
-									 glBindBuffer(GL_ARRAY_BUFFER, id);
-									 glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * gridSize * gridSize, neighborData, GL_STATIC_DRAW);
-
-									 glEnableVertexAttribArray(ShaderAttributeID::neighbor);
-									 glVertexAttribPointer(ShaderAttributeID::neighbor, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), NULL);
-									 glVertexAttribDivisor(ShaderAttributeID::neighbor, 1);
-
-									 glBindBuffer(GL_ARRAY_BUFFER, 0);
-								 })
 			.finalize();
-		delete[] topData;
-		delete[] neighborData;
+
+		auto hitbox = _enemy->addComponent<HitboxComponent>();
+		hitbox->addHitbox(HitboxComponent::SPHERE, transform->getPosition());
+		_enemy->addComponent<PhysicsComponent>();
+
+		auto text = _enemy->addComponent<TextComponent>();
+		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
+
+		text->transform.setPosition({ 0, 2, 5 });
+		//text->transform.rotation = glm::vec3(0, 0, 0);
+		text->transform.setScale({0.1, 0.1, 0.1}); // To counteract transform->scale
+
+		auto rigidbody = _enemy->addComponent<RigidBodyComponent>();
+
+		rigidbody->setHitboxHalfSize(transform->getScale());
+		rigidbody->setMass(1);
+		rigidbody->setFriction(1);
+		rigidbody->setTransform(transform);
+
+		bulletphyiscs->addRigidBody(rigidbody);
 	}
+	// clang-format off
+	{ // Adding Floor
+		auto mapLoader = engine.getMapLoader();
+		std::vector<Uint8> map = mapLoader->getMap("maps/smileyface.png");
+		int width = mapLoader->getWidth();
+		int height = mapLoader->getHeight();
+
+		Entity * room = _world.addEntity(sole::uuid4(), "Room");
+
+		std::unique_ptr<SimpleMesh> box = std::make_unique<SimpleMesh>();
+		box->setDrawMode(GL_TRIANGLES)
+			// TOP
+			.addVertex({ -0.5,  0.5,  0.5 })
+			.addVertex({  0.5,  0.5,  0.5 })
+			.addVertex({ -0.5,  0.5, -0.5 })
+			.addVertex({ -0.5,  0.5, -0.5 })
+			.addVertex({  0.5,  0.5,  0.5 })
+			.addVertex({  0.5,  0.5, -0.5 })
+			// RIGHT
+			.addVertex({ -0.5, -0.5,  0.5 })
+			.addVertex({ -0.5,  0.5,  0.5 })
+			.addVertex({ -0.5, -0.5, -0.5 })
+			.addVertex({ -0.5, -0.5, -0.5 })
+			.addVertex({ -0.5,  0.5,  0.5 })
+			.addVertex({ -0.5,  0.5, -0.5 })
+			// LEFT
+			.addVertex({  0.5, -0.5,  0.5 })
+			.addVertex({  0.5, -0.5, -0.5 })
+			.addVertex({  0.5,  0.5,  0.5 })
+			.addVertex({  0.5, -0.5, -0.5 })
+			.addVertex({  0.5,  0.5, -0.5 })
+			.addVertex({  0.5,  0.5,  0.5 })
+			// FRONT
+			.addVertex({ -0.5,  0.5, -0.5 })
+			.addVertex({  0.5,  0.5, -0.5 })
+			.addVertex({ -0.5, -0.5, -0.5 })
+			.addVertex({ -0.5, -0.5, -0.5 })
+			.addVertex({  0.5,  0.5, -0.5 })
+			.addVertex({  0.5, -0.5, -0.5 })
+			// BACK
+			.addVertex({ -0.5,  0.5,  0.5 })
+			.addVertex({  0.5,  0.5,  0.5 })
+			.addVertex({ -0.5, -0.5,  0.5 })
+			.addVertex({ -0.5, -0.5,  0.5 })
+			.addVertex({  0.5,  0.5,  0.5 })
+			.addVertex({  0.5, -0.5,  0.5 })
+		.finalize(256);
+
+		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(box);
+
+		for (int i = 0; i < map.size(); i++)
+		{
+			int x = i % width;
+			int y = i / width;
+			float h = float(map[i]) / 255.0f;
+
+			Entity * tile  = _world.addEntity(sole::uuid4(), "FloorTile");
+
+			TransformComponent * transform = tile->addComponent<TransformComponent>();
+			transform->setPosition({ x, h - 0.5, y });
+			transform->setScale({ 1, 1, 1 });
+
+			RigidBodyComponent * rigidbody = tile->addComponent<RigidBodyComponent>();
+			rigidbody->setTransform(transform);
+			rigidbody->setHitboxHalfSize({ 0.5, 0.5, 0.5 });
+
+			bulletphyiscs->addRigidBody(rigidbody);
+			ismc->addInstance(transform);
+		}
+	}
+	// clang-format off
 }
+
+InGameState::~InGameState() {}
 
 void InGameState::onEnter(State* prev) {}
 void InGameState::onLeave(State* next) {}

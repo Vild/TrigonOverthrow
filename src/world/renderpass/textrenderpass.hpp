@@ -5,6 +5,8 @@
 class TextRenderPass : public RenderPass {
 public:
 	TextRenderPass();
+	virtual ~TextRenderPass();
+
 	virtual void render(World& world);
 	virtual void resize(unsigned int width, unsigned int height);
 	virtual void registerImGui();

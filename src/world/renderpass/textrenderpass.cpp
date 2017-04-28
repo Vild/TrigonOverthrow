@@ -19,7 +19,11 @@ TextRenderPass::TextRenderPass() {
 	_shader->setUniform("fontMap", 0);
 }
 
+TextRenderPass::~TextRenderPass() {}
+
 void TextRenderPass::render(World& world) {
+	rmt_ScopedCPUSample(TextRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(TextRenderPass);
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
@@ -50,18 +54,22 @@ void TextRenderPass::render(World& world) {
 		const glm::vec3 y(0, 1, 0);
 		const glm::vec3 z(0, 0, 1);
 
-		glm::mat4 matrix;
-		matrix = glm::translate(transform->position);
-		matrix = matrix * glm::rotate(glm::radians(transform->rotation.z), z);
-		matrix = matrix * glm::rotate(glm::radians(transform->rotation.y), y);
-		matrix = matrix * glm::rotate(-glm::radians(transform->rotation.x), x);
 
-		matrix = matrix * glm::rotate(glm::radians(text->transform.rotation.z), z);
-		matrix = matrix * glm::rotate(glm::radians(text->transform.rotation.y), y);
-		matrix = matrix * glm::rotate(-glm::radians(text->transform.rotation.x), x);
-		matrix = matrix * glm::translate(text->transform.position);
+		//glm::vec3 position = transform->getPosition();
+		//glm::quat rotation = transform->getRotation();
 
-		matrix = matrix * glm::scale(text->transform.scale) * glm::scale(transform->scale);
+		glm::mat4 matrix = transform->getMatrix() * text->transform.getMatrix();
+		////matrix = glm::translate(transform->position);
+		////matrix = matrix * glm::rotate(glm::radians(transform->rotation.z), z);
+		////matrix = matrix * glm::rotate(glm::radians(transform->rotation.y), y);
+		////matrix = matrix * glm::rotate(-glm::radians(transform->rotation.x), x);
+
+		////matrix = matrix * glm::rotate(glm::radians(text->transform.rotation.z), z);
+		////matrix = matrix * glm::rotate(glm::radians(text->transform.rotation.y), y);
+		////matrix = matrix * glm::rotate(-glm::radians(text->transform.rotation.x), x);
+		////matrix = matrix * glm::translate(text->transform.position);
+
+		////matrix = matrix * glm::scale(text->transform.scale) * glm::scale(transform->scale);
 		_shader->setUniform("m", matrix);
 
 		tr->getMesh()->render(tr->getText().size());

@@ -5,6 +5,8 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 
+FloorTransformComponent::~FloorTransformComponent() {}
+
 void FloorTransformComponent::recalculateMatrices() {
 	if (!matrices.size())
 		matrices.resize(gridSize * gridSize);

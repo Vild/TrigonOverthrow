@@ -17,6 +17,7 @@ inline MouseState& operator|=(MouseState& a, const MouseState& b) {
 class HIDInput {
 public:
 	HIDInput();
+	virtual ~HIDInput();
 
 	void update();
 

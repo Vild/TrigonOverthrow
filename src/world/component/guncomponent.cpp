@@ -1,9 +1,9 @@
 #include "guncomponent.hpp"
 
+GunComponent::~GunComponent() {}
 
 void GunComponent::addGun(GunComponent::GunType inType, glm::vec3 inO, glm::vec3 inDir) {
-	switch (inType)
-	{
+	switch (inType) {
 	case GunComponent::RAYGUN: {
 		type = inType;
 		std::shared_ptr<RayGun> raygun = std::make_shared<RayGun>();
@@ -18,7 +18,6 @@ void GunComponent::addGun(GunComponent::GunType inType, glm::vec3 inO, glm::vec3
 		break;
 	}
 	case GunComponent::ENERGYGUN: {
-		
 		break;
 	}
 	default:
@@ -26,6 +25,4 @@ void GunComponent::addGun(GunComponent::GunType inType, glm::vec3 inO, glm::vec3
 	}
 }
 
-void GunComponent::registerImGui() {
-	
-}
+void GunComponent::registerImGui() {}

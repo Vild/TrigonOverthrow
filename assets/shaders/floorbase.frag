@@ -11,9 +11,6 @@ in vec3 gColor;
 in vec2 gUV;
 in mat3 gTBN;
 
-in flat vec4 gTopY;
-in flat vec4 gBottomY;
-
 uniform sampler2D diffuseTexture;
 uniform sampler2D normalTexture;
 uniform float setting_defaultSpecular;

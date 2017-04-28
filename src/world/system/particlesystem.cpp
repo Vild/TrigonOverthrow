@@ -28,9 +28,12 @@ ParticleSystem::ParticleSystem() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+ParticleSystem::~ParticleSystem() {}
+
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
-	// Gotta change how this system works abit. 
+	rmt_ScopedCPUSample(ParticleSystem, RMTSF_None);
+	// Gotta change how this system works abit.
 	glm::vec3 direction;
 	glm::vec3 pos;
 	glm::vec3 entryPos;
@@ -46,12 +49,7 @@ void ParticleSystem::update(World& world, float delta) {
 				direction = raygun->ray.dir;
 				pos = raygun->ray.o;
 				entryPos = raygun->ray.t[0];
-				_programs[0]
-					->bind()
-					.setUniform("delta", delta)
-					.setUniform("emitterPos", pos)
-					.setUniform("emitterDir", direction)
-					.setUniform("entryPos", entryPos);
+				_programs[0]->bind().setUniform("delta", delta).setUniform("emitterPos", pos).setUniform("emitterDir", direction).setUniform("entryPos", entryPos);
 				particleComp->textureSize = _textureSize;
 				_particleData->bindImageTexture(0, true);
 				_particleData->bindImageTexture(1, true);

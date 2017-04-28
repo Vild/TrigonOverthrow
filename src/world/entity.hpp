@@ -19,18 +19,19 @@ class Entity {
 public:
 	/// Don't call this one directly! Always use world->addEntity
 	Entity(sole::uuid uuid, std::string name);
+	virtual ~Entity();
 
-	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
-	T* addComponent() {
-		_components.push_back(std::make_unique<T>());
+	template <typename T, typename ... Args, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
+	T* addComponent(Args &... args) {
+		_components.push_back(std::make_unique<T>(args...));
 		return static_cast<T*>(_components.back().get());
 	}
 
-	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
-	T* addComponent(std::unique_ptr<T> component) {
-		_components.push_back(std::move(component));
-		return static_cast<T*>(_components.back().get());
-	}
+	//template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
+	//T* addComponent(std::unique_ptr<T> component) {
+	//	_components.push_back(std::move(component));
+	//	return static_cast<T*>(_components.back().get());
+	//}
 
 	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	T* getComponent() {

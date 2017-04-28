@@ -60,6 +60,8 @@ TextRenderer::TextRenderer(TextFactory& factory, const std::string& text, bool i
 		.finalize();
 }
 
+TextRenderer::~TextRenderer() {}
+
 void TextRenderer::setText(const std::string& text) {
 	if (_isStatic)
 		return;

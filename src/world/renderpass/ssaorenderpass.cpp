@@ -64,6 +64,8 @@ SSAORenderSystem::SSAORenderSystem() {
 	generateUniformData(width, height);
 }
 
+SSAORenderSystem::~SSAORenderSystem() {}
+
 float SSAORenderSystem::lerp(float a, float b, float f) {
 	return a + f * (b - a);
 }
@@ -138,6 +140,8 @@ void SSAORenderSystem::registerImGui() {
 }
 
 void SSAORenderSystem::render(World& world) {
+	rmt_ScopedCPUSample(SSAORenderSystem, RMTSF_None);
+	rmt_ScopedOpenGLSample(SSAORenderSystem);
 	glClear(GL_COLOR_BUFFER_BIT);
 	auto camera = Engine::getInstance().getCamera();
 	auto cameraComponent = camera->getComponent<CameraComponent>();

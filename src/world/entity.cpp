@@ -4,5 +4,4 @@
 
 Entity::Entity(sole::uuid uuid, std::string name) : _uuid(uuid), _name(name) {}
 
-void registerLua();
-
+Entity::~Entity() {}

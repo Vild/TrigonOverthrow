@@ -26,7 +26,8 @@
 #include "world/system/particlesystem.hpp"
 #include "world/system/buttonsystem.hpp"
 #include "world/system/gunsystem.hpp"
-#include "world\system/luasystem.hpp"
+#include "world/system/luasystem.hpp"
+#include "world/system/bulletphysicssystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -34,11 +35,18 @@
 #include "world/renderpass/lightingrenderpass.hpp"
 #include "world/renderpass/particlerenderpass.hpp"
 #include "world/renderpass/textrenderpass.hpp"
+#include "world/renderpass/bulletdebugrenderpass.hpp"
 
 #include "state/ingamestate.hpp"
 #include "state/mainmenustate.hpp"
 
 Engine::~Engine() {
+	_systems.clear();
+	_states.clear();
+
+	rmt_UnbindOpenGL();
+	rmt_DestroyGlobalInstance(rmt);
+
 	TTF_Quit();
 	Mix_Quit();
 	IMG_Quit();
@@ -56,6 +64,8 @@ int Engine::run(bool vsync) {
 	uint32_t lastTime = SDL_GetTicks();
 
 	while (!_quit) {
+		rmt_ScopedCPUSample(GameLoop, RMTSF_None);
+		rmt_ScopedOpenGLSample(GameLoop);
 		if (*_nextState != std::type_index(typeid(Engine))) {
 			State* prev = getStatePtr();
 			*_currentState = *_nextState;
@@ -70,66 +80,83 @@ int Engine::run(bool vsync) {
 			if (!next)
 				break;
 		}
-
-		SDL_Event event;
-		ImGuiIO& io = ImGui::GetIO();
-		while (SDL_PollEvent(&event)) {
-			ImGui_ImplSdlGL3_ProcessEvent(&event);
-			switch (event.type) {
-			case SDL_QUIT:
-				_quit = true;
-				break;
-			case SDL_KEYDOWN:
-				if (io.WantCaptureKeyboard)
-					break;
-				switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE:
+		{
+			rmt_ScopedCPUSample(EventHandling, RMTSF_None);
+			rmt_ScopedOpenGLSample(EventHandling);
+			SDL_Event event;
+			ImGuiIO& io = ImGui::GetIO();
+			while (SDL_PollEvent(&event)) {
+				ImGui_ImplSdlGL3_ProcessEvent(&event);
+				switch (event.type) {
+				case SDL_QUIT:
 					_quit = true;
+					break;
+				case SDL_KEYDOWN:
+					if (io.WantCaptureKeyboard)
+						break;
+					switch (event.key.keysym.sym) {
+					case SDLK_ESCAPE:
+						_quit = true;
+						break;
+					default:
+						break;
+					}
+					break;
+
+				case SDL_WINDOWEVENT:
+					if (event.window.event == SDL_WINDOWEVENT_RESIZED || event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+						_width = event.window.data1;
+						_height = event.window.data2;
+						_system_resize(_width, _height);
+
+						World& world = getState().getWorld();
+						for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+							CameraComponent* cc = entity->getComponent<CameraComponent>();
+							if (!cc)
+								continue;
+							cc->aspect = (_width * 1.0) / _height;
+							cc->recalculateProjectionMatrix();
+						}
+					}
 					break;
 				default:
 					break;
 				}
-				break;
+			}
+			ImGui_ImplSdlGL3_NewFrame(_window);
 
-			case SDL_WINDOWEVENT:
-				if (event.window.event == SDL_WINDOWEVENT_RESIZED || event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-					_width = event.window.data1;
-					_height = event.window.data2;
-					_system_resize(_width, _height);
-
-					World& world = getState().getWorld();
-					for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-						CameraComponent* cc = entity->getComponent<CameraComponent>();
-						if (!cc)
-							continue;
-						cc->aspect = (_width * 1.0) / _height;
-						cc->recalculateProjectionMatrix();
-					}
-				}
-				break;
-			default:
-				break;
+			{
+				ImGui::SetNextWindowPos(ImVec2(8, 8), ImGuiSetCond_Always);
+				ImGui::SetNextWindowSize(ImVec2(384, 32), ImGuiSetCond_Once);
+				ImGui::Begin("Info panel", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+				ImGui::End();
 			}
 		}
-		ImGui_ImplSdlGL3_NewFrame(_window);
 
 		{
-			ImGui::SetNextWindowPos(ImVec2(8, 8), ImGuiSetCond_Always);
-			ImGui::SetNextWindowSize(ImVec2(384, 32), ImGuiSetCond_Once);
-			ImGui::Begin("Info panel", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-			ImGui::End();
+			rmt_ScopedCPUSample(WorldTick, RMTSF_None);
+			rmt_ScopedOpenGLSample(WorldTick);
+
+			uint32_t curTime = SDL_GetTicks();
+			float delta = (curTime - lastTime) / 1000.0f;
+			lastTime = curTime;
+
+			_hidInput->update();
+
+			_system_tick(delta);
 		}
 
-		uint32_t curTime = SDL_GetTicks();
-		float delta = (curTime - lastTime) / 1000.0f;
-		lastTime = curTime;
-
-		_hidInput->update();
-
-		_system_tick(delta);
-		ImGui::Render();
-		SDL_GL_SwapWindow(_window);
+		{
+			rmt_ScopedCPUSample(ImGuiRender, RMTSF_None);
+			rmt_ScopedOpenGLSample(ImGuiRender);
+			ImGui::Render();
+		}
+		{
+			rmt_ScopedCPUSample(SwapWindow, RMTSF_None);
+			rmt_ScopedOpenGLSample(SwapWindow);
+			SDL_GL_SwapWindow(_window);
+		}
 	}
 	return 0;
 }
@@ -139,20 +166,31 @@ void Engine::_init(bool vsync) {
 	_initSDL();
 	_initGL();
 	_initImGui();
-	_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
-	_meshLoader = std::make_shared<MeshLoader>();
-	_mapLoader = std::make_shared<MapLoader>();
-	_hidInput = std::make_shared<HIDInput>();
-	_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
 
-	_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
-	_nextState = std::make_unique<std::type_index>(std::type_index(typeid(Engine)));
+	rmt_CreateGlobalInstance(&rmt);
+	rmt_BindOpenGL();
 
-	_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
-	_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
-	_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
-	setState<MainMenuState>();
-	_setupSystems();
+	rmt_ScopedCPUSample(Initialization, RMTSF_None);
+	{
+		rmt_ScopedCPUSample(InitializingHelpers, RMTSF_None);
+		_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
+		_meshLoader = std::make_shared<MeshLoader>();
+		_mapLoader = std::make_shared<MapLoader>();
+		_hidInput = std::make_shared<HIDInput>();
+		_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
+	}
+
+	{
+		rmt_ScopedCPUSample(InitializingECS, RMTSF_None);
+		_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
+		_nextState = std::make_unique<std::type_index>(std::type_index(typeid(Engine)));
+
+		_setupSystems();
+		_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
+		_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
+		_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
+		setState<InGameState>();
+	}
 }
 
 void Engine::_initSDL() {
@@ -180,8 +218,8 @@ void Engine::_initSDL() {
 		throw "Failed to load SDL2_ttf";
 	}
 
-	_window = SDL_CreateWindow("TurtleGL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
-														 SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	_window =
+		SDL_CreateWindow("Trigon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	if (!_window)
 		throw "Failed to create window";
 }
@@ -267,6 +305,7 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<InputSystem>());
 	_systems.push_back(std::make_unique<LuaSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
+	_systems.push_back(std::make_unique<BulletPhyisicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
 	_systems.push_back(std::make_unique<ButtonSystem>());
@@ -293,17 +332,13 @@ void Engine::_setupSystems() {
 			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
 			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::BlurredImage));
 
-		for (std::unique_ptr<System>& system : _systems) {
-			auto particleSystem = dynamic_cast<ParticleSystem*>(system.get());
-			if (!particleSystem)
-				continue;
+		{ // GIT-GUD: fixed in velocity and position to be output instead.
+			auto particleSystem = getSystem<ParticleSystem>();
 			auto _gbuffer = particleSystem->getGBuffers();
 
-			// GIT-GUD: fixed in velocity and position to be output instead.
-			particles->attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachments()[ParticleSystem::Attachment::inPosition])
-				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachments()[ParticleSystem::Attachment::inVelocity]);
-
-			break;
+			(*particles)
+				.attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachment(ParticleSystem::Attachment::inPosition))
+				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachment(ParticleSystem::Attachment::inVelocity));
 		}
 
 		_systems.push_back(std::move(geometry));
@@ -312,11 +347,17 @@ void Engine::_setupSystems() {
 		_systems.push_back(std::move(lighting));
 		_systems.push_back(std::move(particles));
 		_systems.push_back(std::move(text));
+
+#ifdef _DEBUG
+		_systems.push_back(std::make_unique<BulletDebugRenderPass>());
+#endif // _DEBUG
+
 	}
 }
 
 void Engine::_system_tick(float delta) {
 	World& world = getState().getWorld();
+
 	for (const std::unique_ptr<System>& system : _systems)
 		system->update(world, delta);
 }

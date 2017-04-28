@@ -9,6 +9,8 @@ public:
 	enum InputAttachment { position = 0, velocity };
 
 	ParticleRenderPass();
+	virtual ~ParticleRenderPass();
+
 	virtual void render(World& world);
 	virtual void resize(unsigned int width, unsigned int height);
 	virtual void registerImGui();

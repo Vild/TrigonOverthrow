@@ -8,6 +8,8 @@
 
 class RenderPass : public System {
 public:
+	virtual ~RenderPass() = 0;
+
 	RenderPass& attachInputTexture(GLuint id, std::shared_ptr<Texture> texture);
 
 	// TODO: virtual void onResize() = 0;
@@ -26,3 +28,5 @@ protected:
 	std::shared_ptr<ShaderProgram> _shader;
 	std::map<GLuint, std::shared_ptr<Texture>> _inputs;
 };
+
+inline RenderPass::~RenderPass() {}

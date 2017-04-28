@@ -5,7 +5,10 @@
 #include "../../lib/imgui.h"
 #include "../../engine.hpp"
 
+ImGuiSystem::~ImGuiSystem() {}
+
 void ImGuiSystem::update(World& world, float delta) {
+	rmt_ScopedCPUSample(ImGuiSystem, RMTSF_None);
 	State& state = Engine::getInstance().getState();
 
 	ImGui::SetNextWindowPos(ImVec2(8, 48), ImGuiSetCond_Once);

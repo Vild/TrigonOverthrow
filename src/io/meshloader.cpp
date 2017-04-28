@@ -105,6 +105,8 @@ std::shared_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {
 	return std::make_shared<Mesh>(vertices, indices);
 }
 
+LoadedMesh::~LoadedMesh() {}
+
 std::shared_ptr<Texture> LoadedMesh::_getTexture(const aiScene* scene, const std::string& filename) {
 	if (scene->mNumMaterials == 0)
 		return Engine::getInstance().getTextureManager()->getTexture(""); // Error texture

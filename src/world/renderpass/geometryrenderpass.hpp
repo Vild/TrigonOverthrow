@@ -9,6 +9,7 @@ public:
 	enum Attachment : GLint { position = 0, normal, diffuseSpecular, depth };
 
 	GeometryRenderPass();
+	virtual ~GeometryRenderPass();
 
 	virtual void render(World& world);
 	virtual void resize(unsigned int width, unsigned int height);
@@ -18,6 +19,7 @@ public:
 
 private:
 	std::shared_ptr<ShaderProgram> _floorShader;
+	std::unique_ptr<ShaderProgram> ismShader;
 
 	bool _setting_base_doBackFaceCulling = false;
 	float _setting_base_defaultSpecular = 0.5f;

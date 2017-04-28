@@ -11,6 +11,7 @@
 #include "../component/floortransformcomponent.hpp"
 #include "../component/modelcomponent.hpp"
 #include "../component/cameracomponent.hpp"
+#include "../component/instancedsimplemeshcomponent.hpp"
 
 GeometryRenderPass::GeometryRenderPass() {
 	auto& engine = Engine::getInstance();
@@ -57,9 +58,27 @@ GeometryRenderPass::GeometryRenderPass() {
 		.addUniform("setting_doBackFaceCulling")
 		.addUniform("setting_defaultSpecular");
 	_floorShader->setUniform("diffuseTexture", 0).setUniform("normalTexture", 1).setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
+
+	ismShader = std::make_unique<ShaderProgram>();
+	(*ismShader)
+		.attach("assets/shaders/ism_geometry.vert", ShaderType::vertex)
+		.attach("assets/shaders/ism_geometry.geom", ShaderType::geometry)
+		.attach("assets/shaders/ism_geometry.frag", ShaderType::fragment)
+	.finalize();
+
+	ismShader->bind()
+		.addUniform("u_view")
+		.addUniform("u_projection")
+		.addUniform("u_cameraPos")
+		.addUniform("u_diffuseSpec")
+		.setUniform("u_diffuseSpec", glm::vec4(1));
 }
 
+GeometryRenderPass::~GeometryRenderPass() {}
+
 void GeometryRenderPass::render(World& world) {
+	rmt_ScopedCPUSample(GeometryRenderPass, RMTSF_None);
+	rmt_ScopedOpenGLSample(GeometryRenderPass);
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
@@ -80,22 +99,34 @@ void GeometryRenderPass::render(World& world) {
 	_shader->setUniform("p", cameraComponent->projectionMatrix);
 
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		auto model = entity->getComponent<ModelComponent>();
-		if (!model)
-			continue;
+		ModelComponent* model = nullptr;
+		InstancedSimpleMeshComponent* ism = nullptr;
 
-		auto transform = entity->getComponent<TransformComponent>();
-		if (transform)
-			model->render(transform->matrix);
-		else {
-			auto ft = entity->getComponent<FloorTransformComponent>();
-			if (!ft)
-				continue;
-			_floorShader->bind();
+		if (model = entity->getComponent<ModelComponent>())
+		{
+			auto transform = entity->getComponent<TransformComponent>();
+			if (transform)
+				model->render(transform->getMatrix());
+			else {
+				auto ft = entity->getComponent<FloorTransformComponent>();
+				if (!ft)
+					continue;
+				_floorShader->bind();
 
-			model->render(ft->matrices, ft->gridSize * ft->gridSize);
-			_shader->bind();
+				model->render(ft->matrices, ft->gridSize * ft->gridSize);
+				_shader->bind();
+			}
 		}
+		else if (ism = entity->getComponent<InstancedSimpleMeshComponent>())
+		{
+			ismShader->bind()
+				.setUniform("u_view", cameraComponent->viewMatrix)
+				.setUniform("u_projection", cameraComponent->projectionMatrix);
+				//.setUniform("u_cameraPos", cameraComponent->posit);
+
+			ism->render();
+		}
+		
 	}
 }
 
