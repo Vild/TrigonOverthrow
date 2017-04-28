@@ -18,7 +18,6 @@ glm::vec3 TransformComponent::getDirection() {
 	static const glm::vec3 x(1, 0, 0);
 	static const glm::vec3 y(0, 1, 0);
 	static const glm::vec3 z(0, 0, 1);
-
 	glm::vec4 direction(0, 0, 1, 0);
 	direction = glm::rotate(glm::radians(rotation.z), z) * glm::rotate(glm::radians(rotation.y), y) * glm::rotate(-glm::radians(rotation.x), x) * direction;
 
@@ -35,4 +34,10 @@ void TransformComponent::registerImGui() {
 	if (dirty) {
 		recalculateMatrix();
 	}
+}
+void TransformComponent::registerLua(sel::State& L)
+{
+	L["TransformComponent"].SetClass<TransformComponent>("position", &TransformComponent::position,
+		"scale", &TransformComponent::scale,
+		"rotation", &TransformComponent::rotation);
 }

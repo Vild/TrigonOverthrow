@@ -2,10 +2,13 @@
 
 #include "component.hpp"
 #include <lua.hpp>
+#include <selene.h>
 struct LuaComponent : public Component
 {
-	lua_State *L = luaL_newstate();
-	std::string name() { return "LuaComponent"; };
+	LuaComponent();
+	virtual ~LuaComponent();
+	sel::State L{ true };
+	inline std::string name() { return "LuaComponent"; };
 	void loadFile(const char* fileName);
 	virtual void registerImGui();
 };

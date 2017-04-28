@@ -7,6 +7,7 @@
 #include "../lib/imgui.h"
 #include "../gl/shader.hpp"
 
+#include "../world/component/luacomponent.hpp"
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
 #include "../world/component/lookatcomponent.hpp"
@@ -74,7 +75,7 @@ InGameState::InGameState() {
 		text->transform.recalculateMatrix();
 	}
 
-	{
+	{ //Adding enemy
 		auto transform = _enemy->addComponent<TransformComponent>();
 		transform->scale = glm::vec3(0.3);
 		transform->position = glm::vec3(0, 0.2, 5);
@@ -110,6 +111,7 @@ InGameState::InGameState() {
 		text->transform.rotation = glm::vec3(0, 0, 0);
 		text->transform.scale = glm::vec3(0); // To counteract transform->scale
 		text->transform.recalculateMatrix();
+		
 	}
 
 	{															// Adding Floor

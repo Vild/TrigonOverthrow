@@ -65,10 +65,10 @@
     <ClCompile Include="src\world\system\buttonsystem.cpp" />
     <ClCompile Include="src\world\system\camerasystem.cpp" />
     <ClCompile Include="src\world\system\gunsystem.cpp" />
-    <ClCompile Include="src\world\system\hitboxsystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
+    <ClCompile Include="src\world\system\luasystem.cpp" />
     <ClCompile Include="src\world\system\particlesystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
     <ClCompile Include="src\world\world.cpp" />
@@ -98,6 +98,7 @@
     <ClInclude Include="src\state\ingamestate.hpp" />
     <ClInclude Include="src\state\mainmenustate.hpp" />
     <ClInclude Include="src\state\state.hpp" />
+    <ClInclude Include="src\utils\collisionbox.hpp" />
     <ClInclude Include="src\world\component\buttoncomponent.hpp" />
     <ClInclude Include="src\world\component\cameracomponent.hpp" />
     <ClInclude Include="src\world\component\component.hpp" />
@@ -125,14 +126,17 @@
     <ClInclude Include="src\world\system\buttonsystem.hpp" />
     <ClInclude Include="src\world\system\camerasystem.hpp" />
     <ClInclude Include="src\world\system\gunsystem.hpp" />
-    <ClInclude Include="src\world\system\hitboxsystem.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />
     <ClInclude Include="src\world\system\inputsystem.hpp" />
     <ClInclude Include="src\world\system\lookatsystem.hpp" />
+    <ClInclude Include="src\world\system\luasystem.hpp" />
     <ClInclude Include="src\world\system\particlesystem.hpp" />
     <ClInclude Include="src\world\system\physicssystem.hpp" />
     <ClInclude Include="src\world\system\system.hpp" />
     <ClInclude Include="src\world\world.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\scripts\enemy.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -250,6 +254,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include/Lua</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -273,6 +278,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include/Lua</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

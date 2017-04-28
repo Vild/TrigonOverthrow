@@ -1,17 +1,23 @@
 #include "luacomponent.hpp"
+#include "transformcomponent.hpp"
+
+#include <glm/glm.hpp>
+
+LuaComponent::LuaComponent()
+{
+	//doesnt understand floats, only doubles. Would otherwise use.
+	//L["vec3"].SetClass<glm::vec3>("x", &glm::vec3::x, "y", &glm::vec3::y, "z", &glm::vec3::z);
+}
 
 LuaComponent::~LuaComponent()
 {
-	lua_close(L);
 }
 
 void LuaComponent::loadFile(const char* fileName)
 {
-	int error = luaL_loadfile(L, fileName) || lua_pcall(L, 0, 0, 0);
+	L.Load(fileName);
+}
+void LuaComponent::registerImGui()
+{
 
-	if (error)
-	{
-		printf("ERROR!");
-		throw "Fail to load Lua";
-	}
 }

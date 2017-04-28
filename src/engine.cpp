@@ -26,6 +26,7 @@
 #include "world/system/particlesystem.hpp"
 #include "world/system/buttonsystem.hpp"
 #include "world/system/gunsystem.hpp"
+#include "world\system/luasystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -264,6 +265,7 @@ void Engine::_setupSystems() {
 	// Pure systems
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
+	_systems.push_back(std::make_unique<LuaSystem>());
 	_systems.push_back(std::make_unique<PhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());

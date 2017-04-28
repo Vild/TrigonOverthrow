@@ -8,4 +8,5 @@ public:
 
 	virtual void registerImGui();
 	inline virtual std::string name() { return "LuaSystem"; };
+	Entity * _player = nullptr;
 };
