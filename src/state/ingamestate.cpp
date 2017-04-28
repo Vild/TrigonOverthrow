@@ -38,6 +38,8 @@ InGameState::InGameState() {
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();
+		auto playerLua = _player->addComponent<LuaComponent>();
+		playerLua->loadFile("assets/scripts/enemy.lua");
 		transform->scale = glm::vec3(0.3);
 		transform->rotation = glm::vec3(90, 180, 0);
 		transform->recalculateMatrix();
@@ -112,6 +114,8 @@ InGameState::InGameState() {
 		text->transform.scale = glm::vec3(0); // To counteract transform->scale
 		text->transform.recalculateMatrix();
 		
+		auto enemyLua = _enemy->addComponent<LuaComponent>();
+		enemyLua->loadFile("assets/scripts/enemy.lua");
 	}
 
 	{															// Adding Floor
