@@ -14,13 +14,15 @@ public:
 		COL_WALL = BIT(1),
 		COL_PLAYER = BIT(2),
 		COL_ENEMY = BIT(3),
-		COL_PROJECTILE = BIT(4)
+		COL_ENEMY_PROJECTILE = BIT(4),
+		COL_PLAYER_PROJECTILE = BIT(5)
 	};
 
-	const static int playerCollidesWith = COL_WALL | COL_ENEMY | COL_PROJECTILE;
-	const static int enemyCollidesWith = COL_WALL | COL_PLAYER | COL_PROJECTILE;
-	const static int projectileCollidesWith = COL_PLAYER | COL_ENEMY;
-	const static int wallCollidesWith = COL_PLAYER | COL_ENEMY;
+	const static int playerCollidesWith = COL_WALL | COL_ENEMY | COL_ENEMY_PROJECTILE;
+	const static int enemyCollidesWith = COL_WALL | COL_PLAYER | COL_PLAYER_PROJECTILE;
+	const static int enemyProjectileCollidesWith = COL_PLAYER | COL_WALL;
+	const static int playerProjectileCollidesWith = COL_ENEMY | COL_WALL;
+	const static int wallCollidesWith = COL_PLAYER | COL_ENEMY | COL_ENEMY_PROJECTILE | COL_PLAYER_PROJECTILE;
 
 	BulletPhysicsSystem();
 	virtual ~BulletPhysicsSystem();

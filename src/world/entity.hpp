@@ -22,7 +22,7 @@ public:
 	virtual ~Entity() {};
 
 	template <typename T, typename ... Args, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
-	T* addComponent(Args &... args) {
+	T* addComponent(Args ... args) {
 		_components.push_back(std::make_unique<T>(args...));
 		return static_cast<T*>(_components.back().get());
 	}

@@ -8,7 +8,12 @@
 
 BulletDebugRenderPass::BulletDebugRenderPass()
 {
+#ifdef _DEBUG 
+	enable = true;
+#else
 	enable = false;
+#endif // _DEBUG
+
 
 	wireFrame.setDrawMode(GL_LINES)
 		// Bottom

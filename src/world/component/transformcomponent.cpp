@@ -10,7 +10,7 @@ TransformComponent::TransformComponent() {
 	position = glm::vec3(0, 0, 0);
 	scale = glm::vec3(1, 1, 1);
 	rotation = glm::quat();
-	matrix = glm::mat4();
+	matrix = glm::mat4(1);
 }
 
 TransformComponent::~TransformComponent() {}

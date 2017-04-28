@@ -57,13 +57,14 @@ void BulletPhysicsSystem::update(World & w, float delta)
 
 		auto transform = entity->getComponent<TransformComponent>();
 		if (!transform) continue;
-		
+
 		auto projComp = entity->getComponent<ProjectileComponent>();
 		if (projComp)
-			rigidbody->getRigidBody()->setGravity(btVector3(0,0,0));
+			rigidbody->getRigidBody()->setGravity(btVector3(0, 0, 0));
 
-		
+
 		btTransform t = rigidbody->getRigidBody()->getWorldTransform();
+
 
 		btVector3 o = t.getOrigin();
 		btQuaternion q = t.getRotation();

@@ -7,12 +7,11 @@
 struct ProjectileComponent : public Component
 {
 public:
-	ProjectileComponent() {};
+	ProjectileComponent(float damage) { this->damage = damage; }
 	virtual ~ProjectileComponent() {};
 
 	virtual void registerImGui() {};
 	virtual std::string name() { return "ProjectileComponent"; }
 
-private:
-
+	float damage;
 };

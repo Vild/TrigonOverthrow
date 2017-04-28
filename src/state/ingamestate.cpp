@@ -79,12 +79,9 @@ InGameState::InGameState() {
 		text->transform.setPosition(glm::vec3(0, 200, 0));
 		text->transform.setScale(glm::vec3(100 * 2)); // To counteract transform->scale
 
-		auto rigidbody = _player->addComponent<RigidBodyComponent>();
+		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
 		rigidbody->setHitboxHalfSize(transform->getScale());
-		rigidbody->setMass(1);
 		rigidbody->setTransform(transform);
-		rigidbody->getRigidBody()->setUserPointer(_player);
-		rigidbody->setFriction(1);
 		rigidbody->setActivationState(DISABLE_DEACTIVATION);
 		bulletphyiscs->addRigidBody(rigidbody,
 			BulletPhysicsSystem::CollisionType::COL_PLAYER,
@@ -97,7 +94,7 @@ InGameState::InGameState() {
 		transform->setPosition(glm::vec3(0, 0.2, 5));
 
 		auto model = _enemy->addComponent<ModelComponent>();
-		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy.fbx");
+		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy_7HP.fbx");
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
 		model->meshData->mesh
 			->addBuffer("m",
@@ -115,9 +112,9 @@ InGameState::InGameState() {
 									})
 			.finalize();
 
-		auto hitbox = _enemy->addComponent<HitboxComponent>();
-		hitbox->addHitbox(HitboxComponent::SPHERE, transform->getPosition());
-		_enemy->addComponent<PhysicsComponent>();
+		//auto hitbox = _enemy->addComponent<HitboxComponent>();
+		//hitbox->addHitbox(HitboxComponent::SPHERE, transform->getPosition());
+		//_enemy->addComponent<PhysicsComponent>();
 		
 		auto life = _enemy->addComponent<LifeComponent>();
 		life->currHP = life->maxHP = 5;
@@ -129,11 +126,8 @@ InGameState::InGameState() {
 		//text->transform.rotation = glm::vec3(0, 0, 0);
 		text->transform.setScale({0.1, 0.1, 0.1}); // To counteract transform->scale
 
-		auto rigidbody = _enemy->addComponent<RigidBodyComponent>();
-		rigidbody->getRigidBody()->setUserPointer(_enemy);
+		auto rigidbody = _enemy->addComponent<RigidBodyComponent>(_enemy, 1.0f, 1.0f);
 		rigidbody->setHitboxHalfSize(transform->getScale());
-		rigidbody->setMass(1);
-		rigidbody->setFriction(1);
 		rigidbody->setTransform(transform);
 
 		bulletphyiscs->addRigidBody(rigidbody,
@@ -146,12 +140,12 @@ InGameState::InGameState() {
 		std::vector<Uint8> map = mapLoader->getMap("maps/smileyface.png");
 		int width = mapLoader->getWidth();
 		int height = mapLoader->getHeight();
-
+		
 		Entity * room = _world.addEntity(sole::uuid4(), "Room");
-
+		//
 		std::unique_ptr<SimpleMesh> box = std::make_unique<SimpleMesh>();
 		box->setDrawMode(GL_TRIANGLES)
-			// TOP
+		//	// TOP
 			.addVertex({ -0.5,  0.5,  0.5 })
 			.addVertex({  0.5,  0.5,  0.5 })
 			.addVertex({ -0.5,  0.5, -0.5 })
@@ -187,26 +181,26 @@ InGameState::InGameState() {
 			.addVertex({  0.5,  0.5,  0.5 })
 			.addVertex({  0.5, -0.5,  0.5 })
 		.finalize(256);
-
-		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(box);
-
+	
+		//auto ismc = room->addComponent<InstancedSimpleMeshComponent>(box);
+		
 		for (int i = 0; i < map.size(); i++)
 		{
 			int x = i % width;
 			int y = i / width;
 			float h = float(map[i]) / 255.0f;
-
+		
 			Entity * tile  = _world.addEntity(sole::uuid4(), "FloorTile");
-
+		
 			TransformComponent * transform = tile->addComponent<TransformComponent>();
 			transform->setPosition({ x, h - 0.5, y });
 			transform->setScale({ 1, 1, 1 });
-			ismc->addInstance(transform);
-
-			RigidBodyComponent * rigidbody = tile->addComponent<RigidBodyComponent>();
+			//ismc->addInstance(transform);
+		
+			RigidBodyComponent * rigidbody = tile->addComponent<RigidBodyComponent>(tile);
 			rigidbody->setTransform(transform);
 			rigidbody->setHitboxHalfSize({ 0.5, 0.5, 0.5 });
-
+		
 			bulletphyiscs->addRigidBody(rigidbody,
 				BulletPhysicsSystem::CollisionType::COL_WALL,
 				BulletPhysicsSystem::wallCollidesWith);
