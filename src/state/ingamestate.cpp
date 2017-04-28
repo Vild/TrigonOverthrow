@@ -23,15 +23,26 @@
 #include "../world/component/lifecomponent.hpp"
 #include "../world/component/instancedsimplemeshcomponent.hpp"
 #include "../world/component/dynamicmodelcomponent.hpp"
+#include "../world/component/suncomponent.hpp"
+#include "../world/component/pointlightcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
 	BulletPhysicsSystem * bulletphyiscs = engine.getSystem<BulletPhysicsSystem>();
 
+	_sun = _world.addEntity(sole::uuid4(), "Sun");
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
+
+	{ // Adding Sun
+		auto sun = _sun->addComponent<SunComponent>();
+		sun->ambient = glm::vec3(0.1);
+		sun->directionLight.diffuse = glm::vec3(0, 0.3, 0.3);
+		sun->directionLight.specular = glm::vec3(0.3, 0, 0);
+		sun->directionLight.direction = glm::vec3(0, -1, 0);
+	}
 
 	{ // Adding Camera
 		_camera->addComponent<TransformComponent>();
@@ -86,6 +97,13 @@ InGameState::InGameState() {
 		bulletphyiscs->addRigidBody(rigidbody,
 			BulletPhysicsSystem::CollisionType::COL_PLAYER,
 			BulletPhysicsSystem::playerCollidesWith);
+
+		auto point = _player->addComponent<PointLightComponent>();
+		point->pointLight.diffuse = glm::vec3(0, 1, 0);
+		point->pointLight.specular = glm::vec3(0, 0, 0);
+		point->pointLight.constant = 1;
+		point->pointLight.linear = 0.14;
+		point->pointLight.quadratic = 0.07;
 	}
 
 	{

@@ -28,13 +28,17 @@ struct PointLight {
 	float quadratic;
 };
 
+uniform bool settings_enableDirLight;
+uniform bool settings_enablePointLight;
+uniform float settings_shininess;
+
 uniform vec3 cameraPos;
 
 uniform vec3 ambient;
-#define POINT_LIGHTS 64
+#define MAX_POINT_LIGHTS 16
 uniform DirLight dirLight;
-uniform PointLight pointLights[POINT_LIGHTS];
-uniform float settings_shininess = 1;
+uniform int pointLightCount;
+uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
 vec3 calcDirLight(DirLight light, vec3 pos, vec3 normal, vec3 diffuse, float specular) {
 	// Diffuse shading
@@ -81,10 +85,15 @@ void main() {
 
 	vec3 result = ambient * diffuse;
 
-	//result += calcDirLight(dirLight, pos, normal, diffuse, specular);
+	if (settings_enableDirLight)
+		result += calcDirLight(dirLight, pos, normal, diffuse, specular);
 
-	for (int i = 0; i < POINT_LIGHTS; i++)
-		result += calcPointLight(pointLights[i], pos, normal, diffuse, specular);
+	if (settings_enablePointLight)
+		for (int i = 0; i < pointLightCount; i++)
+			result += calcPointLight(pointLights[i], pos, normal, diffuse, specular);
+
+	if (!settings_enableDirLight && !settings_enablePointLight)
+		result = diffuse;
 
 	result *= occlusion;
 	outColor = vec4(result, 1);

@@ -47,8 +47,8 @@ Engine::~Engine() {
 	_systems.clear();
 	_states.clear();
 
-	//rmt_UnbindOpenGL();
-	//rmt_DestroyGlobalInstance(rmt);
+	// rmt_UnbindOpenGL();
+	// rmt_DestroyGlobalInstance(rmt);
 
 	TTF_Quit();
 	Mix_Quit();
@@ -262,6 +262,9 @@ void Engine::_initGL() {
 	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
 		throw "Failed to init GLAD";
 
+	glDebugMessageCallback(&Engine::_glDebugLog, static_cast<void*>(this));
+	glEnable(GL_DEBUG_OUTPUT);
+
 	SDL_GL_SetSwapInterval(_vsync);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -391,4 +394,60 @@ void Engine::_system_resize(unsigned int width, unsigned int height) {
 			continue;
 		rp->resize(width, height);
 	}
+}
+
+void Engine::_glDebugLog(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	Engine* engine = const_cast<Engine*>(static_cast<const Engine*>(userParam));
+	(void)engine;
+
+	if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+		return;
+
+	std::string sourceStr = "!UNKNOWN!";
+	if (source == GL_DEBUG_SOURCE_API)
+		sourceStr = "GL_DEBUG_SOURCE_API";
+	else if (source == GL_DEBUG_SOURCE_WINDOW_SYSTEM)
+		sourceStr = "GL_DEBUG_SOURCE_WINDOW_SYSTEM";
+	else if (source == GL_DEBUG_SOURCE_SHADER_COMPILER)
+		sourceStr = "GL_DEBUG_SOURCE_SHADER_COMPILER";
+	else if (source == GL_DEBUG_SOURCE_THIRD_PARTY)
+		sourceStr = "GL_DEBUG_SOURCE_THIRD_PARTY";
+	else if (source == GL_DEBUG_SOURCE_APPLICATION)
+		sourceStr = "GL_DEBUG_SOURCE_APPLICATION";
+	else if (source == GL_DEBUG_SOURCE_OTHER)
+		sourceStr = "GL_DEBUG_SOURCE_OTHER";
+
+	std::string typeStr = "!UNKNOWN!";
+
+	if (type == GL_DEBUG_TYPE_ERROR)
+		typeStr = "GL_DEBUG_TYPE_ERROR";
+	else if (type == GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR)
+		typeStr = "GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR";
+	else if (type == GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR)
+		typeStr = "GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR";
+	else if (type == GL_DEBUG_TYPE_PORTABILITY)
+		typeStr = "GL_DEBUG_TYPE_PORTABILITY";
+	else if (type == GL_DEBUG_TYPE_PERFORMANCE)
+		typeStr = "GL_DEBUG_TYPE_PERFORMANCE";
+	else if (type == GL_DEBUG_TYPE_MARKER)
+		typeStr = "GL_DEBUG_TYPE_MARKER";
+	else if (type == GL_DEBUG_TYPE_PUSH_GROUP)
+		typeStr = "GL_DEBUG_TYPE_PUSH_GROUP";
+	else if (type == GL_DEBUG_TYPE_POP_GROUP)
+		typeStr = "GL_DEBUG_TYPE_POP_GROUP";
+	else if (type == GL_DEBUG_TYPE_OTHER)
+		typeStr = "GL_DEBUG_TYPE_OTHER";
+
+	std::string severityStr = "!UNKNOWN!";
+
+	if (severity == GL_DEBUG_SEVERITY_HIGH)
+		severityStr = "GL_DEBUG_SEVERITY_HIGH";
+	else if (severity == GL_DEBUG_SEVERITY_MEDIUM)
+		severityStr = "GL_DEBUG_SEVERITY_MEDIUM";
+	else if (severity == GL_DEBUG_SEVERITY_LOW)
+		severityStr = "GL_DEBUG_SEVERITY_LOW";
+	else if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+		severityStr = "GL_DEBUG_SEVERITY_NOTIFICATION";
+
+	fprintf(stdout, "[%s][%s][%d][%s] %s\n", sourceStr.c_str(), typeStr.c_str(), id, severityStr.c_str(), message);
 }
