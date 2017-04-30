@@ -13,8 +13,6 @@ void LifeSystem::update(World& world, float delta) {
 		if (entity->getName() == "Projectile") {
 			lifeComp->currHP -= 1 * delta;
 		}
-
-		// TO-DO: Projectiles are spawned as entities, and their HP should be lowered each second.
 	}
 }
 

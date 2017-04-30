@@ -22,6 +22,7 @@
 #include "../world/component/guncomponent.hpp"
 #include "../world/component/lifecomponent.hpp"
 #include "../world/component/instancedsimplemeshcomponent.hpp"
+#include "../world/component/dynamicmodelcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -93,6 +94,8 @@ InGameState::InGameState() {
 		transform->setScale(glm::vec3(0.3));
 		transform->setPosition(glm::vec3(0, 0.2, 5));
 
+		auto dynamicModelComp = _enemy->addComponent<DynamicModelComponent>();
+
 		auto model = _enemy->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy_7HP.fbx");
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
@@ -117,7 +120,7 @@ InGameState::InGameState() {
 		//_enemy->addComponent<PhysicsComponent>();
 		
 		auto life = _enemy->addComponent<LifeComponent>();
-		life->currHP = life->maxHP = 5;
+		life->currHP = life->maxHP = 6;
 
 		auto text = _enemy->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");

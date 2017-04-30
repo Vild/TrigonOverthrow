@@ -6,13 +6,14 @@
 #include "../component/modelcomponent.hpp"
 #include "../component/projectilecomponent.hpp"
 #include "../component/instancedsimplemeshcomponent.hpp"
+#include "../component/dynamicmodelcomponent.hpp"
 
 #include "../system/bulletphysicssystem.hpp"
 
 #include "../entity.hpp"
-#include "../src/gl/mesh.hpp"
-#include "../src/io/meshloader.hpp"
-#include "../src/engine.hpp"
+#include "../../gl/mesh.hpp"
+#include "../../io/meshloader.hpp"
+#include "../../engine.hpp"
 
 GunSystem::~GunSystem() {}
 
@@ -57,7 +58,7 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	projRdbComp->setActivationState(DISABLE_DEACTIVATION);
 
 	auto projLifeComp = projectile->addComponent<LifeComponent>();
-	projLifeComp->currHP = projLifeComp->maxHP = 2;
+	projLifeComp->currHP = projLifeComp->maxHP = 1;
 
 	auto projComp = projectile->addComponent<ProjectileComponent>(1.0f);
 

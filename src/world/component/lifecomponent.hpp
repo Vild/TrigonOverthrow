@@ -5,11 +5,14 @@
 
 
 struct LifeComponent : public Component {
-	LifeComponent(float inMaxHP) { currHP = maxHP = inMaxHP; }
+	LifeComponent(float inMaxHP) { 
+		currHP = maxHP = inMaxHP; 
+		hpchanged = true;
+	}
 	LifeComponent() { currHP = maxHP = 4; };
 	float maxHP;
 	float currHP;
-
-	void registerImGui() {};
-	virtual std::string name() { return "GunComponent"; }
+	bool hpchanged;
+	void registerImGui();
+	virtual std::string name() { return "LifeComponent"; }
 };

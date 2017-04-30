@@ -29,6 +29,7 @@
 #include "world/system/lifesystem.hpp"
 #include "world/system/bulletphysicssystem.hpp"
 #include "world/system/projectilesystem.hpp"
+#include "world/system/dynamicmodelsystem.hpp"
 
 
 #include "world/renderpass/geometryrenderpass.hpp"
@@ -330,8 +331,9 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<ButtonSystem>());
 	_systems.push_back(std::make_unique<GunSystem>());
 	_systems.push_back(std::make_unique<ParticleSystem>());
-	_systems.push_back(std::make_unique<LifeSystem>());
 	_systems.push_back(std::make_unique<ProjectileSystem>());
+	_systems.push_back(std::make_unique<DynamicModelSystem>());
+	_systems.push_back(std::make_unique<LifeSystem>());
 
 	// Render passes
 	{

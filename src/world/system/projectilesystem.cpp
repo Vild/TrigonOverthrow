@@ -24,35 +24,42 @@ void ProjectileSystem::update(World& world, float delta) {
 		}
 		else {
 			targetLifeComp = static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>();
-			if (!targetLifeComp)
-				continue;
-
 			isAProj = true;
 		}
 
 		int numContacts = contactManifold->getNumContacts();
 		for (int j = 0; j < numContacts; j++) {
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
+			// Loops through everything and take the first object that was collided with.
+			// And breaks the for-loop after that.
 			if (pt.getDistance() < 0.f) {
 				//const btVector3& ptA = pt.getPositionWorldOnA();
 				//const btVector3& ptB = pt.getPositionWorldOnB();
 				//const btVector3& normalOnB = pt.m_normalWorldOnB;
-				switch (isAProj)
-				{
-				case true:
-					targetLifeComp->currHP -= projComp->damage;
-					static_cast<Entity*>(obA->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
-					break;
-				case false:
-					targetLifeComp->currHP -= projComp->damage;
-					static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
-					break;
+				switch (isAProj){
+				case true: {
+						if (targetLifeComp) {
+							targetLifeComp->currHP -= projComp->damage;
+							targetLifeComp->hpchanged = true;
+						}
+						static_cast<Entity*>(obA->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
+						break;
+					}
+				case false: {
+						if (targetLifeComp) {
+							targetLifeComp->currHP -= projComp->damage;
+							targetLifeComp->hpchanged = true;
+						}
+						static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
+						break;
+					}
 				default:
 					break;
 				}
+				break;
 			}
-			j = numContacts;
 		}
+		break;
 	}
 }
 
