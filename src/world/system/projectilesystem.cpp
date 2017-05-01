@@ -36,25 +36,18 @@ void ProjectileSystem::update(World& world, float delta) {
 				//const btVector3& ptA = pt.getPositionWorldOnA();
 				//const btVector3& ptB = pt.getPositionWorldOnB();
 				//const btVector3& normalOnB = pt.m_normalWorldOnB;
-				switch (isAProj){
-				case true: {
-						if (targetLifeComp) {
-							targetLifeComp->currHP -= projComp->damage;
-							targetLifeComp->hpchanged = true;
-						}
-						static_cast<Entity*>(obA->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
-						break;
+				if (isAProj) {
+					if (targetLifeComp) {
+						targetLifeComp->currHP -= projComp->damage;
+						targetLifeComp->hpchanged = true;
 					}
-				case false: {
-						if (targetLifeComp) {
-							targetLifeComp->currHP -= projComp->damage;
-							targetLifeComp->hpchanged = true;
-						}
-						static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
-						break;
+					static_cast<Entity*>(obA->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
+				} else {
+					if (targetLifeComp) {
+						targetLifeComp->currHP -= projComp->damage;
+						targetLifeComp->hpchanged = true;
 					}
-				default:
-					break;
+					static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
 				}
 				break;
 			}
@@ -65,5 +58,5 @@ void ProjectileSystem::update(World& world, float delta) {
 
 
 void ProjectileSystem::registerImGui() {
-	
+
 }

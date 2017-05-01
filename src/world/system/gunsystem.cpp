@@ -47,7 +47,7 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	transProj->setDirection(transComp->getDirection()); // should be transComp->getDirection() instead of 0,0,1 but the direction is weird.
 	transProj->setPosition(transComp->getPosition() + transProj->getDirection());
 
-	auto currRdbComp = me->getComponent<RigidBodyComponent>();
+	//auto currRdbComp = me->getComponent<RigidBodyComponent>();
 	auto projRdbComp = projectile->addComponent<RigidBodyComponent>(projectile);
 
 	projRdbComp->setHitboxHalfSize(transProj->getScale());
@@ -60,7 +60,7 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	auto projLifeComp = projectile->addComponent<LifeComponent>();
 	projLifeComp->currHP = projLifeComp->maxHP = 1;
 
-	auto projComp = projectile->addComponent<ProjectileComponent>(1.0f);
+	/*auto projComp =*/ projectile->addComponent<ProjectileComponent>(1.0f);
 
 	auto modelComp = projectile->addComponent<ModelComponent>();
 	modelComp->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player_projectile.fbx");
@@ -82,7 +82,7 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 			.finalize();
 
 	if (me->getComponent<GunComponent>()->type == GunComponent::GunType::RAYGUN)
-		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, 
+		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp,
 			BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
 			BulletPhysicsSystem::playerProjectileCollidesWith);
 	else
@@ -142,5 +142,5 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 //}
 
 void GunSystem::registerImGui() {
-	
+
 }

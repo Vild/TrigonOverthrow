@@ -1,6 +1,6 @@
 #pragma once
 #include "system.hpp"
-#include "../src/gl/mesh.hpp"
+#include "../../gl/mesh.hpp"
 
 class DynamicModelSystem : public System {
 public:

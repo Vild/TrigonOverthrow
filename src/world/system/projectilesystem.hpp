@@ -1,6 +1,6 @@
 #pragma once
 #include "system.hpp"
-#include <BulletCollision\CollisionDispatch\btCollisionDispatcher.h>
+#include <BulletCollision/CollisionDispatch/btCollisionDispatcher.h>
 
 class ProjectileSystem : public System {
 public:

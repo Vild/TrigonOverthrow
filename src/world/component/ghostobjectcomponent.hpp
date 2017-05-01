@@ -4,7 +4,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 #include <glm/glm.hpp>
-#include <BulletCollision\CollisionDispatch\btGhostObject.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 struct GhostObjectComponent : public Component
 {
