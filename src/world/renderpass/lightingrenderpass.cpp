@@ -76,7 +76,7 @@ LightingRenderPass::LightingRenderPass() {
 
 		.setUniform("settings_enableDirLight", _settings_enableDirLight)
 		.setUniform("settings_enablePointLight", _settings_enablePointLight)
-		.setUniform("settings_shininess", 1);
+		.setUniform("settings_shininess", 1.0f);
 
 	_shader->setUniform("ambient", _ambient)
 		.setUniform("dirLight.diffuse", _dirLight.diffuse)

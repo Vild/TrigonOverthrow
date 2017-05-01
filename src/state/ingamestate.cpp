@@ -87,8 +87,8 @@ InGameState::InGameState() {
 
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
-		text->transform.setPosition(glm::vec3(0, 200, 0));
-		text->transform.setScale(glm::vec3(100 * 2)); // To counteract transform->scale
+		text->transform.setPosition(glm::vec3(0, 1, 0));
+		text->transform.setScale(glm::vec3(1));
 
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
 		rigidbody->setHitboxHalfSize(transform->getScale());
