@@ -6,6 +6,50 @@
 
 #include <glm/glm.hpp>
 
+struct DirLight {
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+
+	glm::vec3 direction;
+
+	bool operator==(const DirLight& other) { return diffuse == other.diffuse && specular == other.specular && direction == other.direction; }
+	bool operator!=(const DirLight& other) { return !operator==(other); }
+
+	DirLight& operator=(const DirLight& other) {
+		diffuse = other.diffuse;
+		specular = other.specular;
+		direction = other.direction;
+		return *this;
+	}
+};
+
+struct PointLight {
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+
+	glm::vec3 position;
+	float constant;
+	float linear;
+	float quadratic;
+	bool operator==(const PointLight& other) {
+		return diffuse == other.diffuse && specular == other.specular && position == other.position && constant == other.constant && linear == other.linear &&
+					 quadratic == other.quadratic;
+	}
+	bool operator!=(const PointLight& other) { return !operator==(other); }
+
+	PointLight& operator=(const PointLight& other) {
+		diffuse = other.diffuse;
+		specular = other.specular;
+		position = other.position;
+
+		constant = other.constant;
+		linear = other.linear;
+		quadratic = other.quadratic;
+
+		return *this;
+	}
+};
+
 class LightingRenderPass : public RenderPass {
 public:
 	enum InputAttachment : GLint { position = 0, normal, diffuseSpecular, depth, OcclusionMap };
@@ -20,12 +64,14 @@ public:
 	inline virtual std::string name() { return "LightingRenderPass"; };
 
 private:
+	static const int MAX_POINT_LIGHTS = 16;
+
 	std::shared_ptr<Mesh> _plane;
-	struct DirLight {
-		glm::vec3 direction;
-		glm::vec3 ambient;
-		glm::vec3 diffuse;
-		glm::vec3 specular;
-	};
-	DirLight _dirLight{glm::vec3(0, -1, 0), glm::vec3(0.1, 0.1, 0.1), glm::vec3(1, 1, 1), glm::vec3(0.5, 0.5, 0.5)};
+
+	bool _settings_enableDirLight = true;
+	bool _settings_enablePointLight = true;
+
+	glm::vec3 _ambient;
+	DirLight _dirLight;
+	PointLight _pointLights[MAX_POINT_LIGHTS];
 };

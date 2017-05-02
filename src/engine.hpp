@@ -19,8 +19,7 @@
 #include "io/maploader.hpp"
 
 #include "world/world.hpp"
-#include "world/system/particlesystem.hpp"
-
+#include "../src/world/system/system.hpp"
 #include "state/state.hpp"
 
 class Engine {
@@ -109,6 +108,8 @@ private:
 
 	void _system_tick(float delta);
 	void _system_resize(unsigned int width, unsigned int height);
+
+	static void _glDebugLog(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 };
 
 template <typename T>

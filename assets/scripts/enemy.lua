@@ -4,7 +4,18 @@
 --	playerPosY = y
 --	playerPosZ = z
 --end
-function update(enemyPos, playerPos)
+
+function ranged(enemyPos, playerPos)
+	
+	if enemyPos > playerPos then
+		value = -1.0
+	elseif enemyPos < playerPos then
+		value = 1.0
+	end
+	return value
+end
+
+function melee(enemyPos, playerPos)
 	
 	if enemyPos > playerPos then
 		value = -1.0

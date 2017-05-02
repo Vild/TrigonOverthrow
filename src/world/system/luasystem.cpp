@@ -27,8 +27,8 @@ void LuaSystem::update(World& world, float delta) {
 					//sending X and Z value of enemy and player and updating enemy position based on that, moving it closer to player position.
 					glm::vec3 playerPosition = _player->getComponent<TransformComponent>()->getPosition();
 					glm::vec3 enemyPosition = transform->getPosition();
-					int posX = lua->L["update"]((double)enemyPosition.x, (double)playerPosition.x);
-					int posZ = lua->L["update"]((double)enemyPosition.z, (double)playerPosition.z);
+					int posX = lua->L["melee"]((double)enemyPosition.x, (double)playerPosition.x);
+					int posZ = lua->L["melee"]((double)enemyPosition.z, (double)playerPosition.z);
 					btVector3 force{(float)posX, 0,(float)posZ };
 					rb->applyCentralForce(force*10);
 

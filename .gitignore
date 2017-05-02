@@ -33,6 +33,7 @@
 *.vcxproj.user
 *.vcxproj.filters
 /.vscode/
+*.filters
 
 # Reggae
 compile_commands.json

@@ -8,8 +8,29 @@
 #include "../../lib/imgui.h"
 
 #include "../component/transformcomponent.hpp"
+#include "../component/suncomponent.hpp"
+#include "../component/pointlightcomponent.hpp"
 
 LightingRenderPass::LightingRenderPass() {
+	_ambient = glm::vec3(0.1, 0.1, 0.1);
+	_dirLight = DirLight{
+		.diffuse = glm::vec3(1, 1, 1),				//
+		.specular = glm::vec3(0.5, 0.5, 0.5), //
+		.direction = glm::vec3(0, -1, 0)			//
+	};
+
+	for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+		_pointLights[i] = PointLight{
+			.diffuse = glm::vec3{(i % 8) / 8.0, (i % 16) / 16.0, (i % 2) / 2.0}, //
+			.specular = glm::vec3{0.0, 0.0, 0.0},																 //
+
+			.position = glm::vec3{i, 1, i}, //
+			.constant = float{1},						//
+			.linear = float{0.7},						//
+			.quadratic = float{1.8},				//
+		};
+	}
+
 	_gbuffer = std::make_shared<GBuffer>(0);
 
 	_shader = std::make_shared<ShaderProgram>();
@@ -23,20 +44,54 @@ LightingRenderPass::LightingRenderPass() {
 		.addUniform("defDiffuseSpecular")
 		.addUniform("defDepth")
 		.addUniform("defOcclusionMap")
+
+		.addUniform("settings_enableDirLight")
+		.addUniform("settings_enablePointLight")
+		.addUniform("settings_shininess")
+
 		.addUniform("cameraPos")
-		.addUniform("setting_dirLight.direction")
-		.addUniform("setting_dirLight.ambient")
-		.addUniform("setting_dirLight.diffuse")
-		.addUniform("setting_dirLight.specular");
+		.addUniform("ambient")
+
+		.addUniform("dirLight.diffuse")
+		.addUniform("dirLight.specular")
+		.addUniform("dirLight.direction")
+
+		.addUniform("pointLightCount");
+
+	for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+		_shader->addUniform("pointLights[" + std::to_string(i) + "].diffuse")
+			.addUniform("pointLights[" + std::to_string(i) + "].specular")
+
+			.addUniform("pointLights[" + std::to_string(i) + "].position")
+			.addUniform("pointLights[" + std::to_string(i) + "].constant")
+			.addUniform("pointLights[" + std::to_string(i) + "].linear")
+			.addUniform("pointLights[" + std::to_string(i) + "].quadratic");
+	}
+
 	_shader->setUniform("defPos", (GLint)InputAttachment::position)
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
 		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
 		.setUniform("defDepth", (GLint)InputAttachment::depth)
 		.setUniform("defOcclusionMap", (GLint)InputAttachment::OcclusionMap)
-		.setUniform("setting_dirLight.direction", _dirLight.direction)
-		.setUniform("setting_dirLight.ambient", _dirLight.ambient)
-		.setUniform("setting_dirLight.diffuse", _dirLight.diffuse)
-		.setUniform("setting_dirLight.specular", _dirLight.specular);
+
+		.setUniform("settings_enableDirLight", _settings_enableDirLight)
+		.setUniform("settings_enablePointLight", _settings_enablePointLight)
+		.setUniform("settings_shininess", 1.0f);
+
+	_shader->setUniform("ambient", _ambient)
+		.setUniform("dirLight.diffuse", _dirLight.diffuse)
+		.setUniform("dirLight.specular", _dirLight.specular)
+		.setUniform("dirLight.direction", _dirLight.direction);
+
+	for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+		_shader->setUniform("pointLights[" + std::to_string(i) + "].diffuse", _pointLights[i].diffuse)
+			.setUniform("pointLights[" + std::to_string(i) + "].specular", _pointLights[i].specular)
+
+			.setUniform("pointLights[" + std::to_string(i) + "].position", _pointLights[i].position)
+			.setUniform("pointLights[" + std::to_string(i) + "].constant", _pointLights[i].constant)
+			.setUniform("pointLights[" + std::to_string(i) + "].linear", _pointLights[i].linear)
+			.setUniform("pointLights[" + std::to_string(i) + "].quadratic", _pointLights[i].quadratic);
+	}
 
 	std::vector<Vertex> vertices = {
 		Vertex{glm::vec3{-1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 1}}, Vertex{glm::vec3{1, 1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {1, 1}},
@@ -77,7 +132,81 @@ void LightingRenderPass::render(World& world) {
 
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_shader->bind().setUniform("cameraPos", transformComponent->getPosition());
+	auto camPos = transformComponent->getPosition();
+	_shader->bind().setUniform("cameraPos", camPos);
+
+	bool enableDirLight = false;
+	bool enablePointLight = false;
+	int pointLightCount = 0;
+	float distances[MAX_POINT_LIGHTS];
+
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+		auto sun = entity->getComponent<SunComponent>();
+		if (sun) {
+			if (_ambient != sun->ambient) {
+				_ambient = sun->ambient;
+				_shader->setUniform("ambient", _ambient);
+			}
+			if (_dirLight != sun->directionLight) {
+				_dirLight = sun->directionLight;
+				_shader->setUniform("dirLight.diffuse", _dirLight.diffuse)
+					.setUniform("dirLight.specular", _dirLight.specular)
+					.setUniform("dirLight.direction", glm::normalize(_dirLight.direction));
+			}
+			enableDirLight = true;
+		} else {
+			auto pointLight = entity->getComponent<PointLightComponent>();
+			if (!pointLight)
+				continue;
+			auto transform = entity->getComponent<TransformComponent>();
+			if (!transform)
+				continue;
+			// XXX: Hack make nicer
+			pointLight->pointLight.position = transform->getPosition() + pointLight->offset;
+
+			int idx = pointLightCount;
+			auto myDist = glm::distance(pointLight->pointLight.position, camPos);
+			if (idx >= MAX_POINT_LIGHTS) {
+				float biggestDist = 0;
+				int biggestIdx = 0;
+				for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+					auto dist = glm::distance(_pointLights[i].position, camPos);
+					if (biggestDist < dist) {
+						biggestDist = dist;
+						biggestIdx = i;
+					}
+				}
+
+				if (myDist > biggestDist)
+					continue;
+
+				idx = biggestIdx;
+			} else
+				pointLightCount++;
+			auto& light = _pointLights[idx];
+
+			distances[idx] = myDist;
+
+			if (light != pointLight->pointLight) {
+				light = pointLight->pointLight;
+
+				std::string pointStr = "pointLights[" + std::to_string(idx) + "]";
+
+				_shader->setUniform(pointStr + ".diffuse", light.diffuse)
+					.setUniform(pointStr + ".specular", light.specular)
+
+					.setUniform(pointStr + ".position", light.position)
+					.setUniform(pointStr + ".constant", light.constant)
+					.setUniform(pointStr + ".linear", light.linear)
+					.setUniform(pointStr + ".quadratic", light.quadratic);
+			}
+		}
+	}
+	enablePointLight = !!pointLightCount;
+
+	_shader->setUniform("settings_enableDirLight", enableDirLight && _settings_enableDirLight)
+		.setUniform("settings_enablePointLight", enablePointLight && _settings_enablePointLight)
+		.setUniform("pointLightCount", pointLightCount);
 
 	_shader->setUniform("vp", glm::mat4(1));
 	_plane->render();
@@ -90,13 +219,9 @@ void LightingRenderPass::resize(unsigned int width, unsigned int height) {
 
 void LightingRenderPass::registerImGui() {
 	_shader->bind();
+	if (ImGui::Checkbox("Directional Light", &_settings_enableDirLight))
+		_shader->setUniform("settings_enableDirLight", _settings_enableDirLight);
 
-	if (ImGui::DragFloat3("DirLight Direction", glm::value_ptr(_dirLight.direction), 0.1))
-		_shader->setUniform("setting_dirLight.direction", _dirLight.direction);
-	if (ImGui::DragFloat3("DirLight Ambient", glm::value_ptr(_dirLight.ambient), 0.1, 0, 1))
-		_shader->setUniform("setting_dirLight.ambient", _dirLight.ambient);
-	if (ImGui::DragFloat3("DirLight Diffuse", glm::value_ptr(_dirLight.diffuse), 0.1, 0, 1))
-		_shader->setUniform("setting_dirLight.diffuse", _dirLight.diffuse);
-	if (ImGui::DragFloat3("DirLight Specular", glm::value_ptr(_dirLight.specular), 0.1, 0, 1))
-		_shader->setUniform("setting_dirLight.specular", _dirLight.specular);
+	if (ImGui::Checkbox("Point Lights", &_settings_enablePointLight))
+		_shader->setUniform("settings_enablePointLight", _settings_enablePointLight);
 }

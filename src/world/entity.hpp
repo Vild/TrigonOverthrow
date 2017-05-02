@@ -19,16 +19,16 @@ class Entity {
 public:
 	/// Don't call this one directly! Always use world->addEntity
 	Entity(sole::uuid uuid, std::string name);
-	virtual ~Entity();
+	virtual ~Entity() {};
 
 	template <typename T, typename ... Args, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
-	T* addComponent(Args &... args) {
+	T* addComponent(Args ... args) {
 		_components.push_back(std::make_unique<T>(args...));
 		return static_cast<T*>(_components.back().get());
 	}
 
-	//template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
-	//T* addComponent(std::unique_ptr<T> component) {
+	// template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
+	// T* addComponent(std::unique_ptr<T> component) {
 	//	_components.push_back(std::move(component));
 	//	return static_cast<T*>(_components.back().get());
 	//}
@@ -59,10 +59,16 @@ public:
 
 	inline sole::uuid& getUUID() { return _uuid; }
 	inline std::string& getName() { return _name; }
+	inline void makeDead() { _dead = true;  }
+	inline bool isDead() { return _dead; }
 	inline std::vector<std::unique_ptr<Component>>& getComponents() { return _components; }
+	inline bool& getHide() { return _hide; }
 
 private:
 	sole::uuid _uuid;
 	std::string _name;
 	std::vector<std::unique_ptr<Component>> _components;
+
+	bool _dead = false;
+	bool _hide = false;
 };

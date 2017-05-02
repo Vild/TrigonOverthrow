@@ -102,11 +102,12 @@ void GeometryRenderPass::render(World& world) {
 		ModelComponent* model = nullptr;
 		InstancedSimpleMeshComponent* ism = nullptr;
 
-		if (model = entity->getComponent<ModelComponent>())
+		if ((model = entity->getComponent<ModelComponent>()))
 		{
 			auto transform = entity->getComponent<TransformComponent>();
-			if (transform)
+			if (transform) {
 				model->render(transform->getMatrix());
+			}
 			else {
 				auto ft = entity->getComponent<FloorTransformComponent>();
 				if (!ft)
@@ -117,7 +118,7 @@ void GeometryRenderPass::render(World& world) {
 				_shader->bind();
 			}
 		}
-		else if (ism = entity->getComponent<InstancedSimpleMeshComponent>())
+		else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>()))
 		{
 			ismShader->bind()
 				.setUniform("u_view", cameraComponent->viewMatrix)
@@ -126,7 +127,7 @@ void GeometryRenderPass::render(World& world) {
 
 			ism->render();
 		}
-		
+
 	}
 }
 

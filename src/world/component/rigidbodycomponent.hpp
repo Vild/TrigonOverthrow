@@ -4,11 +4,11 @@
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 #include <glm/glm.hpp>
-
+#include "../entity.hpp"
 class RigidBodyComponent : public Component
 {
 public:
-	RigidBodyComponent();
+	RigidBodyComponent(Entity* entity, float mass = 0.0f, float friction = 0.0f);
 	virtual ~RigidBodyComponent();
 
 	// Inherited via Component

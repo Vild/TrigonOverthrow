@@ -7,6 +7,7 @@
 #include <glm/gtx/transform.hpp>
 #include "../../engine.hpp"
 #include "../component/guncomponent.hpp"
+#include "../component/transformcomponent.hpp"
 
 ParticleSystem::ParticleSystem() {
 	_programs.resize(2);
@@ -32,31 +33,29 @@ ParticleSystem::~ParticleSystem() {}
 
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
+	// Gotta change how this system works abit. 
 	rmt_ScopedCPUSample(ParticleSystem, RMTSF_None);
-	// Gotta change how this system works abit.
-	glm::vec3 direction;
-	glm::vec3 pos;
-	glm::vec3 entryPos;
+	glm::vec3 direction = glm::vec3(0);
+	glm::vec3 pos = glm::vec3(0);
+	glm::vec3 entryPos = glm::vec3(0);
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto particleComp = entity->getComponent<ParticleComponent>();
 		if (!particleComp)
 			continue;
 
-		if (entity->getName() == "Player") {
-			auto gunComponent = entity->getComponent<GunComponent>();
-			if (gunComponent->drawShot) {
-				auto raygun = std::static_pointer_cast<GunComponent::RayGun>(gunComponent->gun);
-				direction = raygun->ray.dir;
-				pos = raygun->ray.o;
-				entryPos = raygun->ray.t[0];
-				_programs[0]->bind().setUniform("delta", delta).setUniform("emitterPos", pos).setUniform("emitterDir", direction).setUniform("entryPos", entryPos);
-				particleComp->textureSize = _textureSize;
-				_particleData->bindImageTexture(0, true);
-				_particleData->bindImageTexture(1, true);
-				// Barrier is in particlerenderpass.
-				glDispatchCompute((GLint)_textureSize, (GLint)_textureSize, 1);
-			}
-		}
+		direction = entity->getComponent<TransformComponent>()->getDirection();
+		pos = entity->getComponent<TransformComponent>()->getPosition();
+		_programs[0]
+			->bind()
+			.setUniform("delta", delta)
+			.setUniform("emitterPos", pos)
+			.setUniform("emitterDir", direction)
+			.setUniform("entryPos", entryPos);
+		particleComp->textureSize = _textureSize;
+		_particleData->bindImageTexture(0, true);
+		_particleData->bindImageTexture(1, true);
+		// Barrier is in particlerenderpass.
+		glDispatchCompute((GLint)_textureSize, (GLint)_textureSize, 1);
 	}
 }
 

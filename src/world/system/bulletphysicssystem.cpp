@@ -1,11 +1,12 @@
 #include "bulletphysicssystem.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/transformcomponent.hpp"
+#include "../component/projectilecomponent.hpp"
 #include <Bullet3Common/b3Transform.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "../../engine.hpp"
 
-BulletPhyisicsSystem::BulletPhyisicsSystem()
+BulletPhysicsSystem::BulletPhysicsSystem()
 {
 	collisionConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -14,15 +15,9 @@ BulletPhyisicsSystem::BulletPhyisicsSystem()
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphaseInterface, constraintSolver, collisionConfig);
 	world->setGravity({ 0, -9.82f, 0 });
-
-	planeShape = std::make_unique<btStaticPlaneShape>(btVector3(0, 1, 0), 0);
-	planeState = std::make_unique<btDefaultMotionState>();
-	planeBody = std::make_unique<btRigidBody>(0, planeState.get(), planeShape.get());
-
-	//world->addRigidBody(planeBody.get());
 }
 
-BulletPhyisicsSystem::~BulletPhyisicsSystem()
+BulletPhysicsSystem::~BulletPhysicsSystem()
 {
 	//auto & objs = world->getCollisionObjectArray();
 	//for (int i = 0; i < objs.size(); i++)
@@ -50,7 +45,7 @@ BulletPhyisicsSystem::~BulletPhyisicsSystem()
 	delete collisionConfig;
 }
 
-void BulletPhyisicsSystem::update(World & w, float delta)
+void BulletPhysicsSystem::update(World & w, float delta)
 {
 	rmt_ScopedCPUSample(BulletPhyisicsSystem, RMTSF_None);
 	world->stepSimulation(delta);
@@ -63,8 +58,13 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 		auto transform = entity->getComponent<TransformComponent>();
 		if (!transform) continue;
 
-		
+		auto projComp = entity->getComponent<ProjectileComponent>();
+		if (projComp)
+			rigidbody->getRigidBody()->setGravity(btVector3(0, 0, 0));
+
+
 		btTransform t = rigidbody->getRigidBody()->getWorldTransform();
+
 
 		btVector3 o = t.getOrigin();
 		btQuaternion q = t.getRotation();
@@ -74,21 +74,21 @@ void BulletPhyisicsSystem::update(World & w, float delta)
 	}
 }
 
-void BulletPhyisicsSystem::registerImGui()
+void BulletPhysicsSystem::registerImGui()
 {
 }
 
-std::string BulletPhyisicsSystem::name()
+std::string BulletPhysicsSystem::name()
 {
 	return "BulletPhyisicsSystem";
 }
 
-void BulletPhyisicsSystem::addRigidBody(RigidBodyComponent * rigidBody)
+void BulletPhysicsSystem::addRigidBody(RigidBodyComponent * rigidBody, int group, int mask)
 {
-	world->addRigidBody(rigidBody->getRigidBody());
+	world->addRigidBody(rigidBody->getRigidBody(), group, mask);
 }
 
-void BulletPhyisicsSystem::removeRigidBody(RigidBodyComponent * rigidBody)
+void BulletPhysicsSystem::removeRigidBody(RigidBodyComponent * rigidBody)
 {
 	world->removeRigidBody(rigidBody->getRigidBody());
 }
