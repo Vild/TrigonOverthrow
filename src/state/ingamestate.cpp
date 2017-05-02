@@ -8,6 +8,7 @@
 #include "../gl/shader.hpp"
 
 #include "../world/system/bulletphysicssystem.hpp"
+#include "../world/system/floortilesystem.hpp"
 
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
@@ -25,10 +26,12 @@
 #include "../world/component/dynamicmodelcomponent.hpp"
 #include "../world/component/suncomponent.hpp"
 #include "../world/component/pointlightcomponent.hpp"
+#include "../world/component/floortilecomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
 	BulletPhysicsSystem * bulletphyiscs = engine.getSystem<BulletPhysicsSystem>();
+	FloorTileSystem * floorTileSystem = engine.getSystem<FloorTileSystem>();
 
 	_sun = _world.addEntity(sole::uuid4(), "Sun");
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
@@ -56,6 +59,8 @@ InGameState::InGameState() {
 		transform->setPosition(glm::vec3(3));
 		transform->setScale(glm::vec3(0.3));
 		transform->setDirection({0, 0, 1});
+
+		floorTileSystem->setPlayerTransform(transform);
 
 		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
@@ -208,13 +213,13 @@ InGameState::InGameState() {
 		{
 			int x = i % width;
 			int y = i / width;
-			float h = float(map[i]) / 255.0f;
+			float h = float(map[i]) / 128.f;
 
 			Entity * tile  = _world.addEntity(sole::uuid4(), "FloorTile");
 			tile->getHide() = true;
 
 			TransformComponent * transform = tile->addComponent<TransformComponent>();
-			transform->setPosition({ x, h - 0.5, y });
+			transform->setPosition({ x, h, y });
 			transform->setScale({ 1, 1, 1 });
 			ismc->addInstance(transform);
 
@@ -225,6 +230,8 @@ InGameState::InGameState() {
 			bulletphyiscs->addRigidBody(rigidbody,
 				BulletPhysicsSystem::CollisionType::COL_WALL,
 				BulletPhysicsSystem::wallCollidesWith);
+
+			tile->addComponent<FloorTileComponent>(h);
 		}
 	}
 	// clang-format off

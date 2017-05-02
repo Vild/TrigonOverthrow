@@ -76,6 +76,7 @@
     <ClCompile Include="src\world\system\buttonsystem.cpp" />
     <ClCompile Include="src\world\system\camerasystem.cpp" />
     <ClCompile Include="src\world\system\dynamicmodelsystem.cpp" />
+    <ClCompile Include="src\world\system\floortilesystem.cpp" />
     <ClCompile Include="src\world\system\ghostobjectsystem.cpp" />
     <ClCompile Include="src\world\system\gunsystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="src\world\system\buttonsystem.hpp" />
     <ClInclude Include="src\world\system\camerasystem.hpp" />
     <ClInclude Include="src\world\system\dynamicmodelsystem.hpp" />
+    <ClInclude Include="src\world\system\floortilesystem.hpp" />
     <ClInclude Include="src\world\system\ghostobjectsystem.hpp" />
     <ClInclude Include="src\world\system\gunsystem.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />

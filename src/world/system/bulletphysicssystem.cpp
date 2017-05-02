@@ -70,7 +70,7 @@ void BulletPhysicsSystem::update(World & w, float delta)
 		btQuaternion q = t.getRotation();
 
 		transform->setPosition(cast(o));
-		transform->setRotation(cast(q));
+		//transform->setRotation(cast(q));
 	}
 }
 

@@ -106,6 +106,7 @@ void GeometryRenderPass::render(World& world) {
 		{
 			auto transform = entity->getComponent<TransformComponent>();
 			if (transform) {
+				_shader->bind();
 				model->render(transform->getMatrix());
 			}
 			else {
@@ -115,7 +116,6 @@ void GeometryRenderPass::render(World& world) {
 				_floorShader->bind();
 
 				model->render(ft->matrices, ft->gridSize * ft->gridSize);
-				_shader->bind();
 			}
 		}
 		else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>()))
