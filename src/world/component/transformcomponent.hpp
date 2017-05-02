@@ -1,6 +1,8 @@
 #pragma once
 #include "component.hpp"
 #include <glm/glm.hpp>
+#include <lua.hpp>
+#include <selene.h>
 #include <glm/gtc/quaternion.hpp>
 #include <btBulletDynamicsCommon.h>
 
@@ -34,8 +36,9 @@ public:
 	void move(const glm::vec3& delta);
 
 	virtual void registerImGui();
-	inline std::string name() { return "TransformComponent"; }
+	virtual std::string name() { return "TransformComponent"; }
 
+	void registerLua(sel::State& L);
 
 private:
 	bool dirty;

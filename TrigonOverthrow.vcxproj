@@ -52,13 +52,15 @@
     <ClCompile Include="src\world\component\instancedsimplemeshcomponent.cpp" />
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp" />
     <ClCompile Include="src\world\component\lifecomponent.cpp" />
-    <ClCompile Include="src\world\component\lightcomponent.cpp" />
     <ClCompile Include="src\world\component\lookatcomponent.cpp" />
+    <ClCompile Include="src\world\component\luacomponent.cpp" />
     <ClCompile Include="src\world\component\modelcomponent.cpp" />
     <ClCompile Include="src\world\component\particlecomponent.cpp" />
     <ClCompile Include="src\world\component\physicscomponent.cpp" />
+    <ClCompile Include="src\world\component\pointlightcomponent.cpp" />
     <ClCompile Include="src\world\component\projectilecomponent.cpp" />
     <ClCompile Include="src\world\component\rigidbodycomponent.cpp" />
+    <ClCompile Include="src\world\component\suncomponent.cpp" />
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
@@ -80,6 +82,7 @@
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lifesystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
+    <ClCompile Include="src\world\system\luasystem.cpp" />
     <ClCompile Include="src\world\system\particlesystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
     <ClCompile Include="src\world\system\projectilesystem.cpp" />
@@ -113,6 +116,7 @@
     <ClInclude Include="src\state\ingamestate.hpp" />
     <ClInclude Include="src\state\mainmenustate.hpp" />
     <ClInclude Include="src\state\state.hpp" />
+    <ClInclude Include="src\utils\collisionbox.hpp" />
     <ClInclude Include="src\world\component\buttoncomponent.hpp" />
     <ClInclude Include="src\world\component\cameracomponent.hpp" />
     <ClInclude Include="src\world\component\component.hpp" />
@@ -124,13 +128,15 @@
     <ClInclude Include="src\world\component\instancedsimplemeshcomponent.hpp" />
     <ClInclude Include="src\world\component\kbmouseinputcomponent.hpp" />
     <ClInclude Include="src\world\component\lifecomponent.hpp" />
-    <ClInclude Include="src\world\component\lightcomponent.hpp" />
     <ClInclude Include="src\world\component\lookatcomponent.hpp" />
+    <ClInclude Include="src\world\component\luacomponent.hpp" />
     <ClInclude Include="src\world\component\modelcomponent.hpp" />
     <ClInclude Include="src\world\component\particlecomponent.hpp" />
     <ClInclude Include="src\world\component\physicscomponent.hpp" />
+    <ClInclude Include="src\world\component\pointlightcomponent.hpp" />
     <ClInclude Include="src\world\component\projectilecomponent.hpp" />
     <ClInclude Include="src\world\component\rigidbodycomponent.hpp" />
+    <ClInclude Include="src\world\component\suncomponent.hpp" />
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
@@ -152,11 +158,15 @@
     <ClInclude Include="src\world\system\inputsystem.hpp" />
     <ClInclude Include="src\world\system\lifesystem.hpp" />
     <ClInclude Include="src\world\system\lookatsystem.hpp" />
+    <ClInclude Include="src\world\system\luasystem.hpp" />
     <ClInclude Include="src\world\system\particlesystem.hpp" />
     <ClInclude Include="src\world\system\physicssystem.hpp" />
     <ClInclude Include="src\world\system\projectilesystem.hpp" />
     <ClInclude Include="src\world\system\system.hpp" />
     <ClInclude Include="src\world\world.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\scripts\enemy.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -238,14 +248,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include/Lua</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;LuaLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -258,7 +268,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include/Lua</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -266,7 +276,7 @@
     <Link />
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;LuaLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -281,7 +291,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include/Lua</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -290,7 +300,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;LuaLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -305,7 +315,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include/Lua</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -314,7 +324,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;opengl32.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;assimp-vc140-mt.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;Bullet3OpenCL_clew.lib;BulletCollision.lib;BulletDynamics.lib;BulletInverseDynamics.lib;BulletSoftBody.lib;LinearMath.lib;LuaLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>

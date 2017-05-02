@@ -9,6 +9,7 @@
 
 #include "../world/system/bulletphysicssystem.hpp"
 
+#include "../world/component/luacomponent.hpp"
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
 #include "../world/component/lookatcomponent.hpp"
@@ -52,6 +53,9 @@ InGameState::InGameState() {
 	}
 
 	{ // Adding Player
+		auto playerLua = _player->addComponent<LuaComponent>();
+		playerLua->loadFile("assets/scripts/enemy.lua");
+
 		auto transform = _player->addComponent<TransformComponent>();
 		transform->setPosition(glm::vec3(3));
 		transform->setScale(glm::vec3(0.3));
@@ -106,13 +110,12 @@ InGameState::InGameState() {
 		point->pointLight.quadratic = 0.07;
 	}
 
-	{
+	{ //Adding enemy
 		auto transform = _enemy->addComponent<TransformComponent>();
 		transform->setScale(glm::vec3(0.3));
 		transform->setPosition(glm::vec3(0, 0.2, 5));
 
 		/*auto dynamicModelComp = */_enemy->addComponent<DynamicModelComponent>();
-
 		auto model = _enemy->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy_7HP.fbx");
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
@@ -149,6 +152,9 @@ InGameState::InGameState() {
 		auto rigidbody = _enemy->addComponent<RigidBodyComponent>(_enemy, 1.0f, 1.0f);
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setTransform(transform);
+
+		auto enemyLua = _enemy->addComponent<LuaComponent>();
+		enemyLua->loadFile("assets/scripts/enemy.lua");
 
 		bulletphyiscs->addRigidBody(rigidbody,
 			BulletPhysicsSystem::CollisionType::COL_ENEMY,

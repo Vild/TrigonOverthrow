@@ -59,3 +59,9 @@ void TransformComponent::registerImGui() {
 	dirty |= ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);
 }
 
+void TransformComponent::registerLua(sel::State& L)
+{
+	L["TransformComponent"].SetClass<TransformComponent>("position", &TransformComponent::position,
+		"scale", &TransformComponent::scale,
+		"rotation", &TransformComponent::rotation);
+}

@@ -14,20 +14,20 @@
 LightingRenderPass::LightingRenderPass() {
 	_ambient = glm::vec3(0.1, 0.1, 0.1);
 	_dirLight = DirLight{
-		.diffuse = glm::vec3(1, 1, 1),				//
-		.specular = glm::vec3(0.5, 0.5, 0.5), //
-		.direction = glm::vec3(0, -1, 0)			//
+		glm::vec3(1, 1, 1),				//
+		glm::vec3(0.5, 0.5, 0.5), //
+		glm::vec3(0, -1, 0)			//
 	};
 
 	for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
 		_pointLights[i] = PointLight{
-			.diffuse = glm::vec3{(i % 8) / 8.0, (i % 16) / 16.0, (i % 2) / 2.0}, //
-			.specular = glm::vec3{0.0, 0.0, 0.0},																 //
+			glm::vec3{(i % 8) / 8.0, (i % 16) / 16.0, (i % 2) / 2.0}, //
+			glm::vec3{0.0, 0.0, 0.0},																 //
 
-			.position = glm::vec3{i, 1, i}, //
-			.constant = float{1},						//
-			.linear = float{0.7},						//
-			.quadratic = float{1.8},				//
+			glm::vec3{i, 1, i}, //
+			float{1.f},						//
+			float{0.7f},						//
+			float{1.8f},				//
 		};
 	}
 

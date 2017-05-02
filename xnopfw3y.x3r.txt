@@ -1,0 +1,88 @@
+﻿Merge remote-tracking branch 'refs/remotes/origin/master' into Lua
+
+# Conflicts:
+#	src/engine.cpp
+#	src/state/ingamestate.cpp
+#	src/world/entity.cpp
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch Lua
+# Your branch is up-to-date with 'origin/Lua'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   .gitignore
+#	modified:   TrigonOverthrow.vcxproj
+#	deleted:    assets/objects/enemy.fbx
+#	new file:   assets/objects/enemy_1HP.fbx
+#	new file:   assets/objects/enemy_2HP.fbx
+#	new file:   assets/objects/enemy_3HP.fbx
+#	new file:   assets/objects/enemy_4HP.fbx
+#	new file:   assets/objects/enemy_5HP.fbx
+#	new file:   assets/objects/enemy_6HP.fbx
+#	new file:   assets/objects/enemy_7HP.fbx
+#	new file:   assets/objects/player_projectile.fbx
+#	modified:   assets/scripts/enemy.lua
+#	modified:   assets/shaders/final.frag
+#	modified:   assets/shaders/floorbase.geom
+#	new file:   assets/textures/green_texture.png
+#	new file:   assets/textures/white_texture.png
+#	modified:   reggaefile.d
+#	modified:   src/engine.cpp
+#	modified:   src/engine.hpp
+#	modified:   src/gl/simplemesh.cpp
+#	modified:   src/state/ingamestate.cpp
+#	modified:   src/state/ingamestate.hpp
+#	new file:   src/world/component/dynamicmodelcomponent.cpp
+#	new file:   src/world/component/dynamicmodelcomponent.hpp
+#	new file:   src/world/component/ghostobjectcomponent.cpp
+#	new file:   src/world/component/ghostobjectcomponent.hpp
+#	modified:   src/world/component/guncomponent.cpp
+#	modified:   src/world/component/guncomponent.hpp
+#	modified:   src/world/component/hitboxcomponent.cpp
+#	new file:   src/world/component/lifecomponent.cpp
+#	new file:   src/world/component/lifecomponent.hpp
+#	deleted:    src/world/component/lightcomponent.cpp
+#	deleted:    src/world/component/lightcomponent.hpp
+#	new file:   src/world/component/pointlightcomponent.cpp
+#	new file:   src/world/component/pointlightcomponent.hpp
+#	new file:   src/world/component/projectilecomponent.cpp
+#	new file:   src/world/component/projectilecomponent.hpp
+#	modified:   src/world/component/rigidbodycomponent.cpp
+#	modified:   src/world/component/rigidbodycomponent.hpp
+#	new file:   src/world/component/suncomponent.cpp
+#	new file:   src/world/component/suncomponent.hpp
+#	modified:   src/world/component/transformcomponent.cpp
+#	modified:   src/world/entity.cpp
+#	modified:   src/world/entity.hpp
+#	modified:   src/world/renderpass/bulletdebugrenderpass.cpp
+#	modified:   src/world/renderpass/geometryrenderpass.cpp
+#	modified:   src/world/renderpass/lightingrenderpass.cpp
+#	modified:   src/world/renderpass/lightingrenderpass.hpp
+#	modified:   src/world/renderpass/particlerenderpass.cpp
+#	modified:   src/world/system/bulletphysicssystem.cpp
+#	modified:   src/world/system/bulletphysicssystem.hpp
+#	new file:   src/world/system/dynamicmodelsystem.cpp
+#	new file:   src/world/system/dynamicmodelsystem.hpp
+#	new file:   src/world/system/ghostobjectsystem.cpp
+#	new file:   src/world/system/ghostobjectsystem.hpp
+#	modified:   src/world/system/gunsystem.cpp
+#	modified:   src/world/system/gunsystem.hpp
+#	modified:   src/world/system/imguisystem.cpp
+#	modified:   src/world/system/inputsystem.cpp
+#	new file:   src/world/system/lifesystem.cpp
+#	new file:   src/world/system/lifesystem.hpp
+#	modified:   src/world/system/luasystem.cpp
+#	modified:   src/world/system/particlesystem.cpp
+#	new file:   src/world/system/projectilesystem.cpp
+#	new file:   src/world/system/projectilesystem.hpp
+#
+

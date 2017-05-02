@@ -4,10 +4,9 @@
 #include <cstdio>
 #include <cstring>
 #include <ctime>
-
+#include<lua.hpp>
 int main(int argc, char** argv) {
 	srand(time(NULL));
-
 	bool vsync = true;
 
 	for (int i = 1; i < argc; i++) {
