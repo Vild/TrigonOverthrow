@@ -28,7 +28,7 @@ void ParticleRenderPass::render(World& world) {
 	rmt_ScopedOpenGLSample(ParticleRenderPass);
 	// Render particles with instanced drawing.
 	auto camera = Engine::getInstance().getCamera();
-	if (!camera)
+	if (!camera) 
 		return;
 
 	auto cameraComponent = camera->getComponent<CameraComponent>();

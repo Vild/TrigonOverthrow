@@ -20,11 +20,12 @@ ParticleSystem::ParticleSystem() {
 	//	.finalize();
 	//_programs[1]->bind().addUniform("delta")
 	//	.addUniform("swap");
-	_textureSize = 32;
+	_textureSize = 512; // Has support for 256 emitters.
 	_particleData = std::make_shared<GBuffer>();
 	_particleData->bind()
 		.attachTexture(Attachment::inPosition, _textureSize, _textureSize, GL_RGBA32F, GL_FLOAT, 4)	// Input pos and life
 		.attachTexture(Attachment::inVelocity, _textureSize, _textureSize, GL_RGBA32F, GL_FLOAT, 4); // Input vel
+
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -38,10 +39,14 @@ void ParticleSystem::update(World& world, float delta) {
 	glm::vec3 direction = glm::vec3(0);
 	glm::vec3 pos = glm::vec3(0);
 	glm::vec3 entryPos = glm::vec3(0);
+	int x, y = 0;
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+		if (x % 16 == 0)
+			x++;
 		auto particleComp = entity->getComponent<ParticleComponent>();
 		if (!particleComp)
 			continue;
+		x++;
 
 		direction = entity->getComponent<TransformComponent>()->getDirection();
 		pos = entity->getComponent<TransformComponent>()->getPosition();
@@ -55,7 +60,7 @@ void ParticleSystem::update(World& world, float delta) {
 		_particleData->bindImageTexture(0, true);
 		_particleData->bindImageTexture(1, true);
 		// Barrier is in particlerenderpass.
-		glDispatchCompute((GLint)_textureSize, (GLint)_textureSize, 1);
+		glDispatchCompute((GLint)_textureSize/32, (GLint)_textureSize/32, 1);
 	}
 }
 

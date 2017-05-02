@@ -76,7 +76,7 @@ InGameState::InGameState() {
 									})
 			.finalize();
 		auto particle = _player->addComponent<ParticleComponent>();
-		particle->addEmitter(transform->getDirection(), 1024);
+		particle->addEmitter(glm::vec3(0,0,1), 1024);
 		_player->addComponent<KBMouseInputComponent>();
 		//_player->addComponent<PhysicsComponent>();
 
