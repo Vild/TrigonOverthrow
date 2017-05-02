@@ -1,14 +1,17 @@
 #include "luasystem.hpp"
 #include "../component/transformcomponent.hpp"
+#include "../component/rigidbodycomponent.hpp"
 #include "../component/luacomponent.hpp"
 void LuaSystem::update(World& world, float delta) {
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto lua = entity->getComponent<LuaComponent>();
 		if (!lua)
 			continue;
+		auto rigidBodyComponent = entity->getComponent<RigidBodyComponent>();
 		auto transform = entity->getComponent<TransformComponent>();
-		if (transform)
+		if (rigidBodyComponent)
 		{
+
 			if (entity->getName() == "Player")
 			{
 				_player = entity.get();
@@ -20,11 +23,15 @@ void LuaSystem::update(World& world, float delta) {
 				//transform->registerLua(lua->L);
 				if (_player != nullptr)
 				{
+					auto rb = rigidBodyComponent->getRigidBody();
 					//sending X and Z value of enemy and player and updating enemy position based on that, moving it closer to player position.
-					posX = lua->L["update"]((double)delta,(double) transform->getPosition().x,(double) _player->getComponent<TransformComponent>()->getPosition().x);
-					posZ = lua->L["update"]((double)delta, (double)transform->getPosition().z, (double)_player->getComponent<TransformComponent>()->getPosition().z);
-
-					transform->setPosition(glm::vec3(posX, transform->getPosition().y, posZ));
+					glm::vec3 playerPosition = _player->getComponent<TransformComponent>()->getPosition();
+					glm::vec3 enemyPosition = transform->getPosition();
+					float b = lua->L["add"](5, 4);
+				//	float posX = lua->L["update"]((double)enemyPosition.x, (double)playerPosition.x);
+				//	auto posZ = lua->L["update"]((double)enemyPosition.z, (double)playerPosition.z);
+					//btVector3 force{posX, 0,posZ };
+					//rb->applyCentralForce(force*100);
 
 				}
 			}

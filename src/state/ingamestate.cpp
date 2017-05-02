@@ -94,6 +94,7 @@ InGameState::InGameState() {
 		transform->setScale(glm::vec3(0.3));
 		transform->setPosition(glm::vec3(0, 0.2, 5));
 
+
 		auto model = _enemy->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy.fbx");
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
@@ -130,6 +131,9 @@ InGameState::InGameState() {
 		rigidbody->setMass(1);
 		rigidbody->setFriction(1);
 		rigidbody->setTransform(transform);
+
+		auto enemyLua = _enemy->addComponent<LuaComponent>();
+		enemyLua->loadFile("assets/scripts/enemy.lua");
 
 		bulletphyiscs->addRigidBody(rigidbody);
 	}
