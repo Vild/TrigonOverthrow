@@ -27,11 +27,10 @@ void LuaSystem::update(World& world, float delta) {
 					//sending X and Z value of enemy and player and updating enemy position based on that, moving it closer to player position.
 					glm::vec3 playerPosition = _player->getComponent<TransformComponent>()->getPosition();
 					glm::vec3 enemyPosition = transform->getPosition();
-					float b = lua->L["add"](5, 4);
-				//	float posX = lua->L["update"]((double)enemyPosition.x, (double)playerPosition.x);
-				//	auto posZ = lua->L["update"]((double)enemyPosition.z, (double)playerPosition.z);
-					//btVector3 force{posX, 0,posZ };
-					//rb->applyCentralForce(force*100);
+					int posX = lua->L["update"]((double)enemyPosition.x, (double)playerPosition.x);
+					int posZ = lua->L["update"]((double)enemyPosition.z, (double)playerPosition.z);
+					btVector3 force{(float)posX, 0,(float)posZ };
+					rb->applyCentralForce(force*10);
 
 				}
 			}
