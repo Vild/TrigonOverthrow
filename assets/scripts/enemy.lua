@@ -7,26 +7,28 @@
 
 function ranged(enemyPos, playerPos)
 	if enemyPos > playerPos then
-		if enemyPos - 10 > playerpos then
+		enemyPos = enemyPos - 10
+		if enemyPos < playerPos then
 			return 0
 		end
-		value = -1.0
+		return -1.0
 	elseif enemyPos < playerPos then
-		if enemyPos + 10 > playerpos then
+		enemyPos = enemyPos + 10
+		if enemyPos > playerPos then
 			return 0
 		end
-		value = 1.0
+		return 1.0
 	end
-	return value
+	return 0
 end
 
 function melee(enemyPos, playerPos)
 	
 	if enemyPos > playerPos then
-		value = -1.0
+		return -1.0
 	elseif enemyPos < playerPos then
-		value = 1.0
+		return 1.0
 	end
-	return value
+	return 0
 end
 
