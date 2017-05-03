@@ -6,8 +6,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../../engine.hpp"
 
+BulletPhysicsSystem * BulletPhysicsSystem::activeInstance = nullptr;
+
 BulletPhysicsSystem::BulletPhysicsSystem()
 {
+	activeInstance = this;
+
 	collisionConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfig);
 	constraintSolver = new btSequentialImpulseConstraintSolver();
@@ -19,25 +23,6 @@ BulletPhysicsSystem::BulletPhysicsSystem()
 
 BulletPhysicsSystem::~BulletPhysicsSystem()
 {
-	//auto & objs = world->getCollisionObjectArray();
-	//for (int i = 0; i < objs.size(); i++)
-	//{
-	//	world->removeCollisionObject(objs[i]);
-	//}
-
-	//for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
-	//{
-	//	btCollisionObject* obj = world->getCollisionObjectArray()[i];
-	//	//btRigidBody* body = btRigidBody::upcast(obj);
-	//	//if (body && body->getMotionState())
-	//	//{
-	//	//	delete body->getMotionState();
-	//	//}
-	//	world->removeCollisionObject(obj);
-	//	//delete obj;
-	//}
-
-
 	delete world;
 	delete broadphaseInterface;
 	delete constraintSolver;
