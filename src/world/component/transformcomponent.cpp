@@ -21,13 +21,13 @@ void TransformComponent::recalculateMatrix() {
 }
 
 void TransformComponent::setPosition(const glm::vec3& position) {
+	dirty |= this->position != position;
 	this->position = position;
-	dirty = true;
 }
 
 void TransformComponent::setRotation(const glm::quat& rotation) {
+	dirty |= this->rotation != rotation;
 	this->rotation = rotation;
-	dirty = true;
 }
 
 void TransformComponent::setDirection(const glm::vec3& direction, const glm::vec3& up) {
@@ -38,23 +38,19 @@ void TransformComponent::setDirection(const glm::vec3& direction, const glm::vec
 
 	static const glm::vec3 O = {0, 0, 0};
 	glm::mat3 m = glm::lookAt(O, direction, upp);
-	rotation = glm::quat_cast(m);
-	dirty = true;
+	setRotation(glm::quat_cast(m));
 }
 
 void TransformComponent::setScale(const glm::vec3& scale) {
+	dirty |= this->scale != scale;;
 	this->scale = scale;
-	dirty = true;
 }
 
 void TransformComponent::move(const glm::vec3& delta) {
-	position += delta;
-	dirty = true;
+	setPosition(position + delta);
 }
 
 void TransformComponent::registerImGui() {
-	// bool dirty = false;
-
 	dirty |= ImGui::DragFloat3("Position", glm::value_ptr(position), 0.1f);
 	dirty |= ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);
 }
