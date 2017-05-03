@@ -45,6 +45,7 @@
     <ClCompile Include="src\world\component\cameracomponent.cpp" />
     <ClCompile Include="src\world\component\component.cpp" />
     <ClCompile Include="src\world\component\dynamicmodelcomponent.cpp" />
+    <ClCompile Include="src\world\component\floortilecomponent.cpp" />
     <ClCompile Include="src\world\component\floortransformcomponent.cpp" />
     <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="src\world\component\cameracomponent.hpp" />
     <ClInclude Include="src\world\component\component.hpp" />
     <ClInclude Include="src\world\component\dynamicmodelcomponent.hpp" />
+    <ClInclude Include="src\world\component\floortilecomponent.hpp" />
     <ClInclude Include="src\world\component\floortransformcomponent.hpp" />
     <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
