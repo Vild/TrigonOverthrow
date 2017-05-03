@@ -5,6 +5,8 @@
 #include <memory>
 #include <vector>
 #include <cstdint>
+#include <map>
+#include <typeindex>
 
 #include "../lib/sole/sole.hpp"
 
@@ -17,14 +19,15 @@ class State;
 
 class Entity {
 public:
+	typedef std::map<std::type_index, std::unique_ptr<Component>> map_t;
 	/// Don't call this one directly! Always use world->addEntity
 	Entity(sole::uuid uuid, std::string name);
 	virtual ~Entity() {};
 
 	template <typename T, typename ... Args, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	T* addComponent(Args ... args) {
-		_components.push_back(std::make_unique<T>(args...));
-		return static_cast<T*>(_components.back().get());
+		std::pair<map_t::iterator, bool> ret = components.insert_or_assign(typeid(T), std::make_unique<T>(args...));
+		return static_cast<T*>(ret.first->second.get());
 	}
 
 	// template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
@@ -35,23 +38,18 @@ public:
 
 	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	T* getComponent() {
-		for (std::unique_ptr<Component>& c : _components) {
-			T* com = dynamic_cast<T*>(c.get());
-			if (com)
-				return com;
-		}
-		return nullptr;
+		T * component = nullptr;
+		map_t::iterator it = components.find(typeid(T));
+
+		if (it != components.end()) 
+			component = static_cast<T*>(it->second.get());
+
+		return component;
 	}
 
 	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	void removeComponent() {
-		for (auto it = _components.begin(); it != _components.end(); it++) {
-			T* com = dynamic_cast<T*>((*it).get());
-			if (!com)
-				continue;
-			_components.erase(it);
-			break;
-		}
+		components.erase(typeid(T));
 	}
 
 	typedef void (*registerImGui_f)(Entity& self, State& state);
@@ -61,13 +59,14 @@ public:
 	inline std::string& getName() { return _name; }
 	inline void makeDead() { _dead = true;  }
 	inline bool isDead() { return _dead; }
-	inline std::vector<std::unique_ptr<Component>>& getComponents() { return _components; }
+	inline map_t& getComponents() { return components; }
 	inline bool& getHide() { return _hide; }
 
 private:
 	sole::uuid _uuid;
 	std::string _name;
-	std::vector<std::unique_ptr<Component>> _components;
+	map_t components;
+
 
 	bool _dead = false;
 	bool _hide = false;
