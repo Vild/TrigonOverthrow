@@ -79,6 +79,7 @@ GeometryRenderPass::~GeometryRenderPass() {}
 void GeometryRenderPass::render(World& world) {
 	rmt_ScopedCPUSample(GeometryRenderPass, RMTSF_None);
 	rmt_ScopedOpenGLSample(GeometryRenderPass);
+
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;
@@ -90,38 +91,30 @@ void GeometryRenderPass::render(World& world) {
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	_floorShader->bind();
-	_floorShader->setUniform("v", cameraComponent->viewMatrix);
-	_floorShader->setUniform("p", cameraComponent->projectionMatrix);
-
 	_shader->bind();
 	_shader->setUniform("v", cameraComponent->viewMatrix);
 	_shader->setUniform("p", cameraComponent->projectionMatrix);
 
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	ismShader->bind();
+	ismShader->setUniform("u_view", cameraComponent->viewMatrix);
+	ismShader->setUniform("u_projection", cameraComponent->projectionMatrix);
+
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) 
+	{
 		ModelComponent* model = nullptr;
+		TransformComponent * transform = nullptr;
 		InstancedSimpleMeshComponent* ism = nullptr;
 
-		if ((model = entity->getComponent<ModelComponent>())) {
-			auto transform = entity->getComponent<TransformComponent>();
-			if (transform) {
-				_shader->bind();
-				model->render(transform->getMatrix());
-			} else {
-				auto ft = entity->getComponent<FloorTransformComponent>();
-				if (!ft)
-					continue;
-				_floorShader->bind();
-
-				model->render(ft->matrices, ft->gridSize * ft->gridSize);
-			}
-		} else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) {
-			ismShader->bind().setUniform("u_view", cameraComponent->viewMatrix).setUniform("u_projection", cameraComponent->projectionMatrix);
-			//.setUniform("u_cameraPos", cameraComponent->posit);
-
-			ism->render();
-
+		if ((model = entity->getComponent<ModelComponent>()) &&
+			(transform = entity->getComponent<TransformComponent>())) 
+		{
 			_shader->bind();
+			model->render(transform->getMatrix());
+		}
+		else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) 
+		{
+			ismShader->bind();
+			ism->render();
 		}
 	}
 }
