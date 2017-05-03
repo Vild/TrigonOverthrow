@@ -1,5 +1,6 @@
 #include "bulletdebugrenderpass.hpp"
 #include <glm/gtx/transform.hpp>
+#include <vector>
 
 #include "../component/transformcomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
@@ -8,11 +9,7 @@
 
 BulletDebugRenderPass::BulletDebugRenderPass()
 {
-#ifdef _DEBUG 
-	enable = true;
-#else
 	enable = false;
-#endif // _DEBUG
 
 
 	wireFrame.setDrawMode(GL_LINES)
@@ -31,20 +28,19 @@ BulletDebugRenderPass::BulletDebugRenderPass()
 		.addVertex({  1,-1,-1 }).addVertex({  1, 1,-1 }) // BACK RIGHT
 		.addVertex({ -1,-1, 1 }).addVertex({ -1, 1, 1 }) // FRONT LETT
 		.addVertex({  1,-1, 1 }).addVertex({  1, 1, 1 }) // FRONT RIGHT		
-	.finalize(512);
+	.finalize();
 
 
 	_gbuffer = std::make_shared<GBuffer>(0);
 
 	(*(_shader = std::make_shared<ShaderProgram>()))
-		.attach("assets/shaders/bullet_debug.vert", ShaderType::vertex)
-		.attach("assets/shaders/bullet_debug.frag", ShaderType::fragment)
+		.attach("assets/shaders/bulletdebug.vert", ShaderType::vertex)
+		.attach("assets/shaders/bulletdebug.frag", ShaderType::fragment)
 	.finalize();
 
 	_shader->bind()
-		.addUniform("v")
-		.addUniform("p")
-		.addUniform("m");
+		.addUniform("u_view")
+		.addUniform("u_projection");
 }
 
 BulletDebugRenderPass::~BulletDebugRenderPass()
@@ -73,8 +69,11 @@ void BulletDebugRenderPass::render(World & world)
 	//glClear(GL_DEPTH_BUFFER_BIT);
 
 	_shader->bind()
-		.setUniform("v", camera->viewMatrix)
-		.setUniform("p", camera->projectionMatrix);
+		.setUniform("u_view", camera->viewMatrix)
+		.setUniform("u_projection", camera->projectionMatrix);
+
+	static std::vector<glm::mat4> instances;
+	instances.clear();
 
 	for (auto& entity : world.getEntities())
 	{
@@ -87,11 +86,11 @@ void BulletDebugRenderPass::render(World & world)
 		glm::vec3 scale = rigidbody->getHitboxHalfSize();
 
 		glm::mat4 m = glm::translate(pos) * glm::mat4_cast(rot) * glm::scale(scale);
-
-		_shader->setUniform("m", m);
-
-		wireFrame.draw();
+		
+		instances.push_back(m);
 	}
+
+	wireFrame.draw(instances);
 }
 
 void BulletDebugRenderPass::resize(unsigned int width, unsigned int height)
