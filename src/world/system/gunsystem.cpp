@@ -44,7 +44,8 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 
 	transProj->setRotation(transComp->getRotation());
 	transProj->setScale(glm::vec3(0.075, 0.075, 0.25));
-	transProj->setDirection(transComp->getDirection()); // should be transComp->getDirection() instead of 0,0,1 but the direction is weird.
+	auto dir = transComp->getDirection();
+	transProj->setDirection({-dir.x, dir.y, dir.z}); // helt kokt
 	transProj->setPosition(transComp->getPosition() + transProj->getDirection());
 
 	//auto currRdbComp = me->getComponent<RigidBodyComponent>();
