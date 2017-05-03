@@ -27,6 +27,7 @@
 #include "../world/component/suncomponent.hpp"
 #include "../world/component/pointlightcomponent.hpp"
 #include "../world/component/floortilecomponent.hpp"
+#include "../world/component/hovercomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -94,8 +95,9 @@ InGameState::InGameState() {
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 		text->transform.setPosition(glm::vec3(0, 1, 0));
 		text->transform.setScale(glm::vec3(1));
-
+		
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
+		rigidbody->getRigidBody()->setDamping(0.6, 0);
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setTransform(transform);
 		rigidbody->setActivationState(DISABLE_DEACTIVATION);
@@ -109,6 +111,8 @@ InGameState::InGameState() {
 		point->pointLight.constant = 1;
 		point->pointLight.linear = 0.14;
 		point->pointLight.quadratic = 0.07;
+		
+		_player->addComponent<HoverComponent>(0.6, 100);
 	}
 
 	{
@@ -219,7 +223,7 @@ InGameState::InGameState() {
 			tile->getHide() = true;
 
 			TransformComponent * transform = tile->addComponent<TransformComponent>();
-			transform->setPosition({ x, h, y });
+			transform->setPosition({ x, 0.0f, y });
 			transform->setScale({ 1, 1, 1 });
 			ismc->addInstance(transform);
 
