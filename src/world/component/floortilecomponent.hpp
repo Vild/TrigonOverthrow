@@ -9,6 +9,9 @@ public:
 	virtual ~FloorTileComponent();
 
 	float getHeight();
+	float getHeightFactor();
+
+	void setHeightFactor(float heightFactor);
 
 	// Inherited via Component 
 	virtual std::string name() override;
@@ -16,4 +19,5 @@ public:
 
 private:
 	float height;
+	float heightFactor;
 };
