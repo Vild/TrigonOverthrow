@@ -26,6 +26,7 @@ public:
 
 	void setActivationState(int newState);
 
+	inline float getMass() { return mass; }
 private:
 	btRigidBody * rigidBody;
 
