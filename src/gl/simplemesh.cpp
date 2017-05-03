@@ -69,17 +69,22 @@ void SimpleMesh::draw()
 
 void SimpleMesh::draw(std::vector<glm::mat4>& instances)
 {
-	if (instances.size() > maxInstances)
-		throw "too many instances";
-
-	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, IBO);
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, IBO);
+		if (instances.size() > maxInstances)
+		{
+			maxInstances = instances.size();
+			glBufferData(GL_ARRAY_BUFFER, maxInstances * sizeof(glm::mat4), &instances.front(), GL_STREAM_DRAW);
+		}
+		else
 		{
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4) * instances.size(), &instances.front());
 		}
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	glBindVertexArray(VAO);
+	{
 		glDrawArraysInstanced(drawMode, 0, vertices.size(), instances.size());
 	}
 	glBindVertexArray(0);
