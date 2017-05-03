@@ -64,7 +64,7 @@ GeometryRenderPass::GeometryRenderPass() {
 		.attach("assets/shaders/ism_geometry.vert", ShaderType::vertex)
 		.attach("assets/shaders/ism_geometry.geom", ShaderType::geometry)
 		.attach("assets/shaders/ism_geometry.frag", ShaderType::fragment)
-	.finalize();
+		.finalize();
 
 	ismShader->bind()
 		.addUniform("u_view")
@@ -102,14 +102,12 @@ void GeometryRenderPass::render(World& world) {
 		ModelComponent* model = nullptr;
 		InstancedSimpleMeshComponent* ism = nullptr;
 
-		if ((model = entity->getComponent<ModelComponent>()))
-		{
+		if ((model = entity->getComponent<ModelComponent>())) {
 			auto transform = entity->getComponent<TransformComponent>();
 			if (transform) {
 				_shader->bind();
 				model->render(transform->getMatrix());
-			}
-			else {
+			} else {
 				auto ft = entity->getComponent<FloorTransformComponent>();
 				if (!ft)
 					continue;
@@ -117,17 +115,14 @@ void GeometryRenderPass::render(World& world) {
 
 				model->render(ft->matrices, ft->gridSize * ft->gridSize);
 			}
-		}
-		else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>()))
-		{
-			ismShader->bind()
-				.setUniform("u_view", cameraComponent->viewMatrix)
-				.setUniform("u_projection", cameraComponent->projectionMatrix);
-				//.setUniform("u_cameraPos", cameraComponent->posit);
+		} else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) {
+			ismShader->bind().setUniform("u_view", cameraComponent->viewMatrix).setUniform("u_projection", cameraComponent->projectionMatrix);
+			//.setUniform("u_cameraPos", cameraComponent->posit);
 
 			ism->render();
-		}
 
+			_shader->bind();
+		}
 	}
 }
 
