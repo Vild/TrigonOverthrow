@@ -11,6 +11,7 @@
 
 #include "../world/system/bulletphysicssystem.hpp"
 #include "../world/system/floortilesystem.hpp"
+#include "../world/system/roomloadingsystem.hpp"
 
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
@@ -53,7 +54,11 @@ InGameState::InGameState() {
 	{ // Adding Camera
 		_camera->addComponent<TransformComponent>();
 		_camera->addComponent<CameraComponent>();
-		_addLookAt();
+		auto lookAt = _camera->addComponent<LookAtComponent>();
+		lookAt->target = _player;
+		lookAt->followMode = FollowMode::followByOffset;
+		lookAt->offsetFromTarget = glm::vec3(0, 9, -5);
+
 		_camera->registerImGui = &InGameState::_registerImGUI;
 	}
 
@@ -99,7 +104,7 @@ InGameState::InGameState() {
 		text->transform.setScale(glm::vec3(10));
 		
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
-		rigidbody->getRigidBody()->setDamping(0.6, 0);
+		rigidbody->getRigidBody()->setDamping(0.7, 0);
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setTransform(transform);
 		rigidbody->setActivationState(DISABLE_DEACTIVATION);
@@ -113,6 +118,7 @@ InGameState::InGameState() {
 		point->pointLight.quadratic = 0.07;
 
 		_player->addComponent<HoverComponent>(0.6, 100);
+		engine.getSystem<RoomLoadingSystem>()->setPlayerTransform(transform);
 	}
 
 	{
@@ -161,61 +167,6 @@ InGameState::InGameState() {
 
 		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 	}
-	// clang-format off
-	{ // Adding Floor
-		auto mapLoader = engine.getMapLoader();
-		std::vector<Uint8> map = mapLoader->getMap("maps/sunkentemple.png");
-		int width = mapLoader->getWidth();
-		int height = mapLoader->getHeight();
-
-		Entity * room = _world.addEntity(sole::uuid4(), "Room");
-
-		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(
-			GL_TRIANGLES,
-			SimpleMesh::vlist_t{
-			// TOP
-				{ -0.5,  0.5,  0.5 },{ 0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
-				{ -0.5,  0.5, -0.5 },{ 0.5,  0.5,  0.5 },{ 0.5,  0.5, -0.5 },
-				// RIGHT
-				{ -0.5, -0.5,  0.5 },{ -0.5,  0.5,  0.5 },{ -0.5, -0.5, -0.5 },
-				{ -0.5, -0.5, -0.5 },{ -0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
-				// LEFT
-				{ 0.5, -0.5,  0.5 },{ 0.5, -0.5, -0.5 },{ 0.5,  0.5,  0.5 },
-				{ 0.5, -0.5, -0.5 },{ 0.5,  0.5, -0.5 },{ 0.5,  0.5,  0.5 },
-				// FRONT
-				{ -0.5,  0.5, -0.5 },{ 0.5,  0.5, -0.5 },{ -0.5, -0.5, -0.5 },
-				{ -0.5, -0.5, -0.5 },{ 0.5,  0.5, -0.5 },{ 0.5, -0.5, -0.5 },
-				// BACK
-				{ -0.5,  0.5,  0.5 },{ 0.5,  0.5,  0.5 },{ -0.5, -0.5,  0.5 },
-				{ -0.5, -0.5,  0.5 },{ 0.5,  0.5,  0.5 },{ 0.5, -0.5,  0.5 }
-			}
-		));
-
-		for (size_t i = 0, size = map.size(); i < size; i++)
-		{
-			int x = i % width;
-			int y = i / width;
-			float h = float(map[i]) / 128.f;
-
-			Entity * tile  = _world.addEntity(sole::uuid4(), "FloorTile");
-			tile->getHide() = true;
-
-			TransformComponent * transform = tile->addComponent<TransformComponent>();
-			transform->setPosition({ x, 0.0f, y });
-			ismc->addInstance(transform);
-
-			RigidBodyComponent * rigidbody = tile->addComponent<RigidBodyComponent>(tile);
-			rigidbody->setTransform(transform);
-			rigidbody->setHitboxHalfSize({ 0.5, 0.5, 0.5 });
-
-			bulletphyiscs->addRigidBody(rigidbody,
-				BulletPhysicsSystem::CollisionType::COL_WALL,
-				BulletPhysicsSystem::wallCollidesWith);
-
-			tile->addComponent<FloorTileComponent>(h);
-		}
-	}
-	// clang-format off
 }
 
 InGameState::~InGameState() {}
