@@ -1,16 +1,15 @@
 #pragma once
 #include "system.hpp"
 
-class HoverSystem : public System
-{
+class HoverSystem : public System {
 public:
 	HoverSystem();
 	virtual ~HoverSystem();
 
 	// Inherited via System
-	virtual void update(World & world, float delta) override;
-	virtual void registerImGui() override;
-	virtual std::string name() override;
-private:
+	void update(World& world, float delta) final;
+	void registerImGui() final;
+	inline std::string name() final { return "HoverSystem"; };
 
+private:
 };

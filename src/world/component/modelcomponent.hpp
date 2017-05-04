@@ -22,6 +22,6 @@ struct ModelComponent : public Component {
 		meshData->mesh->render(count, drawMode);
 	}
 
-	virtual void registerImGui();
-	virtual std::string name() { return "ModelComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "ModelComponent"; }
 };

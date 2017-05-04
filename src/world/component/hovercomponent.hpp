@@ -1,8 +1,7 @@
 #pragma once
 #include "component.hpp"
 
-class HoverComponent : public Component
-{
+class HoverComponent : public Component {
 public:
 	HoverComponent(float hoverHeight, float hoverForce);
 	virtual ~HoverComponent();
@@ -11,6 +10,6 @@ public:
 	float hoverForce;
 
 	// Inherited via Component
-	virtual std::string name() override;
-	virtual void registerImGui() override;
+	inline std::string name() final { return "HoverComponent"; }
+	void registerImGui() final;
 };

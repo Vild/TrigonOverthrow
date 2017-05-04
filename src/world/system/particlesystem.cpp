@@ -33,7 +33,7 @@ ParticleSystem::~ParticleSystem() {}
 
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
-	// Gotta change how this system works abit. 
+	// Gotta change how this system works abit.
 	rmt_ScopedCPUSample(ParticleSystem, RMTSF_None);
 	glm::vec3 direction = glm::vec3(0);
 	glm::vec3 pos = glm::vec3(0);
@@ -45,12 +45,7 @@ void ParticleSystem::update(World& world, float delta) {
 
 		direction = entity->getComponent<TransformComponent>()->getDirection();
 		pos = entity->getComponent<TransformComponent>()->getPosition();
-		_programs[0]
-			->bind()
-			.setUniform("delta", delta)
-			.setUniform("emitterPos", pos)
-			.setUniform("emitterDir", direction)
-			.setUniform("entryPos", entryPos);
+		_programs[0]->bind().setUniform("delta", delta).setUniform("emitterPos", pos).setUniform("emitterDir", direction).setUniform("entryPos", entryPos);
 		particleComp->textureSize = _textureSize;
 		_particleData->bindImageTexture(0, true);
 		_particleData->bindImageTexture(1, true);

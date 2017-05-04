@@ -19,7 +19,7 @@ struct ButtonComponent : public Component {
 	glm::vec3 size;
 	ButtonCallback callback;
 
-	virtual void registerImGui();
+	void registerImGui() final;
 
-	virtual std::string name() { return "ButtonComponent"; }
+	inline std::string name() final { return "ButtonComponent"; }
 };

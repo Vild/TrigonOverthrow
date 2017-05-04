@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "ingamestate.hpp"
 
 #include <glm/glm.hpp>
@@ -31,8 +33,8 @@
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
-	BulletPhysicsSystem * bulletphyiscs = engine.getSystem<BulletPhysicsSystem>();
-	FloorTileSystem * floorTileSystem = engine.getSystem<FloorTileSystem>();
+	BulletPhysicsSystem* bulletphyiscs = engine.getSystem<BulletPhysicsSystem>();
+	FloorTileSystem* floorTileSystem = engine.getSystem<FloorTileSystem>();
 
 	_sun = _world.addEntity(sole::uuid4(), "Sun");
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
@@ -86,7 +88,7 @@ InGameState::InGameState() {
 		_player->addComponent<KBMouseInputComponent>();
 		//_player->addComponent<PhysicsComponent>();
 
-		/*auto life = */_player->addComponent<LifeComponent>();
+		/*auto life = */ _player->addComponent<LifeComponent>();
 
 		auto gun = _player->addComponent<GunComponent>();
 		gun->addGun(GunComponent::GunType::RAYGUN, 30); // 60 is the the cooldown rate per frame.
@@ -95,15 +97,13 @@ InGameState::InGameState() {
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 		text->transform.setPosition(glm::vec3(0, 1, 0));
 		text->transform.setScale(glm::vec3(1));
-		
+
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
 		rigidbody->getRigidBody()->setDamping(0.6, 0);
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setTransform(transform);
 		rigidbody->setActivationState(DISABLE_DEACTIVATION);
-		bulletphyiscs->addRigidBody(rigidbody,
-			BulletPhysicsSystem::CollisionType::COL_PLAYER,
-			BulletPhysicsSystem::playerCollidesWith);
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_PLAYER, BulletPhysicsSystem::playerCollidesWith);
 
 		auto point = _player->addComponent<PointLightComponent>();
 		point->pointLight.diffuse = glm::vec3(0, 1, 0);
@@ -111,7 +111,7 @@ InGameState::InGameState() {
 		point->pointLight.constant = 1;
 		point->pointLight.linear = 0.14;
 		point->pointLight.quadratic = 0.07;
-		
+
 		_player->addComponent<HoverComponent>(0.6, 100);
 	}
 
@@ -120,7 +120,7 @@ InGameState::InGameState() {
 		transform->setScale(glm::vec3(0.3));
 		transform->setPosition(glm::vec3(0, 0.2, 5));
 
-		/*auto dynamicModelComp = */_enemy->addComponent<DynamicModelComponent>();
+		/*auto dynamicModelComp = */ _enemy->addComponent<DynamicModelComponent>();
 
 		auto model = _enemy->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy_7HP.fbx");
@@ -141,8 +141,8 @@ InGameState::InGameState() {
 									})
 			.finalize();
 
-		//auto hitbox = _enemy->addComponent<HitboxComponent>();
-		//hitbox->addHitbox(HitboxComponent::SPHERE, transform->getPosition());
+		// auto hitbox = _enemy->addComponent<HitboxComponent>();
+		// hitbox->addHitbox(HitboxComponent::SPHERE, transform->getPosition());
 		//_enemy->addComponent<PhysicsComponent>();
 
 		auto life = _enemy->addComponent<LifeComponent>();
@@ -159,9 +159,7 @@ InGameState::InGameState() {
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setTransform(transform);
 
-		bulletphyiscs->addRigidBody(rigidbody,
-			BulletPhysicsSystem::CollisionType::COL_ENEMY,
-			BulletPhysicsSystem::enemyCollidesWith);
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 	}
 	// clang-format off
 	{ // Adding Floor

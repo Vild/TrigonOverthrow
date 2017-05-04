@@ -22,7 +22,6 @@ void CameraComponent::registerImGui() {
 	dirty |= ImGui::DragFloat("zFar", &zFar, 0.1f);
 	dirty |= ImGui::DragFloat("Aspect", &aspect, 0.1f);
 
-	if (dirty) {
+	if (dirty)
 		recalculateProjectionMatrix();
-	}
 }

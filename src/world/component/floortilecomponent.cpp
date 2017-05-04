@@ -1,35 +1,24 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "floortilecomponent.hpp"
 
-FloorTileComponent::FloorTileComponent(float height)
-{
+FloorTileComponent::FloorTileComponent(float height) {
 	this->height = height;
 	this->heightFactor = 0.0f;
 }
 
-FloorTileComponent::~FloorTileComponent()
-{
-}
+FloorTileComponent::~FloorTileComponent() {}
 
-float FloorTileComponent::getHeight()
-{
+float FloorTileComponent::getHeight() {
 	return height;
 }
 
-float FloorTileComponent::getHeightFactor()
-{
-	return heightFactor; 
+float FloorTileComponent::getHeightFactor() {
+	return heightFactor;
 }
 
-void FloorTileComponent::setHeightFactor(float heightFactor) 
-{ 
-	this->heightFactor = heightFactor; 
+void FloorTileComponent::setHeightFactor(float heightFactor) {
+	this->heightFactor = heightFactor;
 }
 
-inline std::string FloorTileComponent::name()
-{
-	return "FloorTileComponent";
-}
-
-void FloorTileComponent::registerImGui()
-{
-}
+void FloorTileComponent::registerImGui() {}

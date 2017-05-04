@@ -9,9 +9,9 @@ public:
 	MainMenuState();
 	virtual ~MainMenuState();
 
-	virtual void onEnter(State* prev);
-	virtual void onLeave(State* next);
-	inline virtual Entity* getCamera() { return _camera; }
+	void onEnter(State* prev) final;
+	void onLeave(State* next) final;
+	inline Entity* getCamera() final { return _camera; }
 
 private:
 	Entity* _camera;

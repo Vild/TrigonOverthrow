@@ -6,8 +6,8 @@ class ImGuiSystem : public System {
 public:
 	virtual ~ImGuiSystem();
 
-	void update(World& world, float delta);
+	void update(World& world, float delta) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "ImGuiSystem"; };
+	void registerImGui() final;
+	inline std::string name() final { return "ImGuiSystem"; };
 };

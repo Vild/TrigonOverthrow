@@ -11,6 +11,6 @@ struct SunComponent : public Component {
 
 	virtual ~SunComponent();
 
-	virtual void registerImGui();
-	virtual std::string name() { return "SunComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "SunComponent"; }
 };

@@ -16,7 +16,7 @@ struct CameraComponent : public Component {
 
 	void recalculateProjectionMatrix();
 
-	virtual void registerImGui();
+	void registerImGui() final;
 
-	virtual std::string name() { return "CameraComponent"; }
+	inline std::string name() final { return "CameraComponent"; }
 };

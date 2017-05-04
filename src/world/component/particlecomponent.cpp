@@ -3,3 +3,4 @@
 #include "particlecomponent.hpp"
 
 ParticleComponent::~ParticleComponent() {}
+void ParticleComponent::registerImGui() {}

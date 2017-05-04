@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2017-05-04 Thu 06:17 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Code style</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Code style</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org7fba6ff">1. Indentation</a></li>
+<li><a href="#orgb34292f">2. Placing Braces</a></li>
+<li><a href="#org837f429">3. Spaces</a></li>
+<li><a href="#orgee1320e">4. Naming conventions</a></li>
+<li><a href="#orgefcc175">5. Typedefs</a></li>
+<li><a href="#orgf5d6c6f">6. Functions</a></li>
+<li><a href="#org1679119">7. Comments</a></li>
+<li><a href="#orge9db570">8. Hierarchy</a></li>
+</ul>
+</div>
+</div>
+<p>
+Based on <a href="https://www.kernel.org/doc/Documentation/process/coding-style.rst">https://www.kernel.org/doc/Documentation/process/coding-style.rst</a>
+</p>
+
+<div id="outline-container-org7fba6ff" class="outline-2">
+<h2 id="org7fba6ff"><span class="section-number-2">1</span> Indentation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Indent using tabs.
+Tabs are 2 spaces.
+Never have more than 4 indentations, if you need more your code is wrong and should be refactored!
+</p>
+
+<p>
+<code>case</code> in <code>switch</code> statements should not be indented.
+</p>
+<div class="org-src-container">
+<pre class="src src-cpp">inline const char* toString(ShaderType shader) {
+	switch (shader) {
+	case ShaderType::vertex:
+		return "Vertex";
+	case ShaderType::fragment:
+		return "Fragment";
+	case ShaderType::geometry:
+		return "Geometry";
+	}
+}
+</pre>
+</div>
+
+<p>
+<code>public</code>, <code>protected</code> and <code>private</code> should not be indented.
+</p>
+<div class="org-src-container">
+<pre class="src src-cpp">struct DataStructure {
+public:
+	int a;
+
+protected:
+	int b;
+
+private:
+	int c;
+
+};
+</pre>
+</div>
+
+<p>
+Don't put multiple statements on a single line.
+</p>
+<div class="org-src-container">
+<pre class="src src-cpp">// Do:
+if (condition)
+	do_something;
+
+// Don't:
+if (condition) do_something;
+</pre>
+</div>
+
+<p>
+Empty braces should be placed on the same line.
+</p>
+<div class="org-src-container">
+<pre class="src src-cpp">World::World() {}
+</pre>
+</div>
+
+<p>
+Empty lines should not be indented.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb34292f" class="outline-2">
+<h2 id="orgb34292f"><span class="section-number-2">2</span> Placing Braces</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Braces should <b>always</b> be on the same line!
+Braces should only be used if needed!
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int funcA() {
+	int value;
+
+	if (x) {
+		stuffA();
+		stuffB();
+	} else 
+		stuffC();
+
+	switch (y) {
+	case 0:
+	case 1:
+		value = 0;
+	case 2:
+		value = 1;
+	default:
+		value = -1;
+	}
+
+	while (z != 0x1234)
+		modifyZ(&amp;z);
+
+	for (int a = 0; a &lt; 10; a++) {
+		 // ...
+	}
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org837f429" class="outline-2">
+<h2 id="org837f429"><span class="section-number-2">3</span> Spaces</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Use spaces after these keywords:
+</p>
+<ul class="org-ul">
+<li><code>if</code></li>
+<li><code>switch</code></li>
+<li><code>case</code></li>
+<li><code>for</code></li>
+<li><code>do</code></li>
+<li><code>while</code></li>
+</ul>
+
+<p>
+But not for these:
+</p>
+<ul class="org-ul">
+<li><code>sizeof</code></li>
+<li><code>typeof</code></li>
+<li><code>alignof</code></li>
+<li><code>typeid</code></li>
+</ul>
+
+<p>
+Don't add spaces inside parentheses:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">// Do:
+int a = func((b &lt;&lt; c) &amp; FLAG_BITMAP);
+int size = sizeof(WorldClass);
+
+// Don't:
+int a = func( ( b &lt;&lt; c ) &amp; FLAG_BITMAP );
+int size = sizeof( WorldClass );
+</pre>
+</div>
+
+<p>
+Pointer <code>*</code> and reference <code>&amp;</code> type declarations should be on the on the type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">// Do:
+void* varA;
+int** varB;
+
+// Don't:
+void *varA;
+int ** varB;
+</pre>
+</div>
+
+
+<p>
+There should be spaces before and after all binary and ternary operators.
+These include: = + - &lt; &gt; * / % | &amp; ^ &lt;= &gt;= <code>= !</code> ? :
+</p>
+
+<p>
+But not for unary operators, <code>.</code> or <code>-&gt;</code>
+</p>
+
+<p>
+Example
+</p>
+<div class="org-src-container">
+<pre class="src src-cpp">int a = (a + b) + (c &amp; ~(1 &lt;&lt; 4));
+
+objA.run();
+objB-&gt;run();
+
+int* addrA = &amp;a;
+int valA = *addrA;
+
+bool isAValueNotZero = !!valA;
+
+a++;
+--a;
+</pre>
+</div>
+
+<p>
+Never have tailing whitespaces at the end of lines.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgee1320e" class="outline-2">
+<h2 id="orgee1320e"><span class="section-number-2">4</span> Naming conventions</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Types always start with a big letter and the following words also uses a bit letter.
+</p>
+<ul class="org-ul">
+<li>World</li>
+<li>GeometryRenderPass</li>
+<li>LifeSystem</li>
+</ul>
+
+<p>
+Public functions and variables starts with a small letter and the following words starts with a big letter.
+</p>
+<ul class="org-ul">
+<li>void addLife(int amount)</li>
+<li>void update(float delta)</li>
+<li>int maxHP;</li>
+</ul>
+
+<p>
+Private functions and variables starts with a underscore and then a small letter and the following words starts with a
+big letter.
+</p>
+<ul class="org-ul">
+<li>_updateMotion()</li>
+<li>int _currentHP;</li>
+</ul>
+
+<p>
+Never encoding the type of a function/variable into the name!
+</p>
+
+<p>
+Names like <code>i</code> and <code>tmp</code> are okey to use if you easily can see out of context what they are used for, and what they
+store.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgefcc175" class="outline-2">
+<h2 id="orgefcc175"><span class="section-number-2">5</span> Typedefs</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Never typedef unless really needed, this hides what type it is and makes it just makes it more difficult to find out
+what it is.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf5d6c6f" class="outline-2">
+<h2 id="orgf5d6c6f"><span class="section-number-2">6</span> Functions</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+<code>Functions should be short and sweet, and do just one thing.</code>
+It is good to use helper functions with descriptive names. This helps to self document the code.
+</p>
+
+<p>
+Early exit is good!
+Don't wrap the code in big if statements, it is much easier to read if you just early exit.
+</p>
+
+<p>
+<code>goto</code> is a powerful tool, and thous should be handled with care, but not be discarded.
+Use it for help with readability and to exit out of loops that are inside of loops.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1679119" class="outline-2">
+<h2 id="org1679119"><span class="section-number-2">7</span> Comments</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Comments are only needed to tell the reader what the code should do, if it is unclear from the context.
+But never explain <b>how</b> it does it, only <b>what</b> it does.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge9db570" class="outline-2">
+<h2 id="orge9db570"><span class="section-number-2">8</span> Hierarchy</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+All classes need a virtual destructor!
+</p>
+
+<p>
+Functions that can be extended should be tagged with <code>virtual</code>, and if needed made pure virtual.
+Functions that extend base functions should use <code>override</code> if that function also can be extended,
+or <code>final</code> if that is the last time that function can be extended.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">struct Component {
+	virtual void registerImGui();
+
+	virtual int derp();
+};
+
+struct LifeComponent : public Component {
+	// ...
+	void registerImGui() final;
+
+	int derp() override;
+};
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2017-05-04 Thu 06:17</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

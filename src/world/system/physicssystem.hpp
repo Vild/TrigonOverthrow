@@ -6,8 +6,8 @@ class PhysicsSystem : public System {
 public:
 	virtual ~PhysicsSystem();
 
-	virtual void update(World& world, float delta);
+	void update(World& world, float delta) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "PhysicsSystem"; };
+	void registerImGui() final;
+	inline std::string name() final { return "PhysicsSystem"; };
 };

@@ -9,14 +9,14 @@ public:
 	GaussianRenderPass();
 	virtual ~GaussianRenderPass();
 
-	enum InputAttachments { Image };
-	enum Attachments { BlurredImage };
+	enum InputAttachments { image };
+	enum Attachments { blurredImage };
 
-	virtual void render(World& world) override;
-	virtual void resize(unsigned int width, unsigned int height) override;
+	void render(World& world) final;
+	void resize(unsigned int width, unsigned int height) final;
 
-	virtual void registerImGui() override;
-	virtual std::string name() { return "GaussianRenderPass"; };
+	void registerImGui() final;
+	inline std::string name() final { return "GaussianRenderPass"; };
 
 private:
 	std::unique_ptr<Mesh> fsQuad;

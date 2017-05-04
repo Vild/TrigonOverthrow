@@ -9,7 +9,7 @@ uniform vec3 emitterDir;
 uniform vec3 entryPos;
 
 float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
 void main(){
@@ -25,7 +25,7 @@ void main(){
 		pos = vec3(0);
 	}
 	vec3 a = emitterDir * delta;
-  	pos = vec3(0, 0, clamp(gl_GlobalInvocationID.x / float(gl_GlobalInvocationID.y), emitterPos.z, entryPos.z));
+	pos = vec3(0, 0, clamp(gl_GlobalInvocationID.x / float(gl_GlobalInvocationID.y), emitterPos.z, entryPos.z));
 	vel += a * delta;
 
 	life -= 1 * delta;

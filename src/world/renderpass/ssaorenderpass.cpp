@@ -30,7 +30,7 @@ SSAORenderSystem::SSAORenderSystem() {
 		.addUniform("projectionMatrix");
 
 	_gbuffer = std::make_shared<GBuffer>();
-	_gbuffer->bind().attachTexture(0, width, height, GL_RED, GL_FLOAT, 1).finalize();
+	_gbuffer->bind().attachTexture(Attachments::occlusionMap, width, height, GL_RED, GL_FLOAT, 1).finalize();
 
 	//_gbuffer->getAttachments()[0]->bind()
 	//	.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR)
@@ -103,13 +103,13 @@ void SSAORenderSystem::generateUniformData(int width, int height) {
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT)
 		.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 
-	attachInputTexture(2, noiseMap);
+	attachInputTexture(InputAttachments::noiseMap_INTERNAL, noiseMap);
 
 	glm::vec2 noiseScale = {width / 4.0, height / 4.0};
 
-	_shader->setUniform("positionMap", 0);
-	_shader->setUniform("normalMap", 1);
-	_shader->setUniform("noiseMap", 2);
+	_shader->setUniform("positionMap", (GLint)InputAttachments::positionMap);
+	_shader->setUniform("normalMap", (GLint)InputAttachments::normalMap);
+	_shader->setUniform("noiseMap", (GLint)InputAttachments::noiseMap_INTERNAL);
 
 	_shader->setUniform("noiseScale", noiseScale);
 
@@ -121,7 +121,7 @@ void SSAORenderSystem::generateUniformData(int width, int height) {
 
 void SSAORenderSystem::resize(unsigned int width, unsigned int height) {
 	auto& attachments = _gbuffer->getAttachments();
-	attachments[Attachments::OcclusionMap]->resize(width, height, GL_RED, GL_RED, GL_FLOAT);
+	attachments[Attachments::occlusionMap]->resize(width, height, GL_RED, GL_RED, GL_FLOAT);
 
 	_gbuffer->bind();
 	glViewport(0, 0, width, height);
@@ -134,9 +134,8 @@ void SSAORenderSystem::registerImGui() {
 	dirty |= ImGui::DragFloat("Sample Radius", &sampleRadius, 0.01f);
 	dirty |= ImGui::DragFloat("Sample Bias", &sampleBias, 0.001f);
 
-	if (dirty) {
+	if (dirty)
 		_shader->bind().setUniform("sampleSize", sampleSize).setUniform("sampleRadius", sampleRadius).setUniform("sampleBias", sampleBias);
-	}
 }
 
 void SSAORenderSystem::render(World& world) {

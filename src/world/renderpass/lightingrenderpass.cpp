@@ -16,17 +16,17 @@ LightingRenderPass::LightingRenderPass() {
 	_dirLight = DirLight{
 		glm::vec3(1, 1, 1),				//
 		glm::vec3(0.5, 0.5, 0.5), //
-		glm::vec3(0, -1, 0)			//
+		glm::vec3(0, -1, 0)				//
 	};
 
 	for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
 		_pointLights[i] = PointLight{
 			glm::vec3{(i % 8) / 8.0, (i % 16) / 16.0, (i % 2) / 2.0}, //
-			glm::vec3{0.0, 0.0, 0.0},																 //
+			glm::vec3{0.0, 0.0, 0.0},																	//
 
 			glm::vec3{i, 1, i}, //
-			float{1.0f},						//
-			float{0.7f},						//
+			float{1.0f},				//
+			float{0.7f},				//
 			float{1.8f},				//
 		};
 	}
@@ -72,7 +72,7 @@ LightingRenderPass::LightingRenderPass() {
 		.setUniform("defNormal", (GLint)InputAttachment::normal)
 		.setUniform("defDiffuseSpecular", (GLint)InputAttachment::diffuseSpecular)
 		.setUniform("defDepth", (GLint)InputAttachment::depth)
-		.setUniform("defOcclusionMap", (GLint)InputAttachment::OcclusionMap)
+		.setUniform("defOcclusionMap", (GLint)InputAttachment::occlusionMap)
 
 		.setUniform("settings_enableDirLight", _settings_enableDirLight)
 		.setUniform("settings_enablePointLight", _settings_enablePointLight)

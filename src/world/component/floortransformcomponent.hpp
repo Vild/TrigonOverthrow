@@ -16,7 +16,7 @@ struct FloorTransformComponent : public Component {
 
 	void recalculateMatrices();
 
-	virtual void registerImGui();
+	void registerImGui() final;
 
-	virtual std::string name() { return "FloorTransformComponent"; }
+	inline std::string name() final { return "FloorTransformComponent"; }
 };

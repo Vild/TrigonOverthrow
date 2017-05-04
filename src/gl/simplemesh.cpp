@@ -1,7 +1,8 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "simplemesh.hpp"
 
-SimpleMesh::SimpleMesh()
-{
+SimpleMesh::SimpleMesh() {
 	drawMode = GL_POINTS;
 	maxInstances = 0;
 
@@ -10,25 +11,19 @@ SimpleMesh::SimpleMesh()
 	glGenBuffers(1, &IBO);
 }
 
-SimpleMesh::~SimpleMesh()
-{
-}
+SimpleMesh::~SimpleMesh() {}
 
-SimpleMesh & SimpleMesh::setDrawMode(GLenum mode)
-{
+SimpleMesh& SimpleMesh::setDrawMode(GLenum mode) {
 	drawMode = mode;
 	return *this;
 }
 
-SimpleMesh & SimpleMesh::addVertex(const glm::vec3 & vertex)
-{
+SimpleMesh& SimpleMesh::addVertex(const glm::vec3& vertex) {
 	vertices.push_back(vertex);
 	return *this;
 }
 
-
-void SimpleMesh::finalize(int maxInstances)
-{
+void SimpleMesh::finalize(int maxInstances) {
 	this->maxInstances = maxInstances;
 
 	glBindVertexArray(VAO);
@@ -46,8 +41,7 @@ void SimpleMesh::finalize(int maxInstances)
 			glBufferData(GL_ARRAY_BUFFER, maxInstances * sizeof(glm::mat4), NULL, GL_STREAM_DRAW);
 
 			int location = 1;
-			for (int i = 0; i < 4; i++)
-			{
+			for (int i = 0; i < 4; i++) {
 				glEnableVertexAttribArray(location + i);
 				glVertexAttribPointer(location + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(i * sizeof(glm::vec4)));
 				glVertexAttribDivisor(location + i, 1);
@@ -58,34 +52,25 @@ void SimpleMesh::finalize(int maxInstances)
 	glBindVertexArray(0);
 }
 
-void SimpleMesh::draw()
-{
+void SimpleMesh::draw() {
 	glBindVertexArray(VAO);
-	{
-		glDrawArrays(drawMode, 0, vertices.size());
-	}
+	{ glDrawArrays(drawMode, 0, vertices.size()); }
 	glBindVertexArray(0);
 }
 
-void SimpleMesh::draw(std::vector<glm::mat4>& instances)
-{
+void SimpleMesh::draw(std::vector<glm::mat4>& instances) {
 	glBindBuffer(GL_ARRAY_BUFFER, IBO);
 	{
-		if (instances.size() > maxInstances)
-		{
+		if (instances.size() > maxInstances) {
 			maxInstances = instances.size();
 			glBufferData(GL_ARRAY_BUFFER, maxInstances * sizeof(glm::mat4), &instances.front(), GL_STREAM_DRAW);
-		}
-		else
-		{
+		} else {
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4) * instances.size(), &instances.front());
 		}
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindVertexArray(VAO);
-	{
-		glDrawArraysInstanced(drawMode, 0, vertices.size(), instances.size());
-	}
+	{ glDrawArraysInstanced(drawMode, 0, vertices.size(), instances.size()); }
 	glBindVertexArray(0);
 }

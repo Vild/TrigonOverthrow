@@ -6,8 +6,8 @@ class InputSystem : public System {
 public:
 	virtual ~InputSystem();
 
-	void update(World& world, float delta);
+	void update(World& world, float delta) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "InputSystem"; };
+	void registerImGui() final;
+	inline std::string name() final { return "InputSystem"; };
 };

@@ -13,6 +13,6 @@ struct PointLightComponent : public Component {
 
 	virtual ~PointLightComponent();
 
-	virtual void registerImGui();
-	virtual std::string name() { return "PointLightComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "PointLightComponent"; }
 };

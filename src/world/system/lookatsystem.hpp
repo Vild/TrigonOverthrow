@@ -6,8 +6,8 @@ class LookAtSystem : public System {
 public:
 	virtual ~LookAtSystem();
 
-	virtual void update(World& world, float delta);
+	void update(World& world, float delta) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "LookAtSystem"; };
+	void registerImGui() final;
+	inline std::string name() final { return "LookAtSystem"; };
 };

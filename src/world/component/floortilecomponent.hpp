@@ -1,9 +1,9 @@
 #pragma once
+
 #include "component.hpp"
 #include "transformcomponent.hpp"
 
-class FloorTileComponent : public Component
-{
+class FloorTileComponent : public Component {
 public:
 	FloorTileComponent(float height);
 	virtual ~FloorTileComponent();
@@ -13,9 +13,9 @@ public:
 
 	void setHeightFactor(float heightFactor);
 
-	// Inherited via Component 
-	virtual std::string name() override;
-	virtual void registerImGui() override;
+	// Inherited via Component
+	inline std::string name() final { return "FloorTileComponent"; }
+	void registerImGui() final;
 
 private:
 	float height;
