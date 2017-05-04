@@ -11,10 +11,10 @@ public:
 	ParticleRenderPass();
 	virtual ~ParticleRenderPass();
 
-	virtual void render(World& world);
-	virtual void resize(unsigned int width, unsigned int height);
-	virtual void registerImGui();
-	inline virtual std::string name() { return "ParticleRenderPass"; };
+	void render(World& world) final;
+	void resize(unsigned int width, unsigned int height) final;
+	void registerImGui() final;
+	inline std::string name() final { return "ParticleRenderPass"; };
 
 private:
 };

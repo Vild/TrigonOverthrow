@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "maploader.hpp"
 
 MapLoader::MapLoader() {
@@ -18,11 +20,10 @@ std::vector<Uint8> MapLoader::getMap(const std::string& filename) {
 
 	_width = loadedSurface->w;
 	_height = loadedSurface->h;
-	for (int y = 0; y < _height; y++) {
-		for (int x = 0; x < _width; x++) {
+	for (int y = 0; y < _height; y++)
+		for (int x = 0; x < _width; x++)
 			_data.push_back(((Uint8*)loadedSurface->pixels)[loadedSurface->pitch * y + x * bpp]);
-		}
-	}
+
 	SDL_FreeSurface(loadedSurface);
 	return _data;
 }

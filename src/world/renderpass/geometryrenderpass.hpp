@@ -11,11 +11,11 @@ public:
 	GeometryRenderPass();
 	virtual ~GeometryRenderPass();
 
-	virtual void render(World& world);
-	virtual void resize(unsigned int width, unsigned int height);
+	void render(World& world) final;
+	void resize(unsigned int width, unsigned int height) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "GeometryRenderPass"; };
+	void registerImGui() final;
+	inline std::string name() final { return "GeometryRenderPass"; };
 
 private:
 	std::shared_ptr<ShaderProgram> _floorShader;

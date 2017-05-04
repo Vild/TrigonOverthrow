@@ -43,8 +43,9 @@ std::shared_ptr<LoadedMesh> MeshLoader::getMesh(const std::string& file) {
 LoadedMesh::LoadedMesh(const std::string& file) {
 	Assimp::Importer importer;
 	importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
-	const aiScene* scene = importer.ReadFile(file, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType |
-																									 aiProcess_GenNormals | aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(
+		file,
+		aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_GenNormals | aiProcess_FlipUVs);
 	if (!scene) {
 		fprintf(stderr, "Could not load model %s\n", file.c_str());
 		throw std::exception();

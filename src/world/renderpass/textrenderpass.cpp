@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "textrenderpass.hpp"
 
 #include "../../engine.hpp"
@@ -54,9 +56,8 @@ void TextRenderPass::render(World& world) {
 		const glm::vec3 y(0, 1, 0);
 		const glm::vec3 z(0, 0, 1);
 
-
-		//glm::vec3 position = transform->getPosition();
-		//glm::quat rotation = transform->getRotation();
+		// glm::vec3 position = transform->getPosition();
+		// glm::quat rotation = transform->getRotation();
 
 		glm::mat4 matrix = transform->getMatrix() * text->transform.getMatrix();
 		////matrix = glm::translate(transform->position);

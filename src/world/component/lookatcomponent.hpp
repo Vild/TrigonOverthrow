@@ -26,6 +26,6 @@ struct LookAtComponent : public Component {
 
 	virtual ~LookAtComponent();
 
-	virtual void registerImGui();
-	virtual std::string name() { return "LookAtComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "LookAtComponent"; }
 };

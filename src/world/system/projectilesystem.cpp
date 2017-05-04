@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "projectilesystem.hpp"
 #include "bulletphysicssystem.hpp"
 #include "../component/projectilecomponent.hpp"
@@ -21,8 +23,7 @@ void ProjectileSystem::update(World& world, float delta) {
 				continue;
 			else
 				targetLifeComp = static_cast<Entity*>(obA->getUserPointer())->getComponent<LifeComponent>();
-		}
-		else {
+		} else {
 			targetLifeComp = static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>();
 			isAProj = true;
 		}
@@ -33,9 +34,9 @@ void ProjectileSystem::update(World& world, float delta) {
 			// Loops through everything and take the first object that was collided with.
 			// And breaks the for-loop after that.
 			if (pt.getDistance() < 0.f) {
-				//const btVector3& ptA = pt.getPositionWorldOnA();
-				//const btVector3& ptB = pt.getPositionWorldOnB();
-				//const btVector3& normalOnB = pt.m_normalWorldOnB;
+				// const btVector3& ptA = pt.getPositionWorldOnA();
+				// const btVector3& ptB = pt.getPositionWorldOnB();
+				// const btVector3& normalOnB = pt.m_normalWorldOnB;
 				if (isAProj) {
 					if (targetLifeComp) {
 						targetLifeComp->currHP -= projComp->damage;
@@ -56,7 +57,4 @@ void ProjectileSystem::update(World& world, float delta) {
 	}
 }
 
-
-void ProjectileSystem::registerImGui() {
-
-}
+void ProjectileSystem::registerImGui() {}

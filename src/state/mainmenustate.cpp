@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "mainmenustate.hpp"
 
 #include <glm/gtx/transform.hpp>
@@ -35,7 +37,7 @@ MainMenuState::MainMenuState() {
 	{
 		auto transform = _title->addComponent<TransformComponent>();
 		transform->setPosition({0, 0.4, 0});
-		//transform->recalculateMatrix();
+		// transform->recalculateMatrix();
 
 		auto text = _title->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer("Trigon", false, 10);
@@ -48,7 +50,7 @@ MainMenuState::MainMenuState() {
 		// transform->position = glm::vec3{0, -0.2, 0};
 		transform->setPosition({-0.5625, -0.5625 - 0.2, 0});
 		transform->setScale({1.125, 3 * 1.0 / 16, 3 * 1.0 / 16});
-		//transform->recalculateMatrix();
+		// transform->recalculateMatrix();
 
 		auto button = _play->addComponent<ButtonComponent>();
 		button->size = glm::vec3{2, 2, 2};
@@ -69,7 +71,7 @@ MainMenuState::MainMenuState() {
 		// transform->position = glm::vec3{0, -0.75, 0};
 		transform->setPosition({-0.5625, -0.5625 - 0.75, 0});
 		transform->setScale({1.125, 1.0 / 16, 1.0 / 16});
-		//transform->recalculateMatrix();
+		// transform->recalculateMatrix();
 
 		auto button = _quit->addComponent<ButtonComponent>();
 		button->size = glm::vec3{2, 2, 2};
@@ -78,7 +80,7 @@ MainMenuState::MainMenuState() {
 
 		auto text = _quit->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer(" Quit ", false, 6);
-		text->transform.setPosition({ 0, 0, 0 });
+		text->transform.setPosition({0, 0, 0});
 		text->transform.setScale(glm::vec3{3, 3, 3} / transform->getScale());
 
 		_quit->registerImGui = &MainMenuState::_registerImGUI;

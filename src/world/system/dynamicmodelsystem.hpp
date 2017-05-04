@@ -6,9 +6,9 @@ class DynamicModelSystem : public System {
 public:
 	DynamicModelSystem();
 	virtual ~DynamicModelSystem() {}
-	virtual void update(World& world, float delta);
-	virtual void registerImGui();
-	inline virtual std::string name() { return "DynamicModelSystem"; }
-private:
+	void update(World& world, float delta) final;
+	void registerImGui() final;
+	inline std::string name() final { return "DynamicModelSystem"; }
 
+private:
 };

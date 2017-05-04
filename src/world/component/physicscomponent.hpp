@@ -9,6 +9,6 @@ struct PhysicsComponent : public Component {
 	virtual ~PhysicsComponent();
 
 	// Inherited via Component
-	virtual void registerImGui();
-	virtual std::string name() override { return "PhysicsComponent"; };
+	void registerImGui() final;
+	inline std::string name() final { return "PhysicsComponent"; };
 };

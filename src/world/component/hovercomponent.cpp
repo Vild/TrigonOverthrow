@@ -1,23 +1,15 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "hovercomponent.hpp"
 
-HoverComponent::HoverComponent(float hoverHeight, float hoverForce)
-{
+HoverComponent::HoverComponent(float hoverHeight, float hoverForce) {
 	this->hoverHeight = hoverHeight;
 	this->hoverForce = hoverForce;
 }
 
-HoverComponent::~HoverComponent()
-{
+HoverComponent::~HoverComponent() {}
 
-}
-
-std::string HoverComponent::name()
-{
-	return "HoverComponent";
-}
-
-void HoverComponent::registerImGui()
-{
+void HoverComponent::registerImGui() {
 	ImGui::DragFloat("Hover Height", &hoverHeight, 0.1, 0, 10);
 	ImGui::DragFloat("Hover Force", &hoverForce, 1, 0, 100);
 }

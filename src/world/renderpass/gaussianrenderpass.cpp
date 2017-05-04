@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "gaussianrenderpass.hpp"
 #include "../../engine.hpp"
 #include <functional>
@@ -7,9 +9,9 @@ GaussianRenderPass::GaussianRenderPass() {
 	int width = engine.getWidth();
 	int height = engine.getHeight();
 
-	(*(_gbuffer = std::make_shared<GBuffer>())).bind().attachTexture(Attachments::BlurredImage, std::make_shared<Texture>(width, height, GL_RGB)).finalize();
+	(*(_gbuffer = std::make_shared<GBuffer>())).bind().attachTexture(Attachments::blurredImage, std::make_shared<Texture>(width, height, GL_RGB)).finalize();
 
-	(*(altBuffer = std::make_shared<GBuffer>())).bind().attachTexture(Attachments::BlurredImage, std::make_shared<Texture>(width, height, GL_RGB)).finalize();
+	(*(altBuffer = std::make_shared<GBuffer>())).bind().attachTexture(Attachments::blurredImage, std::make_shared<Texture>(width, height, GL_RGB)).finalize();
 
 	(*(_shader = std::make_shared<ShaderProgram>()))
 		.attach("assets/shaders/gaussian.vert", ShaderType::vertex)
@@ -110,11 +112,11 @@ void GaussianRenderPass::render(World& world) {
 }
 
 void GaussianRenderPass::resize(unsigned int width, unsigned int height) {
-	_gbuffer->getAttachments()[Attachments::BlurredImage]->resize(width, height, GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE);
+	_gbuffer->getAttachments()[Attachments::blurredImage]->resize(width, height, GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE);
 	_gbuffer->bind();
 	glViewport(0, 0, width, height);
 
-	altBuffer->getAttachments()[Attachments::BlurredImage]->resize(width, height, GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE);
+	altBuffer->getAttachments()[Attachments::blurredImage]->resize(width, height, GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE);
 	altBuffer->bind();
 	glViewport(0, 0, width, height);
 }

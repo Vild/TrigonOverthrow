@@ -33,9 +33,8 @@ public:
 
 	void move(const glm::vec3& delta);
 
-	virtual void registerImGui();
-	inline std::string name() { return "TransformComponent"; }
-
+	void registerImGui() final;
+	inline std::string name() final { return "TransformComponent"; }
 
 private:
 	bool dirty;
@@ -49,17 +48,17 @@ private:
 };
 
 inline glm::vec3 cast(btVector3 const& v) {
-	return {v.x(), v.y(), v.z()};
+	return glm::vec3{v.x(), v.y(), v.z()};
 }
 
 inline glm::quat cast(btQuaternion const& q) {
-	return {q.w(), q.x(), q.y(), q.z()};
+	return glm::quat{q.w(), q.x(), q.y(), q.z()};
 }
 
 inline btVector3 cast(glm::vec3 const& v) {
-	return {v.x, v.y, v.z};
+	return btVector3{v.x, v.y, v.z};
 }
 
 inline btQuaternion cast(glm::quat const& q) {
-	return {q.x, q.y, q.z, q.w};
+	return btQuaternion{q.x, q.y, q.z, q.w};
 }

@@ -42,7 +42,8 @@ void TransformComponent::setDirection(const glm::vec3& direction, const glm::vec
 }
 
 void TransformComponent::setScale(const glm::vec3& scale) {
-	dirty |= this->scale != scale;;
+	dirty |= this->scale != scale;
+	;
 	this->scale = scale;
 }
 
@@ -54,4 +55,3 @@ void TransformComponent::registerImGui() {
 	dirty |= ImGui::DragFloat3("Position", glm::value_ptr(position), 0.1f);
 	dirty |= ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);
 }
-

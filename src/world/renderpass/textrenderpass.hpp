@@ -7,10 +7,10 @@ public:
 	TextRenderPass();
 	virtual ~TextRenderPass();
 
-	virtual void render(World& world);
-	virtual void resize(unsigned int width, unsigned int height);
-	virtual void registerImGui();
-	inline virtual std::string name() { return "TextRenderPass"; };
+	void render(World& world) final;
+	void resize(unsigned int width, unsigned int height) final;
+	void registerImGui() final;
+	inline std::string name() final { return "TextRenderPass"; };
 
 private:
 };

@@ -2,21 +2,20 @@
 #include "system.hpp"
 #include "../component/transformcomponent.hpp"
 
-class FloorTileSystem : public System
-{
+class FloorTileSystem : public System {
 public:
 	FloorTileSystem();
 	virtual ~FloorTileSystem();
 
-	void setPlayerTransform(TransformComponent * playerTransform);
+	void setPlayerTransform(TransformComponent* playerTransform);
 
 	// Inherited via System
-	virtual void update(World & world, float delta) override;
+	void update(World& world, float delta) final;
 
-	virtual void registerImGui() override;
+	void registerImGui() final;
 
-	virtual std::string name() override;
+	inline std::string name() final { return "FloorTileSystem"; }
+
 private:
-	TransformComponent * playerTransform;
-
+	TransformComponent* playerTransform;
 };

@@ -99,20 +99,15 @@ void GeometryRenderPass::render(World& world) {
 	ismShader->setUniform("u_view", cameraComponent->viewMatrix);
 	ismShader->setUniform("u_projection", cameraComponent->projectionMatrix);
 
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) 
-	{
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		ModelComponent* model = nullptr;
-		TransformComponent * transform = nullptr;
+		TransformComponent* transform = nullptr;
 		InstancedSimpleMeshComponent* ism = nullptr;
 
-		if ((model = entity->getComponent<ModelComponent>()) &&
-			(transform = entity->getComponent<TransformComponent>())) 
-		{
+		if ((model = entity->getComponent<ModelComponent>()) && (transform = entity->getComponent<TransformComponent>())) {
 			_shader->bind();
 			model->render(transform->getMatrix());
-		}
-		else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) 
-		{
+		} else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) {
 			ismShader->bind();
 			ism->render();
 		}

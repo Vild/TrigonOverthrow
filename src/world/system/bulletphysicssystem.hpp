@@ -4,12 +4,11 @@
 #include <btBulletDynamicsCommon.h>
 #include <vector>
 #include "../component/rigidbodycomponent.hpp"
-#define BIT(x) (1<<(x))
+#define BIT(x) (1 << (x))
 
-class BulletPhysicsSystem : public System
-{
+class BulletPhysicsSystem : public System {
 public:
-	static BulletPhysicsSystem * activeInstance;
+	static BulletPhysicsSystem* activeInstance;
 
 	enum CollisionType {
 		COL_NOTHING = 0,
@@ -30,20 +29,20 @@ public:
 	virtual ~BulletPhysicsSystem();
 
 	// Inherited via System
-	virtual void update(World & world, float delta) override;
-	virtual void registerImGui() override;
-	virtual std::string name() override;
+	void update(World& world, float delta) final;
+	void registerImGui() final;
+	inline std::string name() final { return "BulletPhyisicsSystem"; }
 
-	void addRigidBody(RigidBodyComponent *  rigidBody, int group, int mask);
-	void removeRigidBody(RigidBodyComponent *  rigidBody);
+	void addRigidBody(RigidBodyComponent* rigidBody, int group, int mask);
+	void removeRigidBody(RigidBodyComponent* rigidBody);
 	btDynamicsWorld* getWorld() { return world; }
 
 private:
-	btDynamicsWorld * world;
-	btDispatcher * dispatcher;
-	btCollisionConfiguration * collisionConfig;
-	btBroadphaseInterface * broadphaseInterface;
-	btConstraintSolver * constraintSolver;
+	btDynamicsWorld* world;
+	btDispatcher* dispatcher;
+	btCollisionConfiguration* collisionConfig;
+	btBroadphaseInterface* broadphaseInterface;
+	btConstraintSolver* constraintSolver;
 
 	std::vector<btRigidBody*> bodies;
 
