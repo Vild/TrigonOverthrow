@@ -9,19 +9,18 @@
 
 class SSAORenderSystem : public RenderPass {
 public:
-	enum InputAttachments { PositionMap, NormalMap, NoiseMap };
-	enum Attachments { OcclusionMap };
-	typedef int Camera;
+	enum InputAttachments : GLint { positionMap = 0, normalMap, noiseMap_INTERNAL };
+	enum Attachments : GLint { occlusionMap = 0 };
 
 	SSAORenderSystem();
 	virtual ~SSAORenderSystem();
 
 	// Inherited via RenderPass
-	virtual void render(World& world) override;
-	virtual void resize(unsigned int width, unsigned int height) override;
+	void render(World& world) final;
+	void resize(unsigned int width, unsigned int height) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "SSAORenderPass"; };
+	void registerImGui() final;
+	inline std::string name() final { return "SSAORenderPass"; };
 
 private:
 	std::shared_ptr<Texture> noiseMap;

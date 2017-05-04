@@ -5,9 +5,7 @@
 #include "../../gl/simplemesh.hpp"
 #include "transformcomponent.hpp"
 
-
-class InstancedSimpleMeshComponent : public Component
-{
+class InstancedSimpleMeshComponent : public Component {
 public:
 	InstancedSimpleMeshComponent(std::unique_ptr<SimpleMesh>& simpleMesh);
 	virtual ~InstancedSimpleMeshComponent();
@@ -17,11 +15,10 @@ public:
 	void render();
 
 	// Inherited via Component
-	virtual std::string name() override;
-	virtual void registerImGui() override;
+	inline std::string name() final { return "InstancedSimpleMeshComponent"; }
+	void registerImGui() final;
 
 private:
 	std::unique_ptr<SimpleMesh> simpleMesh;
 	std::vector<TransformComponent*> instances;
-
 };

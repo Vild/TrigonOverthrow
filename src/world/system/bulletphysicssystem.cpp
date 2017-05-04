@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "bulletphysicssystem.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/transformcomponent.hpp"
@@ -6,38 +8,21 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../../engine.hpp"
 
-BulletPhysicsSystem::BulletPhysicsSystem()
-{
+BulletPhysicsSystem* BulletPhysicsSystem::activeInstance = nullptr;
+
+BulletPhysicsSystem::BulletPhysicsSystem() {
+	activeInstance = this;
+
 	collisionConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfig);
 	constraintSolver = new btSequentialImpulseConstraintSolver();
 	broadphaseInterface = new btDbvtBroadphase();
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphaseInterface, constraintSolver, collisionConfig);
-	world->setGravity({ 0, -9.82f, 0 });
+	world->setGravity({0, -9.82f, 0});
 }
 
-BulletPhysicsSystem::~BulletPhysicsSystem()
-{
-	//auto & objs = world->getCollisionObjectArray();
-	//for (int i = 0; i < objs.size(); i++)
-	//{
-	//	world->removeCollisionObject(objs[i]);
-	//}
-
-	//for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
-	//{
-	//	btCollisionObject* obj = world->getCollisionObjectArray()[i];
-	//	//btRigidBody* body = btRigidBody::upcast(obj);
-	//	//if (body && body->getMotionState())
-	//	//{
-	//	//	delete body->getMotionState();
-	//	//}
-	//	world->removeCollisionObject(obj);
-	//	//delete obj;
-	//}
-
-
+BulletPhysicsSystem::~BulletPhysicsSystem() {
 	delete world;
 	delete broadphaseInterface;
 	delete constraintSolver;
@@ -45,50 +30,39 @@ BulletPhysicsSystem::~BulletPhysicsSystem()
 	delete collisionConfig;
 }
 
-void BulletPhysicsSystem::update(World & w, float delta)
-{
+void BulletPhysicsSystem::update(World& w, float delta) {
 	rmt_ScopedCPUSample(BulletPhyisicsSystem, RMTSF_None);
 	world->stepSimulation(delta);
 
-	for (std::unique_ptr<Entity>& entity : w.getEntities())
-	{
+	for (std::unique_ptr<Entity>& entity : w.getEntities()) {
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
-		if (!rigidbody) continue;
+		if (!rigidbody)
+			continue;
 
 		auto transform = entity->getComponent<TransformComponent>();
-		if (!transform) continue;
+		if (!transform)
+			continue;
 
 		auto projComp = entity->getComponent<ProjectileComponent>();
 		if (projComp)
 			rigidbody->getRigidBody()->setGravity(btVector3(0, 0, 0));
 
-
 		btTransform t = rigidbody->getRigidBody()->getWorldTransform();
-
 
 		btVector3 o = t.getOrigin();
 		btQuaternion q = t.getRotation();
 
 		transform->setPosition(cast(o));
-		transform->setRotation(cast(q));
+		// transform->setRotation(cast(q));
 	}
 }
 
-void BulletPhysicsSystem::registerImGui()
-{
-}
+void BulletPhysicsSystem::registerImGui() {}
 
-std::string BulletPhysicsSystem::name()
-{
-	return "BulletPhyisicsSystem";
-}
-
-void BulletPhysicsSystem::addRigidBody(RigidBodyComponent * rigidBody, int group, int mask)
-{
+void BulletPhysicsSystem::addRigidBody(RigidBodyComponent* rigidBody, int group, int mask) {
 	world->addRigidBody(rigidBody->getRigidBody(), group, mask);
 }
 
-void BulletPhysicsSystem::removeRigidBody(RigidBodyComponent * rigidBody)
-{
+void BulletPhysicsSystem::removeRigidBody(RigidBodyComponent* rigidBody) {
 	world->removeRigidBody(rigidBody->getRigidBody());
 }

@@ -3,9 +3,8 @@
 
 class LifeSystem : public System {
 public:
+	void update(World& world, float delta) final;
 
-	virtual void update(World& world, float delta);
-
-	virtual void registerImGui();
-	inline virtual std::string name() { return "LifeSystem"; };
+	void registerImGui() final;
+	inline std::string name() final { return "LifeSystem"; };
 };

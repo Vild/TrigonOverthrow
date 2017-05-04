@@ -9,6 +9,8 @@
 
 #include "../../engine.hpp"
 
+#include <cstdio>
+
 InputSystem::~InputSystem() {}
 
 void InputSystem::update(World& world, float delta) {
@@ -23,12 +25,12 @@ void InputSystem::update(World& world, float delta) {
 		if (!rigidBodyComponent)
 			continue;
 
-		btRigidBody & rigidBody = *rigidBodyComponent->getRigidBody();
+		btRigidBody& rigidBody = *rigidBodyComponent->getRigidBody();
 
 		// TODO: calculate this?
-		//glm::vec3 forward = glm::vec3(0, 0, 1);
-		//glm::vec3 right = glm::vec3(-1, 0, 0);
-		//glm::vec3 up = glm::vec3(0, 1, 0);
+		// glm::vec3 forward = glm::vec3(0, 0, 1);
+		// glm::vec3 right = glm::vec3(-1, 0, 0);
+		// glm::vec3 up = glm::vec3(0, 1, 0);
 
 		glm::vec3 inputDir;
 		if (hid->getKey(SDL_SCANCODE_W))
@@ -46,36 +48,36 @@ void InputSystem::update(World& world, float delta) {
 		if (hid->getKey(SDL_SCANCODE_LCTRL))
 			inputDir.y--;
 
-		float accelSpeed = 20;
-		float maxVelocty = 5;
-		float maxVelocty2 = maxVelocty * maxVelocty;
+		float accelSpeed = 60;
+		// float maxSpeed = 5;
 
-		//physicsComponent->acceleration = -physicsComponent->velocity / 0.05f;
-		//physicsComponent->acceleration += inputDir.z * forward * accelSpeed;
-		//physicsComponent->acceleration += inputDir.x * right * accelSpeed;
-		//physicsComponent->acceleration += inputDir.y * up * accelSpeed;
+		// physicsComponent->acceleration = -physicsComponent->velocity / 0.05f;
+		// physicsComponent->acceleration += inputDir.z * forward * accelSpeed;
+		// physicsComponent->acceleration += inputDir.x * right * accelSpeed;
+		// physicsComponent->acceleration += inputDir.y * up * accelSpeed;
 
-		rigidBody.applyCentralForce({
-			inputDir.x * accelSpeed,
-			inputDir.y * accelSpeed * 2,
-			inputDir.z * accelSpeed
-		});
+		rigidBody.applyCentralForce({inputDir.x * accelSpeed, inputDir.y * accelSpeed * 2, inputDir.z * accelSpeed});
 
-		if (entity->getName() == "Player") {
-			auto gun = entity->getComponent<GunComponent>();
-			if (hid->getKey(SDL_SCANCODE_F) && gun->cooldown <= 0) {
-				gun->shoot = true;
-			}
+		auto tc = entity->getComponent<TransformComponent>();
+		if (tc) {
+			static Engine* engine = &Engine::getInstance();
+			int width = engine->getWidth();
+			int height = engine->getHeight();
+
+			glm::vec2 mpos = hid->getXY();
+			glm::vec2 hmpos = {mpos.x / width, 1 - mpos.y / height};
+			hmpos *= 2;
+			hmpos -= 1;
+
+			glm::vec2 dir = glm::normalize(hmpos);
+
+			tc->setDirection({dir.x, 0, dir.y});
 		}
 
-		btVector3 v = rigidBody.getLinearVelocity();
-		if (v.length2() > maxVelocty2)
-		{
-			v.normalize();
-			v *= maxVelocty;
-			rigidBody.setLinearVelocity(v);
+		auto gun = entity->getComponent<GunComponent>();
+		if (gun && hid->getKey(SDL_SCANCODE_F) && gun->cooldown <= 0) {
+			gun->shoot = true;
 		}
-
 	}
 }
 

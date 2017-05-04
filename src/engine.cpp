@@ -30,7 +30,8 @@
 #include "world/system/bulletphysicssystem.hpp"
 #include "world/system/projectilesystem.hpp"
 #include "world/system/dynamicmodelsystem.hpp"
-
+#include "world/system/floortilesystem.hpp"
+#include "world/system/hoversystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -158,14 +159,7 @@ int Engine::run(bool vsync) {
 					getSystem<BulletPhysicsSystem>()->removeRigidBody(rgbComponent);
 			}
 			// Entities in world.
-			entities.erase(
-				std::remove_if(
-					entities.begin(),
-					entities.end(),
-					[](const std::unique_ptr<Entity>& e) -> bool { return e->isDead(); }
-				),
-				entities.end()
-			);
+			entities.erase(std::remove_if(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& e) -> bool { return e->isDead(); }), entities.end());
 		}
 
 		{
@@ -340,6 +334,8 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<ProjectileSystem>());
 	_systems.push_back(std::make_unique<DynamicModelSystem>());
 	_systems.push_back(std::make_unique<LifeSystem>());
+	_systems.push_back(std::make_unique<FloorTileSystem>());
+	_systems.push_back(std::make_unique<HoverSystem>());
 
 	// Render passes
 	{
@@ -350,16 +346,16 @@ void Engine::_setupSystems() {
 		std::unique_ptr<ParticleRenderPass> particles = std::make_unique<ParticleRenderPass>();
 		std::unique_ptr<TextRenderPass> text = std::make_unique<TextRenderPass>();
 
-		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::PositionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position))
-			.attachInputTexture(SSAORenderSystem::InputAttachments::NormalMap, geometry->getAttachment(GeometryRenderPass::Attachment::normal));
+		ssao->attachInputTexture(SSAORenderSystem::InputAttachments::positionMap, geometry->getAttachment(GeometryRenderPass::Attachment::position))
+			.attachInputTexture(SSAORenderSystem::InputAttachments::normalMap, geometry->getAttachment(GeometryRenderPass::Attachment::normal));
 
-		gaussian->attachInputTexture(GaussianRenderPass::InputAttachments::Image, ssao->getAttachment(SSAORenderSystem::Attachments::OcclusionMap));
+		gaussian->attachInputTexture(GaussianRenderPass::InputAttachments::image, ssao->getAttachment(SSAORenderSystem::Attachments::occlusionMap));
 
 		lighting->attachInputTexture(LightingRenderPass::InputAttachment::position, geometry->getAttachment(GeometryRenderPass::Attachment::position))
 			.attachInputTexture(LightingRenderPass::InputAttachment::normal, geometry->getAttachment(GeometryRenderPass::Attachment::normal))
 			.attachInputTexture(LightingRenderPass::InputAttachment::diffuseSpecular, geometry->getAttachment(GeometryRenderPass::Attachment::diffuseSpecular))
 			.attachInputTexture(LightingRenderPass::InputAttachment::depth, geometry->getAttachment(GeometryRenderPass::Attachment::depth))
-			.attachInputTexture(LightingRenderPass::InputAttachment::OcclusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::BlurredImage));
+			.attachInputTexture(LightingRenderPass::InputAttachment::occlusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::blurredImage));
 
 		{ // GIT-GUD: fixed in velocity and position to be output instead.
 			auto particleSystem = getSystem<ParticleSystem>();

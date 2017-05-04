@@ -1,16 +1,14 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "ghostobjectsystem.hpp"
 #include "../component/ghostobjectcomponent.hpp"
 #include "bulletphysicssystem.hpp"
 #include "../../engine.hpp"
-GhostObjectSystem::GhostObjectSystem() {
-	
-}
+GhostObjectSystem::GhostObjectSystem() {}
 
-GhostObjectSystem::~GhostObjectSystem() {
-	
-}
+GhostObjectSystem::~GhostObjectSystem() {}
 
-void GhostObjectSystem::update(World & world, float delta){
+void GhostObjectSystem::update(World& world, float delta) {
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto ghostObjComp = entity->getComponent<GhostObjectComponent>();
 		if (!ghostObjComp)
@@ -18,7 +16,4 @@ void GhostObjectSystem::update(World & world, float delta){
 	}
 }
 
-void GhostObjectSystem::registerImGui(){
-
-}
-
+void GhostObjectSystem::registerImGui() {}

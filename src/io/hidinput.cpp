@@ -21,9 +21,8 @@ void HIDInput::update() {
 	if (_lockMouseCenter) {
 		SDL_WarpMouseInWindow(engine.getWindow(), engine.getWidth() / 2, engine.getHeight() / 2);
 		_xyDiff = glm::ivec2(engine.getWidth() / 2 - x, engine.getHeight() / 2 - y);
-	} else {
+	} else
 		_xyDiff = glm::ivec2(_xy.x - x, _xy.y - y);
-	}
 
 	_xy = glm::ivec2(x, y);
 

@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "lifesystem.hpp"
 #include "../component/lifecomponent.hpp"
 
@@ -16,6 +18,4 @@ void LifeSystem::update(World& world, float delta) {
 	}
 }
 
-void LifeSystem::registerImGui() {
-	
-}
+void LifeSystem::registerImGui() {}

@@ -15,7 +15,7 @@ struct TextComponent : public Component {
 
 	virtual ~TextComponent();
 
-	virtual void registerImGui();
+	void registerImGui() final;
 
-	virtual std::string name() { return "TextComponent"; }
+	inline std::string name() final { return "TextComponent"; }
 };

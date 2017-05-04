@@ -6,8 +6,8 @@ class CameraSystem : public System {
 public:
 	virtual ~CameraSystem();
 
-	virtual void update(World& world, float delta) override;
+	void update(World& world, float delta) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "CameraSystem"; };
+	void registerImGui() final;
+	inline std::string name() final { return "CameraSystem"; };
 };

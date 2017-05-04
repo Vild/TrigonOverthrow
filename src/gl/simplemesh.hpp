@@ -3,19 +3,17 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-class SimpleMesh
-{
+class SimpleMesh {
 public:
 	SimpleMesh();
 	virtual ~SimpleMesh();
 
 	SimpleMesh& setDrawMode(GLenum mode);
-	SimpleMesh& addVertex(const glm::vec3 & vertex);
-
+	SimpleMesh& addVertex(const glm::vec3& vertex);
 
 	void finalize(int maxInstances = 0);
 	void draw();
-	void draw(std::vector<glm::mat4> & instances);
+	void draw(std::vector<glm::mat4>& instances);
 
 private:
 	GLuint VAO;

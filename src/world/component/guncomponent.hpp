@@ -14,6 +14,6 @@ struct GunComponent : public Component {
 	bool shoot;
 
 	void addGun(GunType inType, int inCooldown);
-	void registerImGui();
-	virtual std::string name() { return "GunComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "GunComponent"; }
 };

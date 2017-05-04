@@ -5,35 +5,35 @@
 #include <btBulletCollisionCommon.h>
 #include <glm/glm.hpp>
 #include "../entity.hpp"
-class RigidBodyComponent : public Component
-{
+class RigidBodyComponent : public Component {
 public:
 	RigidBodyComponent(Entity* entity, float mass = 0.0f, float friction = 0.0f);
 	virtual ~RigidBodyComponent();
 
 	// Inherited via Component
-	virtual std::string name() override;
-	virtual void registerImGui() override;
+	inline std::string name() final { return "RigidBodyComponent"; }
+	void registerImGui() final;
 
-	btRigidBody * getRigidBody();
-	btMotionState * getMotionState();
+	btRigidBody* getRigidBody();
+	btMotionState* getMotionState();
 	glm::vec3 getHitboxHalfSize();
 
 	void setMass(btScalar mass);
 	void setFriction(btScalar friction);
-	void setHitboxHalfSize(const glm::vec3 & size);
-	void setTransform(TransformComponent * transform);
+	void setHitboxHalfSize(const glm::vec3& size);
+	void setTransform(TransformComponent* transform);
 
 	void setActivationState(int newState);
 
+	inline float getMass() { return mass; }
+
 private:
-	btRigidBody * rigidBody;
+	btRigidBody* rigidBody;
 
 	btScalar friction;
 	btScalar mass;
-	btMotionState * state;
-	btBoxShape * shape;
+	btMotionState* state;
+	btBoxShape* shape;
 
 	glm::vec3 hitboxHalfSize;
-
 };

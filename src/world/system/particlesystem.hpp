@@ -11,9 +11,9 @@ public:
 	ParticleSystem();
 	virtual ~ParticleSystem();
 
-	virtual void update(World& world, float delta);
-	virtual void registerImGui();
-	inline virtual std::string name() { return "ParticleSystem"; };
+	void update(World& world, float delta) final;
+	void registerImGui() final;
+	inline std::string name() final { return "ParticleSystem"; };
 	std::shared_ptr<GBuffer> getGBuffers();
 
 private:

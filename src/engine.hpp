@@ -116,7 +116,7 @@ template <typename T>
 T* Engine::getSystem() {
 	T* ptr = nullptr;
 
-	int i = 0, size = _systems.size();
+	size_t i = 0, size = _systems.size();
 	while (ptr == nullptr && i < size) {
 		ptr = dynamic_cast<T*>(_systems[i++].get());
 	}

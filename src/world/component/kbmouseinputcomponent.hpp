@@ -7,6 +7,6 @@
 struct KBMouseInputComponent : public Component {
 	virtual ~KBMouseInputComponent();
 
-	virtual void registerImGui();
-	virtual std::string name() { return "KBMouseInputComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "KBMouseInputComponent"; }
 };

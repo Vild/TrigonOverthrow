@@ -22,11 +22,9 @@ void LookAtComponent::registerImGui() {
 	ImGui::SameLine();
 	ImGui::RadioButton("Static", (int*)&followMode, (int)FollowMode::staticPosition);
 
-
 	if (followMode == FollowMode::followByDistance) {
 		ImGui::DragFloat("Min distance", &minDistance);
 		ImGui::DragFloat("Max distance", &maxDistance);
-	} else {
+	} else
 		ImGui::DragFloat3("Offset from target", glm::value_ptr(offsetFromTarget));
-	}
 }

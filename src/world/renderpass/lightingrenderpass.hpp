@@ -52,16 +52,16 @@ struct PointLight {
 
 class LightingRenderPass : public RenderPass {
 public:
-	enum InputAttachment : GLint { position = 0, normal, diffuseSpecular, depth, OcclusionMap };
+	enum InputAttachment : GLint { position = 0, normal, diffuseSpecular, depth, occlusionMap };
 
 	LightingRenderPass();
 	virtual ~LightingRenderPass();
 
-	virtual void render(World& world);
-	virtual void resize(unsigned int width, unsigned int height);
+	void render(World& world) final;
+	void resize(unsigned int width, unsigned int height) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "LightingRenderPass"; };
+	void registerImGui() final;
+	inline std::string name() final { return "LightingRenderPass"; };
 
 private:
 	static const int MAX_POINT_LIGHTS = 16;

@@ -6,8 +6,8 @@
 struct DynamicModelComponent : public Component {
 	DynamicModelComponent();
 	virtual ~DynamicModelComponent() {}
-	void registerImGui();
-	virtual std::string name() { return "DynamicModelComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "DynamicModelComponent"; }
 
 	std::map<int, std::shared_ptr<LoadedMesh>> meshes;
 };

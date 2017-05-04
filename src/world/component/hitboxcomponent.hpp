@@ -22,6 +22,6 @@ struct HitboxComponent : public Component {
 	virtual ~HitboxComponent();
 
 	void addHitbox(HitboxType type, glm::vec3 pos);
-	virtual void registerImGui();
-	virtual std::string name() { return "HitboxComponent"; }
+	void registerImGui() final;
+	inline std::string name() final { return "HitboxComponent"; }
 };

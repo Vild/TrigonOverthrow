@@ -12,9 +12,8 @@ public:
 
 	RenderPass& attachInputTexture(GLuint id, std::shared_ptr<Texture> texture);
 
-	// TODO: virtual void onResize() = 0;
 	virtual void render(World& world) = 0;
-	virtual void update(World& world, float delta);
+	void update(World& world, float delta) final;
 
 	virtual void resize(unsigned int width, unsigned int height) = 0;
 

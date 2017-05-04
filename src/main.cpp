@@ -1,5 +1,3 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "engine.hpp"
 #include <cstdio>
 #include <cstring>
@@ -19,13 +17,15 @@ int main(int argc, char** argv) {
 
 	try {
 		return Engine::getInstance().run(vsync);
-	} catch (std::exception& e) {
+	}
+	catch (std::exception& e) {
 		fprintf(stderr, "%s\n", e.what());
-		getchar();
+		system("pause");
 		return -1;
-	} catch (const char* str) {
+	}
+	catch (const char* str) {
 		fprintf(stderr, "%s\n", str);
-		getchar();
+		system("pause");
 		return -1;
 	}
 }

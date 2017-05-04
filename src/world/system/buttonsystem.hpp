@@ -6,10 +6,10 @@ class ButtonSystem : public System {
 public:
 	virtual ~ButtonSystem();
 
-	virtual void update(World& world, float delta);
+	void update(World& world, float delta) final;
 
-	virtual void registerImGui();
-	inline virtual std::string name() { return "ButtonSystem"; };
+	void registerImGui() final;
+	inline std::string name() final { return "ButtonSystem"; };
 
 private:
 	constexpr static float _epsilon = 1e-8;

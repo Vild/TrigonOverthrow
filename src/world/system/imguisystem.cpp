@@ -28,9 +28,9 @@ void ImGuiSystem::update(World& world, float delta) {
 				entity->registerImGui(*entity.get(), state);
 
 			ImGui::Text("Component:");
-			for (std::unique_ptr<Component>& component : entity->getComponents()) {
-				if (ImGui::TreeNode(component->name().c_str())) {
-					component->registerImGui();
+			for (auto& component : entity->getComponents()) {
+				if (ImGui::TreeNode(component.second->name().c_str())) {
+					component.second->registerImGui();
 					ImGui::TreePop();
 				}
 			}

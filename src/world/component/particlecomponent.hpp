@@ -37,6 +37,6 @@ struct ParticleComponent : public Component {
 		point = std::make_shared<Mesh>(vertices, indices);
 	};
 
-	virtual std::string name() { return "ParticleComponent"; }
-	virtual void registerImGui(){};
+	inline std::string name() final { return "ParticleComponent"; }
+	void registerImGui() final;
 };
