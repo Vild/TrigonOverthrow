@@ -20,7 +20,7 @@ std::vector<Uint8> MapLoader::getMap(const std::string& filename) {
 
 	_width = loadedSurface->w;
 	_height = loadedSurface->h;
-	for (int y = 0; y < _height; y++)
+	for (int y = _height - 1; y >= 0; y--)
 		for (int x = 0; x < _width; x++)
 			_data.push_back(((Uint8*)loadedSurface->pixels)[loadedSurface->pitch * y + x * bpp]);
 
