@@ -94,7 +94,7 @@ InGameState::InGameState() {
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 		text->transform.setPosition(glm::vec3(0, 1, 0));
-		text->transform.setScale(glm::vec3(1));
+		text->transform.setScale(glm::vec3(10));
 		
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
 		rigidbody->getRigidBody()->setDamping(0.6, 0);
@@ -171,45 +171,27 @@ InGameState::InGameState() {
 		int height = mapLoader->getHeight();
 
 		Entity * room = _world.addEntity(sole::uuid4(), "Room");
-		//
-		std::unique_ptr<SimpleMesh> box = std::make_unique<SimpleMesh>();
-		box->setDrawMode(GL_TRIANGLES)
-		//	// TOP
-			.addVertex({ -0.5,  0.5,  0.5 })
-			.addVertex({  0.5,  0.5,  0.5 })
-			.addVertex({ -0.5,  0.5, -0.5 })
-			.addVertex({ -0.5,  0.5, -0.5 })
-			.addVertex({  0.5,  0.5,  0.5 })
-			.addVertex({  0.5,  0.5, -0.5 })
-			// RIGHT
-			.addVertex({ -0.5, -0.5,  0.5 })
-			.addVertex({ -0.5,  0.5,  0.5 })
-			.addVertex({ -0.5, -0.5, -0.5 })
-			.addVertex({ -0.5, -0.5, -0.5 })
-			.addVertex({ -0.5,  0.5,  0.5 })
-			.addVertex({ -0.5,  0.5, -0.5 })
-			// LEFT
-			.addVertex({  0.5, -0.5,  0.5 })
-			.addVertex({  0.5, -0.5, -0.5 })
-			.addVertex({  0.5,  0.5,  0.5 })
-			.addVertex({  0.5, -0.5, -0.5 })
-			.addVertex({  0.5,  0.5, -0.5 })
-			.addVertex({  0.5,  0.5,  0.5 })
-			// FRONT
-			.addVertex({ -0.5,  0.5, -0.5 })
-			.addVertex({  0.5,  0.5, -0.5 })
-			.addVertex({ -0.5, -0.5, -0.5 })
-			.addVertex({ -0.5, -0.5, -0.5 })
-			.addVertex({  0.5,  0.5, -0.5 })
-			.addVertex({  0.5, -0.5, -0.5 })
-			// BACK
-			.addVertex({ -0.5,  0.5,  0.5 })
-			.addVertex({  0.5,  0.5,  0.5 })
-			.addVertex({ -0.5, -0.5,  0.5 })
-			.addVertex({ -0.5, -0.5,  0.5 })
-			.addVertex({  0.5,  0.5,  0.5 })
-			.addVertex({  0.5, -0.5,  0.5 })
-		.finalize(width * height);
+
+		std::unique_ptr<SimpleMesh> box = std::make_unique<SimpleMesh>(
+			GL_TRIANGLES, 
+			SimpleMesh::vlist_t{
+				// TOP
+				{ -0.5,  0.5,  0.5 },{  0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
+				{ -0.5,  0.5, -0.5 },{  0.5,  0.5,  0.5 },{  0.5,  0.5, -0.5 },
+				// RIGHT
+				{ -0.5, -0.5,  0.5 },{ -0.5,  0.5,  0.5 },{ -0.5, -0.5, -0.5 },
+				{ -0.5, -0.5, -0.5 },{ -0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
+				// LEFT
+				{  0.5, -0.5,  0.5 },{  0.5, -0.5, -0.5 },{  0.5,  0.5,  0.5 },
+				{  0.5, -0.5, -0.5 },{  0.5,  0.5, -0.5 },{  0.5,  0.5,  0.5 },
+				// FRONT
+				{ -0.5,  0.5, -0.5 },{  0.5,  0.5, -0.5 },{ -0.5, -0.5, -0.5 },
+				{ -0.5, -0.5, -0.5 },{  0.5,  0.5, -0.5 },{  0.5, -0.5, -0.5 },
+				// BACK
+				{ -0.5,  0.5,  0.5 },{  0.5,  0.5,  0.5 },{ -0.5, -0.5,  0.5 },
+				{ -0.5, -0.5,  0.5 },{  0.5,  0.5,  0.5 },{  0.5, -0.5,  0.5 }
+			}
+		);
 
 		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::move(box));
 

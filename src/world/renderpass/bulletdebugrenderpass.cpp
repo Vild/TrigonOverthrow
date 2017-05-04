@@ -11,24 +11,23 @@ BulletDebugRenderPass::BulletDebugRenderPass()
 {
 	enable = false;
 
-
-	wireFrame.setDrawMode(GL_LINES)
+	wireFrame = std::make_unique<SimpleMesh>(GL_LINES, SimpleMesh::vlist_t{
 		// Bottom
-		.addVertex({ -1,-1,-1 }).addVertex({  1,-1,-1 }) // TOP
-		.addVertex({ -1,-1, 1 }).addVertex({  1,-1, 1 }) // BOTTOM
-		.addVertex({ -1,-1,-1 }).addVertex({ -1,-1, 1 }) // LEFT
-		.addVertex({  1,-1,-1 }).addVertex({  1,-1, 1 }) // RIGHT
+		{ -1,-1,-1 }, {  1,-1,-1 }, // TOP
+		{ -1,-1, 1 }, {  1,-1, 1 }, // BOTTOM
+		{ -1,-1,-1 }, { -1,-1, 1 }, // LEFT
+		{  1,-1,-1 }, {  1,-1, 1 }, // RIGHT
 		// TOP
-		.addVertex({ -1, 1,-1 }).addVertex({  1, 1,-1 }) // TOP
-		.addVertex({ -1, 1, 1 }).addVertex({  1, 1, 1 }) // BOTTOM
-		.addVertex({ -1, 1,-1 }).addVertex({ -1, 1, 1 }) // LEFT
-		.addVertex({  1, 1,-1 }).addVertex({  1, 1, 1 }) // RIGHT
+		{ -1, 1,-1 }, {  1, 1,-1 }, // TOP
+		{ -1, 1, 1 }, {  1, 1, 1 }, // BOTTOM
+		{ -1, 1,-1 }, { -1, 1, 1 }, // LEFT
+		{  1, 1,-1 }, {  1, 1, 1 }, // RIGHT
 		// SIDES
-		.addVertex({ -1,-1,-1 }).addVertex({ -1, 1,-1 }) // BACK LEFT
-		.addVertex({  1,-1,-1 }).addVertex({  1, 1,-1 }) // BACK RIGHT
-		.addVertex({ -1,-1, 1 }).addVertex({ -1, 1, 1 }) // FRONT LETT
-		.addVertex({  1,-1, 1 }).addVertex({  1, 1, 1 }) // FRONT RIGHT		
-	.finalize();
+		{ -1,-1,-1 }, { -1, 1,-1 }, // BACK LEFT
+		{  1,-1,-1 }, {  1, 1,-1 }, // BACK RIGHT
+		{ -1,-1, 1 }, { -1, 1, 1 }, // FRONT LETT
+		{  1,-1, 1 }, {  1, 1, 1 }  // FRONT RIGHT		
+	});
 
 
 	_gbuffer = std::make_shared<GBuffer>(0);
@@ -90,7 +89,7 @@ void BulletDebugRenderPass::render(World & world)
 		instances.push_back(m);
 	}
 
-	wireFrame.draw(instances);
+	wireFrame->draw(instances);
 }
 
 void BulletDebugRenderPass::resize(unsigned int width, unsigned int height)

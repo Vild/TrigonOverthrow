@@ -14,6 +14,6 @@ public:
 	virtual void render(World & world) override;
 	virtual void resize(unsigned int width, unsigned int height) override;
 private:
-	SimpleMesh wireFrame;
+	std::unique_ptr<SimpleMesh> wireFrame;
 	bool enable;
 };
