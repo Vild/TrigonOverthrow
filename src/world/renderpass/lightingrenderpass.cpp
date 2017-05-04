@@ -130,7 +130,7 @@ void LightingRenderPass::render(World& world) {
 	if (!transformComponent)
 		return;
 
-	glClearColor(0, 0, 0, 1);
+	glClearColor(.9, .3, .9, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	auto camPos = transformComponent->getPosition();
 	_shader->bind().setUniform("cameraPos", camPos);
