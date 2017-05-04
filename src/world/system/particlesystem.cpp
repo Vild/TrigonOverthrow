@@ -12,44 +12,23 @@
 ParticleSystem::ParticleSystem() {
 	// Creating shaders for each particle effect. Check particlecomponent.hpp for the enumeration.
 	_programs.resize(2);
-	_programs[0] = std::make_shared<ShaderProgram>();
-	_programs[0]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
-	_programs[0]->bind().addUniform("delta")
-		.addUniform("emitterCount")
-		.addUniform("emitters[0].direction")
-		.addUniform("emitters[1].direction")
-		.addUniform("emitters[2].direction")
-		.addUniform("emitters[3].direction")
-		.addUniform("emitters[0].position")
-		.addUniform("emitters[1].position")
-		.addUniform("emitters[2].position")
-		.addUniform("emitters[3].position");
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta").addUniform("emitterCount");
 
-	_programs[1] = std::make_shared<ShaderProgram>();
-	_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
-	_programs[1]->bind().addUniform("delta")
-		.addUniform("emitterCount")
-		.addUniform("emitters[0].direction")
-		.addUniform("emitters[1].direction")
-		.addUniform("emitters[2].direction")
-		.addUniform("emitters[3].direction")
-		.addUniform("emitters[0].position")
-		.addUniform("emitters[1].position")
-		.addUniform("emitters[2].position")
-		.addUniform("emitters[3].position");
+	_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta").addUniform("emitterCount");
 
-	//_programs[1] = std::make_shared<ShaderProgram>();
-	//_programs[1]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute))
-	//	.finalize();
-	//_programs[1]->bind().addUniform("delta")
-	//	.addUniform("swap");
-	_textureSize = 256; // Has support for 256 emitters.
+	_addEmitterUniforms();
+
+	_textureSize = 256; // Has support for 64 emitters with 1024 particles each.
 	_particleData = std::make_shared<GBuffer>();
 	_particleData->bind()
 		.attachTexture(Attachment::inPosition, _textureSize, _textureSize, GL_RGBA32F, GL_FLOAT, 4)	// Input pos and life
 		.attachTexture(Attachment::inVelocity, _textureSize, _textureSize, GL_RGBA32F, GL_FLOAT, 4); // Input vel
 
-	glClearColor(0, 0, 0, 5);
+	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -62,47 +41,48 @@ void ParticleSystem::update(World& world, float delta) {
 	// Will have to do one compute for each effect for all the different emitters/effects whilst them being in the same
 	// big texture.
 
-
+	int emitterCount = 0;
+	std::vector<ParticleComponent::Emitter> emitters;
 	rmt_ScopedCPUSample(ParticleSystem, RMTSF_None);
-	glm::vec3 emittersPos[4] = {
-		glm::vec3(0,2,0),
-		glm::vec3(2,0,2),
-		glm::vec3(4,0,4),
-		glm::vec3(6,0,6)
-	};
-
-	glm::vec3 emittersDir[4] = {
-		glm::vec3(0,1,0),
-		glm::vec3(1,1,0),
-		glm::vec3(0,0,1),
-		glm::vec3(1,1,1)
-	};
-
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto particleComp = entity->getComponent<ParticleComponent>();
 		if (!particleComp)
 			continue;
-
-		_programs[particleComp->type]
-			->bind()
+		emitterCount++;
+		emitters.push_back(*particleComp->emitter);
+		// Barrier is in particlerenderpass.
+		// Alternative 1: Huge texture 256x256 for all 65.536 particles divide them up into 8*8 dispatch into 32x32 local groups.
+	}
+	// Decide which compute shader to use...
+	if (emitterCount > 0) {
+		_currEmitterCount = emitterCount;
+		_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind()
 			.setUniform("delta", delta)
-			.setUniform("emitterCount", 4)
-			.setUniform("emitters[0].position", emittersPos[0])
-			.setUniform("emitters[1].position", emittersPos[1])
-			.setUniform("emitters[2].position", emittersPos[2])
-			.setUniform("emitters[3].position", emittersPos[3])
-			.setUniform("emitters[0].direction", emittersDir[0])
-			.setUniform("emitters[1].direction", emittersDir[1])
-			.setUniform("emitters[2].direction", emittersDir[2])
-			.setUniform("emitters[3].direction", emittersDir[3]);
-
-		particleComp->textureSize = _textureSize;
+			.setUniform("emitterCount", emitterCount);
+		_setEmitterUniforms(emitters, emitterCount);
+		
 		_particleData->bindImageTexture(0, true);
 		_particleData->bindImageTexture(1, true);
-		// Barrier is in particlerenderpass.
-		// Alternative 1: Huge texture 512x512 for all particles divide them up into 16x16 dispatch computes for 32x32 local groups.
-		// Dispatch compute 16x16 particles
-		glDispatchCompute((GLint)_textureSize, (GLint)_textureSize, 1);
+		glDispatchCompute((GLint)_textureSize / (32 * emitterCount), (GLint)_textureSize / (32 * emitterCount), 1);
+	}
+}
+
+void ParticleSystem::_addEmitterUniforms() {
+	for (int i = 0; i < 64; i++) {
+		_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind()
+			.addUniform("emitters[" + std::to_string(i) + "].position")
+			.addUniform("emitters[" + std::to_string(i) + "].direction");
+		_programs[ParticleComponent::ParticleEffect::SPEW]->bind()
+			.addUniform("emitters[" + std::to_string(i) + "].position")
+			.addUniform("emitters[" + std::to_string(i) + "].direction");
+	}
+}
+
+void ParticleSystem::_setEmitterUniforms(std::vector<ParticleComponent::Emitter> emitters, const int emitterCount) {
+	for (int i = 0; i < emitterCount; i++) {
+		_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind()
+			.setUniform("emitters[" + std::to_string(i) + "].position", emitters[i].pos)
+			.setUniform("emitters[" + std::to_string(i) + "].direction", emitters[i].direction);
 	}
 }
 

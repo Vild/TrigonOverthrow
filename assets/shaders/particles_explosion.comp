@@ -1,5 +1,5 @@
 #version 440 core
-layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(local_size_x = 1, local_size_y = 1024, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform image2D pos_input;
 layout(rgba32f, binding = 1) uniform image2D vel_input;
 
@@ -8,7 +8,7 @@ struct Emitter {
 	vec3 position;
 };
 
-#define MAX_EMITTER_COUNT 128
+#define MAX_EMITTER_COUNT 64
 uniform float delta;
 uniform int emitterCount;
 uniform Emitter emitters[MAX_EMITTER_COUNT];
@@ -23,18 +23,17 @@ void main(){
 	vec3 pos = imageLoad(vel_input, pixel_Coords).xyz;
 	float life = imageLoad(pos_input, pixel_Coords).w;
 
-	vel = emitters[0].direction;
-	pos = emitters[0].position + (gl_GlobalInvocationID.x + gl_GlobalInvocationID.y) * 0.05f;
-
-	//vel += vel * delta;
-	//pos += vel * delta + vel * delta * delta * 0.5f;
-
 	life -= 1.0f * delta;
 	if(life <= 0){
-		vel = vec3(0, 0, 0);
-		pos = vec3(0, -10, 0);
-		life = -1.0f;
+		vel = emitters[int(gl_LocalInvocationIndex + gl_WorkGroupID.x / emitterCount)].direction;
+		pos = emitters[int(gl_LocalInvocationIndex + gl_WorkGroupID.x / emitterCount)].position;
+		//life = rand(pixel_Coords);
+		life = 5;
 	}
+	barrier();
+	vel += vec3(0, 0.1f, 0) * delta;
+	pos += vel * delta;
+
 	imageStore(pos_input, pixel_Coords, vec4(pos, life));
 	imageStore(vel_input, pixel_Coords, vec4(vel, 0));
 }

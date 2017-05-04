@@ -6,6 +6,7 @@
 #include "../component/physicscomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/guncomponent.hpp"
+#include "../component/particlecomponent.hpp"
 
 #include "../../engine.hpp"
 

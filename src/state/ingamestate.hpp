@@ -17,6 +17,7 @@ private:
 	Entity* _player;
 	Entity* _floor;
 	Entity* _enemy;
+	std::vector<Entity*> _emitters;
 
 	void _addLookAt();
 

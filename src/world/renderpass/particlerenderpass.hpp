@@ -3,6 +3,7 @@
 #include "renderpass.hpp"
 
 #include "../../lib/glad.h"
+#include "../../gl/mesh.hpp"
 
 class ParticleRenderPass : public RenderPass {
 public:
@@ -17,4 +18,6 @@ public:
 	inline std::string name() final { return "ParticleRenderPass"; };
 
 private:
+	std::shared_ptr<Mesh> _point;
+	const int NR_OF_PARTICLES = 1024;
 };
