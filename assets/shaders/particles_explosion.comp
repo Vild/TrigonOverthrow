@@ -1,0 +1,40 @@
+#version 440 core
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(rgba32f, binding = 0) uniform image2D pos_input;
+layout(rgba32f, binding = 1) uniform image2D vel_input;
+
+struct Emitter {
+	vec3 direction;
+	vec3 position;
+};
+
+#define MAX_EMITTER_COUNT 128
+uniform float delta;
+uniform int emitterCount;
+uniform Emitter emitters[MAX_EMITTER_COUNT];
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void main(){
+	ivec2 pixel_Coords = ivec2(gl_GlobalInvocationID).xy;
+	vec3 vel = imageLoad(pos_input, pixel_Coords).xyz;
+	vec3 pos = imageLoad(vel_input, pixel_Coords).xyz;
+	float life = imageLoad(pos_input, pixel_Coords).w;
+
+	vel = emitters[0].direction;
+	pos = emitters[0].position + (gl_GlobalInvocationID.x + gl_GlobalInvocationID.y) * 0.05f;
+
+	//vel += vel * delta;
+	//pos += vel * delta + vel * delta * delta * 0.5f;
+
+	life -= 1.0f * delta;
+	if(life <= 0){
+		vel = vec3(0, 0, 0);
+		pos = vec3(0, -10, 0);
+		life = -1.0f;
+	}
+	imageStore(pos_input, pixel_Coords, vec4(pos, life));
+	imageStore(vel_input, pixel_Coords, vec4(vel, 0));
+}
