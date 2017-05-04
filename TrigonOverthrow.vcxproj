@@ -88,6 +88,7 @@
     <ClCompile Include="src\world\system\particlesystem.cpp" />
     <ClCompile Include="src\world\system\physicssystem.cpp" />
     <ClCompile Include="src\world\system\projectilesystem.cpp" />
+    <ClCompile Include="src\world\system\roomloadingsystem.cpp" />
     <ClCompile Include="src\world\system\system.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="src\world\system\particlesystem.hpp" />
     <ClInclude Include="src\world\system\physicssystem.hpp" />
     <ClInclude Include="src\world\system\projectilesystem.hpp" />
+    <ClInclude Include="src\world\system\roomloadingsystem.hpp" />
     <ClInclude Include="src\world\system\system.hpp" />
     <ClInclude Include="src\world\world.hpp" />
   </ItemGroup>
