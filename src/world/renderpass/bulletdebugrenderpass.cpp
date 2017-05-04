@@ -11,7 +11,7 @@ BulletDebugRenderPass::BulletDebugRenderPass()
 {
 	enable = false;
 
-	wireFrame = std::make_unique<SimpleMesh>(GL_LINES, SimpleMesh::vlist_t{
+	wireFrame = std::make_unique<SimpleMesh>(GL_LINES, SimpleMesh::vertexlist_t{
 		// Bottom
 		{ -1,-1,-1 }, {  1,-1,-1 }, // TOP
 		{ -1,-1, 1 }, {  1,-1, 1 }, // BOTTOM
