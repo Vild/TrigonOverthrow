@@ -164,36 +164,34 @@ InGameState::InGameState() {
 	// clang-format off
 	{ // Adding Floor
 		auto mapLoader = engine.getMapLoader();
-		std::vector<Uint8> map = mapLoader->getMap("maps/smileyface.png");
+		std::vector<Uint8> map = mapLoader->getMap("maps/sunkentemple.png");
 		int width = mapLoader->getWidth();
 		int height = mapLoader->getHeight();
 
 		Entity * room = _world.addEntity(sole::uuid4(), "Room");
 
-		std::unique_ptr<SimpleMesh> box = std::make_unique<SimpleMesh>(
-			GL_TRIANGLES, 
+		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(
+			GL_TRIANGLES,
 			SimpleMesh::vlist_t{
-				// TOP
-				{ -0.5,  0.5,  0.5 },{  0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
-				{ -0.5,  0.5, -0.5 },{  0.5,  0.5,  0.5 },{  0.5,  0.5, -0.5 },
+			// TOP
+				{ -0.5,  0.5,  0.5 },{ 0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
+				{ -0.5,  0.5, -0.5 },{ 0.5,  0.5,  0.5 },{ 0.5,  0.5, -0.5 },
 				// RIGHT
 				{ -0.5, -0.5,  0.5 },{ -0.5,  0.5,  0.5 },{ -0.5, -0.5, -0.5 },
 				{ -0.5, -0.5, -0.5 },{ -0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
 				// LEFT
-				{  0.5, -0.5,  0.5 },{  0.5, -0.5, -0.5 },{  0.5,  0.5,  0.5 },
-				{  0.5, -0.5, -0.5 },{  0.5,  0.5, -0.5 },{  0.5,  0.5,  0.5 },
+				{ 0.5, -0.5,  0.5 },{ 0.5, -0.5, -0.5 },{ 0.5,  0.5,  0.5 },
+				{ 0.5, -0.5, -0.5 },{ 0.5,  0.5, -0.5 },{ 0.5,  0.5,  0.5 },
 				// FRONT
-				{ -0.5,  0.5, -0.5 },{  0.5,  0.5, -0.5 },{ -0.5, -0.5, -0.5 },
-				{ -0.5, -0.5, -0.5 },{  0.5,  0.5, -0.5 },{  0.5, -0.5, -0.5 },
+				{ -0.5,  0.5, -0.5 },{ 0.5,  0.5, -0.5 },{ -0.5, -0.5, -0.5 },
+				{ -0.5, -0.5, -0.5 },{ 0.5,  0.5, -0.5 },{ 0.5, -0.5, -0.5 },
 				// BACK
-				{ -0.5,  0.5,  0.5 },{  0.5,  0.5,  0.5 },{ -0.5, -0.5,  0.5 },
-				{ -0.5, -0.5,  0.5 },{  0.5,  0.5,  0.5 },{  0.5, -0.5,  0.5 }
+				{ -0.5,  0.5,  0.5 },{ 0.5,  0.5,  0.5 },{ -0.5, -0.5,  0.5 },
+				{ -0.5, -0.5,  0.5 },{ 0.5,  0.5,  0.5 },{ 0.5, -0.5,  0.5 }
 			}
-		);
+		));
 
-		auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::move(box));
-
-		for (unsigned int i = 0; i < map.size(); i++)
+		for (size_t i = 0, size = map.size(); i < size; i++)
 		{
 			int x = i % width;
 			int y = i / width;
@@ -204,7 +202,6 @@ InGameState::InGameState() {
 
 			TransformComponent * transform = tile->addComponent<TransformComponent>();
 			transform->setPosition({ x, 0.0f, y });
-			transform->setScale({ 1, 1, 1 });
 			ismc->addInstance(transform);
 
 			RigidBodyComponent * rigidbody = tile->addComponent<RigidBodyComponent>(tile);
