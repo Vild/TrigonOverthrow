@@ -3,11 +3,15 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <initializer_list>
+#include <memory>
 
 class SimpleMesh
 {
 public:
-	typedef std::initializer_list<glm::vec3> vlist_t;
+	typedef std::initializer_list<glm::vec3> vertexlist_t;
+	static vertexlist_t box;
+	static vertexlist_t quad;
+
 
 	SimpleMesh(GLenum drawMode, std::initializer_list<glm::vec3> vertices, GLuint maxInstances = 0);
 	virtual ~SimpleMesh();
