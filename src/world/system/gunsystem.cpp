@@ -99,7 +99,7 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 //	case HitboxComponent::SPHERE: {
 //		float t0, t1;
 //		std::shared_ptr<HitboxComponent::HitboxSphere> hitbox =
-//std::static_pointer_cast<HitboxComponent::HitboxSphere>(target->getComponent<HitboxComponent>()->hitbox);
+// std::static_pointer_cast<HitboxComponent::HitboxSphere>(target->getComponent<HitboxComponent>()->hitbox);
 //		std::shared_ptr<GunComponent::RayGun> raygun = std::static_pointer_cast<GunComponent::RayGun>(gun);
 //		glm::vec3 L = hitbox->center - raygun->ray.o;
 //		float tca = glm::dot(L, raygun->ray.dir);

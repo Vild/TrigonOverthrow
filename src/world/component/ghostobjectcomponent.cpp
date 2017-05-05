@@ -15,7 +15,6 @@ GhostObjectComponent::~GhostObjectComponent() {
 	delete _ghostObject;
 }
 
-
 void GhostObjectComponent::registerImGui() {}
 
 btPairCachingGhostObject* GhostObjectComponent::getGhostObject() {
