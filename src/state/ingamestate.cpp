@@ -97,7 +97,7 @@ InGameState::InGameState() {
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 		text->transform.setPosition(glm::vec3(0, 1, 0));
 		text->transform.setScale(glm::vec3(10));
-		
+
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
 		rigidbody->getRigidBody()->setDamping(0.6, 0);
 		rigidbody->setHitboxHalfSize(transform->getScale());
@@ -166,12 +166,12 @@ InGameState::InGameState() {
 		auto mapLoader = engine.getMapLoader();
 		std::vector<Uint8> map = mapLoader->getMap("maps/smileyface.png");
 		int width = mapLoader->getWidth();
-		int height = mapLoader->getHeight();
+		//int height = mapLoader->getHeight();
 
 		Entity * room = _world.addEntity(sole::uuid4(), "Room");
 
 		std::unique_ptr<SimpleMesh> box = std::make_unique<SimpleMesh>(
-			GL_TRIANGLES, 
+			GL_TRIANGLES,
 			SimpleMesh::vlist_t{
 				// TOP
 				{ -0.5,  0.5,  0.5 },{  0.5,  0.5,  0.5 },{ -0.5,  0.5, -0.5 },
