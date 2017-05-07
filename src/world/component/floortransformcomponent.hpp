@@ -12,6 +12,8 @@ struct FloorTransformComponent : public Component {
 	glm::vec3 scale = glm::vec3(1, 1, 1);
 	std::vector<glm::mat4> matrices;
 
+	FloorTransformComponent() = default;
+	FloorTransformComponent(const ComponentValues& value);
 	virtual ~FloorTransformComponent();
 
 	void recalculateMatrices();

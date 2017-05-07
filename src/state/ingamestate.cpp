@@ -42,6 +42,8 @@ InGameState::InGameState() {
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
 
+	engine.getJSONLoader()->constructEntity(_world, "assets/entities/player.json");
+
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
 		sun->ambient = glm::vec3(0.1);

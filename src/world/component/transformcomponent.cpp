@@ -13,6 +13,12 @@ TransformComponent::TransformComponent() {
 	matrix = glm::mat4(1);
 }
 
+TransformComponent::TransformComponent(const ComponentValues& value) : TransformComponent() {
+	position = value.getVec3("position", {0, 0, 0});
+	scale = value.getVec3("scale", {1, 1, 1});
+	recalculateMatrix();
+}
+
 TransformComponent::~TransformComponent() {}
 
 void TransformComponent::recalculateMatrix() {

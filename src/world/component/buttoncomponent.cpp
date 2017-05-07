@@ -6,6 +6,11 @@
 
 ButtonComponent::ButtonComponent() {}
 
+ButtonComponent::ButtonComponent(const ComponentValues& value) : ButtonComponent() {
+	position = value.getVec3("position", {0, 0, 0});
+	size = value.getVec3("size", {1, 1, 1});
+}
+
 ButtonComponent::~ButtonComponent() {}
 
 void ButtonComponent::registerImGui() {

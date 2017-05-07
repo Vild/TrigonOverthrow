@@ -27,6 +27,8 @@ struct ParticleComponent : public Component {
 	float particleSize;
 	int textureSize;
 
+	ParticleComponent() = default;
+	ParticleComponent(const ComponentValues& value);
 	virtual ~ParticleComponent();
 
 	void addEmitter(glm::vec3 dir, int nrOfParticles) {

@@ -6,6 +6,8 @@
 struct LifeComponent : public Component {
 	LifeComponent();
 	LifeComponent(float inMaxHP);
+	LifeComponent(const ComponentValues& value);
+	virtual ~LifeComponent();
 
 	float maxHP;
 	float currHP;

@@ -15,6 +15,10 @@ RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float frictio
 	rigidBody->setUserPointer(entity);
 }
 
+RigidBodyComponent::RigidBodyComponent(const ComponentValues& value) : RigidBodyComponent() {
+	// TODO:
+}
+
 RigidBodyComponent::~RigidBodyComponent() {
 	delete state;
 	delete shape;

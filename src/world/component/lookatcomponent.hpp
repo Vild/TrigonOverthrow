@@ -24,6 +24,8 @@ struct LookAtComponent : public Component {
 	// for FollowMode::followByOffset
 	glm::vec3 offsetFromTarget;
 
+	LookAtComponent() = default;
+	LookAtComponent(const ComponentValues& value);
 	virtual ~LookAtComponent();
 
 	void registerImGui() final;

@@ -5,6 +5,11 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 
+FloorTransformComponent::FloorTransformComponent(const ComponentValues& value) : FloorTransformComponent() {
+	position = value.getVec3("position", {0, 0, 0});
+	scale = value.getVec3("scale", {1, 1, 1});
+}
+
 FloorTransformComponent::~FloorTransformComponent() {}
 
 void FloorTransformComponent::recalculateMatrices() {

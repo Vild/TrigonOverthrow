@@ -6,7 +6,9 @@
 
 struct ProjectileComponent : public Component {
 public:
+	ProjectileComponent() = default;
 	ProjectileComponent(float damage);
+	ProjectileComponent(const ComponentValues& value);
 	virtual ~ProjectileComponent();
 
 	inline std::string name() final { return "ProjectileComponent"; }

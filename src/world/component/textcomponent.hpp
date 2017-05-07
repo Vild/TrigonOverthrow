@@ -13,6 +13,8 @@ struct TextComponent : public Component {
 	// XXX: Hack, fix?
 	TransformComponent transform;
 
+	TextComponent() = default;
+	TextComponent(const ComponentValues& value);
 	virtual ~TextComponent();
 
 	void registerImGui() final;

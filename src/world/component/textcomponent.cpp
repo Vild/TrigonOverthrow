@@ -6,6 +6,15 @@
 
 #include <iostream>
 
+#include "../../engine.hpp"
+
+TextComponent::TextComponent(const ComponentValues& value) : TextComponent() {
+	textRenderer = Engine::getInstance().getTextFactory()->makeRenderer(value.getString("text", ""));
+
+	transform.setPosition(value.getVec3("position", {0, 1, 0}));
+	transform.setScale(value.getVec3("scale", {1, 1, 1}));
+}
+
 TextComponent::~TextComponent() {}
 
 void TextComponent::registerImGui() {

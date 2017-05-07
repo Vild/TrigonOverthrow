@@ -2,6 +2,10 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "hitboxcomponent.hpp"
 
+HitboxComponent::HitboxComponent(const ComponentValues& value) : HitboxComponent() {
+	// TODO:
+}
+
 HitboxComponent::~HitboxComponent() {}
 
 void HitboxComponent::addHitbox(HitboxComponent::HitboxType type, glm::vec3 pos) {

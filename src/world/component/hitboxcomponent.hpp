@@ -19,6 +19,8 @@ struct HitboxComponent : public Component {
 	HitboxType type;
 	std::shared_ptr<Hitbox> hitbox;
 
+	HitboxComponent() = default;
+	HitboxComponent(const ComponentValues& value);
 	virtual ~HitboxComponent();
 
 	void addHitbox(HitboxType type, glm::vec3 pos);

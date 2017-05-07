@@ -193,9 +193,10 @@ void Engine::_init(bool vsync) {
 		rmt_ScopedCPUSample(InitializingHelpers, RMTSF_None);
 		_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
 		_meshLoader = std::make_shared<MeshLoader>();
-		_mapLoader = std::make_shared<MapLoader>();
 		_hidInput = std::make_shared<HIDInput>();
 		_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
+		_mapLoader = std::make_shared<MapLoader>();
+		_jsonLoader = std::make_shared<JSONLoader>();
 	}
 
 	{

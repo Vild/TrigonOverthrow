@@ -33,4 +33,8 @@ DynamicModelComponent::DynamicModelComponent() {
 	}
 }
 
+DynamicModelComponent::DynamicModelComponent(const ComponentValues& value) : DynamicModelComponent() {
+	// TODO:
+}
+
 void DynamicModelComponent::registerImGui() {}

@@ -7,6 +7,11 @@ FloorTileComponent::FloorTileComponent(float height) {
 	this->heightFactor = 0.0f;
 }
 
+FloorTileComponent::FloorTileComponent(const ComponentValues& value) : FloorTileComponent() {
+	height = value.getFloat("height", 1);
+	heightFactor = value.getFloat("heightFactor", 0);
+}
+
 FloorTileComponent::~FloorTileComponent() {}
 
 float FloorTileComponent::getHeight() {

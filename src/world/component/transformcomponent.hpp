@@ -9,6 +9,7 @@
 class TransformComponent : public Component {
 public:
 	TransformComponent();
+	TransformComponent(const ComponentValues& value);
 	virtual ~TransformComponent();
 
 	inline glm::mat4 getMatrix() {

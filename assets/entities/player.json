@@ -1,0 +1,55 @@
+{
+	"uuid": "83b8ee20-a03e-48d9-a8c6-4086561fdf58",
+	"name": "DerpDerpHerp",
+	"components": {
+		"TransformComponent": {
+			"position": [
+				0,
+				0,
+				0
+			],
+			"scale": [
+				1,
+				1,
+				1
+			]
+		},
+		"TextComponent": {
+			"text": "I'm Derp The Herp Derp",
+			"position": [
+				0,
+				1,
+				0
+			],
+			"scale": [
+				1,
+				1,
+				1
+			]
+		},
+		"PointLightComponent": {
+			"diffuse": [
+				{
+					"upper": 1,
+					"lower": 0
+				},
+				{
+					"upper": 1,
+					"lower": 0
+				},
+				{
+					"upper": 1,
+					"lower": 0
+				}
+			],
+			"specular": [
+				0,
+				0,
+				0
+			],
+			"constant": 1,
+			"linear": 0.14,
+			"quadratic": 0.07
+		}
+	}
+}
