@@ -3,6 +3,7 @@
 #include "projectilesystem.hpp"
 #include "bulletphysicssystem.hpp"
 #include "../component/projectilecomponent.hpp"
+#include "../component/particlecomponent.hpp"
 #include "../component/lifecomponent.hpp"
 #include "../../engine.hpp"
 
@@ -14,17 +15,19 @@ void ProjectileSystem::update(World& world, float delta) {
 		btPersistentManifold* contactManifold = physWorld->getDispatcher()->getManifoldByIndexInternal(i);
 		const btCollisionObject* obA = contactManifold->getBody0();
 		const btCollisionObject* obB = contactManifold->getBody1();
+		auto entityA = static_cast<Entity*>(obA->getUserPointer());
+		auto entityB = static_cast<Entity*>(obB->getUserPointer());
 
-		auto projComp = static_cast<Entity*>(obA->getUserPointer())->getComponent<ProjectileComponent>();
+		auto projComp = entityA->getComponent<ProjectileComponent>();
 		LifeComponent* targetLifeComp;
 		bool isAProj = false;
 		if (!projComp) {
-			if (!(projComp = static_cast<Entity*>(obB->getUserPointer())->getComponent<ProjectileComponent>()))
+			if (!(projComp = entityB->getComponent<ProjectileComponent>()))
 				continue;
 			else
-				targetLifeComp = static_cast<Entity*>(obA->getUserPointer())->getComponent<LifeComponent>();
+				targetLifeComp = entityA->getComponent<LifeComponent>();
 		} else {
-			targetLifeComp = static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>();
+			targetLifeComp = entityB->getComponent<LifeComponent>();
 			isAProj = true;
 		}
 
@@ -34,21 +37,27 @@ void ProjectileSystem::update(World& world, float delta) {
 			// Loops through everything and take the first object that was collided with.
 			// And breaks the for-loop after that.
 			if (pt.getDistance() < 0.f) {
-				// const btVector3& ptA = pt.getPositionWorldOnA();
-				// const btVector3& ptB = pt.getPositionWorldOnB();
-				// const btVector3& normalOnB = pt.m_normalWorldOnB;
+				const btVector3& ptA = pt.getPositionWorldOnA();
+				const btVector3& ptB = pt.getPositionWorldOnB();
+				const btVector3& normalOnB = pt.m_normalWorldOnB;
 				if (isAProj) {
 					if (targetLifeComp) {
 						targetLifeComp->currHP -= projComp->damage;
 						targetLifeComp->hpchanged = true;
+						auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
+						particleComp->addEmitter(cast(ptB), 
+							glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 					}
-					static_cast<Entity*>(obA->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
+					entityA->getComponent<LifeComponent>()->currHP = 0.0f;
 				} else {
 					if (targetLifeComp) {
 						targetLifeComp->currHP -= projComp->damage;
 						targetLifeComp->hpchanged = true;
+						auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
+						particleComp->addEmitter(cast(ptA),
+							glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 					}
-					static_cast<Entity*>(obB->getUserPointer())->getComponent<LifeComponent>()->currHP = 0.0f;
+					entityB->getComponent<LifeComponent>()->currHP = 0.0f;
 				}
 				break;
 			}

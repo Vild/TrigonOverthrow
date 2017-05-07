@@ -21,6 +21,8 @@ public:
 	int getEmitterCount() const { return nrOfEmitters; }
 
 private:
+	void _removeEmitter(const int counter);
+	void _addNewData(int emitters[64], int tempNrOfEmitters);
 	std::vector<std::shared_ptr<ShaderProgram>> _programs;
 	std::vector<std::shared_ptr<ShaderStorageBuffer>> _ssbos;
 	std::vector<glm::vec4> _computePositions;

@@ -21,10 +21,6 @@ ParticleRenderPass::ParticleRenderPass() {
 		.finalize();
 	_shader->bind().addUniform("v")
 		.addUniform("p");
-
-	std::vector<Vertex> vertices = { Vertex{ glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), glm::vec2(0, 0), glm::vec3(0, 0, 1) } };
-	std::vector<GLuint> indices = { 0 };
-	_point = std::make_shared<Mesh>(vertices, indices);
 }
 
 ParticleRenderPass::~ParticleRenderPass() {}
@@ -41,19 +37,24 @@ void ParticleRenderPass::render(World& world) {
 	if (!cameraComponent)
 		return;
 
+	auto emitterCount = Engine::getInstance().getSystem<ParticleSystem>()->getEmitterCount();
 	auto ssbo = Engine::getInstance().getSystem<ParticleSystem>()->getSSBO();
+
 	// bind the ssbo as array buffer.
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	ssbo[0]->bind();
-	glEnableVertexAttribArray(12);
-	glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(0));
-	ssbo[1]->bind();
-	glEnableVertexAttribArray(13);
-	glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4)));
-	ssbo[2]->bind();
-	glEnableVertexAttribArray(14);
-	glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4) + sizeof(glm::vec4)));
-	glDrawArrays(GL_POINTS, 0, 1024 * Engine::getInstance().getSystem<ParticleSystem>()->getEmitterCount());
+	if (emitterCount > 0) {
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+		ssbo[0]->bind();
+		glEnableVertexAttribArray(12);
+		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(0));
+		ssbo[1]->bind();
+		glEnableVertexAttribArray(13);
+		glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4)));
+		ssbo[2]->bind();
+		glEnableVertexAttribArray(14);
+		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4) + sizeof(glm::vec4)));
+		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES * emitterCount);
+	}
 }
 
 void ParticleRenderPass::resize(unsigned int width, unsigned int height) {

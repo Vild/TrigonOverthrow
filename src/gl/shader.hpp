@@ -131,6 +131,13 @@ public:
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	}
 
+	template <typename T>
+	void setSpecificSubData(const std::vector<T>& data, int offset, int size, int pos) {
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, sizeof(T) * size, &data[size * pos]);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+	}
+
 	void bindBase(GLuint loc) {
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, loc, _ssbo);
 	}

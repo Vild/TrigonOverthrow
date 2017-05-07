@@ -45,6 +45,10 @@ InGameState::InGameState() {
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter2"));
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter3"));
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter4"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter5"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter6"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter7"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter8"));
 
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
@@ -61,26 +65,25 @@ InGameState::InGameState() {
 		_camera->registerImGui = &InGameState::_registerImGUI;
 	}
 
-	{
-		auto particleComp = _emitters[0]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-	}
-
-	{
-		auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(0, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-	}
-	
-	{
-		auto particleComp = _emitters[2]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-	}
-	
-	{
-		auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-	}
-
+	//{
+	//	auto particleComp = _emitters[0]->addComponent<ParticleComponent>();
+	//	particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+	//}
+	//
+	//{
+	//	auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
+	//	particleComp->addEmitter(glm::vec3(0, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+	//}
+	//
+	//{
+	//	auto particleComp = _emitters[2]->addComponent<ParticleComponent>();
+	//	particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::INITIATE);
+	//}
+	//
+	//{
+	//	auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
+	//	particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+	//}
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();

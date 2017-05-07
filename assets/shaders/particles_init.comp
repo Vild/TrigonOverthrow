@@ -30,7 +30,6 @@ void main(){
 	vec3 vel = velocities[index];
 	float life = lives[index];
 
-	vel += vel * 0.2f * delta;
 	pos += vel * delta;
 	life -= 1 * delta;
 
