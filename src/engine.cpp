@@ -358,12 +358,12 @@ void Engine::_setupSystems() {
 			.attachInputTexture(LightingRenderPass::InputAttachment::occlusionMap, gaussian->getAttachment(GaussianRenderPass::Attachments::blurredImage));
 
 		{ // GIT-GUD: fixed in velocity and position to be output instead.
-			auto particleSystem = getSystem<ParticleSystem>();
-			auto _gbuffer = particleSystem->getGBuffers();
-
-			(*particles)
-				.attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachment(ParticleSystem::Attachment::inPosition))
-				.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachment(ParticleSystem::Attachment::inVelocity));
+			//auto particleSystem = getSystem<ParticleSystem>();
+			//auto _gbuffer = particleSystem->getGBuffers();
+			//
+			//(*particles)
+			//	.attachInputTexture(ParticleRenderPass::InputAttachment::position, _gbuffer->getAttachment(ParticleSystem::Attachment::inPosition))
+			//	.attachInputTexture(ParticleRenderPass::InputAttachment::velocity, _gbuffer->getAttachment(ParticleSystem::Attachment::inVelocity));
 		}
 
 		_systems.push_back(std::move(geometry));

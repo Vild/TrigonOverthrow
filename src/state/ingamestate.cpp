@@ -67,11 +67,11 @@ InGameState::InGameState() {
 		particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), 1024);
 	}
 
-	{
-		auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
-		particleComp->type = ParticleComponent::ParticleEffect::EXPLOSION;
-		particleComp->addEmitter(glm::vec3(2, 4, 0), glm::vec3(0, 1, 0), 1024);
-	}
+	//{
+	//	auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
+	//	particleComp->type = ParticleComponent::ParticleEffect::EXPLOSION;
+	//	particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), 1024);
+	//}
 	//
 	//{
 	//	auto particleComp = _emitters[2]->addComponent<ParticleComponent>();

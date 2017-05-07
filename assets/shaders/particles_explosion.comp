@@ -1,5 +1,5 @@
 #version 440 core
-layout(local_size_x = 1, local_size_y = 1024, local_size_z = 1) in;
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform image2D pos_input;
 layout(rgba32f, binding = 1) uniform image2D vel_input;
 
@@ -22,17 +22,11 @@ void main(){
 	vec3 vel = imageLoad(pos_input, pixel_Coords).xyz;
 	vec3 pos = imageLoad(vel_input, pixel_Coords).xyz;
 	float life = imageLoad(pos_input, pixel_Coords).w;
-
-	life -= 1.0f * delta;
-	if(life <= 0){
-		vel = emitters[int(gl_LocalInvocationIndex + gl_WorkGroupID.x / emitterCount)].direction;
-		pos = emitters[int(gl_LocalInvocationIndex + gl_WorkGroupID.x / emitterCount)].position;
-		//life = rand(pixel_Coords);
-		life = 5;
+	if(life != 5){
+		life -= 1 * delta;
+		vel += delta * vec3(0, 1, 0);
+		pos += vel * delta;
 	}
-	barrier();
-	vel += vec3(0, 0.1f, 0) * delta;
-	pos += vel * delta;
 
 	imageStore(pos_input, pixel_Coords, vec4(pos, life));
 	imageStore(vel_input, pixel_Coords, vec4(vel, 0));

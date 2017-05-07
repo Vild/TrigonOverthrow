@@ -19,12 +19,7 @@ ParticleRenderPass::ParticleRenderPass() {
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/particles.frag", ShaderType::fragment))
 		.finalize();
 	_shader->bind().addUniform("v")
-		.addUniform("p")
-		.addUniform("particlePos")
-		.addUniform("particleVel")
-		.addUniform("textureSize")
-		.addUniform("emitterCount");
-	_shader->setUniform("particlePos", (GLint)InputAttachment::position).setUniform("particleVel", (GLint)InputAttachment::velocity);
+		.addUniform("p");
 
 	std::vector<Vertex> vertices = { Vertex{ glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), glm::vec2(0, 0), glm::vec3(0, 0, 1) } };
 	std::vector<GLuint> indices = { 0 };
@@ -45,27 +40,30 @@ void ParticleRenderPass::render(World& world) {
 	if (!cameraComponent)
 		return;
 
+	auto ssbo = Engine::getInstance().getSystem<ParticleSystem>()->getSSBO();
+	// bind the ssbo as array buffer.
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	auto emitterCount = Engine::getInstance().getSystem<ParticleSystem>()->getCurrEmitterCount();
-	if (emitterCount > 0) {
-		_shader->setUniform("billboardSize", 2)
-			.setUniform("textureSize", Engine::getInstance().getSystem<ParticleSystem>()->getTextureSize())
-			.setUniform("emitterCount", emitterCount);
-		// wait for reading/writing before rendering.
-		glMemoryBarrier(GL_ALL_BARRIER_BITS);
-		// Should only be in one spot if it's correct.
-		_point->render(NR_OF_PARTICLES * emitterCount, GL_POINTS);
-	}
+	ssbo[0]->bind();
+	glEnableVertexAttribArray(12);
+	glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	//ssbo[1]->bind();
+	//glEnableVertexAttribArray(13);
+	//glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	//ssbo[2]->bind();
+	//glEnableVertexAttribArray(14);
+	//glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
+	//_point->render(NR_OF_PARTICLES, GL_POINTS);
+	glDrawArrays(GL_POINTS, 0, 1024);
 	//for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 	//	auto particle = entity->getComponent<ParticleComponent>();
 	//	if (!particle)
 	//		continue;
 	//	_shader->setUniform("billboardSize", particle->particleSize);
-	//	_shader->setUniform("textureSize", Engine::getInstance().getSystem<ParticleSystem>()->getTextureSize());
+	//	//_shader->setUniform("textureSize", Engine::getInstance().getSystem<ParticleSystem>()->getTextureSize());
 	//	// wait for reading/writing before rendering.
 	//
 	//	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	//	particle->point->render(particle->nrOfParticles, GL_POINTS);
+	//	glDrawArrays(GL_POINTS, 0, 1024);
 	//}
 }
 
