@@ -11,6 +11,7 @@
 #include <glm/gtx/transform.hpp>
 #include <cmath>
 #include "glm/glm.hpp"
+#define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 
 ParticleRenderPass::ParticleRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>(0);
@@ -45,26 +46,14 @@ void ParticleRenderPass::render(World& world) {
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
 	ssbo[0]->bind();
 	glEnableVertexAttribArray(12);
-	glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-	//ssbo[1]->bind();
-	//glEnableVertexAttribArray(13);
-	//glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-	//ssbo[2]->bind();
-	//glEnableVertexAttribArray(14);
-	//glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
-	//_point->render(NR_OF_PARTICLES, GL_POINTS);
-	glDrawArrays(GL_POINTS, 0, 1024);
-	//for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-	//	auto particle = entity->getComponent<ParticleComponent>();
-	//	if (!particle)
-	//		continue;
-	//	_shader->setUniform("billboardSize", particle->particleSize);
-	//	//_shader->setUniform("textureSize", Engine::getInstance().getSystem<ParticleSystem>()->getTextureSize());
-	//	// wait for reading/writing before rendering.
-	//
-	//	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	//	glDrawArrays(GL_POINTS, 0, 1024);
-	//}
+	glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(0));
+	ssbo[1]->bind();
+	glEnableVertexAttribArray(13);
+	glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4)));
+	ssbo[2]->bind();
+	glEnableVertexAttribArray(14);
+	glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4) + sizeof(glm::vec4)));
+	glDrawArrays(GL_POINTS, 0, 1024 * Engine::getInstance().getSystem<ParticleSystem>()->getEmitterCount());
 }
 
 void ParticleRenderPass::resize(unsigned int width, unsigned int height) {

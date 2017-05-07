@@ -9,17 +9,6 @@ class ParticleSystem : public System {
 public:
 	enum Attachment : GLint { inPosition = 0, inVelocity, outPosition, outVelocity };
 	enum ParticleAttribute : int { position = 0, velocity, life};
-	struct Positions {
-		glm::vec3 positions[];
-	};
-
-	struct Velocities {
-		glm::vec3 velocities[];
-	};
-
-	struct Lives {
-		float lives[];
-	};
 
 	ParticleSystem();
 	virtual ~ParticleSystem();
@@ -34,8 +23,8 @@ public:
 private:
 	std::vector<std::shared_ptr<ShaderProgram>> _programs;
 	std::vector<std::shared_ptr<ShaderStorageBuffer>> _ssbos;
-	std::vector<glm::vec3> _computePositions;
-	std::vector<glm::vec3> _computeVelocities;
+	std::vector<glm::vec4> _computePositions;
+	std::vector<glm::vec4> _computeVelocities;
 	std::vector<float> _computeLives;
 	const int MAX_EMITTER_COUNT = 64;
 	const int NR_OF_PARTICLES = 1024;

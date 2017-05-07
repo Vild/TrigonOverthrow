@@ -27,9 +27,14 @@ highp float rand(vec2 co){
 void main(){
 	uint index = gl_GlobalInvocationID.x;
 	vec3 pos = positions[index];
-	//vec3 vel = positions[index];
+	vec3 vel = velocities[index];
+	float life = lives[index];
 
-	pos += vec3(0, 1, 0) * delta;
+	vel += vel * 0.2f * delta;
+	pos += vel * delta;
+	life -= 1 * delta;
+
 	positions[index] = pos;
-	//lives[index] = 2.0f;
+	velocities[index] = vel;
+	lives[index] = life;
 }

@@ -11,47 +11,23 @@
 
 ParticleSystem::ParticleSystem() {
 	// Creating shaders for each particle effect. Check particlecomponent.hpp for the enumeration.
-	//_programs.resize(3);
-	//_programs[ParticleComponent::ParticleEffect::INITIATE] = std::make_shared<ShaderProgram>();
-	//_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute)).finalize();
-	//_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().addUniform("emitterCount");
-	//
-	//_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
-	//_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
-	//_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta").addUniform("emitterCount");
-	//
-	//_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
-	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
-	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta").addUniform("emitterCount");
-	//
-	//_addEmitterUniforms();
-	//
-	//_textureSize = 256; // Has support for 32 emitters with 256 particles each.
-	//_particleData = std::make_shared<GBuffer>();
-	//_particleData->bind()
-	//	.attachTexture(Attachment::inPosition, _textureSize, _textureSize, GL_RGBA32F, GL_FLOAT, 4)	// Input pos and life
-	//	.attachTexture(Attachment::inVelocity, _textureSize, _textureSize, GL_RGBA32F, GL_FLOAT, 4); // Input vel
-	//
-	//glClearColor(0, 0, 0, 0);
-	//glClear(GL_COLOR_BUFFER_BIT);
-
-	_programs.resize(1);
+	_programs.resize(3);
 	_programs[ParticleComponent::ParticleEffect::INITIATE] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute)).finalize();
-	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().addUniform("emitterCount").addUniform("delta");
+	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().addUniform("delta");
+
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta");
+
+	_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
 	
 	_ssbos.resize(3);
-	_ssbos[ParticleAttribute::position] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec3));
-	_ssbos[ParticleAttribute::velocity] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec3));
+	_ssbos[ParticleAttribute::position] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec4));
+	_ssbos[ParticleAttribute::velocity] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec4));
 	_ssbos[ParticleAttribute::life] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(float));
-	
-	//for (int i = 0; i < 1024; i++) {
-	//	glm::vec3 vec;
-	//	vec.x = (rand() % 2000) / (500.0);
-	//	vec.y = (rand() % 2000) / (500.0);
-	//	vec.z = (rand() % 2000) / (500.0);
-	//	_computePositions.push_back(vec);
-	//}
 }
 
 ParticleSystem::~ParticleSystem() {}
@@ -73,8 +49,8 @@ void ParticleSystem::update(World& world, float delta) {
 		if (!particleComp->loaded) {
 			particleComp->loaded = true;
 			for (int i = 0; i < 1024; i++) {
-				_computePositions.push_back(particleComp->particlePositions[i]);
-				_computeVelocities.push_back(particleComp->particleVelocities[i]);
+				_computePositions.push_back(glm::vec4(particleComp->particlePositions[i], 0));
+				_computeVelocities.push_back(glm::vec4(particleComp->particleVelocities[i], 0));
 				_computeLives.push_back(particleComp->particleLives[i]);
 			}
 			nrOfEmitters++;
@@ -83,10 +59,9 @@ void ParticleSystem::update(World& world, float delta) {
 	}
 	if (noNewData) {
 		_ssbos[ParticleAttribute::position]->setData(_computePositions);
-		_ssbos[ParticleAttribute::life]->setData(_computeVelocities);
-		_ssbos[ParticleAttribute::velocity]->setData(_computeLives);
+		_ssbos[ParticleAttribute::life]->setData(_computeLives);
+		_ssbos[ParticleAttribute::velocity]->setData(_computeVelocities);
 	}
-	printf("%i\n", nrOfEmitters);
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind()
 		.setUniform("delta", delta);
 	_ssbos[ParticleAttribute::position]->bindBase(ParticleAttribute::position);
