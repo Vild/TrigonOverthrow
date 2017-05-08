@@ -1,15 +1,17 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "particlerenderpass.hpp"
-#include "../component/particlecomponent.hpp"
+#include "../system/particlesystem.hpp"
 #include "../component/transformcomponent.hpp"
 #include "../component/guncomponent.hpp"
 #include "../../engine.hpp"
 #include "../component/cameracomponent.hpp"
 #include "../component/lookatcomponent.hpp"
+#include "../../engine.hpp"
 #include <glm/gtx/transform.hpp>
 #include <cmath>
 #include "glm/glm.hpp"
+#define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 
 ParticleRenderPass::ParticleRenderPass() {
 	_gbuffer = std::make_shared<GBuffer>(0);
@@ -17,8 +19,8 @@ ParticleRenderPass::ParticleRenderPass() {
 	_shader->attach(std::make_shared<ShaderUnit>("assets/shaders/particles.vert", ShaderType::vertex))
 		.attach(std::make_shared<ShaderUnit>("assets/shaders/particles.frag", ShaderType::fragment))
 		.finalize();
-	_shader->bind().addUniform("v").addUniform("p").addUniform("particlePos").addUniform("particleVel").addUniform("textureSize");
-	_shader->setUniform("particlePos", (GLint)InputAttachment::position).setUniform("particleVel", (GLint)InputAttachment::velocity);
+	_shader->bind().addUniform("v")
+		.addUniform("p");
 }
 
 ParticleRenderPass::~ParticleRenderPass() {}
@@ -28,24 +30,30 @@ void ParticleRenderPass::render(World& world) {
 	rmt_ScopedOpenGLSample(ParticleRenderPass);
 	// Render particles with instanced drawing.
 	auto camera = Engine::getInstance().getCamera();
-	if (!camera)
+	if (!camera) 
 		return;
 
 	auto cameraComponent = camera->getComponent<CameraComponent>();
 	if (!cameraComponent)
 		return;
 
-	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		auto particle = entity->getComponent<ParticleComponent>();
-		if (!particle)
-			continue;
-		_shader->setUniform("billboardSize", particle->particleSize);
-		_shader->setUniform("textureSize", particle->textureSize);
-		// wait for reading/writing before rendering.
+	auto emitterCount = Engine::getInstance().getSystem<ParticleSystem>()->getEmitterCount();
+	auto ssbo = Engine::getInstance().getSystem<ParticleSystem>()->getSSBO();
 
+	// bind the ssbo as array buffer.
+	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
+	if (emitterCount > 0) {
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
-		particle->point->render(particle->_nrOfParticles, GL_POINTS);
+		ssbo[0]->bind();
+		glEnableVertexAttribArray(12);
+		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)0);
+		ssbo[1]->bind();
+		glEnableVertexAttribArray(13);
+		glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)sizeof(glm::vec4));
+		ssbo[2]->bind();
+		glEnableVertexAttribArray(14);
+		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4)));
+		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES * emitterCount);
 	}
 }
 

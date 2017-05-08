@@ -29,7 +29,10 @@ enum ShaderAttributeID : GLint {
 
 	// Text
 	charRect = _custom_start,
-	charPos
+	charPos,
+
+	// Particles
+	life
 };
 
 enum class ShaderType {
@@ -114,6 +117,38 @@ public:
 
 private:
 	GLuint _bufferID;
+};
+
+class ShaderStorageBuffer {
+public:
+	ShaderStorageBuffer(size_t size, GLenum dataMode = GL_DYNAMIC_COPY);
+	virtual ~ShaderStorageBuffer();
+
+	template <typename T>
+	void setData(const std::vector<T>& data) {
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(T) * data.size(), &data[0]);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+	}
+
+	template <typename T>
+	void setSpecificSubData(const std::vector<T>& data, int offset, int size, int pos) {
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, sizeof(T) * size, &data[size * pos]);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+	}
+
+	void bindBase(GLuint loc) {
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, loc, _ssbo);
+	}
+
+	void bind() {
+		glBindBuffer(GL_ARRAY_BUFFER, _ssbo);
+	}
+
+	GLuint getID() const { return _ssbo; }
+private:
+	GLuint _ssbo;
 };
 
 class ShaderProgram {

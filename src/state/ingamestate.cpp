@@ -41,6 +41,10 @@ InGameState::InGameState() {
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter1"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter2"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter3"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter4"));
 
 	engine.getJSONLoader()->constructEntity(_world, "assets/entities/player.json");
 
@@ -57,6 +61,30 @@ InGameState::InGameState() {
 		_camera->addComponent<CameraComponent>();
 		_addLookAt();
 		_camera->registerImGui = &InGameState::_registerImGUI;
+	}
+
+	{
+		auto particleComp = _emitters[0]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+		particleComp->emitterLife = 2.0f;
+	}
+	
+	{
+		auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(0, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+		particleComp->emitterLife = 3.0f;
+	}
+	
+	{
+		auto particleComp = _emitters[2]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::INITIATE);
+		particleComp->emitterLife = 4.0f;
+	}
+	
+	{
+		auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+		particleComp->emitterLife = 5.0f;
 	}
 
 	{ // Adding Player
@@ -85,10 +113,12 @@ InGameState::InGameState() {
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
 			.finalize();
-		auto particle = _player->addComponent<ParticleComponent>();
-		particle->addEmitter(transform->getDirection(), 1024);
+		//auto particle = _player->addComponent<ParticleComponent>();
+		//particle->type = ParticleComponent::ParticleEffect::EXPLOSION;
+		//particle->addEmitter(glm::vec3(0,0,1), glm::vec3(0,0,1), 1024);
+		
 		_player->addComponent<KBMouseInputComponent>();
-		//_player->addComponent<PhysicsComponent>();
+		_player->addComponent<PhysicsComponent>();
 
 		/*auto life = */ _player->addComponent<LifeComponent>();
 
