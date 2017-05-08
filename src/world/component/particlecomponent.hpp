@@ -19,7 +19,6 @@ struct ParticleComponent : public Component {
 	};
 	// Should have a number (1 probably) of emitters to spew out particles from.
 	// fix particle render system and a fixed size of particles for each system.
-	virtual ~ParticleComponent();
 
 	std::shared_ptr<Emitter> emitter;
 	ParticleEffect type;
