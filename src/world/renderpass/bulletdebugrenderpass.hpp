@@ -14,6 +14,6 @@ public:
 	void resize(unsigned int width, unsigned int height) final;
 
 private:
-	SimpleMesh wireFrame;
+	std::unique_ptr<SimpleMesh> wireFrame;
 	bool enable;
 };
