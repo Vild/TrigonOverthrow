@@ -29,7 +29,7 @@ mat3 calcTBN(mat3 normalMatrix, vec3 normal, int idx) {
 	vec3 N = normalize(normalMatrix * normal);
 	// Gram-Schmidt process
 	T = normalize(T - dot(T, N) * N);
-	vec3 B = cross(T, N);
+	vec3 B = cross(N, T);
 	return mat3(T, B, N);
 }
 
@@ -55,7 +55,7 @@ void main() {
 		gPos = pos.xyz;
 
 		mat3 normalMatrix = transpose(inverse(mat3(vM[i])));
-		gNormal = normalize(normalMatrix * vNormal[i]);
+		gNormal = vNormal[i];// normalize(normalMatrix * vNormal[i]);
 
 		gColor = vColor[i];
 		gUV = vUV[i];
