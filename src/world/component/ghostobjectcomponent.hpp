@@ -9,6 +9,7 @@
 struct GhostObjectComponent : public Component {
 public:
 	GhostObjectComponent();
+	GhostObjectComponent(const ComponentValues& value);
 	virtual ~GhostObjectComponent();
 	// Inherited via Component
 	inline std::string name() final { return "GhostObjectComponent"; }

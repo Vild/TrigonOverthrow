@@ -10,9 +10,10 @@
 struct TextComponent : public Component {
 	std::shared_ptr<TextRenderer> textRenderer;
 
-	// XXX: Hack, fix?
 	TransformComponent transform;
 
+	TextComponent() = default;
+	TextComponent(const ComponentValues& value);
 	virtual ~TextComponent();
 
 	void registerImGui() final;

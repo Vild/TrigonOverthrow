@@ -19,7 +19,6 @@ struct ParticleComponent : public Component {
 	};
 	// Should have a number (1 probably) of emitters to spew out particles from.
 	// fix particle render system and a fixed size of particles for each system.
-	virtual ~ParticleComponent();
 
 	std::shared_ptr<Emitter> emitter;
 	ParticleEffect type;
@@ -29,6 +28,9 @@ struct ParticleComponent : public Component {
 	float emitterLife;
 	bool loaded;
 
+	ParticleComponent() = default;
+	ParticleComponent(const ComponentValues& value);
+	virtual ~ParticleComponent();
 	void addEmitter(glm::vec3 inPos, glm::vec3 dir, ParticleEffect type) {
 		emitter = std::make_shared<Emitter>(inPos, dir);
 		loaded = false;

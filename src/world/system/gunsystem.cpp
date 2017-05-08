@@ -2,9 +2,9 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "gunsystem.hpp"
 #include "../component/transformcomponent.hpp"
+#include "../component/pointlightcomponent.hpp"
 #include "../component/guncomponent.hpp"
 #include "../component/lifecomponent.hpp"
-#include "../component/physicscomponent.hpp"
 #include "../component/modelcomponent.hpp"
 #include "../component/projectilecomponent.hpp"
 #include "../component/instancedsimplemeshcomponent.hpp"
@@ -50,6 +50,13 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	transProj->setDirection({-dir.x, dir.y, dir.z}); // helt kokt
 	transProj->setPosition(transComp->getPosition() + transProj->getDirection());
 
+	auto point = projectile->addComponent<PointLightComponent>();
+	point->pointLight.diffuse = glm::vec3(1, 0, 0);
+	point->pointLight.specular = glm::vec3(0.05, 0, 0);
+	point->pointLight.constant = 1;
+	point->pointLight.linear = 0.35;
+	point->pointLight.quadratic = 0.44;
+
 	// auto currRdbComp = me->getComponent<RigidBodyComponent>();
 	auto projRdbComp = projectile->addComponent<RigidBodyComponent>(projectile);
 
@@ -91,55 +98,5 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
 																																				 BulletPhysicsSystem::playerProjectileCollidesWith);
 }
-
-// bool GunSystem::fireRay(std::unique_ptr<Entity>& target, HitboxComponent::HitboxType inType) {
-//	bool hit = false;
-//	switch (inType)
-//	{
-//	case HitboxComponent::SPHERE: {
-//		float t0, t1;
-//		std::shared_ptr<HitboxComponent::HitboxSphere> hitbox =
-//std::static_pointer_cast<HitboxComponent::HitboxSphere>(target->getComponent<HitboxComponent>()->hitbox);
-//		std::shared_ptr<GunComponent::RayGun> raygun = std::static_pointer_cast<GunComponent::RayGun>(gun);
-//		glm::vec3 L = hitbox->center - raygun->ray.o;
-//		float tca = glm::dot(L, raygun->ray.dir);
-//		if (tca < 0)
-//			return false;
-//		float d2 = glm::dot(L, L) - tca * tca;
-//		if (d2 > hitbox->radius2)
-//			return false;
-//		float thc = sqrt(hitbox->radius2 - d2);
-//		t0 = tca - thc;
-//		t1 = tca + thc;
-//		if (t0 > t1)
-//			std::swap(t0, t1);
-//
-//		if (t0 < 0) {
-//			t0 = t1;
-//			if (t0 < 0)
-//				return false;
-//		}
-//
-//		raygun->ray.t[0] = raygun->ray.o + t0 * raygun->ray.dir;
-//		raygun->ray.t[1] = raygun->ray.o + t1 * raygun->ray.dir;
-//		gun = raygun;
-//		printf("Entry: %f %f %f\n, Exit: %f %f %f\n\n", raygun->ray.t[0].x, raygun->ray.t[0].y, raygun->ray.t[0].z,
-//			raygun->ray.t[1].x, raygun->ray.t[1].y, raygun->ray.t[1].z);
-//		hit = true;
-//		break;
-//	}
-//	case HitboxComponent::TETRAHEDRON: {
-//
-//		break;
-//	}
-//	case HitboxComponent::AABB: {
-//
-//		break;
-//	}
-//	default:
-//		break;
-//	}
-//	return hit;
-//}
 
 void GunSystem::registerImGui() {}

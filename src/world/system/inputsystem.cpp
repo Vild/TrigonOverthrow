@@ -3,7 +3,6 @@
 #include "inputsystem.hpp"
 
 #include "../component/kbmouseinputcomponent.hpp"
-#include "../component/physicscomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/guncomponent.hpp"
 #include "../component/particlecomponent.hpp"
@@ -28,11 +27,6 @@ void InputSystem::update(World& world, float delta) {
 
 		btRigidBody& rigidBody = *rigidBodyComponent->getRigidBody();
 
-		// TODO: calculate this?
-		// glm::vec3 forward = glm::vec3(0, 0, 1);
-		// glm::vec3 right = glm::vec3(-1, 0, 0);
-		// glm::vec3 up = glm::vec3(0, 1, 0);
-
 		glm::vec3 inputDir;
 		if (hid->getKey(SDL_SCANCODE_W))
 			inputDir.z++;
@@ -49,13 +43,8 @@ void InputSystem::update(World& world, float delta) {
 		if (hid->getKey(SDL_SCANCODE_LCTRL))
 			inputDir.y--;
 
-		float accelSpeed = 60;
+		float accelSpeed = 20;
 		// float maxSpeed = 5;
-
-		// physicsComponent->acceleration = -physicsComponent->velocity / 0.05f;
-		// physicsComponent->acceleration += inputDir.z * forward * accelSpeed;
-		// physicsComponent->acceleration += inputDir.x * right * accelSpeed;
-		// physicsComponent->acceleration += inputDir.y * up * accelSpeed;
 
 		rigidBody.applyCentralForce({inputDir.x * accelSpeed, inputDir.y * accelSpeed * 2, inputDir.z * accelSpeed});
 

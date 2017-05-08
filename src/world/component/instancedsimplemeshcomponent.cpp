@@ -7,6 +7,10 @@ InstancedSimpleMeshComponent::InstancedSimpleMeshComponent(std::unique_ptr<Simpl
 	this->simpleMesh = std::move(simpleMesh);
 }
 
+InstancedSimpleMeshComponent::InstancedSimpleMeshComponent(const ComponentValues& value) : InstancedSimpleMeshComponent() {
+	// TODO:
+}
+
 InstancedSimpleMeshComponent::~InstancedSimpleMeshComponent() {}
 
 void InstancedSimpleMeshComponent::addInstance(TransformComponent* instance) {

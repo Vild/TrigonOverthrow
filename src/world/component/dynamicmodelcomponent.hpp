@@ -5,6 +5,7 @@
 
 struct DynamicModelComponent : public Component {
 	DynamicModelComponent();
+	DynamicModelComponent(const ComponentValues& value);
 	virtual ~DynamicModelComponent() {}
 	void registerImGui() final;
 	inline std::string name() final { return "DynamicModelComponent"; }

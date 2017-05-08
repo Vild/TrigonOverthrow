@@ -4,6 +4,10 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+LookAtComponent::LookAtComponent(const ComponentValues& value) : LookAtComponent() {
+	// TODO: Soon™
+}
+
 LookAtComponent::~LookAtComponent() {}
 
 void LookAtComponent::registerImGui() {

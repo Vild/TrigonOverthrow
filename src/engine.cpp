@@ -19,7 +19,6 @@
 #include "world/component/cameracomponent.hpp"
 
 #include "world/system/inputsystem.hpp"
-#include "world/system/physicssystem.hpp"
 #include "world/system/imguisystem.hpp"
 #include "world/system/lookatsystem.hpp"
 #include "world/system/camerasystem.hpp"
@@ -193,9 +192,10 @@ void Engine::_init(bool vsync) {
 		rmt_ScopedCPUSample(InitializingHelpers, RMTSF_None);
 		_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
 		_meshLoader = std::make_shared<MeshLoader>();
-		_mapLoader = std::make_shared<MapLoader>();
 		_hidInput = std::make_shared<HIDInput>();
 		_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
+		_mapLoader = std::make_shared<MapLoader>();
+		_jsonLoader = std::make_shared<JSONLoader>();
 	}
 
 	{
@@ -324,7 +324,6 @@ void Engine::_setupSystems() {
 	// Pure systems
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
-	_systems.push_back(std::make_unique<PhysicsSystem>());
 	_systems.push_back(std::make_unique<BulletPhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());

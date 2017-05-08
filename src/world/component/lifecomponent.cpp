@@ -3,7 +3,15 @@
 #include "lifecomponent.hpp"
 
 LifeComponent::LifeComponent() : maxHP(4), currHP(4), hpchanged(false) {}
+
 LifeComponent::LifeComponent(float inMaxHP) : maxHP(inMaxHP), currHP(inMaxHP), hpchanged(true) {}
+
+LifeComponent::LifeComponent(const ComponentValues& value) : LifeComponent() {
+	currHP = maxHP = value.getFloat("maxHP", 4);
+	hpchanged = false;
+}
+
+LifeComponent::~LifeComponent() {}
 
 void LifeComponent::registerImGui() {
 	if (ImGui::DragFloat("Life", &currHP)) {

@@ -4,11 +4,10 @@
 #include <glm/gtc/quaternion.hpp>
 #include <btBulletDynamicsCommon.h>
 
-// Note! When making changes here add them also to FloorTransformComponent
-
 class TransformComponent : public Component {
 public:
 	TransformComponent();
+	TransformComponent(const ComponentValues& value);
 	virtual ~TransformComponent();
 
 	inline glm::mat4 getMatrix() {

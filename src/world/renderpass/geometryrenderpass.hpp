@@ -18,8 +18,7 @@ public:
 	inline std::string name() final { return "GeometryRenderPass"; };
 
 private:
-	std::shared_ptr<ShaderProgram> _floorShader;
-	std::unique_ptr<ShaderProgram> ismShader;
+	std::unique_ptr<ShaderProgram> _ismShader;
 
 	bool _setting_base_doBackFaceCulling = false;
 	float _setting_base_defaultSpecular = 0.5f;

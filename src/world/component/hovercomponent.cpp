@@ -7,6 +7,11 @@ HoverComponent::HoverComponent(float hoverHeight, float hoverForce) {
 	this->hoverForce = hoverForce;
 }
 
+HoverComponent::HoverComponent(const ComponentValues& value) : HoverComponent() {
+	hoverHeight = value.getFloat("hoverHeight", 0.6);
+	hoverForce = value.getFloat("hoverForce", 100);
+}
+
 HoverComponent::~HoverComponent() {}
 
 void HoverComponent::registerImGui() {

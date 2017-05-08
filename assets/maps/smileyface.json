@@ -1,0 +1,33 @@
+{
+	"name": "smileyface",
+	"map": "smileyface.png",
+	"entities": {
+		"25b0c718-dfb5-4f86-a4e1-2c57763eb736": {
+			"template": "enemy_closeRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						4,
+						0.2,
+						0
+					]
+				}
+			}
+		},
+		"25b0c718-dfb5-4f86-a4e1-2c57763eb737": {
+			"template": "enemy_closeRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						5,
+						0.2,
+						0
+					]
+				},
+				"TextComponent": {
+					"text": "I'm number 2!\u0002"
+				}
+			}
+		}
+	}
+}

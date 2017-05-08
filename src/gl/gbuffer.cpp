@@ -112,7 +112,7 @@ GBuffer& GBuffer::finalize() {
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		std::cerr << "Framebuffer failed!" << std::endl << "\tStatus: " << status << std::endl;
-		throw new std::exception();
+		throw "Failed to create framebuffer!";
 	}
 	return *this;
 }

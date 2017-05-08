@@ -8,9 +8,10 @@
 
 struct PointLightComponent : public Component {
 	PointLight pointLight;
-
 	glm::vec3 offset;
 
+	PointLightComponent() = default;
+	PointLightComponent(const ComponentValues& value);
 	virtual ~PointLightComponent();
 
 	void registerImGui() final;

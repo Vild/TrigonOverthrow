@@ -3,7 +3,9 @@
 
 class HoverComponent : public Component {
 public:
+	HoverComponent() = default;
 	HoverComponent(float hoverHeight, float hoverForce);
+	HoverComponent(const ComponentValues& value);
 	virtual ~HoverComponent();
 
 	float hoverHeight;

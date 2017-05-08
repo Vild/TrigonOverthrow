@@ -10,6 +10,8 @@
 struct ModelComponent : public Component {
 	std::shared_ptr<LoadedMesh> meshData;
 
+	ModelComponent() = default;
+	ModelComponent(const ComponentValues& value);
 	virtual ~ModelComponent();
 
 	virtual void render(const glm::mat4& m, GLenum drawMode = GL_TRIANGLES);

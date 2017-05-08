@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 
 struct KBMouseInputComponent : public Component {
+	KBMouseInputComponent() = default;
+	KBMouseInputComponent(const ComponentValues& value);
 	virtual ~KBMouseInputComponent();
 
 	void registerImGui() final;
