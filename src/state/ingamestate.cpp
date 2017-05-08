@@ -151,7 +151,7 @@ InGameState::InGameState() {
 		text->transform.setScale(glm::vec3(10));
 
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
-		rigidbody->getRigidBody()->setDamping(0.99, 0);
+		rigidbody->getRigidBody()->setDamping(0.9, 0);
 		rigidbody->setHitboxHalfSize(transform->getScale());
 		rigidbody->setTransform(transform);
 		rigidbody->setActivationState(DISABLE_DEACTIVATION);

@@ -21,7 +21,7 @@ public:
 	virtual std::string name() override;
 
 private:
-	int chunkSize = 16;
+	int chunkSize = 15;
 
 	typedef std::pair<int, int> coord_t;
 	typedef std::map<coord_t, Entity *> map_t;
