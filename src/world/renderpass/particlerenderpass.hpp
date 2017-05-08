@@ -7,8 +7,6 @@
 
 class ParticleRenderPass : public RenderPass {
 public:
-	enum InputAttachment { position = 0, velocity };
-
 	ParticleRenderPass();
 	virtual ~ParticleRenderPass();
 

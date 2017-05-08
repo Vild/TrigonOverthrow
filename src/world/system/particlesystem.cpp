@@ -11,18 +11,18 @@
 
 ParticleSystem::ParticleSystem() {
 	// Creating shaders for each particle effect. Check particlecomponent.hpp for the enumeration.
-	_programs.resize(3);
+	_programs.resize(1);
 	_programs[ParticleComponent::ParticleEffect::INITIATE] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().addUniform("delta");
 
-	_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
-	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
-	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta");
-
-	_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
-	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
-	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
+	//_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
+	//_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
+	//_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta");
+	//
+	//_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
+	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
+	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
 	
 	_ssbos.resize(3);
 	_ssbos[ParticleAttribute::position] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec4));
@@ -49,10 +49,14 @@ void ParticleSystem::update(World& world, float delta) {
 			continue;
 
 		if (particleComp->emitterLife <= 0) {
-			entity->removeComponent<ParticleComponent>();
-			_removeEmitter(innerCounter);
-			printf("Emitter: %i removed...\n", innerCounter);
-			continue;
+			// Gotta fix this, temporarily makes them respawn.
+			//entity->removeComponent<ParticleComponent>();
+			//entity->makeDead();
+			//_removeEmitter(innerCounter);
+			//printf("Emitter: %i removed...\n", innerCounter);
+			//continue;
+			particleComp->emitterLife = 5.0f;
+			particleComp->loaded = false;
 		}
 
 		if (!particleComp->loaded) {
@@ -68,7 +72,6 @@ void ParticleSystem::update(World& world, float delta) {
 			newData = true;
 		}
 		particleComp->emitterLife -= 1 * delta;
-		printf("Emitter %i's life: %f\n\n", innerCounter, particleComp->emitterLife);
 		innerCounter++;
 	}
 	if (newData)
@@ -97,9 +100,9 @@ void ParticleSystem::_addNewData(int emitters[64], int tempNrOfEmitters) {
 
 void ParticleSystem::_removeEmitter(const int counter) {
 	for (int i = 0; i < 1024; i++) {
-		_computePositions[counter * 1024 + i] = glm::vec4(NULL);
-		_computeVelocities[counter * 1024 + i] = glm::vec4(NULL);
-		_computeLives[counter * 1024 + i] = -10;
+		_computePositions[counter * NR_OF_PARTICLES + i] = glm::vec4(NULL);
+		_computeVelocities[counter * NR_OF_PARTICLES + i] = glm::vec4(NULL);
+		_computeLives[counter * NR_OF_PARTICLES + i] = -10;
 	}
 	_computePositions.erase(remove(_computePositions.begin(), _computePositions.end(), glm::vec4(NULL)),
 		_computePositions.end());

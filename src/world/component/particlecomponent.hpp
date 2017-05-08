@@ -44,7 +44,7 @@ struct ParticleComponent : public Component {
 				pos.z = ((rand() % 2000) / (500.0));
 				particlePositions[i] = pos + inPos;
 				particleVelocities[i] = dir;
-				particleLives[i] = (rand() % (10 + 1) / 2.0f);
+				particleLives[i] = 5;
 			}
 			break;
 		}
@@ -53,7 +53,7 @@ struct ParticleComponent : public Component {
 				glm::vec3 vel;
 				particlePositions[i] = inPos;
 				particleVelocities[i] = glm::normalize(glm::vec3(sin(3 * i), abs(cos(i * 0.5f)), cos(i * 0.5f) - sin(8 * i) + sin(3 * i)));
-				particleLives[i] = (rand() % (10 + 1) / 2.0f);
+				particleLives[i] = 5;
 			}
 			break;
 		}

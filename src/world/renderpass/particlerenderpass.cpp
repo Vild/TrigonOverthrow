@@ -46,13 +46,13 @@ void ParticleRenderPass::render(World& world) {
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 		ssbo[0]->bind();
 		glEnableVertexAttribArray(12);
-		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(0));
+		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)0);
 		ssbo[1]->bind();
 		glEnableVertexAttribArray(13);
-		glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4)));
+		glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)sizeof(glm::vec4));
 		ssbo[2]->bind();
 		glEnableVertexAttribArray(14);
-		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), BUFFER_OFFSET(sizeof(glm::vec4) + sizeof(glm::vec4)));
+		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4)));
 		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES * emitterCount);
 	}
 }
