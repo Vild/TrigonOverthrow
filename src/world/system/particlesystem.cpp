@@ -11,23 +11,18 @@
 
 ParticleSystem::ParticleSystem() {
 	// Creating shaders for each particle effect. Check particlecomponent.hpp for the enumeration.
-	_programs.resize(1);
+	_programs.resize(3);
 	_programs[ParticleComponent::ParticleEffect::INITIATE] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().addUniform("delta");
 
-	//_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
-	//_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
-	//_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta");
-	//
-	//_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
-	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
-	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
-
-	_ssbos.resize(3);
-	_ssbos[ParticleAttribute::position] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec4));
-	_ssbos[ParticleAttribute::velocity] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec4));
-	_ssbos[ParticleAttribute::life] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(float));
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta");
+	
+	_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
 }
 
 ParticleSystem::~ParticleSystem() {}
@@ -37,10 +32,6 @@ void ParticleSystem::update(World& world, float delta) {
 	// Gotta change how this system works abit.
 	// Main things to fix: All emitters with the different types should use the correct shader.
 
-	bool newData = false;
-	int innerCounter = 0;
-	int emitters[64];
-	int newEmittersCount = 0;
 	// remember to fix initiate particles.
 	rmt_ScopedCPUSample(ParticleSystem, RMTSF_None);
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
@@ -48,61 +39,18 @@ void ParticleSystem::update(World& world, float delta) {
 		if (!particleComp)
 			continue;
 
-		if (particleComp->emitterLife <= 0) {
-			// Gotta fix this, temporarily makes them respawn.
-			entity->removeComponent<ParticleComponent>();
+		if (particleComp->emitterLife <= 0)
 			entity->makeDead();
-			_removeEmitter(innerCounter);
-			printf("Emitter: %i removed...\n", innerCounter);
-			continue;
-			//particleComp->emitterLife = 5.0f;
-			//particleComp->loaded = false;
-		}
 
-		if (!particleComp->loaded) {
-			particleComp->loaded = true;
-			for (int i = 0; i < 1024; i++) {
-				_computePositions.push_back(glm::vec4(particleComp->particlePositions[i], 0));
-				_computeVelocities.push_back(glm::vec4(particleComp->particleVelocities[i], 0));
-				_computeLives.push_back(particleComp->particleLives[i]);
-			}
-			nrOfEmitters++;
-			emitters[newEmittersCount] = innerCounter;
-			newEmittersCount++;
-			newData = true;
-		}
-		particleComp->emitterLife -= 1 * delta;
-		printf("Entity %s, nr: %i and it's life: %f\n", entity->getName().c_str(), innerCounter, particleComp->emitterLife);
-		innerCounter++;
-	}
-	if (newData)
-		_addNewData(emitters, newEmittersCount);
-	if (nrOfEmitters > 0) {
-		_programs[ParticleComponent::ParticleEffect::INITIATE]->bind()
+		_programs[particleComp->type]->bind()
 			.setUniform("delta", delta);
-		_ssbos[ParticleAttribute::position]->bindBase(ParticleAttribute::position);
-		_ssbos[ParticleAttribute::velocity]->bindBase(ParticleAttribute::velocity);
-		_ssbos[ParticleAttribute::life]->bindBase(ParticleAttribute::life);
-		glDispatchCompute((GLint)(1024 * nrOfEmitters)/128, 1, 1);
-	}
-}
+		particleComp->ssbo[ParticleAttribute::position]->bindBase(ParticleAttribute::position);
+		particleComp->ssbo[ParticleAttribute::velocity]->bindBase(ParticleAttribute::velocity);
+		particleComp->ssbo[ParticleAttribute::life]->bindBase(ParticleAttribute::life);
+		glDispatchCompute((GLint)NR_OF_PARTICLES / 128, 1, 1);
 
-void ParticleSystem::_addNewData(int emitters[64], int tempNrOfEmitters) {
-	for (int i = 0; i < tempNrOfEmitters; i++) {
-		_ssbos[ParticleAttribute::position]->setSpecificSubData(_computePositions,
-			NR_OF_PARTICLES * emitters[i] * sizeof(glm::vec4), NR_OF_PARTICLES, emitters[i]);
-		_ssbos[ParticleAttribute::velocity]->setSpecificSubData(_computeVelocities,
-			NR_OF_PARTICLES * emitters[i] * sizeof(glm::vec4), NR_OF_PARTICLES, emitters[i]);
-		_ssbos[ParticleAttribute::life]->setSpecificSubData(_computeLives,
-			NR_OF_PARTICLES * emitters[i] * sizeof(float), NR_OF_PARTICLES, emitters[i]);
+		particleComp->emitterLife -= 1 * delta;
 	}
-}
-
-void ParticleSystem::_removeEmitter(const int counter) {
-	_computePositions.erase(_computePositions.begin() + counter * NR_OF_PARTICLES, _computePositions.begin() + (counter + 1) * NR_OF_PARTICLES);
-	_computeVelocities.erase(_computeVelocities.begin() + counter * NR_OF_PARTICLES, _computeVelocities.begin() + (counter + 1) *  NR_OF_PARTICLES);
-	_computeLives.erase(_computeLives.begin() + counter * NR_OF_PARTICLES, _computeLives.begin() + (counter + 1) * NR_OF_PARTICLES);
-	nrOfEmitters -= 1;
 }
 
 void ParticleSystem::registerImGui() {}
