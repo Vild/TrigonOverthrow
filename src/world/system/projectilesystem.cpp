@@ -39,13 +39,13 @@ void ProjectileSystem::update(World& world, float delta) {
 			if (pt.getDistance() < 0.f) {
 				const btVector3& ptA = pt.getPositionWorldOnA();
 				const btVector3& ptB = pt.getPositionWorldOnB();
-				const btVector3& normalOnB = pt.m_normalWorldOnB;
+				//const btVector3& normalOnB = pt.m_normalWorldOnB;
 				if (isAProj) {
 					if (targetLifeComp) {
 						targetLifeComp->currHP -= projComp->damage;
 						targetLifeComp->hpchanged = true;
 						auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
-						particleComp->addEmitter(cast(ptB), 
+						particleComp->addEmitter(cast(ptB),
 							glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 					}
 					entityA->getComponent<LifeComponent>()->currHP = 0.0f;
