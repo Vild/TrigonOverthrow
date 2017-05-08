@@ -162,7 +162,7 @@ public:
 	void finalize();
 
 	ShaderProgram& addUniform(const std::string& name);
-	/// XXX: bindingID start at 0?
+
 	ShaderProgram& addUniformBuffer(const std::string& name, std::shared_ptr<UniformBuffer> buffer, GLuint bindingID);
 
 	ShaderProgram& bind();

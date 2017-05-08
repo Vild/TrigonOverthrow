@@ -18,6 +18,7 @@
 			"texture": "assets/textures/errorNormal.png",
 			"needsMMatrix": true
 		},
+		"DynamicModelComponent": {},
 		"LifeComponent": {
 			"maxHP": 6
 		},
@@ -41,26 +42,29 @@
 		"PointLightComponent": {
 			"diffuse": [
 				{
-					"upper": 1,
-					"lower": 0.5
+					"upper": 0.25,
+					"lower": 0.01
 				},
 				{
-					"upper": 1,
-					"lower": 0.5
+					"upper": 0.25,
+					"lower": 0.01
 				},
 				{
-					"upper": 1,
-					"lower": 0.5
+					"upper": 0.75,
+					"lower": 0.01
 				}
 			],
 			"specular": [
-				0.1,
-				0.1,
-				0.1
+				0.01,
+				0.01,
+				0.05
 			],
 			"constant": 1,
 			"linear": 0.14,
-			"quadratic": 0.07
+			"quadratic": 0.07,
+			"offset": [
+				0, 0.5, 0
+			]
 		}
 	}
 }

@@ -10,7 +10,6 @@
 struct TextComponent : public Component {
 	std::shared_ptr<TextRenderer> textRenderer;
 
-	// XXX: Hack, fix?
 	TransformComponent transform;
 
 	TextComponent() = default;

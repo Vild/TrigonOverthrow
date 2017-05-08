@@ -6,13 +6,10 @@
 
 #include "../world/component/buttoncomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
-#include "../world/component/floortransformcomponent.hpp"
-#include "../world/component/hitboxcomponent.hpp"
 #include "../world/component/kbmouseinputcomponent.hpp"
 #include "../world/component/lookatcomponent.hpp"
 #include "../world/component/modelcomponent.hpp"
 #include "../world/component/particlecomponent.hpp"
-#include "../world/component/physicscomponent.hpp"
 #include "../world/component/textcomponent.hpp"
 #include "../world/component/dynamicmodelcomponent.hpp"
 #include "../world/component/guncomponent.hpp"
@@ -55,13 +52,10 @@ static void constructComponent(Entity* entity, const ComponentValues& value) {
 JSONLoader::JSONLoader() {
 	_constructors["ButtonComponent"] = &constructComponent<ButtonComponent>;
 	_constructors["CameraComponent"] = &constructComponent<CameraComponent>;
-	_constructors["FloorTransformComponent"] = &constructComponent<FloorTransformComponent>;
-	_constructors["HitboxComponent"] = &constructComponent<HitboxComponent>;
 	_constructors["KBMouseInputComponent"] = &constructComponent<KBMouseInputComponent>;
 	_constructors["LookAtComponent"] = &constructComponent<LookAtComponent>;
 	_constructors["ModelComponent"] = &constructComponent<ModelComponent>;
 	_constructors["ParticleComponent"] = &constructComponent<ParticleComponent>;
-	_constructors["PhysicsComponent"] = &constructComponent<PhysicsComponent>;
 	_constructors["TextComponent"] = &constructComponent<TextComponent>;
 	_constructors["DynamicModelComponent"] = &constructComponent<DynamicModelComponent>;
 	_constructors["GunComponent"] = &constructComponent<GunComponent>;

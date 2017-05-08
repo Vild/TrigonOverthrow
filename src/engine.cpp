@@ -19,7 +19,6 @@
 #include "world/component/cameracomponent.hpp"
 
 #include "world/system/inputsystem.hpp"
-#include "world/system/physicssystem.hpp"
 #include "world/system/imguisystem.hpp"
 #include "world/system/lookatsystem.hpp"
 #include "world/system/camerasystem.hpp"
@@ -325,7 +324,6 @@ void Engine::_setupSystems() {
 	// Pure systems
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
-	_systems.push_back(std::make_unique<PhysicsSystem>());
 	_systems.push_back(std::make_unique<BulletPhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());

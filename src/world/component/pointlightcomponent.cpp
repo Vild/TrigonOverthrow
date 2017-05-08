@@ -9,6 +9,8 @@ PointLightComponent::PointLightComponent(const ComponentValues& value) : PointLi
 	pointLight.constant = value.getFloat("constant", 1);
 	pointLight.linear = value.getFloat("linear", 0.14);
 	pointLight.quadratic = value.getFloat("quadratic", 0.07);
+
+	offset = value.getVec3("offset", {0, 0, 0});
 }
 
 PointLightComponent::~PointLightComponent() {}
