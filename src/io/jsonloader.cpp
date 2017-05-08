@@ -27,6 +27,10 @@
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/rigidbodycomponent.hpp"
 
+#ifdef WIN32
+#define __PRETTY_FUNCTION__ __func__
+#endif
+
 using json = nlohmann::json;
 
 template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
