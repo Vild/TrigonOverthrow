@@ -47,10 +47,8 @@
     <ClCompile Include="src\world\component\component.cpp" />
     <ClCompile Include="src\world\component\dynamicmodelcomponent.cpp" />
     <ClCompile Include="src\world\component\floortilecomponent.cpp" />
-    <ClCompile Include="src\world\component\floortransformcomponent.cpp" />
     <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
-    <ClCompile Include="src\world\component\hitboxcomponent.cpp" />
     <ClCompile Include="src\world\component\hovercomponent.cpp" />
     <ClCompile Include="src\world\component\instancedsimplemeshcomponent.cpp" />
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp" />
@@ -58,7 +56,6 @@
     <ClCompile Include="src\world\component\lookatcomponent.cpp" />
     <ClCompile Include="src\world\component\modelcomponent.cpp" />
     <ClCompile Include="src\world\component\particlecomponent.cpp" />
-    <ClCompile Include="src\world\component\physicscomponent.cpp" />
     <ClCompile Include="src\world\component\pointlightcomponent.cpp" />
     <ClCompile Include="src\world\component\projectilecomponent.cpp" />
     <ClCompile Include="src\world\component\rigidbodycomponent.cpp" />
@@ -87,7 +84,6 @@
     <ClCompile Include="src\world\system\lifesystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
     <ClCompile Include="src\world\system\particlesystem.cpp" />
-    <ClCompile Include="src\world\system\physicssystem.cpp" />
     <ClCompile Include="src\world\system\projectilesystem.cpp" />
     <ClCompile Include="src\world\system\system.cpp" />
     <ClCompile Include="src\world\world.cpp" />

@@ -50,13 +50,13 @@ void ParticleSystem::update(World& world, float delta) {
 
 		if (particleComp->emitterLife <= 0) {
 			// Gotta fix this, temporarily makes them respawn.
-			//entity->removeComponent<ParticleComponent>();
-			//entity->makeDead();
-			//_removeEmitter(innerCounter);
-			//printf("Emitter: %i removed...\n", innerCounter);
-			//continue;
-			particleComp->emitterLife = 5.0f;
-			particleComp->loaded = false;
+			entity->removeComponent<ParticleComponent>();
+			entity->makeDead();
+			_removeEmitter(innerCounter);
+			printf("Emitter: %i removed...\n", innerCounter);
+			continue;
+			//particleComp->emitterLife = 5.0f;
+			//particleComp->loaded = false;
 		}
 
 		if (!particleComp->loaded) {
@@ -72,11 +72,11 @@ void ParticleSystem::update(World& world, float delta) {
 			newData = true;
 		}
 		particleComp->emitterLife -= 1 * delta;
+		printf("Entity %s, nr: %i and it's life: %f\n", entity->getName().c_str(), innerCounter, particleComp->emitterLife);
 		innerCounter++;
 	}
 	if (newData)
 		_addNewData(emitters, newEmittersCount);
-
 	if (nrOfEmitters > 0) {
 		_programs[ParticleComponent::ParticleEffect::INITIATE]->bind()
 			.setUniform("delta", delta);
@@ -99,17 +99,9 @@ void ParticleSystem::_addNewData(int emitters[64], int tempNrOfEmitters) {
 }
 
 void ParticleSystem::_removeEmitter(const int counter) {
-	for (int i = 0; i < 1024; i++) {
-		_computePositions[counter * NR_OF_PARTICLES + i] = glm::vec4(0);
-		_computeVelocities[counter * NR_OF_PARTICLES + i] = glm::vec4(0);
-		_computeLives[counter * NR_OF_PARTICLES + i] = -10;
-	}
-	_computePositions.erase(remove(_computePositions.begin(), _computePositions.end(), glm::vec4(0)),
-		_computePositions.end());
-	_computeVelocities.erase(remove(_computeVelocities.begin(), _computeVelocities.end(), glm::vec4(0)),
-		_computeVelocities.end());
-	_computeLives.erase(remove(_computeLives.begin(), _computeLives.end(), -10),
-		_computeLives.end());
+	_computePositions.erase(_computePositions.begin() + counter * NR_OF_PARTICLES, _computePositions.begin() + (counter + 1) * NR_OF_PARTICLES);
+	_computeVelocities.erase(_computeVelocities.begin() + counter * NR_OF_PARTICLES, _computeVelocities.begin() + (counter + 1) *  NR_OF_PARTICLES);
+	_computeLives.erase(_computeLives.begin() + counter * NR_OF_PARTICLES, _computeLives.begin() + (counter + 1) * NR_OF_PARTICLES);
 	nrOfEmitters -= 1;
 }
 
