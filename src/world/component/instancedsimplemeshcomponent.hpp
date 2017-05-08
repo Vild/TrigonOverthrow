@@ -7,7 +7,9 @@
 
 class InstancedSimpleMeshComponent : public Component {
 public:
+	InstancedSimpleMeshComponent() = default;
 	InstancedSimpleMeshComponent(std::unique_ptr<SimpleMesh>& simpleMesh);
+	InstancedSimpleMeshComponent(const ComponentValues& value);
 	virtual ~InstancedSimpleMeshComponent();
 
 	void addInstance(TransformComponent* instance);

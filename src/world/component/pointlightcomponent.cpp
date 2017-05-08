@@ -2,6 +2,17 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "pointlightcomponent.hpp"
 
+PointLightComponent::PointLightComponent(const ComponentValues& value) : PointLightComponent() {
+	pointLight.diffuse = value.getVec3("diffuse", {0, 0, 0});
+	pointLight.specular = value.getVec3("specular", {0, 0, 0});
+	pointLight.position = value.getVec3("position", {0, 0, 0});
+	pointLight.constant = value.getFloat("constant", 1);
+	pointLight.linear = value.getFloat("linear", 0.14);
+	pointLight.quadratic = value.getFloat("quadratic", 0.07);
+
+	offset = value.getVec3("offset", {0, 0, 0});
+}
+
 PointLightComponent::~PointLightComponent() {}
 
 void PointLightComponent::registerImGui() {

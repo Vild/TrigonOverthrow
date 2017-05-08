@@ -2,5 +2,9 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "particlecomponent.hpp"
 
+ParticleComponent::ParticleComponent(const ComponentValues& value) : ParticleComponent() {
+	// TODO:
+}
+
 ParticleComponent::~ParticleComponent() {}
 void ParticleComponent::registerImGui() {}

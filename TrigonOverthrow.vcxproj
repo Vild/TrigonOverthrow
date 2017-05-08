@@ -26,6 +26,7 @@
     <ClCompile Include="src\gl\simplemesh.cpp" />
     <ClCompile Include="src\gl\texture.cpp" />
     <ClCompile Include="src\io\hidinput.cpp" />
+    <ClCompile Include="src\io\jsonloader.cpp" />
     <ClCompile Include="src\io\maploader.cpp" />
     <ClCompile Include="src\io\meshloader.cpp" />
     <ClCompile Include="src\io\textfactory.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="src\gl\simplemesh.hpp" />
     <ClInclude Include="src\gl\texture.hpp" />
     <ClInclude Include="src\io\hidinput.hpp" />
+    <ClInclude Include="src\io\jsonloader.hpp" />
     <ClInclude Include="src\io\maploader.hpp" />
     <ClInclude Include="src\io\meshloader.hpp" />
     <ClInclude Include="src\io\textfactory.hpp" />
@@ -109,6 +111,7 @@
     <ClInclude Include="src\lib\imgui.h" />
     <ClInclude Include="src\lib\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="src\lib\imgui_internal.h" />
+    <ClInclude Include="src\lib\json.hpp" />
     <ClInclude Include="src\lib\KHR\khrplatform.h" />
     <ClInclude Include="src\lib\Remotery.h" />
     <ClInclude Include="src\lib\sole\sole.fwd.hpp" />

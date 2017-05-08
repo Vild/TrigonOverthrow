@@ -5,7 +5,9 @@
 
 class FloorTileComponent : public Component {
 public:
+	FloorTileComponent() = default;
 	FloorTileComponent(float height);
+	FloorTileComponent(const ComponentValues& value);
 	virtual ~FloorTileComponent();
 
 	float getHeight();

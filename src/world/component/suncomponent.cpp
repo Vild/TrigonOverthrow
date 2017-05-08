@@ -2,6 +2,13 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "suncomponent.hpp"
 
+SunComponent::SunComponent(const ComponentValues& value) : SunComponent() {
+	ambient = value.getVec3("ambient", {0, 0, 0});
+	directionLight.diffuse = value.getVec3("diffuse", {1, 1, 1});
+	directionLight.specular = value.getVec3("specular", {0, 0, 0});
+	directionLight.direction = value.getVec3("direction", {0, -1, 0});
+}
+
 SunComponent::~SunComponent() {}
 
 void SunComponent::registerImGui() {

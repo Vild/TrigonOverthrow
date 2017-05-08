@@ -8,6 +8,14 @@ CameraComponent::CameraComponent() {
 	recalculateProjectionMatrix();
 }
 
+CameraComponent::CameraComponent(const ComponentValues& value) : CameraComponent() {
+	fov = value.getFloat("fov", 1.0f);
+	zNear = value.getFloat("zNear", 0.001f);
+	zFar = value.getFloat("zFar", 100.0f);
+	aspect = value.getFloat("aspect", 1.77f);
+	recalculateProjectionMatrix();
+}
+
 CameraComponent::~CameraComponent() {}
 
 void CameraComponent::recalculateProjectionMatrix() {

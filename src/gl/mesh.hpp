@@ -19,11 +19,13 @@ struct Vertex {
 	glm::vec3 color;
 	glm::vec2 uv;
 	glm::vec3 tangent;
+	float lifeTime;
 };
 
 class Mesh {
 public:
 	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices);
+	Mesh(const Mesh& other);
 	virtual ~Mesh();
 
 	Mesh& addBuffer(const std::string& name, std::function<void(GLuint)> bindHelper, GLenum type = GL_ARRAY_BUFFER);

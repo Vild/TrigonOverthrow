@@ -7,8 +7,7 @@
 #include "../component/cameracomponent.hpp"
 #include "../../engine.hpp"
 
-BulletDebugRenderPass::BulletDebugRenderPass()
-{
+BulletDebugRenderPass::BulletDebugRenderPass() {
 	enable = false;
 
 	wireFrame = std::make_unique<SimpleMesh>(GL_LINES, SimpleMesh::vertexlist_t{
@@ -29,55 +28,45 @@ BulletDebugRenderPass::BulletDebugRenderPass()
 		{  1,-1, 1 }, {  1, 1, 1 }  // FRONT RIGHT		
 	});
 
-
 	_gbuffer = std::make_shared<GBuffer>(0);
 
 	(*(_shader = std::make_shared<ShaderProgram>()))
 		.attach("assets/shaders/bulletdebug.vert", ShaderType::vertex)
 		.attach("assets/shaders/bulletdebug.frag", ShaderType::fragment)
-	.finalize();
+		.finalize();
 
-	_shader->bind()
-		.addUniform("u_view")
-		.addUniform("u_projection");
+	_shader->bind().addUniform("u_view").addUniform("u_projection");
 }
 
-BulletDebugRenderPass::~BulletDebugRenderPass()
-{
-}
+BulletDebugRenderPass::~BulletDebugRenderPass() {}
 
-void BulletDebugRenderPass::registerImGui()
-{
+void BulletDebugRenderPass::registerImGui() {
 	ImGui::Checkbox("Enable", &enable);
 }
 
-inline std::string BulletDebugRenderPass::name()
-{
+inline std::string BulletDebugRenderPass::name() {
 	return "BulletDebugRenderPass";
 }
 
-void BulletDebugRenderPass::render(World & world)
-{
+void BulletDebugRenderPass::render(World& world) {
 	rmt_ScopedCPUSample(BulletDebugRenderPass, RMTSF_None);
 	rmt_ScopedOpenGLSample(BulletDebugRenderPass);
-	if (!enable) return;
+	if (!enable)
+		return;
 
 	auto camera = Engine::getInstance().getCamera()->getComponent<CameraComponent>();
 
+	// glClear(GL_DEPTH_BUFFER_BIT);
 
-	//glClear(GL_DEPTH_BUFFER_BIT);
-
-	_shader->bind()
-		.setUniform("u_view", camera->viewMatrix)
-		.setUniform("u_projection", camera->projectionMatrix);
+	_shader->bind().setUniform("u_view", camera->viewMatrix).setUniform("u_projection", camera->projectionMatrix);
 
 	static std::vector<glm::mat4> instances;
 	instances.clear();
 
-	for (auto& entity : world.getEntities())
-	{
+	for (auto& entity : world.getEntities()) {
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
-		if (!rigidbody) continue;
+		if (!rigidbody)
+			continue;
 
 		auto t = rigidbody->getRigidBody()->getWorldTransform();
 		glm::vec3 pos = cast(t.getOrigin());
@@ -85,13 +74,11 @@ void BulletDebugRenderPass::render(World & world)
 		glm::vec3 scale = rigidbody->getHitboxHalfSize();
 
 		glm::mat4 m = glm::translate(pos) * glm::mat4_cast(rot) * glm::scale(scale);
-		
+
 		instances.push_back(m);
 	}
 
 	wireFrame->draw(instances);
 }
 
-void BulletDebugRenderPass::resize(unsigned int width, unsigned int height)
-{
-}
+void BulletDebugRenderPass::resize(unsigned int width, unsigned int height) {}

@@ -10,11 +10,14 @@ GhostObjectComponent::GhostObjectComponent() {
 	_ghostObject->setActivationState(DISABLE_DEACTIVATION);
 }
 
+GhostObjectComponent::GhostObjectComponent(const ComponentValues& value) : GhostObjectComponent() {
+	// TODO:
+}
+
 GhostObjectComponent::~GhostObjectComponent() {
 	delete _shape;
 	delete _ghostObject;
 }
-
 
 void GhostObjectComponent::registerImGui() {}
 

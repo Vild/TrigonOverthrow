@@ -48,7 +48,6 @@ private:
 	inline const CharInfo& _getChar(char ch) { return _charInfos[(int)ch]; }
 };
 
-// TODO: Turn into a interface and use a private class for the instance
 class TextRenderer {
 public:
 	/// maxTextLength will only be used when isStatic = false

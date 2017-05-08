@@ -1,9 +1,13 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "engine.hpp"
 #include <cstdio>
 #include <cstring>
 #include <ctime>
+
+#ifdef _WIN32
+#define PAUSE() do{ system("pause"); } while(false)
+#else
+#define PAUSE() do{ __asm__("int3"); } while(false)
+#endif
 
 int main(int argc, char** argv) {
 	srand(time(NULL));
@@ -19,13 +23,13 @@ int main(int argc, char** argv) {
 
 	try {
 		return Engine::getInstance().run(vsync);
-	} catch (std::exception& e) {
+	} catch (const std::exception& e) {
 		fprintf(stderr, "%s\n", e.what());
-		system("pause");
+		PAUSE();
 		return -1;
 	} catch (const char* str) {
 		fprintf(stderr, "%s\n", str);
-		system("pause");
+		PAUSE();
 		return -1;
 	}
 }

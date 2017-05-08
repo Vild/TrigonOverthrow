@@ -83,10 +83,10 @@ void main() {
 	float depth = texture(defDepth, vUV).r;
 	float occlusion = texture(defOcclusionMap, vUV).r;
 
-	vec3 result = ambient * diffuse;
+	vec3 result = vec3(0);
 
 	if (settings_enableDirLight)
-		result += calcDirLight(dirLight, pos, normal, diffuse, specular);
+		result += ambient * diffuse + calcDirLight(dirLight, pos, normal, diffuse, specular);
 
 	if (settings_enablePointLight)
 		for (int i = 0; i < pointLightCount; i++)

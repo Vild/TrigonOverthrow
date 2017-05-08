@@ -8,7 +8,6 @@
 #include "../../lib/glad.h"
 
 #include "../component/transformcomponent.hpp"
-#include "../component/floortransformcomponent.hpp"
 #include "../component/modelcomponent.hpp"
 #include "../component/cameracomponent.hpp"
 #include "../component/instancedsimplemeshcomponent.hpp"
@@ -21,7 +20,7 @@ GeometryRenderPass::GeometryRenderPass() {
 	unsigned int width = engine.getWidth(), height = engine.getHeight();
 	_gbuffer->bind()
 		.attachTexture(Attachment::position, width, height, GL_RGB32F, GL_FLOAT, 3)
-		.attachTexture(Attachment::normal, width, height, GL_RGB, GL_UNSIGNED_BYTE, 3)
+		.attachTexture(Attachment::normal, width, height, GL_RGB32F, GL_FLOAT, 3)
 		.attachTexture(Attachment::diffuseSpecular, width, height, GL_RGBA, GL_UNSIGNED_BYTE, 4)
 		.attachDepthTexture(Attachment::depth, width, height)
 		.finalize();
@@ -44,29 +43,14 @@ GeometryRenderPass::GeometryRenderPass() {
 		.setUniform("setting_doBackFaceCulling", _setting_base_doBackFaceCulling)
 		.setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
 
-	_floorShader = std::make_shared<ShaderProgram>();
-	_floorShader->attach(std::make_shared<ShaderUnit>("assets/shaders/floorbase.vert", ShaderType::vertex))
-		.attach(std::make_shared<ShaderUnit>("assets/shaders/floorbase.geom", ShaderType::geometry))
-		.attach(std::make_shared<ShaderUnit>("assets/shaders/floorbase.frag", ShaderType::fragment))
-		.finalize();
-	_floorShader->bind()
-		.addUniform("v")
-		.addUniform("p")
-		.addUniform("cameraPos")
-		.addUniform("diffuseTexture")
-		.addUniform("normalTexture")
-		.addUniform("setting_doBackFaceCulling")
-		.addUniform("setting_defaultSpecular");
-	_floorShader->setUniform("diffuseTexture", 0).setUniform("normalTexture", 1).setUniform("setting_defaultSpecular", _setting_base_defaultSpecular);
-
-	ismShader = std::make_unique<ShaderProgram>();
-	(*ismShader)
+	_ismShader = std::make_unique<ShaderProgram>();
+	(*_ismShader)
 		.attach("assets/shaders/ism_geometry.vert", ShaderType::vertex)
 		.attach("assets/shaders/ism_geometry.geom", ShaderType::geometry)
 		.attach("assets/shaders/ism_geometry.frag", ShaderType::fragment)
 		.finalize();
 
-	ismShader->bind()
+	_ismShader->bind()
 		.addUniform("u_view")
 		.addUniform("u_projection")
 		.addUniform("u_cameraPos")
@@ -95,9 +79,9 @@ void GeometryRenderPass::render(World& world) {
 	_shader->setUniform("v", cameraComponent->viewMatrix);
 	_shader->setUniform("p", cameraComponent->projectionMatrix);
 
-	ismShader->bind();
-	ismShader->setUniform("u_view", cameraComponent->viewMatrix);
-	ismShader->setUniform("u_projection", cameraComponent->projectionMatrix);
+	_ismShader->bind();
+	_ismShader->setUniform("u_view", cameraComponent->viewMatrix);
+	_ismShader->setUniform("u_projection", cameraComponent->projectionMatrix);
 
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		ModelComponent* model = nullptr;
@@ -108,7 +92,7 @@ void GeometryRenderPass::render(World& world) {
 			_shader->bind();
 			model->render(transform->getMatrix());
 		} else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) {
-			ismShader->bind();
+			_ismShader->bind();
 			ism->render();
 		}
 	}

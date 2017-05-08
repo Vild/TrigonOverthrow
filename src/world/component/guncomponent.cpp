@@ -2,6 +2,13 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "guncomponent.hpp"
 
+GunComponent::GunComponent(const ComponentValues& value) : GunComponent() {
+	type = static_cast<GunType>(value.getInt("type", (int)GunComponent::RAYGUN));
+	cooldown = value.getInt("cooldown", 0);
+	cooldownLength = value.getInt("cooldownLength", 32);
+	shoot = value.getBool("shoot", false);
+}
+
 GunComponent::~GunComponent() {}
 
 void GunComponent::addGun(GunComponent::GunType inType, int inCooldown) {

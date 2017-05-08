@@ -17,3 +17,5 @@ struct Component {
 };
 
 inline Component::~Component() {}
+
+#include "../../io/jsonloader.hpp"

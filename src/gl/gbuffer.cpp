@@ -40,7 +40,7 @@ GBuffer& GBuffer::bindImageTexture(GLuint index, bool read) {
 	if (read) { // set it to read only
 		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 	} else {
-		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_WRITE_ONLY | GL_READ_ONLY, GL_RGBA32F);
+		glBindImageTexture(index, _attachments[index]->getTexture(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 	}
 
 	return *this;
@@ -112,7 +112,7 @@ GBuffer& GBuffer::finalize() {
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		std::cerr << "Framebuffer failed!" << std::endl << "\tStatus: " << status << std::endl;
-		throw new std::exception();
+		throw "Failed to create framebuffer!";
 	}
 	return *this;
 }

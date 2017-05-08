@@ -18,11 +18,8 @@
 #include "../world/component/lookatcomponent.hpp"
 #include "../world/component/particlecomponent.hpp"
 #include "../world/component/kbmouseinputcomponent.hpp"
-#include "../world/component/physicscomponent.hpp"
 #include "../world/component/textcomponent.hpp"
-#include "../world/component/floortransformcomponent.hpp"
 #include "../world/component/modelcomponent.hpp"
-#include "../world/component/hitboxcomponent.hpp"
 #include "../world/component/guncomponent.hpp"
 #include "../world/component/lifecomponent.hpp"
 #include "../world/component/instancedsimplemeshcomponent.hpp"
@@ -42,12 +39,37 @@ InGameState::InGameState() {
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter1"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter2"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter3"));
+	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter4"));
+
+	{
+		std::shared_ptr<MapInformation> mapInfo = engine.getJSONLoader()->loadMap("assets/maps/smileyface.json");
+		std::vector<Entity*> entities = mapInfo->constructEntities(_world);
+		for (Entity* entity : entities) {
+			if (!entity)
+				continue;
+
+			// XXX: hack
+			auto transform = entity->getComponent<TransformComponent>();
+			if (!transform)
+				continue;
+			auto rigidbody = entity->getComponent<RigidBodyComponent>();
+			if (!rigidbody)
+				continue;
+			rigidbody->setHitboxHalfSize(transform->getScale());
+			rigidbody->setTransform(transform);
+
+			bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
+		}
+	}
 
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
 		sun->ambient = glm::vec3(0.1);
-		sun->directionLight.diffuse = glm::vec3(0, 0.3, 0.3);
-		sun->directionLight.specular = glm::vec3(0.3, 0, 0);
+		sun->directionLight.diffuse = glm::vec3(0, 0.2, 0.2);
+		sun->directionLight.specular = glm::vec3(0.02, 0.2, 0.02);
 		sun->directionLight.direction = glm::vec3(0, -1, 0);
 	}
 
@@ -60,6 +82,30 @@ InGameState::InGameState() {
 		lookAt->offsetFromTarget = glm::vec3(0, 9, -5);
 
 		_camera->registerImGui = &InGameState::_registerImGUI;
+	}
+
+	{
+		auto particleComp = _emitters[0]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+		particleComp->emitterLife = 2.0f;
+	}
+
+	{
+		auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(0, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+		particleComp->emitterLife = 3.0f;
+	}
+
+	{
+		auto particleComp = _emitters[2]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::INITIATE);
+		particleComp->emitterLife = 4.0f;
+	}
+
+	{
+		auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
+		particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+		particleComp->emitterLife = 5.0f;
 	}
 
 	{ // Adding Player
@@ -88,10 +134,11 @@ InGameState::InGameState() {
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
 			.finalize();
-		auto particle = _player->addComponent<ParticleComponent>();
-		particle->addEmitter(transform->getDirection(), 1024);
+		//auto particle = _player->addComponent<ParticleComponent>();
+		//particle->type = ParticleComponent::ParticleEffect::EXPLOSION;
+		//particle->addEmitter(glm::vec3(0,0,1), glm::vec3(0,0,1), 1024);
+
 		_player->addComponent<KBMouseInputComponent>();
-		//_player->addComponent<PhysicsComponent>();
 
 		/*auto life = */ _player->addComponent<LifeComponent>();
 
@@ -102,7 +149,7 @@ InGameState::InGameState() {
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 		text->transform.setPosition(glm::vec3(0, 1, 0));
 		text->transform.setScale(glm::vec3(10));
-		
+
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
 		rigidbody->getRigidBody()->setDamping(0.99, 0);
 		rigidbody->setHitboxHalfSize(transform->getScale());
@@ -111,8 +158,8 @@ InGameState::InGameState() {
 		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_PLAYER, BulletPhysicsSystem::playerCollidesWith);
 
 		auto point = _player->addComponent<PointLightComponent>();
-		point->pointLight.diffuse = glm::vec3(0, 1, 0);
-		point->pointLight.specular = glm::vec3(0, 0, 0);
+		point->pointLight.diffuse = glm::vec3(0, 0.9, 0);
+		point->pointLight.specular = glm::vec3(0, 0.05, 0);
 		point->pointLight.constant = 1;
 		point->pointLight.linear = 0.14;
 		point->pointLight.quadratic = 0.07;
@@ -121,7 +168,7 @@ InGameState::InGameState() {
 		engine.getSystem<RoomLoadingSystem>()->setPlayerTransform(transform);
 	}
 
-	{
+	{ // Adding Enemy
 		auto transform = _enemy->addComponent<TransformComponent>();
 		transform->setScale(glm::vec3(0.3));
 		transform->setPosition(glm::vec3(0, 0.2, 5));
@@ -146,10 +193,6 @@ InGameState::InGameState() {
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
 			.finalize();
-
-		// auto hitbox = _enemy->addComponent<HitboxComponent>();
-		// hitbox->addHitbox(HitboxComponent::SPHERE, transform->getPosition());
-		//_enemy->addComponent<PhysicsComponent>();
 
 		auto life = _enemy->addComponent<LifeComponent>();
 		life->currHP = life->maxHP = 6;

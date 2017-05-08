@@ -41,11 +41,12 @@ ShaderUnit::ShaderUnit(const std::string& file, ShaderType type) {
 		const char* strtype = toString(type);
 
 		char buf[0x1000];
-		snprintf(buf, sizeof(buf), "Compile %s in %s(%s) shader:\n%s\n", status == GL_FALSE ? "failure" : "successful", file.c_str(), strtype, errorLog.data());
-		if (status == GL_FALSE)
+		if (status == GL_TRUE)
+			printf("Compile the '%s(%s)' shader successfully!\n", file.c_str(), strtype);
+		else {
+			snprintf(buf, sizeof(buf), "Compilation failure for the '%s(%s)' shader:\n\t%s\n", file.c_str(), strtype, errorLog.data());
 			throw ShaderUnitException(std::string(buf));
-		else
-			printf("%s", buf);
+		}
 	}
 }
 
@@ -62,6 +63,17 @@ UniformBuffer::UniformBuffer(size_t size, GLenum dataMode) {
 
 UniformBuffer::~UniformBuffer() {
 	glDeleteBuffers(1, &_bufferID);
+}
+
+ShaderStorageBuffer::ShaderStorageBuffer(size_t size, GLenum dataMode) {
+	glGenBuffers(1, &_ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, dataMode);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+ShaderStorageBuffer::~ShaderStorageBuffer() {
+	glDeleteBuffers(1, &_ssbo);
 }
 
 ShaderProgram::ShaderProgram() {

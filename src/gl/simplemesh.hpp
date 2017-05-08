@@ -5,8 +5,7 @@
 #include <initializer_list>
 #include <memory>
 
-class SimpleMesh
-{
+class SimpleMesh {
 public:
 	typedef std::initializer_list<glm::vec3> vertexlist_t;
 	static vertexlist_t box;
@@ -19,7 +18,7 @@ public:
 	SimpleMesh& setDrawMode(GLenum mode);
 
 	void draw();
-	void draw(std::vector<glm::mat4> & instances);
+	void draw(std::vector<glm::mat4>& instances);
 
 private:
 	GLuint VAO;
