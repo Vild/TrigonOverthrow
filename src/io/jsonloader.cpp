@@ -31,7 +31,21 @@
 #define __PRETTY_FUNCTION__ __func__
 #endif
 
-using json = nlohmann::json;
+std::vector<Entity*> MapInformation::constructEntities(World& world) {
+	std::vector<Entity*> result;
+
+	for (auto it = entities.begin(); it != entities.end(); ++it) {
+		sole::uuid uuid = sole::rebuild(it.key());
+
+		json entity = it.value();
+		std::string template_ = entity.at("template").get<std::string>();
+		json components = entity.at("components");
+
+		result.push_back(jsonLoader.constructEntity(world, uuid, "assets/entities/" + template_ + ".json", components));
+	}
+
+	return result;
+}
 
 template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 static void constructComponent(Entity* entity, const ComponentValues& value) {
@@ -65,14 +79,41 @@ JSONLoader::JSONLoader() {
 
 JSONLoader::~JSONLoader() {}
 
-Entity* JSONLoader::constructEntity(World& world, const std::string& file) {
+std::shared_ptr<MapInformation> JSONLoader::loadMap(const std::string& map) {
 	json root;
-	{
-		std::ifstream input(file);
+	try {
+		std::ifstream input(map);
 		input >> root;
+	} catch (const std::invalid_argument& e) {
+		fprintf(stderr, "Failed to load map: Map file path is invalid!: %s\n", e.what());
+		return std::shared_ptr<MapInformation>();
+	} catch (const std::exception& e) {
+		fprintf(stderr, "Failed to load map: %s\n", e.what());
+		return std::shared_ptr<MapInformation>();
+	} catch (const char* msg) {
+		fprintf(stderr, "Failed to load map: %s\n", msg);
+		return std::shared_ptr<MapInformation>();
 	}
 
-	sole::uuid uuid = sole::rebuild(root.at("uuid").get<std::string>());
+	return std::make_shared<MapInformation>(*this, root.at("name").get<std::string>(), root.at("map").get<std::string>(), root.at("entities"));
+}
+
+Entity* JSONLoader::constructEntity(World& world, const sole::uuid& uuid, const std::string& entityTemplate, const json& mapEntityComponents) {
+	json root;
+	try {
+		std::ifstream input(entityTemplate);
+		input >> root;
+	} catch (const std::invalid_argument& e) {
+		fprintf(stderr, "Failed to load entity: Entity template file path is invalid!: %s\n", e.what());
+		return nullptr;
+	} catch (const std::exception& e) {
+		fprintf(stderr, "Failed to load entity: %s\n", e.what());
+		return nullptr;
+	} catch (const char* msg) {
+		fprintf(stderr, "Failed to load entity: %s\n", msg);
+		return nullptr;
+	}
+
 	std::string name = root.at("name").get<std::string>();
 
 	json components = root.at("components");
@@ -83,19 +124,30 @@ Entity* JSONLoader::constructEntity(World& world, const std::string& file) {
 		std::string name = it.key();
 
 		auto f = _constructors[name];
-		if (f)
-			f(entity, ComponentValues{it.value()});
+		if (!f)
+			throw JSONParseException("Missing component constructor!", name, __PRETTY_FUNCTION__, __LINE__);
+
+		json mapObj;
+		auto mapIT = mapEntityComponents.find(name);
+		if (mapIT != mapEntityComponents.end())
+			mapObj = *mapIT;
+
+		f(entity, ComponentValues{mapObj, it.value(), entity});
 	}
 
 	return entity;
 }
 
 bool ComponentValues::getBool(const std::string& name, bool defaultValue) const {
-	auto it = obj.find(name);
-	if (it == obj.end())
-		return defaultValue;
-
-	auto tmp = *it;
+	json tmp;
+	auto mapIT = mapObj.find(name);
+	if (mapIT == mapObj.end()) {
+		auto templateIT = templateObj.find(name);
+		if (templateIT == templateObj.end())
+			return defaultValue;
+		tmp = *templateIT;
+	} else
+		tmp = *mapIT;
 
 	if (tmp.type() == json::value_t::boolean)
 		return tmp.get<bool>();
@@ -109,11 +161,15 @@ bool ComponentValues::getBool(const std::string& name, bool defaultValue) const 
 }
 
 int ComponentValues::getInt(const std::string& name, int defaultValue) const {
-	auto it = obj.find(name);
-	if (it == obj.end())
-		return defaultValue;
-
-	auto tmp = *it;
+	json tmp;
+	auto mapIT = mapObj.find(name);
+	if (mapIT == mapObj.end()) {
+		auto templateIT = templateObj.find(name);
+		if (templateIT == templateObj.end())
+			return defaultValue;
+		tmp = *templateIT;
+	} else
+		tmp = *mapIT;
 
 	if (tmp.type() == json::value_t::number_integer)
 		return tmp.get<int>();
@@ -132,11 +188,15 @@ int ComponentValues::getInt(const std::string& name, int defaultValue) const {
 }
 
 float ComponentValues::getFloat(const std::string& name, float defaultValue) const {
-	auto it = obj.find(name);
-	if (it == obj.end())
-		return defaultValue;
-
-	auto tmp = *it;
+	json tmp;
+	auto mapIT = mapObj.find(name);
+	if (mapIT == mapObj.end()) {
+		auto templateIT = templateObj.find(name);
+		if (templateIT == templateObj.end())
+			return defaultValue;
+		tmp = *templateIT;
+	} else
+		tmp = *mapIT;
 
 	if (tmp.type() == json::value_t::number_float)
 		return tmp.get<float>();
@@ -181,11 +241,15 @@ float ComponentValues::getFloat(const std::string& name, float defaultValue) con
 }
 
 glm::vec2 ComponentValues::getVec2(const std::string& name, const glm::vec2& defaultValue) const {
-	auto it = obj.find(name);
-	if (it == obj.end())
-		return defaultValue;
-
-	auto tmp = *it;
+	json tmp;
+	auto mapIT = mapObj.find(name);
+	if (mapIT == mapObj.end()) {
+		auto templateIT = templateObj.find(name);
+		if (templateIT == templateObj.end())
+			return defaultValue;
+		tmp = *templateIT;
+	} else
+		tmp = *mapIT;
 
 	if (tmp.type() != json::value_t::array)
 		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
@@ -240,11 +304,15 @@ glm::vec2 ComponentValues::getVec2(const std::string& name, const glm::vec2& def
 }
 
 glm::vec3 ComponentValues::getVec3(const std::string& name, const glm::vec3& defaultValue) const {
-	auto it = obj.find(name);
-	if (it == obj.end())
-		return defaultValue;
-
-	auto tmp = *it;
+	json tmp;
+	auto mapIT = mapObj.find(name);
+	if (mapIT == mapObj.end()) {
+		auto templateIT = templateObj.find(name);
+		if (templateIT == templateObj.end())
+			return defaultValue;
+		tmp = *templateIT;
+	} else
+		tmp = *mapIT;
 
 	if (tmp.type() != json::value_t::array)
 		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
@@ -299,11 +367,15 @@ glm::vec3 ComponentValues::getVec3(const std::string& name, const glm::vec3& def
 }
 
 std::string ComponentValues::getString(const std::string& name, const std::string& defaultValue) const {
-	auto it = obj.find(name);
-	if (it == obj.end())
-		return defaultValue;
-
-	auto tmp = *it;
+	json tmp;
+	auto mapIT = mapObj.find(name);
+	if (mapIT == mapObj.end()) {
+		auto templateIT = templateObj.find(name);
+		if (templateIT == templateObj.end())
+			return defaultValue;
+		tmp = *templateIT;
+	} else
+		tmp = *mapIT;
 
 	if (tmp.type() != json::value_t::string)
 		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);

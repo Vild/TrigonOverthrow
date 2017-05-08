@@ -26,18 +26,27 @@ static bool hasTextureCoords(aiMesh* mesh, unsigned int pIndex) {
 MeshLoader::MeshLoader() {}
 
 MeshLoader::~MeshLoader() {
+	for (std::pair<std::string, LoadedMesh*> mesh : _storage)
+		delete mesh.second;
 	_storage.clear();
 }
 
 std::shared_ptr<LoadedMesh> MeshLoader::getMesh(const std::string& file) {
-	std::cout << "Want mesh: " << file << std::endl;
-	try {
-		std::shared_ptr<LoadedMesh> loadedMesh = std::make_shared<LoadedMesh>(file);
-		return _storage[file] = loadedMesh;
-	} catch (const char* msg) {
-		std::cout << msg << std::endl;
+	LoadedMesh* mesh = _storage[file];
+	if (!mesh) {
+		try {
+			std::cout << "Loading mesh: " << file << std::endl;
+			mesh = _storage[file] = new LoadedMesh(file);
+		} catch (const std::exception& e) {
+			std::cerr << "FAILED TO LOAD MESH: " << e.what() << std::endl;
+			return std::shared_ptr<LoadedMesh>();
+		} catch (const char* msg) {
+			std::cerr << "FAILED TO LOAD MESH: " << msg << std::endl;
+			return std::shared_ptr<LoadedMesh>();
+		}
 	}
-	return std::shared_ptr<LoadedMesh>();
+
+	return std::make_shared<LoadedMesh>(*mesh);
 }
 
 LoadedMesh::LoadedMesh(const std::string& file) {
@@ -48,7 +57,7 @@ LoadedMesh::LoadedMesh(const std::string& file) {
 		aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_GenNormals | aiProcess_FlipUVs);
 	if (!scene) {
 		fprintf(stderr, "Could not load model %s\n", file.c_str());
-		throw std::exception();
+		throw "Could not load model";
 	}
 
 	mesh = _getModel(scene);
@@ -56,7 +65,13 @@ LoadedMesh::LoadedMesh(const std::string& file) {
 	normalTexture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
 }
 
-std::shared_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {
+LoadedMesh::LoadedMesh(const LoadedMesh& other) {
+	mesh = std::make_unique<Mesh>(*other.mesh);
+	texture = other.texture;
+	normalTexture = other.normalTexture;
+}
+
+std::unique_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 
@@ -103,7 +118,7 @@ std::shared_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {
 		counterVertices += assimpMesh->mNumVertices;
 	}
 
-	return std::make_shared<Mesh>(vertices, indices);
+	return std::make_unique<Mesh>(vertices, indices);
 }
 
 LoadedMesh::~LoadedMesh() {}

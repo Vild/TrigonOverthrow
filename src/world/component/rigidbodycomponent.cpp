@@ -16,7 +16,14 @@ RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float frictio
 }
 
 RigidBodyComponent::RigidBodyComponent(const ComponentValues& value) : RigidBodyComponent() {
-	// TODO:
+	hitboxHalfSize = {1, 1, 1};
+
+	mass = value.getFloat("mass", 1);
+	friction = value.getFloat("friction", 1);
+	state = new btDefaultMotionState();
+	shape = new btBoxShape({1, 1, 1});
+	rigidBody = new btRigidBody(mass, state, shape);
+	rigidBody->setUserPointer(value.entity);
 }
 
 RigidBodyComponent::~RigidBodyComponent() {

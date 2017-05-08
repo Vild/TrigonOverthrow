@@ -46,7 +46,26 @@ InGameState::InGameState() {
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter3"));
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter4"));
 
-	engine.getJSONLoader()->constructEntity(_world, "assets/entities/player.json");
+	{
+		std::shared_ptr<MapInformation> mapInfo = engine.getJSONLoader()->loadMap("assets/maps/smileyface.json");
+		std::vector<Entity*> entities = mapInfo->constructEntities(_world);
+		for (Entity* entity : entities) {
+			if (!entity)
+				continue;
+
+			// XXX: hack
+			auto transform = entity->getComponent<TransformComponent>();
+			if (!transform)
+				continue;
+			auto rigidbody = entity->getComponent<RigidBodyComponent>();
+			if (!rigidbody)
+				continue;
+			rigidbody->setHitboxHalfSize(transform->getScale());
+			rigidbody->setTransform(transform);
+
+			bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
+		}
+	}
 
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
@@ -147,7 +166,7 @@ InGameState::InGameState() {
 		_player->addComponent<HoverComponent>(0.6, 100);
 	}
 
-	{
+	{ // Adding Enemy
 		auto transform = _enemy->addComponent<TransformComponent>();
 		transform->setScale(glm::vec3(0.3));
 		transform->setPosition(glm::vec3(0, 0.2, 5));
@@ -193,6 +212,7 @@ InGameState::InGameState() {
 
 		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 	}
+
 	// clang-format off
 	{ // Adding Floor
 		auto mapLoader = engine.getMapLoader();

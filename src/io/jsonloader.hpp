@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <vector>
 #include <glm/glm.hpp>
 
 #include "../lib/json.hpp"
@@ -9,14 +10,30 @@
 #include "../world/world.hpp"
 #include "../world/entity.hpp"
 
+using json = nlohmann::json;
+
+class JSONLoader;
 struct ComponentValues;
+
+struct MapInformation {
+	JSONLoader& jsonLoader;
+
+	std::string name;
+	std::string map;
+	json entities;
+
+	MapInformation(JSONLoader& jsonLoader, std::string name, std::string map, json entities) : jsonLoader(jsonLoader), name(name), map(map), entities(entities) {}
+
+	std::vector<Entity*> constructEntities(World& world);
+};
 
 class JSONLoader {
 public:
 	JSONLoader();
 	virtual ~JSONLoader();
 
-	Entity* constructEntity(World& world, const std::string& file);
+	std::shared_ptr<MapInformation> loadMap(const std::string& map);
+	Entity* constructEntity(World& world, const sole::uuid& uuid, const std::string& entityTemplate, const json& mapEntityComponents);
 
 private:
 	typedef void (*constructComponent_f)(Entity* entity, const ComponentValues& value);
@@ -25,7 +42,10 @@ private:
 };
 
 struct ComponentValues {
-	nlohmann::json& obj;
+	json& mapObj;
+	json& templateObj;
+	// XXX: HACK
+	Entity* entity;
 
 	bool getBool(const std::string& name, bool defaultValue) const;
 	int getInt(const std::string& name, int defaultValue) const;

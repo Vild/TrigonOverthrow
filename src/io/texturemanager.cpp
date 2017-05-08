@@ -12,14 +12,23 @@ TextureManager::~TextureManager() {
 }
 
 std::shared_ptr<Texture> TextureManager::getTexture(const std::string& file) {
-	std::cout << "Want file: " << file << std::endl;
-	try {
-		std::shared_ptr<Texture> tex = std::make_shared<Texture>(file);
-		return _storage[file] = tex;
-	} catch (const char* msg) {
-		std::cout << msg << std::endl;
+	if (file.empty())
+		return _errorTexture;
+	std::shared_ptr<Texture> texture = _storage[file];
+	if (!texture) {
+		try {
+			std::cout << "Loading texture: " << file << std::endl;
+			texture = _storage[file] = std::make_shared<Texture>(file);
+		} catch (const std::exception& e) {
+			std::cerr << "FAILED TO LOAD TEXTURE: " << e.what() << std::endl;
+			return _errorTexture;
+		} catch (const char* msg) {
+			std::cerr << "FAILED TO LOAD TEXTURE: " << msg << std::endl;
+			return _errorTexture;
+		}
 	}
-	return _storage[file] = _errorTexture;
+
+	return texture;
 }
 
 std::shared_ptr<Texture> TextureManager::getErrorTexture() {

@@ -10,6 +10,8 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices) : _vertice
 	_uploadData();
 }
 
+Mesh::Mesh(const Mesh& other) : Mesh(other._vertices, other._indices) {}
+
 Mesh::~Mesh() {
 	for (std::map<std::string, GLuint>::iterator it = _extraBuffers.begin(); it != _extraBuffers.end(); ++it) {
 		GLuint id = it->second;

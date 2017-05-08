@@ -106,6 +106,8 @@ void GeometryRenderPass::render(World& world) {
 
 		if ((model = entity->getComponent<ModelComponent>()) && (transform = entity->getComponent<TransformComponent>())) {
 			_shader->bind();
+			if (!model->meshData)
+				__asm__("int3");
 			model->render(transform->getMatrix());
 		} else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) {
 			ismShader->bind();

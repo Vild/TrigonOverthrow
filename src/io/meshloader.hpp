@@ -8,14 +8,15 @@
 
 struct LoadedMesh {
 	LoadedMesh(const std::string& file);
+	LoadedMesh(const LoadedMesh& other);
 	virtual ~LoadedMesh();
 
-	std::shared_ptr<Mesh> mesh;
+	std::unique_ptr<Mesh> mesh;
 	std::shared_ptr<Texture> texture;
 	std::shared_ptr<Texture> normalTexture;
 
 private:
-	std::shared_ptr<Mesh> _getModel(const aiScene* scene);
+	std::unique_ptr<Mesh> _getModel(const aiScene* scene);
 	std::shared_ptr<Texture> _getTexture(const aiScene* scene, const std::string& filename);
 };
 
@@ -27,5 +28,5 @@ public:
 	std::shared_ptr<LoadedMesh> getMesh(const std::string& file);
 
 private:
-	std::map<std::string, std::shared_ptr<LoadedMesh>> _storage;
+	std::map<std::string, LoadedMesh*> _storage;
 };

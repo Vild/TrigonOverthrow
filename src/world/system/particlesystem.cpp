@@ -23,7 +23,7 @@ ParticleSystem::ParticleSystem() {
 	//_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
 	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
 	//_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
-	
+
 	_ssbos.resize(3);
 	_ssbos[ParticleAttribute::position] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec4));
 	_ssbos[ParticleAttribute::velocity] = std::make_shared<ShaderStorageBuffer>(MAX_EMITTER_COUNT * NR_OF_PARTICLES * sizeof(glm::vec4));
@@ -34,7 +34,7 @@ ParticleSystem::~ParticleSystem() {}
 
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
-	// Gotta change how this system works abit. 
+	// Gotta change how this system works abit.
 	// Main things to fix: All emitters with the different types should use the correct shader.
 
 	bool newData = false;
@@ -100,13 +100,13 @@ void ParticleSystem::_addNewData(int emitters[64], int tempNrOfEmitters) {
 
 void ParticleSystem::_removeEmitter(const int counter) {
 	for (int i = 0; i < 1024; i++) {
-		_computePositions[counter * NR_OF_PARTICLES + i] = glm::vec4(NULL);
-		_computeVelocities[counter * NR_OF_PARTICLES + i] = glm::vec4(NULL);
+		_computePositions[counter * NR_OF_PARTICLES + i] = glm::vec4(0);
+		_computeVelocities[counter * NR_OF_PARTICLES + i] = glm::vec4(0);
 		_computeLives[counter * NR_OF_PARTICLES + i] = -10;
 	}
-	_computePositions.erase(remove(_computePositions.begin(), _computePositions.end(), glm::vec4(NULL)),
+	_computePositions.erase(remove(_computePositions.begin(), _computePositions.end(), glm::vec4(0)),
 		_computePositions.end());
-	_computeVelocities.erase(remove(_computeVelocities.begin(), _computeVelocities.end(), glm::vec4(NULL)),
+	_computeVelocities.erase(remove(_computeVelocities.begin(), _computeVelocities.end(), glm::vec4(0)),
 		_computeVelocities.end());
 	_computeLives.erase(remove(_computeLives.begin(), _computeLives.end(), -10),
 		_computeLives.end());

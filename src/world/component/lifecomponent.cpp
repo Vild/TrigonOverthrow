@@ -7,9 +7,8 @@ LifeComponent::LifeComponent() : maxHP(4), currHP(4), hpchanged(false) {}
 LifeComponent::LifeComponent(float inMaxHP) : maxHP(inMaxHP), currHP(inMaxHP), hpchanged(true) {}
 
 LifeComponent::LifeComponent(const ComponentValues& value) : LifeComponent() {
-	maxHP = value.getFloat("maxHP", 4);
-	currHP = value.getFloat("currHP", 4);
-	hpchanged = value.getBool("hpchanged", false);
+	currHP = maxHP = value.getFloat("maxHP", 4);
+	hpchanged = false;
 }
 
 LifeComponent::~LifeComponent() {}

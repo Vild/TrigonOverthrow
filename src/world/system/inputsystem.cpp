@@ -49,7 +49,7 @@ void InputSystem::update(World& world, float delta) {
 		if (hid->getKey(SDL_SCANCODE_LCTRL))
 			inputDir.y--;
 
-		float accelSpeed = 60;
+		float accelSpeed = 20;
 		// float maxSpeed = 5;
 
 		// physicsComponent->acceleration = -physicsComponent->velocity / 0.05f;
