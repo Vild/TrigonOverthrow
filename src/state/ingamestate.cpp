@@ -227,8 +227,7 @@ InGameState::InGameState() {
 		auto model = expOrb->addComponent<ModelComponent>();
 		model->meshData = std::make_shared<LoadedMesh>();
 		std::vector<Vertex> vertices;
-		vertices.push_back(Vertex{ glm::vec3(0, 0, 0), glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 1 }, glm::vec2{ 0, 0 }, glm::vec3{ 0, 0, 1 }, 0
-	});
+		vertices.push_back(Vertex{ glm::vec3(0, 0, 0), glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 1 }, glm::vec2{ 0, 0 }, glm::vec3{ 0, 0, 1 }});
 		std::vector<GLuint> indices;
 		indices.push_back(0);
 		model->meshData->mesh = std::make_unique<Mesh>(vertices, indices);
