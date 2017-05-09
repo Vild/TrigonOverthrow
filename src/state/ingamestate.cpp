@@ -67,9 +67,9 @@ InGameState::InGameState() {
 
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
-		sun->ambient = glm::vec3(0.1);
-		sun->directionLight.diffuse = glm::vec3(0, 0.2, 0.2);
-		sun->directionLight.specular = glm::vec3(0.02, 0.2, 0.02);
+		sun->ambient = glm::vec3(0.5);
+		sun->directionLight.diffuse = glm::vec3(0.4, 0.4, 0.4);
+		sun->directionLight.specular = glm::vec3(0.0, 0.0, 0.0);
 		sun->directionLight.direction = glm::vec3(0, -1, 0);
 	}
 

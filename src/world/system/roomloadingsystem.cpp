@@ -71,9 +71,9 @@ void RoomLoadingSystem::newRoom(World * world, coord_t coord)
 	static Engine * engine = &Engine::getInstance();
 	static MapLoader * mapLoader = engine->getMapLoader().get();
 	static BulletPhysicsSystem * bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
-	static std::string maps[] = { "maps/derp.png", "maps/sunkentemple.png" , "maps/whiteness.png", "maps/smileyface.png" };
+	static std::string maps[] = { "maps/test3218.png" };
 
-	MapData map = mapLoader->loadFromImage(maps[3]);
+	MapData map = mapLoader->loadFromImage(maps[0]);
 	Entity * room = world->addEntity(sole::uuid4(), "Room");
 	
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
