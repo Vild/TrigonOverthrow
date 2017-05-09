@@ -36,7 +36,6 @@
     <ClCompile Include="src\lib\imgui_demo.cpp" />
     <ClCompile Include="src\lib\imgui_draw.cpp" />
     <ClCompile Include="src\lib\imgui_impl_sdl_gl3.cpp" />
-    <ClCompile Include="src\lib\Remotery.c" />
     <ClCompile Include="src\lib\sole\sole.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\state\ingamestate.cpp" />
