@@ -48,7 +48,7 @@ void RoomLoadingSystem::update(World & world, float delta)
 			glm::ivec2 roomCoord = rlc->getCoord();
 			float distance = glm::distance(glm::vec2(playerCoord), glm::vec2(roomCoord));
 
-			if (distance > 4)
+			if (distance > 1.5)
 			{
 				rlc->unload();
 				chunks.erase(coord_t(roomCoord.x, roomCoord.y));
