@@ -50,6 +50,7 @@
     <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
     <ClCompile Include="src\world\component\hovercomponent.cpp" />
+    <ClCompile Include="src\world\component\infiniteplanefollowcomponent.cpp" />
     <ClCompile Include="src\world\component\instancedsimplemeshcomponent.cpp" />
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp" />
     <ClCompile Include="src\world\component\lifecomponent.cpp" />
@@ -59,6 +60,7 @@
     <ClCompile Include="src\world\component\pointlightcomponent.cpp" />
     <ClCompile Include="src\world\component\projectilecomponent.cpp" />
     <ClCompile Include="src\world\component\rigidbodycomponent.cpp" />
+    <ClCompile Include="src\world\component\roomloadingcomponent.cpp" />
     <ClCompile Include="src\world\component\suncomponent.cpp" />
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
@@ -126,6 +128,7 @@
     <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
     <ClInclude Include="src\world\component\hovercomponent.hpp" />
+    <ClInclude Include="src\world\component\infiniteplanefollowcomponent.hpp" />
     <ClInclude Include="src\world\component\instancedsimplemeshcomponent.hpp" />
     <ClInclude Include="src\world\component\kbmouseinputcomponent.hpp" />
     <ClInclude Include="src\world\component\lifecomponent.hpp" />
@@ -135,6 +138,7 @@
     <ClInclude Include="src\world\component\pointlightcomponent.hpp" />
     <ClInclude Include="src\world\component\projectilecomponent.hpp" />
     <ClInclude Include="src\world\component\rigidbodycomponent.hpp" />
+    <ClInclude Include="src\world\component\roomloadingcomponent.hpp" />
     <ClInclude Include="src\world\component\suncomponent.hpp" />
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
