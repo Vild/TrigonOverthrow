@@ -14,7 +14,6 @@
 InputSystem::~InputSystem() {}
 
 void InputSystem::update(World& world, float delta) {
-	rmt_ScopedCPUSample(InputSystem, RMTSF_None);
 	std::shared_ptr<HIDInput> hid = Engine::getInstance().getHIDInput();
 
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {

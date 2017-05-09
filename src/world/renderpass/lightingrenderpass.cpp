@@ -120,8 +120,6 @@ LightingRenderPass::LightingRenderPass() {
 LightingRenderPass::~LightingRenderPass() {}
 
 void LightingRenderPass::render(World& world) {
-	rmt_ScopedCPUSample(LightingRenderPass, RMTSF_None);
-	rmt_ScopedOpenGLSample(LightingRenderPass);
 	auto camera = Engine::getInstance().getCamera();
 	if (!camera)
 		return;

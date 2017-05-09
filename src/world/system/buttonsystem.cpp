@@ -13,7 +13,6 @@
 ButtonSystem::~ButtonSystem() {}
 
 void ButtonSystem::update(World& world, float delta) {
-	rmt_ScopedCPUSample(ButtonSystem, RMTSF_None);
 	Engine& engine = Engine::getInstance();
 	auto camera = engine.getCamera();
 	if (!camera)

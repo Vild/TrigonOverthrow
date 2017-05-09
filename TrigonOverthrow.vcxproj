@@ -64,6 +64,7 @@
     <ClCompile Include="src\world\component\suncomponent.cpp" />
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
+    <ClCompile Include="src\world\component\upgradecomponent.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
     <ClCompile Include="src\world\renderpass\bulletdebugrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="src\world\component\suncomponent.hpp" />
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
+    <ClInclude Include="src\world\component\upgradecomponent.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
     <ClInclude Include="src\world\renderpass\bulletdebugrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp" />

@@ -25,7 +25,7 @@ BulletDebugRenderPass::BulletDebugRenderPass() {
 		{ -1,-1,-1 }, { -1, 1,-1 }, // BACK LEFT
 		{  1,-1,-1 }, {  1, 1,-1 }, // BACK RIGHT
 		{ -1,-1, 1 }, { -1, 1, 1 }, // FRONT LETT
-		{  1,-1, 1 }, {  1, 1, 1 }  // FRONT RIGHT		
+		{  1,-1, 1 }, {  1, 1, 1 }  // FRONT RIGHT
 	});
 
 	_gbuffer = std::make_shared<GBuffer>(0);
@@ -49,8 +49,6 @@ inline std::string BulletDebugRenderPass::name() {
 }
 
 void BulletDebugRenderPass::render(World& world) {
-	rmt_ScopedCPUSample(BulletDebugRenderPass, RMTSF_None);
-	rmt_ScopedOpenGLSample(BulletDebugRenderPass);
 	if (!enable)
 		return;
 

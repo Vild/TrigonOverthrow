@@ -19,7 +19,7 @@ ParticleSystem::ParticleSystem() {
 	_programs[ParticleComponent::ParticleEffect::EXPLOSION] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_explosion.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::EXPLOSION]->bind().addUniform("delta");
-	
+
 	_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
@@ -33,14 +33,16 @@ void ParticleSystem::update(World& world, float delta) {
 	// Main things to fix: All emitters with the different types should use the correct shader.
 
 	// remember to fix initiate particles.
-	rmt_ScopedCPUSample(ParticleSystem, RMTSF_None);
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto particleComp = entity->getComponent<ParticleComponent>();
 		if (!particleComp)
 			continue;
 
-		if (particleComp->emitterLife <= 0)
+		if (particleComp->emitterLife <= 0) {
+			entity->removeComponent<ParticleComponent>();
 			entity->makeDead();
+			continue;
+		}
 
 		_programs[particleComp->type]->bind()
 			.setUniform("delta", delta);

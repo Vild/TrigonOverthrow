@@ -64,7 +64,7 @@ public:
 	inline std::string name() final { return "LightingRenderPass"; };
 
 private:
-	static const int MAX_POINT_LIGHTS = 16;
+	static const int MAX_POINT_LIGHTS = 128;
 
 	std::shared_ptr<Mesh> _plane;
 

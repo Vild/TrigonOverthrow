@@ -31,7 +31,6 @@ BulletPhysicsSystem::~BulletPhysicsSystem() {
 }
 
 void BulletPhysicsSystem::update(World& w, float delta) {
-	rmt_ScopedCPUSample(BulletPhyisicsSystem, RMTSF_None);
 	world->stepSimulation(delta);
 
 	for (std::unique_ptr<Entity>& entity : w.getEntities()) {

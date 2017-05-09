@@ -13,7 +13,6 @@
 LookAtSystem::~LookAtSystem() {}
 
 void LookAtSystem::update(World& world, float delta) {
-	rmt_ScopedCPUSample(LookAtSystem, RMTSF_None);
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto lookat = entity->getComponent<LookAtComponent>();
 		if (!lookat || !lookat->target)
