@@ -96,7 +96,6 @@ void main() {
 		result = diffuse;
 
 	result *= occlusion;
-	result = normal * vec3(0.5) + vec3(0.5);
 	outColor = vec4(result, 1);
 	gl_FragDepth = depth;
 }
