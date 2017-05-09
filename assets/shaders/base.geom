@@ -55,7 +55,7 @@ void main() {
 		gPos = pos.xyz;
 
 		mat3 normalMatrix = transpose(inverse(mat3(vM[i])));
-		gNormal = normalize(normalMatrix * vNormal[i]);
+		gNormal = vNormal[i];// normalize(normalMatrix * vNormal[i]);
 
 		gColor = vColor[i];
 		gUV = vUV[i];

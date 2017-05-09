@@ -88,26 +88,26 @@ InGameState::InGameState() {
 	{
 		auto particleComp = _emitters[0]->addComponent<ParticleComponent>();
 		particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 2.0f;
+		particleComp->emitterLife = 5.0f;
 	}
 
 	{
 		auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
 		particleComp->addEmitter(glm::vec3(0, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 3.0f;
+		particleComp->emitterLife = 5.0f;
 	}
 
 	{
 		auto particleComp = _emitters[2]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::INITIATE);
-		particleComp->emitterLife = 4.0f;
-	}
-
-	{
-		auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+		particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 		particleComp->emitterLife = 5.0f;
 	}
+
+	//{
+	//	auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
+	//	particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+	//	particleComp->emitterLife = 5.0f;
+	//}
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();

@@ -22,9 +22,7 @@ struct ParticleComponent : public Component {
 
 	std::shared_ptr<Emitter> emitter;
 	ParticleEffect type;
-	glm::vec3 particlePositions[1024];
-	glm::vec3 particleVelocities[1024];
-	float particleLives[1024];
+	std::vector<std::shared_ptr<ShaderStorageBuffer>> ssbo;
 	float emitterLife;
 	bool loaded;
 
@@ -33,39 +31,24 @@ struct ParticleComponent : public Component {
 	virtual ~ParticleComponent();
 	void addEmitter(glm::vec3 inPos, glm::vec3 dir, ParticleEffect type) {
 		emitter = std::make_shared<Emitter>(inPos, dir);
+		ssbo.resize(3);
+		ssbo[0] = std::make_shared<ShaderStorageBuffer>(1024 * sizeof(glm::vec4));
+		ssbo[1] = std::make_shared<ShaderStorageBuffer>(1024 * sizeof(glm::vec4));
+		ssbo[2] = std::make_shared<ShaderStorageBuffer>(1024 * sizeof(float));
 		loaded = false;
 		this->type = type;
 		emitterLife = 5;
-		switch (type)
-		{
-		case ParticleComponent::INITIATE: {
-			for (int i = 0; i < 1024; i++) {
-				glm::vec3 pos;
-				pos.x = ((rand() % 2000) / (500.0));
-				pos.y = ((rand() % 2000) / (500.0));
-				pos.z = ((rand() % 2000) / (500.0));
-				particlePositions[i] = pos + inPos;
-				particleVelocities[i] = dir;
-				particleLives[i] = 5;
-			}
-			break;
+		std::vector<glm::vec4> particlePositions;
+		std::vector<glm::vec4> particleVelocities;
+		std::vector<float> particleLives;
+		for (int i = 0; i < 1024; i++) {
+			particlePositions.push_back(glm::vec4(inPos, 0));
+			particleVelocities.push_back(glm::vec4(dir, 0));
+			particleLives.push_back(5);
 		}
-		case ParticleComponent::EXPLOSION: {
-			for (int i = 0; i < 1024; i++) {
-				glm::vec3 vel;
-				particlePositions[i] = inPos;
-				particleVelocities[i] = glm::normalize(glm::vec3(sin(3 * i), abs(cos(i * 0.5f)), cos(i * 0.5f) - sin(8 * i) + sin(3 * i)));
-				particleLives[i] = 5;
-			}
-			break;
-		}
-		case ParticleComponent::SPEW: {
-
-			break;
-		}
-		default:
-			break;
-		}
+		ssbo[0]->setData(particlePositions);
+		ssbo[1]->setData(particleVelocities);
+		ssbo[2]->setData(particleLives);
 	};
 
 	inline std::string name() final { return "ParticleComponent"; }

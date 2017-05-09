@@ -55,7 +55,7 @@ void RoomLoadingSystem::newRoom(World * world, coord_t coord)
 	static BulletPhysicsSystem * bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
 	static std::string maps[] = { "maps/derp.png", "maps/sunkentemple.png" , "maps/whiteness.png", "maps/smileyface.png" };
 
-	MapData map = mapLoader->loadFromImage(maps[(int)(rand() % 4)]);
+	MapData map = mapLoader->loadFromImage(maps[3]);
 	Entity * room = world->addEntity(sole::uuid4(), "Room");
 
 	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(

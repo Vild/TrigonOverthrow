@@ -37,23 +37,24 @@ void ParticleRenderPass::render(World& world) {
 	if (!cameraComponent)
 		return;
 
-	auto emitterCount = Engine::getInstance().getSystem<ParticleSystem>()->getEmitterCount();
-	auto ssbo = Engine::getInstance().getSystem<ParticleSystem>()->getSSBO();
-
 	// bind the ssbo as array buffer.
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	if (emitterCount > 0) {
+	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+		auto particleComp = entity->getComponent<ParticleComponent>();
+		if (!particleComp)
+			continue;
+		auto ssbos = particleComp->ssbo;
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
-		ssbo[0]->bind();
+		ssbos[ParticleSystem::ParticleAttribute::position]->bind();
 		glEnableVertexAttribArray(12);
 		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)0);
-		ssbo[1]->bind();
+		ssbos[ParticleSystem::ParticleAttribute::velocity]->bind();
 		glEnableVertexAttribArray(13);
 		glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)sizeof(glm::vec4));
-		ssbo[2]->bind();
+		ssbos[ParticleSystem::ParticleAttribute::life]->bind();
 		glEnableVertexAttribArray(14);
 		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4)));
-		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES * emitterCount);
+		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES);
 	}
 }
 
