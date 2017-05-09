@@ -20,7 +20,6 @@
 GunSystem::~GunSystem() {}
 
 void GunSystem::update(World& world, float delta) {
-	rmt_ScopedCPUSample(GunSystem, RMTSF_None);
 	std::vector<Entity*> toAdd;
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto currGunComp = entity->getComponent<GunComponent>();
