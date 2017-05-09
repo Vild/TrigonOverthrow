@@ -46,18 +46,18 @@ void ProjectileSystem::update(World& world, float delta) {
 						targetLifeComp->hpchanged = true;
 						auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
 						particleComp->addEmitter(cast(ptB),
-							glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+							glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::INITIATE);
 					}
-					entityA->getComponent<LifeComponent>()->currHP = 0.0f;
+					entityA->makeDead();
 				} else {
 					if (targetLifeComp) {
 						targetLifeComp->currHP -= projComp->damage;
 						targetLifeComp->hpchanged = true;
 						auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
 						particleComp->addEmitter(cast(ptA),
-							glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+							glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::INITIATE);
 					}
-					entityB->getComponent<LifeComponent>()->currHP = 0.0f;
+					entityB->makeDead();
 				}
 				break;
 			}

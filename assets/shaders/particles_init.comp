@@ -2,11 +2,11 @@
 layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
 layout (std430, binding = 0) buffer PositionBuffer {
-		vec3 positions[];
+	vec3 positions[];
 };
 
 layout (std430, binding = 1) buffer VelocityBuffer {
-		vec3 velocities[];
+	vec3 velocities[];
 };
 
 layout (std430, binding = 2) buffer LifeBuffer {
@@ -15,13 +15,8 @@ layout (std430, binding = 2) buffer LifeBuffer {
 
 uniform float delta;
 
-highp float rand(vec2 co){
-    highp float a = 12.9898;
-    highp float b = 78.233;
-    highp float c = 43758.5453;
-    highp float dt= dot(co.xy ,vec2(a,b));
-    highp float sn= mod(dt,3.14);
-    return fract(sin(sn) * c);
+float rand(vec2 co){
+	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
 void main(){
@@ -30,6 +25,7 @@ void main(){
 	vec3 vel = velocities[index];
 	float life = lives[index];
 
+	vel += normalize(vec3(rand(vec2(index - life, index)), rand(vec2(index * 2, float(index) * 0.5)), rand(vec2(index - life, index)))) * delta;
 	pos += vel * delta;
 	life -= 1 * delta;
 
