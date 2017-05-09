@@ -2,9 +2,11 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "exporbcomponent.hpp"
 
-ExpOrbComponent::ExpOrbComponent() {}
+ExpOrbComponent::ExpOrbComponent() : giveExp(1) { }
 
-ExpOrbComponent::ExpOrbComponent(const ComponentValues& value) : ExpOrbComponent() {}
+ExpOrbComponent::ExpOrbComponent(const ComponentValues& value) : ExpOrbComponent() {
+	this->giveExp = value.getInt("giveExp", 1);
+}
 
 ExpOrbComponent::~ExpOrbComponent() {}
 

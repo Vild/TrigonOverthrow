@@ -33,6 +33,7 @@
 #include "world/system/hoversystem.hpp"
 #include "world/system/roomloadingsystem.hpp"
 #include "world/system/exporbsystem.hpp"
+#include "world/system/levelingsystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -339,6 +340,7 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<HoverSystem>());
 	_systems.push_back(std::make_unique<RoomLoadingSystem>());
 	_systems.push_back(std::make_unique<ExpOrbSystem>());
+	_systems.push_back(std::make_unique<LevelingSystem>());
 
 	// Render passes
 	{

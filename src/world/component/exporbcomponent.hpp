@@ -8,6 +8,8 @@ struct ExpOrbComponent : public Component {
 	ExpOrbComponent(const ComponentValues& value);
 	virtual ~ExpOrbComponent();
 
+	int giveExp;
+
 	void registerImGui() final;
-	inline std::string name() final { return "LifeComponent"; }
+	inline std::string name() final { return "ExpOrbComponent"; }
 };

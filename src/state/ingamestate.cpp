@@ -29,6 +29,7 @@
 #include "../world/component/floortilecomponent.hpp"
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/exporbcomponent.hpp"
+#include "../world/component/levelingcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -167,6 +168,8 @@ InGameState::InGameState() {
 
 		_player->addComponent<HoverComponent>(0.6, 100);
 		engine.getSystem<RoomLoadingSystem>()->setPlayerTransform(transform);
+
+		_player->addComponent<LevelingComponent>();
 	}
 
 	{ // Adding Enemy

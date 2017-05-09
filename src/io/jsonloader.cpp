@@ -23,6 +23,8 @@
 #include "../world/component/floortilecomponent.hpp"
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/rigidbodycomponent.hpp"
+#include "../world/component/exporbcomponent.hpp"
+#include "../world/component/levelingcomponent.hpp"
 
 #ifdef WIN32
 #define __PRETTY_FUNCTION__ __func__
@@ -69,6 +71,8 @@ JSONLoader::JSONLoader() {
 	_constructors["FloorTileComponent"] = &constructComponent<FloorTileComponent>;
 	_constructors["HoverComponent"] = &constructComponent<HoverComponent>;
 	_constructors["RigidBodyComponent"] = &constructComponent<RigidBodyComponent>;
+	_constructors["ExpOrbComponent"] = &constructComponent<ExpOrbComponent>;
+	_constructors["LevelingComponent"] = &constructComponent<LevelingComponent>;
 }
 
 JSONLoader::~JSONLoader() {}
