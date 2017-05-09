@@ -46,6 +46,7 @@
     <ClCompile Include="src\world\component\cameracomponent.cpp" />
     <ClCompile Include="src\world\component\component.cpp" />
     <ClCompile Include="src\world\component\dynamicmodelcomponent.cpp" />
+    <ClCompile Include="src\world\component\exporbcomponent.cpp" />
     <ClCompile Include="src\world\component\floortilecomponent.cpp" />
     <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
@@ -75,6 +76,7 @@
     <ClCompile Include="src\world\system\buttonsystem.cpp" />
     <ClCompile Include="src\world\system\camerasystem.cpp" />
     <ClCompile Include="src\world\system\dynamicmodelsystem.cpp" />
+    <ClCompile Include="src\world\system\exporbsystem.cpp" />
     <ClCompile Include="src\world\system\floortilesystem.cpp" />
     <ClCompile Include="src\world\system\ghostobjectsystem.cpp" />
     <ClCompile Include="src\world\system\gunsystem.cpp" />
@@ -122,6 +124,7 @@
     <ClInclude Include="src\world\component\cameracomponent.hpp" />
     <ClInclude Include="src\world\component\component.hpp" />
     <ClInclude Include="src\world\component\dynamicmodelcomponent.hpp" />
+    <ClInclude Include="src\world\component\exporbcomponent.hpp" />
     <ClInclude Include="src\world\component\floortilecomponent.hpp" />
     <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
@@ -151,6 +154,7 @@
     <ClInclude Include="src\world\system\buttonsystem.hpp" />
     <ClInclude Include="src\world\system\camerasystem.hpp" />
     <ClInclude Include="src\world\system\dynamicmodelsystem.hpp" />
+    <ClInclude Include="src\world\system\exporbsystem.hpp" />
     <ClInclude Include="src\world\system\floortilesystem.hpp" />
     <ClInclude Include="src\world\system\ghostobjectsystem.hpp" />
     <ClInclude Include="src\world\system\gunsystem.hpp" />

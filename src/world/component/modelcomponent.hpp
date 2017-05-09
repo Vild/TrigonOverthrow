@@ -9,6 +9,7 @@
 
 struct ModelComponent : public Component {
 	std::shared_ptr<LoadedMesh> meshData;
+	GLenum drawMode = GL_TRIANGLES;
 
 	ModelComponent() = default;
 	ModelComponent(const ComponentValues& value);

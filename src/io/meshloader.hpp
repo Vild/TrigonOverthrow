@@ -7,6 +7,7 @@
 #include "../gl/texture.hpp"
 
 struct LoadedMesh {
+	LoadedMesh() = default;
 	LoadedMesh(const std::string& file);
 	LoadedMesh(const LoadedMesh& other);
 	virtual ~LoadedMesh();

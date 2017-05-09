@@ -90,7 +90,7 @@ void GeometryRenderPass::render(World& world) {
 
 		if ((model = entity->getComponent<ModelComponent>()) && (transform = entity->getComponent<TransformComponent>())) {
 			_shader->bind();
-			model->render(transform->getMatrix());
+			model->render(transform->getMatrix(), model->drawMode);
 		} else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) {
 			_ismShader->bind();
 			ism->render();

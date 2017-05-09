@@ -28,6 +28,7 @@
 #include "../world/component/pointlightcomponent.hpp"
 #include "../world/component/floortilecomponent.hpp"
 #include "../world/component/hovercomponent.hpp"
+#include "../world/component/exporbcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -209,6 +210,34 @@ InGameState::InGameState() {
 		rigidbody->setTransform(transform);
 
 		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
+
+		_enemy->addComponent<ExpOrbComponent>();
+	}
+
+	if (false) {
+		Entity *expOrb = _world.addEntity(sole::uuid4(), "ExpOrb");
+
+		auto transform = expOrb->addComponent<TransformComponent>();
+		transform->setPosition({ 0, 2, 0 });
+		/*
+		auto ISMC = expOrb->addComponent<InstancedSimpleMeshComponent>(
+			std::make_unique<SimpleMesh>(GL_POINTS, SimpleMesh::vertexlist_t({ { 0,0,0 } })));
+
+		ISMC->addInstance(transform);*/
+		auto model = expOrb->addComponent<ModelComponent>();
+		model->meshData = std::make_shared<LoadedMesh>();
+		std::vector<Vertex> vertices;
+		vertices.push_back(Vertex{ glm::vec3(0, 0, 0), glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 1 }, glm::vec2{ 0, 0 }, glm::vec3{ 0, 0, 1 }, 0
+	});
+		std::vector<GLuint> indices;
+		indices.push_back(0);
+		model->meshData->mesh = std::make_unique<Mesh>(vertices, indices);
+		model->meshData->texture = engine.getTextureManager()->getErrorTexture();
+		model->meshData->normalTexture = engine.getTextureManager()->getTexture("assets/textures/errorNormal.png");
+		model->drawMode = GL_POINTS;
+
+		expOrb->addComponent<ExpOrbComponent>();
+
 	}
 }
 
