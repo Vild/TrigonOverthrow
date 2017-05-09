@@ -73,7 +73,7 @@ void RoomLoadingSystem::newRoom(World * world, coord_t coord)
 		TransformComponent * transform = tile->addComponent<TransformComponent>();
 		float offsetX = coord.first * chunkSize;
 		float offsetY = coord.second * chunkSize;
-		transform->setScale({ 0.95, 1, 0.95 });
+		//transform->setScale({ 0.95, 1, 0.95 });
 		transform->setPosition({ x + offsetX, 0.0f, y + offsetY });
 		ismc->addInstance(transform);
 
