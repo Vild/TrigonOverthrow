@@ -25,7 +25,7 @@ RigidBodyComponent::RigidBodyComponent(const ComponentValues& value) : RigidBody
 	shape = new btBoxShape({1, 1, 1});
 	rigidBody = new btRigidBody(mass, state, shape);
 	rigidBody->setUserPointer(value.entity);
-	rigidBody->setDamping(value.getFloat("damping", 1), 0);
+	rigidBody->setDamping(value.getFloat("damping", 0), 0);
 }
 
 RigidBodyComponent::~RigidBodyComponent() {
