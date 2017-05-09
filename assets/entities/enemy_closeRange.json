@@ -37,7 +37,8 @@
 		},
 		"RigidBodyComponent": {
 			"mass": 1,
-			"friction": 1
+			"friction": 1,
+			"damping": 0.9
 		},
 		"PointLightComponent": {
 			"diffuse": [
@@ -63,8 +64,11 @@
 			"linear": 0.14,
 			"quadratic": 0.07,
 			"offset": [
-				0, 0.5, 0
+				0,
+				0.5,
+				0
 			]
-		}
+		},
+		"HoverComponent": {}
 	}
 }

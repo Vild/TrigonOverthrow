@@ -8,7 +8,7 @@
 class RigidBodyComponent : public Component {
 public:
 	RigidBodyComponent() = default;
-	RigidBodyComponent(Entity* entity, float mass = 0.0f, float friction = 0.0f);
+	RigidBodyComponent(Entity* entity, float mass = 0.0f, float friction = 0.0f, float damp = 0.0f);
 	RigidBodyComponent(const ComponentValues& value);
 	virtual ~RigidBodyComponent();
 

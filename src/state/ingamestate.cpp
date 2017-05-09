@@ -38,7 +38,6 @@ InGameState::InGameState() {
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
-	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter1"));
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter2"));
 	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter3"));
@@ -166,49 +165,6 @@ InGameState::InGameState() {
 
 		_player->addComponent<HoverComponent>(0.6, 100);
 		engine.getSystem<RoomLoadingSystem>()->setPlayerTransform(transform);
-	}
-
-	{ // Adding Enemy
-		auto transform = _enemy->addComponent<TransformComponent>();
-		transform->setScale(glm::vec3(0.3));
-		transform->setPosition(glm::vec3(0, 0.2, 5));
-
-		/*auto dynamicModelComp = */ _enemy->addComponent<DynamicModelComponent>();
-
-		auto model = _enemy->addComponent<ModelComponent>();
-		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy_7HP.fbx");
-		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
-		model->meshData->mesh
-			->addBuffer("m",
-									[](GLuint id) {
-										glBindBuffer(GL_ARRAY_BUFFER, id);
-										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-
-										for (int i = 0; i < 4; i++) {
-											glEnableVertexAttribArray(ShaderAttributeID::m + i);
-											glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-											glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-										}
-
-										glBindBuffer(GL_ARRAY_BUFFER, 0);
-									})
-			.finalize();
-
-		auto life = _enemy->addComponent<LifeComponent>();
-		life->currHP = life->maxHP = 6;
-
-		auto text = _enemy->addComponent<TextComponent>();
-		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
-
-		text->transform.setPosition({0, 2, 5});
-		// text->transform.rotation = glm::vec3(0, 0, 0);
-		text->transform.setScale({0.1, 0.1, 0.1}); // To counteract transform->scale
-
-		auto rigidbody = _enemy->addComponent<RigidBodyComponent>(_enemy, 1.0f, 1.0f);
-		rigidbody->setHitboxHalfSize(transform->getScale());
-		rigidbody->setTransform(transform);
-
-		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 	}
 }
 
