@@ -35,7 +35,7 @@ uniform float settings_shininess;
 uniform vec3 cameraPos;
 
 uniform vec3 ambient;
-#define MAX_POINT_LIGHTS 16
+#define MAX_POINT_LIGHTS 64
 uniform DirLight dirLight;
 uniform int pointLightCount;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];

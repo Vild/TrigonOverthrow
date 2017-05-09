@@ -44,7 +44,6 @@ void ParticleRenderPass::render(World& world) {
 		if (!particleComp)
 			continue;
 		auto ssbos = particleComp->ssbo;
-		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 		ssbos[ParticleSystem::ParticleAttribute::position]->bind();
 		glEnableVertexAttribArray(12);
 		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)0);
@@ -54,6 +53,7 @@ void ParticleRenderPass::render(World& world) {
 		ssbos[ParticleSystem::ParticleAttribute::life]->bind();
 		glEnableVertexAttribArray(14);
 		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4)));
+		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES);
 	}
 }

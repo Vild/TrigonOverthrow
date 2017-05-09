@@ -28,6 +28,7 @@
 #include "../world/component/pointlightcomponent.hpp"
 #include "../world/component/floortilecomponent.hpp"
 #include "../world/component/hovercomponent.hpp"
+#include "../world/component/upgradecomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -39,10 +40,6 @@ InGameState::InGameState() {
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter1"));
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter2"));
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter3"));
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter4"));
 
 	{
 		std::shared_ptr<MapInformation> mapInfo = engine.getJSONLoader()->loadMap("assets/maps/smileyface.json");
@@ -84,30 +81,6 @@ InGameState::InGameState() {
 		_camera->registerImGui = &InGameState::_registerImGUI;
 	}
 
-	{
-		auto particleComp = _emitters[0]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 5.0f;
-	}
-
-	{
-		auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(0, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 5.0f;
-	}
-
-	{
-		auto particleComp = _emitters[2]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 5.0f;
-	}
-
-	//{
-	//	auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
-	//	particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-	//	particleComp->emitterLife = 5.0f;
-	//}
-
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();
 		transform->setPosition(glm::vec3(3));
@@ -144,6 +117,11 @@ InGameState::InGameState() {
 
 		auto gun = _player->addComponent<GunComponent>();
 		gun->addGun(GunComponent::GunType::RAYGUN, 30); // 60 is the the cooldown rate per frame.
+
+		auto upgrades = _player->addComponent<UpgradeComponent>();
+		upgrades->multipleRayMultiplier = 1;
+		upgrades->reflectionCount = 1;
+		upgrades->refractionCount = 1;
 
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
