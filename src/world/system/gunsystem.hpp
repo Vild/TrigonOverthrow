@@ -10,5 +10,5 @@ public:
 	inline std::string name() final { return "GunSystem"; };
 
 private:
-	void fireProjectile(Entity* me, Entity* projectile);
+	void _fireProjectile(Entity* me, World& world);
 };

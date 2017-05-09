@@ -38,8 +38,11 @@ void ParticleSystem::update(World& world, float delta) {
 		if (!particleComp)
 			continue;
 
-		if (particleComp->emitterLife <= 0)
+		if (particleComp->emitterLife <= 0) {
+			entity->removeComponent<ParticleComponent>();
 			entity->makeDead();
+			continue;
+		}
 
 		_programs[particleComp->type]->bind()
 			.setUniform("delta", delta);

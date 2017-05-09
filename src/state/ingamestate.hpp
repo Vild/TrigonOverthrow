@@ -16,7 +16,7 @@ private:
 	Entity* _camera;
 	Entity* _player;
 	Entity* _floor;
-	std::vector<Entity*> _emitters;
+	Entity* _enemy;
 
 	void _addLookAt();
 
