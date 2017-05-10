@@ -84,10 +84,10 @@ std::unique_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {
 			Vertex vertex;
 
 			aiVector3D p = assimpMesh->mVertices[j];
-			vertex.position = glm::vec3{p.x, p.y, p.z};
+			vertex.position = glm::vec3{p.x, p.z, -p.y};
 
 			p = assimpMesh->mNormals[j];
-			vertex.normal = glm::vec3{p.x, p.y, p.z};
+			vertex.normal = glm::vec3{p.x, p.z, -p.y};
 
 			if (hasColors) {
 				aiColor4D c = assimpMesh->mColors[0][j];
@@ -103,7 +103,7 @@ std::unique_ptr<Mesh> LoadedMesh::_getModel(const aiScene* scene) {
 
 			if (assimpMesh->mTangents) {
 				p = assimpMesh->mTangents[j];
-				vertex.tangent = glm::vec3{p.x, p.y, p.z};
+				vertex.tangent = glm::vec3{p.x, p.z, -p.y};
 			}
 
 			vertices.push_back(vertex);

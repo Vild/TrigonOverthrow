@@ -37,10 +37,9 @@ void ParticleRenderPass::render(World& world) {
 
 	// bind the ssbo as array buffer.
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		auto particleComp = entity->getComponent<ParticleComponent>();
-		if (!particleComp)
-			continue;
+	for (Entity * entity : Entity::getEntities<ParticleComponent>()) {
+		ParticleComponent * particleComp = entity->getComponent<ParticleComponent>();
+
 		auto ssbos = particleComp->ssbo;
 		ssbos[ParticleSystem::ParticleAttribute::position]->bind();
 		glEnableVertexAttribArray(12);
