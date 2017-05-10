@@ -1,0 +1,51 @@
+﻿{
+  "name": "ExpOrb",
+  "components": {
+    "TransformComponent": {
+      "position": [
+        0,
+        0.2,
+        2
+      ],
+      "scale": [
+        0.3,
+        0.3,
+        0.3
+      ]
+    },
+    "ModelComponent": {
+      "mesh": "assets/objects/enemy_7HP.fbx",
+      "texture": "assets/textures/errorNormal.png",
+      "needsMMatrix": true
+    },
+    "PointLightComponent": {
+      "diffuse": [
+        {
+          "upper": 0.25,
+          "lower": 0.01
+        },
+        {
+          "upper": 0.25,
+          "lower": 0.01
+        },
+        {
+          "upper": 0.75,
+          "lower": 0.01
+        }
+      ],
+      "specular": [
+        0.01,
+        0.01,
+        0.05
+      ],
+      "constant": 1,
+      "linear": 0.14,
+      "quadratic": 0.07,
+      "offset": [
+        0,
+        0.5,
+        0
+      ]
+    }
+  }
+}

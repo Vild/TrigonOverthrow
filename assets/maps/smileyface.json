@@ -25,7 +25,19 @@
 					]
 				},
 				"TextComponent": {
-					"text": "I'm number 2!\u0002"
+					"text": "I'm number 2"
+				}
+			}
+		},
+		"db499229-72b2-4f4b-a44d-ed4ec31a96de": {
+			"template": "exporb",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						0,
+						0.2,
+						5
+					]
 				}
 			}
 		}

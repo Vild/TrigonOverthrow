@@ -8,8 +8,7 @@ void ExpOrbSystem::update(World& world, float delta) {
 		auto expOrbComp = entity->getComponent<ExpOrbComponent>();
 		if (expOrbComp)
 		{
-			
-
+			//world.addEntity(sole::uuid4(), "ExpOrb");
 		}
 	}
 }
