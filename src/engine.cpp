@@ -32,7 +32,6 @@
 #include "world/system/floortilesystem.hpp"
 #include "world/system/hoversystem.hpp"
 #include "world/system/roomloadingsystem.hpp"
-#include "world/system/infiniteplanefollowsystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -318,7 +317,6 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<FloorTileSystem>());
 	_systems.push_back(std::make_unique<HoverSystem>());
 	_systems.push_back(std::make_unique<RoomLoadingSystem>());
-	_systems.push_back(std::make_unique<InfinitePlaneFollowSystem>());
 
 	// Render passes
 	{
