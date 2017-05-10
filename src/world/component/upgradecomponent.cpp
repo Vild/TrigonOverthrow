@@ -7,6 +7,9 @@ UpgradeComponent::UpgradeComponent(const ComponentValues& value) : UpgradeCompon
 UpgradeComponent::~UpgradeComponent() {}
 
 void UpgradeComponent::registerImGui() {
-	if (ImGui::DragInt("RayMultiplier", &multipleRayMultiplier))
-		multipleRayMultiplier = multipleRayMultiplier;
+	if (ImGui::DragInt("RayMultiplier", &multipleRayMultiplier));
+
+	if (ImGui::DragInt("BounceCount", &reflectionCount));
+
+	if (ImGui::DragInt("PierceCount", &refractionCount));
 }

@@ -13,4 +13,6 @@ public:
 	void registerImGui() final;
 
 	float damage;
+	int bounceCount;
+	int pierceCount;
 };

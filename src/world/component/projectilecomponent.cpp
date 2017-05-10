@@ -5,7 +5,9 @@
 ProjectileComponent::ProjectileComponent(float damage) : damage(damage) {}
 
 ProjectileComponent::ProjectileComponent(const ComponentValues& value) : ProjectileComponent() {
-	damage = value.getFloat("damage", 0);
+	damage = value.getFloat("damage", 1);
+	bounceCount = value.getInt("bounceCount", 0);
+	pierceCount = value.getInt("pierceCount", 0);
 }
 
 ProjectileComponent::~ProjectileComponent() {}

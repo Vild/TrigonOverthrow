@@ -76,6 +76,9 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 	projLifeComp->currHP = projLifeComp->maxHP = 1;
 
 	auto upgradeComp = me->getComponent<UpgradeComponent>();
+	auto projComp = projectile->getComponent<ProjectileComponent>();
+	projComp->bounceCount = upgradeComp->reflectionCount;
+	projComp->pierceCount = upgradeComp->refractionCount;
 	if (upgradeComp && upgradeComp->multipleRayMultiplier > 0) {
 		/// XXX: because i'm good at programming.
 		projectile->makeDead();
@@ -83,6 +86,9 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 			auto newProj = loader->constructEntity(world, sole::uuid4(), filePath, json());
 			auto newRbComp = newProj->getComponent<RigidBodyComponent>();
 			auto newTrans = newProj->getComponent<TransformComponent>();
+			auto newProjComp = newProj->getComponent<ProjectileComponent>();
+			newProjComp->bounceCount = upgradeComp->reflectionCount;
+			newProjComp->pierceCount = upgradeComp->refractionCount;
 			newTrans->setScale(transProj->getScale());
 			newTrans->setRotation(transProj->getRotation() * glm::quat_cast(glm::rotate(i * 0.25f, glm::vec3(0, 1, 0))));
 			newTrans->setPosition(transComp->getPosition() + newTrans->getDirection());

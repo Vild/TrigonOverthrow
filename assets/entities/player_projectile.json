@@ -12,7 +12,9 @@
 			"friction": 0
 		},
 		"ProjectileComponent": {
-			"damage": 1
+      "damage": 1,
+      "bounceCount": 0,
+      "pierceCount":  0
 		},
 		"LifeComponent": {
 			"maxHP": 5

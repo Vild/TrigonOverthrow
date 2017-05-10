@@ -119,8 +119,8 @@ InGameState::InGameState() {
 		gun->addGun(GunComponent::GunType::RAYGUN, 30); // 60 is the the cooldown rate per frame.
 
 		auto upgrades = _player->addComponent<UpgradeComponent>();
-		upgrades->multipleRayMultiplier = 1;
-		upgrades->reflectionCount = 1;
+		upgrades->multipleRayMultiplier = 0;
+		upgrades->reflectionCount = 0;
 		upgrades->refractionCount = 1;
 
 		auto text = _player->addComponent<TextComponent>();

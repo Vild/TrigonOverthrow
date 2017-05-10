@@ -84,6 +84,8 @@ void GeometryRenderPass::render(World& world) {
 		ModelComponent* model = nullptr;
 		TransformComponent* transform = nullptr;
 		InstancedSimpleMeshComponent* ism = nullptr;
+		if (entity->isDead())
+			continue;
 
 		if ((model = entity->getComponent<ModelComponent>()) && (transform = entity->getComponent<TransformComponent>())) {
 			_shader->bind();
