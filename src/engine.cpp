@@ -49,6 +49,7 @@ Engine::~Engine() {
 	_states.clear();
 
 	TTF_Quit();
+	Mix_CloseAudio();
 	Mix_Quit();
 	IMG_Quit();
 
@@ -158,9 +159,7 @@ int Engine::run(bool vsync) {
 
 			ImGui::Render();
 		}
-		{
-			SDL_GL_SwapWindow(_window);
-		}
+		{ SDL_GL_SwapWindow(_window); }
 	}
 	return 0;
 }
@@ -178,6 +177,7 @@ void Engine::_init(bool vsync) {
 		_textFactory = std::make_shared<TextFactory>("assets/fonts/font.png");
 		_mapLoader = std::make_shared<MapLoader>();
 		_jsonLoader = std::make_shared<JSONLoader>();
+		_audioManager = std::make_shared<AudioManager>();
 	}
 
 	{
@@ -187,7 +187,7 @@ void Engine::_init(bool vsync) {
 		_setupSystems();
 		_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
 		_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
-//		_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
+		//		_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
 		setState<InGameState>();
 	}
 }
@@ -208,6 +208,11 @@ void Engine::_initSDL() {
 	if ((Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG) != MIX_INIT_OGG) {
 		fprintf(stderr, "Mix_Init: Failed to init, requires ogg support!\n");
 		fprintf(stderr, "Mix_Init: %s\n", Mix_GetError());
+		throw "Failed to load SDL2_mixer";
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+		fprintf(stderr, "Mix_OpenAudio: %s\n", Mix_GetError());
 		throw "Failed to load SDL2_mixer";
 	}
 

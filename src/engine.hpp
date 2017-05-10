@@ -16,6 +16,7 @@
 #include "io/textfactory.hpp"
 #include "io/maploader.hpp"
 #include "io/jsonloader.hpp"
+#include "io/audiomanager.hpp"
 
 #include "world/world.hpp"
 #include "../src/world/system/system.hpp"
@@ -43,6 +44,7 @@ public:
 	inline std::shared_ptr<TextFactory> getTextFactory() { return _textFactory; }
 	inline std::shared_ptr<MapLoader> getMapLoader() { return _mapLoader; }
 	inline std::shared_ptr<JSONLoader> getJSONLoader() { return _jsonLoader; }
+	inline std::shared_ptr<AudioManager> getAudioManager() { return _audioManager; }
 
 	inline std::vector<std::unique_ptr<System>>& getSystems() { return _systems; }
 
@@ -88,6 +90,7 @@ private:
 	std::shared_ptr<TextFactory> _textFactory;
 	std::shared_ptr<MapLoader> _mapLoader;
 	std::shared_ptr<JSONLoader> _jsonLoader;
+	std::shared_ptr<AudioManager> _audioManager;
 
 	std::vector<std::unique_ptr<System>> _systems;
 

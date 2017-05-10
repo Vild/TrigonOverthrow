@@ -29,6 +29,7 @@
 #include "../world/component/floortilecomponent.hpp"
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/upgradecomponent.hpp"
+#include "../world/component/musiccomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -62,13 +63,16 @@ InGameState::InGameState() {
 		}
 	}
 
-
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
 		sun->ambient = glm::vec3(0.5);
 		sun->directionLight.diffuse = glm::vec3(0.4, 0.4, 0.4);
 		sun->directionLight.specular = glm::vec3(0.0, 0.0, 0.0);
 		sun->directionLight.direction = glm::vec3(0, -1, 0);
+
+		auto music = _sun->addComponent<MusicComponent>();
+		music->music = engine.getAudioManager()->getMusic("assets/music/Mega Hyper Ultrastorm.ogg");
+		music->music->play(-1);
 	}
 
 	{ // Adding Camera
@@ -108,9 +112,9 @@ InGameState::InGameState() {
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
 			.finalize();
-		//auto particle = _player->addComponent<ParticleComponent>();
-		//particle->type = ParticleComponent::ParticleEffect::EXPLOSION;
-		//particle->addEmitter(glm::vec3(0,0,1), glm::vec3(0,0,1), 1024);
+		// auto particle = _player->addComponent<ParticleComponent>();
+		// particle->type = ParticleComponent::ParticleEffect::EXPLOSION;
+		// particle->addEmitter(glm::vec3(0,0,1), glm::vec3(0,0,1), 1024);
 
 		_player->addComponent<KBMouseInputComponent>();
 

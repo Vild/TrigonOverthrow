@@ -12,6 +12,7 @@ public:
 	void onEnter(State* prev) final;
 	void onLeave(State* next) final;
 	inline Entity* getCamera() final { return _camera; }
+	inline Entity* getPlayer() final { return _target; }
 
 private:
 	Entity* _camera;
