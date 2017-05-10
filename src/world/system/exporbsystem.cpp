@@ -2,13 +2,19 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "exporbsystem.hpp"
 #include "../component/exporbcomponent.hpp"
+#include "../component/transformcomponent.hpp"
+
+#include "../../engine.hpp"
 
 void ExpOrbSystem::update(World& world, float delta) {
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	
+	Engine& engine = Engine::getInstance();
+
+	for (Entity * entity : Entity::getEntities<ExpOrbComponent>()) {
 		auto expOrbComp = entity->getComponent<ExpOrbComponent>();
 		if (expOrbComp)
 		{
-			//world.addEntity(sole::uuid4(), "ExpOrb");
+			engine.getState().getPlayer()->getComponent<TransformComponent>()->getPosition();
 		}
 	}
 }

@@ -12,6 +12,7 @@ public:
 
 	inline World& getWorld() { return _world; }
 	virtual Entity* getCamera() = 0;
+	virtual Entity* getPlayer() = 0;
 
 protected:
 	World _world;
