@@ -5,6 +5,7 @@
 #include "../component/projectilecomponent.hpp"
 #include "../component/particlecomponent.hpp"
 #include "../component/lifecomponent.hpp"
+#include "../component/floortilecomponent.hpp"
 #include "../../engine.hpp"
 #include "../../io/jsonloader.hpp"
 #include <glm/gtx/transform.hpp>
@@ -41,15 +42,15 @@ void ProjectileSystem::update(World& world, float delta) {
 				if (abs(normalOnB.y) > 0)
 					continue;
 				if (isAProj) {
-					auto targetLifeComp = entityB->getComponent<LifeComponent>();
-					if (targetLifeComp) {
-						targetLifeComp->currHP -= projComp->damage;
-						targetLifeComp->hpchanged = true;
-					}
-					auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
-					particleComp->addEmitter(ptB,
-						glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-
+					//auto targetLifeComp = entityB->getComponent<LifeComponent>();
+					//if (targetLifeComp) {
+					//	targetLifeComp->currHP -= projComp->damage;
+					//	targetLifeComp->hpchanged = true;
+					//}
+					//auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
+					//particleComp->addEmitter(ptB,
+					//	glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
+					printf("FUCK YOU \n");
 					entityA->makeDead();
 				} else {
 					auto targetLifeComp = entityA->getComponent<LifeComponent>();
@@ -85,7 +86,7 @@ void ProjectileSystem::update(World& world, float delta) {
 							BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
 							BulletPhysicsSystem::playerProjectileCollidesWith);
 					}
-					if (projComp->pierceCount > 0) {
+					if (projComp->pierceCount > 0 && entityA->getComponent<LifeComponent>()) {
 						auto loader = Engine::getInstance().getJSONLoader();
 						const std::string filePath = "assets/entities/player_projectile.json";
 						auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
@@ -94,7 +95,7 @@ void ProjectileSystem::update(World& world, float delta) {
 						auto entityBRbComp = entityB->getComponent<RigidBodyComponent>();
 						auto entityBTrans = entityB->getComponent<TransformComponent>();
 						newTransComp->setDirection(glm::vec3(-entityBTrans->getDirection().x, entityBTrans->getDirection().y, entityBTrans->getDirection().z));
-						newTransComp->setPosition(ptA + (newTransComp->getDirection() * entityA->getComponent<TransformComponent>()->getScale()));
+						newTransComp->setPosition(ptA + (newTransComp->getDirection()));
 						newTransComp->setScale(entityB->getComponent<TransformComponent>()->getScale());
 
 						newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
