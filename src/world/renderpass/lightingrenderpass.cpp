@@ -138,68 +138,71 @@ void LightingRenderPass::render(World& world) {
 	int pointLightCount = 0;
 	float distances[MAX_POINT_LIGHTS];
 
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		auto sun = entity->getComponent<SunComponent>();
-		if (sun) {
-			if (_ambient != sun->ambient) {
-				_ambient = sun->ambient;
-				_shader->setUniform("ambient", _ambient);
-			}
-			if (_dirLight != sun->directionLight) {
-				_dirLight = sun->directionLight;
-				_shader->setUniform("dirLight.diffuse", _dirLight.diffuse)
-					.setUniform("dirLight.specular", _dirLight.specular)
-					.setUniform("dirLight.direction", glm::normalize(_dirLight.direction));
-			}
-			enableDirLight = true;
-		} else {
-			auto pointLight = entity->getComponent<PointLightComponent>();
-			if (!pointLight)
-				continue;
-			auto transform = entity->getComponent<TransformComponent>();
-			if (!transform)
-				continue;
-			// XXX: Hack make nicer
-			pointLight->pointLight.position = transform->getPosition() + pointLight->offset;
 
-			int idx = pointLightCount;
-			auto myDist = glm::distance(pointLight->pointLight.position, camPos);
-			if (idx >= MAX_POINT_LIGHTS) {
-				float biggestDist = 0;
-				int biggestIdx = 0;
-				for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
-					auto dist = glm::distance(_pointLights[i].position, camPos);
-					if (biggestDist < dist) {
-						biggestDist = dist;
-						biggestIdx = i;
-					}
+	for (Entity * entity : Entity::getEntities<SunComponent>()) {
+		SunComponent * sun = entity->getComponent<SunComponent>();
+
+		if (_ambient != sun->ambient) {
+			_ambient = sun->ambient;
+			_shader->setUniform("ambient", _ambient);
+		}
+		if (_dirLight != sun->directionLight) {
+			_dirLight = sun->directionLight;
+			_shader->setUniform("dirLight.diffuse", _dirLight.diffuse)
+				.setUniform("dirLight.specular", _dirLight.specular)
+				.setUniform("dirLight.direction", glm::normalize(_dirLight.direction));
+		}
+		enableDirLight = true;
+	}
+
+	for (Entity * entity : Entity::getEntities<PointLightComponent>()) {
+		PointLightComponent * pointLight = entity->getComponent<PointLightComponent>();
+
+		auto transform = entity->getComponent<TransformComponent>();
+		if (!transform)
+			continue;
+		// XXX: Hack make nicer
+		pointLight->pointLight.position = transform->getPosition() + pointLight->offset;
+
+		int idx = pointLightCount;
+		auto myDist = glm::distance(pointLight->pointLight.position, camPos);
+		if (idx >= MAX_POINT_LIGHTS) {
+			float biggestDist = 0;
+			int biggestIdx = 0;
+			for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+				auto dist = glm::distance(_pointLights[i].position, camPos);
+				if (biggestDist < dist) {
+					biggestDist = dist;
+					biggestIdx = i;
 				}
-
-				if (myDist > biggestDist)
-					continue;
-
-				idx = biggestIdx;
-			} else
-				pointLightCount++;
-			auto& light = _pointLights[idx];
-
-			distances[idx] = myDist;
-
-			if (light != pointLight->pointLight) {
-				light = pointLight->pointLight;
-
-				std::string pointStr = "pointLights[" + std::to_string(idx) + "]";
-
-				_shader->setUniform(pointStr + ".diffuse", light.diffuse)
-					.setUniform(pointStr + ".specular", light.specular)
-
-					.setUniform(pointStr + ".position", light.position)
-					.setUniform(pointStr + ".constant", light.constant)
-					.setUniform(pointStr + ".linear", light.linear)
-					.setUniform(pointStr + ".quadratic", light.quadratic);
 			}
+
+			if (myDist > biggestDist)
+				continue;
+
+			idx = biggestIdx;
+		}
+		else
+			pointLightCount++;
+		auto& light = _pointLights[idx];
+
+		distances[idx] = myDist;
+
+		if (light != pointLight->pointLight) {
+			light = pointLight->pointLight;
+
+			std::string pointStr = "pointLights[" + std::to_string(idx) + "]";
+
+			_shader->setUniform(pointStr + ".diffuse", light.diffuse)
+				.setUniform(pointStr + ".specular", light.specular)
+
+				.setUniform(pointStr + ".position", light.position)
+				.setUniform(pointStr + ".constant", light.constant)
+				.setUniform(pointStr + ".linear", light.linear)
+				.setUniform(pointStr + ".quadratic", light.quadratic);
 		}
 	}
+
 	enablePointLight = !!pointLightCount;
 
 	_shader->setUniform("settings_enableDirLight", enableDirLight && _settings_enableDirLight)

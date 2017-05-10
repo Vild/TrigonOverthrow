@@ -13,7 +13,7 @@ HoverSystem::~HoverSystem() {}
 void HoverSystem::update(World& world, float delta) {
 	btDynamicsWorld* btWorld = BulletPhysicsSystem::activeInstance->getWorld();
 
-	for (auto& e : world.getEntities()) {
+	for (Entity * e : Entity::getEntities<HoverComponent>()) {
 		HoverComponent* hc;
 		TransformComponent* tc;
 		RigidBodyComponent* rbc;

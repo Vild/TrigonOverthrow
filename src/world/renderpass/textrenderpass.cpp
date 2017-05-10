@@ -38,10 +38,8 @@ void TextRenderPass::render(World& world) {
 
 	glDisable(GL_CULL_FACE);
 
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		auto text = entity->getComponent<TextComponent>();
-		if (!text)
-			continue;
+	for (Entity * entity : Entity::getEntities<TextComponent>()) {
+		TextComponent * text = entity->getComponent<TextComponent>();
 
 		auto transform = entity->getComponent<TransformComponent>();
 		if (!transform)

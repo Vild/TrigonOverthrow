@@ -88,11 +88,22 @@ void GeometryRenderPass::render(World& world) {
 			continue;
 
 		if ((model = entity->getComponent<ModelComponent>()) && (transform = entity->getComponent<TransformComponent>())) {
-			_shader->bind();
-			model->render(transform->getMatrix());
-		} else if ((ism = entity->getComponent<InstancedSimpleMeshComponent>())) {
-			_ismShader->bind();
-			ism->render();
+			for (Entity * entity : Entity::getEntities<ModelComponent>())
+			{
+				ModelComponent* model = entity->getComponent<ModelComponent>();
+				TransformComponent* transform = entity->getComponent<TransformComponent>();
+				if (transform) {
+					_shader->bind();
+					model->render(transform->getMatrix());
+				}
+			}
+
+			for (Entity * entity : Entity::getEntities<InstancedSimpleMeshComponent>())
+			{
+				InstancedSimpleMeshComponent* ism = entity->getComponent<InstancedSimpleMeshComponent>();
+				_ismShader->bind();
+				ism->render();
+			}
 		}
 	}
 }

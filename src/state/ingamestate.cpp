@@ -62,6 +62,7 @@ InGameState::InGameState() {
 		}
 	}
 
+
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
 		sun->ambient = glm::vec3(0.5);
