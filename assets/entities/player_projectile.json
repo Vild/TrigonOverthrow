@@ -1,0 +1,41 @@
+{
+	"name": "Projectile",
+	"components": {
+		"TransformComponent": {},
+		"ModelComponent": {
+			"mesh": "assets/objects/player_projectile.fbx",
+			"texture": "assets/textures/errorNormal.png",
+			"needsMMatrix": true
+		},
+		"RigidBodyComponent": {
+			"mass": 1,
+			"friction": 0
+		},
+		"ProjectileComponent": {
+			"damage": 1
+		},
+		"LifeComponent": {
+			"maxHP": 5
+		},
+		"PointLightComponent": {
+			"diffuse": [
+				1,
+				0,
+				0
+			],
+			"specular": [
+				0.05,
+				0.0,
+				0.0
+			],
+			"constant": 1,
+			"linear": 0.35,
+			"quadratic": 0.44,
+			"offset": [
+				0,
+				0.5,
+				0
+			]
+		}
+	}
+}

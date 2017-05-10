@@ -30,6 +30,7 @@
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/exporbcomponent.hpp"
 #include "../world/component/levelingcomponent.hpp"
+#include "../world/component/upgradecomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -41,10 +42,6 @@ InGameState::InGameState() {
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
 	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
 	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter1"));
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter2"));
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter3"));
-	_emitters.push_back(_world.addEntity(sole::uuid4(), "Emitter4"));
 
 	{
 		std::shared_ptr<MapInformation> mapInfo = engine.getJSONLoader()->loadMap("assets/maps/smileyface.json");
@@ -69,9 +66,9 @@ InGameState::InGameState() {
 
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
-		sun->ambient = glm::vec3(0.1);
-		sun->directionLight.diffuse = glm::vec3(0, 0.2, 0.2);
-		sun->directionLight.specular = glm::vec3(0.02, 0.2, 0.02);
+		sun->ambient = glm::vec3(0.5);
+		sun->directionLight.diffuse = glm::vec3(0.4, 0.4, 0.4);
+		sun->directionLight.specular = glm::vec3(0.0, 0.0, 0.0);
 		sun->directionLight.direction = glm::vec3(0, -1, 0);
 	}
 
@@ -85,30 +82,6 @@ InGameState::InGameState() {
 
 		_camera->registerImGui = &InGameState::_registerImGUI;
 	}
-
-	{
-		auto particleComp = _emitters[0]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(0, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 5.0f;
-	}
-
-	{
-		auto particleComp = _emitters[1]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(0, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 5.0f;
-	}
-
-	{
-		auto particleComp = _emitters[2]->addComponent<ParticleComponent>();
-		particleComp->addEmitter(glm::vec3(6, 4, 0), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-		particleComp->emitterLife = 5.0f;
-	}
-
-	//{
-	//	auto particleComp = _emitters[3]->addComponent<ParticleComponent>();
-	//	particleComp->addEmitter(glm::vec3(6, 4, 6), glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-	//	particleComp->emitterLife = 5.0f;
-	//}
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();
@@ -147,6 +120,11 @@ InGameState::InGameState() {
 		auto gun = _player->addComponent<GunComponent>();
 		gun->addGun(GunComponent::GunType::RAYGUN, 30); // 60 is the the cooldown rate per frame.
 
+		auto upgrades = _player->addComponent<UpgradeComponent>();
+		upgrades->multipleRayMultiplier = 1;
+		upgrades->reflectionCount = 1;
+		upgrades->refractionCount = 1;
+
 		auto text = _player->addComponent<TextComponent>();
 		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
 		text->transform.setPosition(glm::vec3(0, 1, 0));
@@ -170,76 +148,6 @@ InGameState::InGameState() {
 		engine.getSystem<RoomLoadingSystem>()->setPlayerTransform(transform);
 
 		_player->addComponent<LevelingComponent>();
-	}
-
-	{ // Adding Enemy
-		auto transform = _enemy->addComponent<TransformComponent>();
-		transform->setScale(glm::vec3(0.3));
-		transform->setPosition(glm::vec3(0, 0.2, 5));
-
-		/*auto dynamicModelComp = */ _enemy->addComponent<DynamicModelComponent>();
-
-		auto model = _enemy->addComponent<ModelComponent>();
-		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/enemy_7HP.fbx");
-		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
-		model->meshData->mesh
-			->addBuffer("m",
-									[](GLuint id) {
-										glBindBuffer(GL_ARRAY_BUFFER, id);
-										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-
-										for (int i = 0; i < 4; i++) {
-											glEnableVertexAttribArray(ShaderAttributeID::m + i);
-											glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-											glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-										}
-
-										glBindBuffer(GL_ARRAY_BUFFER, 0);
-									})
-			.finalize();
-
-		auto life = _enemy->addComponent<LifeComponent>();
-		life->currHP = life->maxHP = 6;
-
-		auto text = _enemy->addComponent<TextComponent>();
-		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, I am a Trigoon, prepare to die!\x01");
-
-		text->transform.setPosition({0, 2, 5});
-		// text->transform.rotation = glm::vec3(0, 0, 0);
-		text->transform.setScale({0.1, 0.1, 0.1}); // To counteract transform->scale
-
-		auto rigidbody = _enemy->addComponent<RigidBodyComponent>(_enemy, 1.0f, 1.0f);
-		rigidbody->setHitboxHalfSize(transform->getScale());
-		rigidbody->setTransform(transform);
-
-		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
-
-		_enemy->addComponent<ExpOrbComponent>();
-	}
-
-	if (false) {
-		Entity *expOrb = _world.addEntity(sole::uuid4(), "ExpOrb");
-
-		auto transform = expOrb->addComponent<TransformComponent>();
-		transform->setPosition({ 0, 2, 0 });
-		/*
-		auto ISMC = expOrb->addComponent<InstancedSimpleMeshComponent>(
-			std::make_unique<SimpleMesh>(GL_POINTS, SimpleMesh::vertexlist_t({ { 0,0,0 } })));
-
-		ISMC->addInstance(transform);*/
-		auto model = expOrb->addComponent<ModelComponent>();
-		model->meshData = std::make_shared<LoadedMesh>();
-		std::vector<Vertex> vertices;
-		vertices.push_back(Vertex{ glm::vec3(0, 0, 0), glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 1 }, glm::vec2{ 0, 0 }, glm::vec3{ 0, 0, 1 }});
-		std::vector<GLuint> indices;
-		indices.push_back(0);
-		model->meshData->mesh = std::make_unique<Mesh>(vertices, indices);
-		model->meshData->texture = engine.getTextureManager()->getErrorTexture();
-		model->meshData->normalTexture = engine.getTextureManager()->getTexture("assets/textures/errorNormal.png");
-		model->drawMode = GL_POINTS;
-
-		expOrb->addComponent<ExpOrbComponent>();
-
 	}
 }
 

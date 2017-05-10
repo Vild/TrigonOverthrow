@@ -73,6 +73,7 @@ JSONLoader::JSONLoader() {
 	_constructors["RigidBodyComponent"] = &constructComponent<RigidBodyComponent>;
 	_constructors["ExpOrbComponent"] = &constructComponent<ExpOrbComponent>;
 	_constructors["LevelingComponent"] = &constructComponent<LevelingComponent>;
+	_constructors["ProjectileComponent"] = &constructComponent<ProjectileComponent>;
 }
 
 JSONLoader::~JSONLoader() {}

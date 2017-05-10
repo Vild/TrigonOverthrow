@@ -36,7 +36,6 @@
     <ClCompile Include="src\lib\imgui_demo.cpp" />
     <ClCompile Include="src\lib\imgui_draw.cpp" />
     <ClCompile Include="src\lib\imgui_impl_sdl_gl3.cpp" />
-    <ClCompile Include="src\lib\Remotery.c" />
     <ClCompile Include="src\lib\sole\sole.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\state\ingamestate.cpp" />
@@ -51,6 +50,7 @@
     <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
     <ClCompile Include="src\world\component\hovercomponent.cpp" />
+    <ClCompile Include="src\world\component\infiniteplanefollowcomponent.cpp" />
     <ClCompile Include="src\world\component\instancedsimplemeshcomponent.cpp" />
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp" />
     <ClCompile Include="src\world\component\levelingcomponent.cpp" />
@@ -61,9 +61,11 @@
     <ClCompile Include="src\world\component\pointlightcomponent.cpp" />
     <ClCompile Include="src\world\component\projectilecomponent.cpp" />
     <ClCompile Include="src\world\component\rigidbodycomponent.cpp" />
+    <ClCompile Include="src\world\component\roomloadingcomponent.cpp" />
     <ClCompile Include="src\world\component\suncomponent.cpp" />
     <ClCompile Include="src\world\component\textcomponent.cpp" />
     <ClCompile Include="src\world\component\transformcomponent.cpp" />
+    <ClCompile Include="src\world\component\upgradecomponent.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
     <ClCompile Include="src\world\renderpass\bulletdebugrenderpass.cpp" />
     <ClCompile Include="src\world\renderpass\gaussianrenderpass.cpp" />
@@ -131,6 +133,7 @@
     <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
     <ClInclude Include="src\world\component\hovercomponent.hpp" />
+    <ClInclude Include="src\world\component\infiniteplanefollowcomponent.hpp" />
     <ClInclude Include="src\world\component\instancedsimplemeshcomponent.hpp" />
     <ClInclude Include="src\world\component\kbmouseinputcomponent.hpp" />
     <ClInclude Include="src\world\component\levelingcomponent.hpp" />
@@ -141,9 +144,11 @@
     <ClInclude Include="src\world\component\pointlightcomponent.hpp" />
     <ClInclude Include="src\world\component\projectilecomponent.hpp" />
     <ClInclude Include="src\world\component\rigidbodycomponent.hpp" />
+    <ClInclude Include="src\world\component\roomloadingcomponent.hpp" />
     <ClInclude Include="src\world\component\suncomponent.hpp" />
     <ClInclude Include="src\world\component\textcomponent.hpp" />
     <ClInclude Include="src\world\component\transformcomponent.hpp" />
+    <ClInclude Include="src\world\component\upgradecomponent.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
     <ClInclude Include="src\world\renderpass\bulletdebugrenderpass.hpp" />
     <ClInclude Include="src\world\renderpass\gaussianrenderpass.hpp" />

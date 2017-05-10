@@ -23,7 +23,7 @@
       "maxHP": 6
     },
     "TextComponent": {
-      "text": "Hello, I am a Trigoon, prepare to die!",
+      "text": "Hello, I am a Trigoon, prepare to die!\u0001",
       "position": [
         0,
         2,
@@ -37,7 +37,8 @@
     },
     "RigidBodyComponent": {
       "mass": 1,
-      "friction": 1
+      "friction": 1,
+      "damping": 0.9
     },
     "PointLightComponent": {
       "diffuse": [
@@ -70,6 +71,7 @@
     },
     "ExpOrbComponent": {
       "giveExp": 1
-    }
-  }
+    },
+		"HoverComponent": {}
+	}
 }

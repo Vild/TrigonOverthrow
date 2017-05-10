@@ -3,7 +3,7 @@
 #include "rigidbodycomponent.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float friction) {
+RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float friction, float damping) {
 	// btStaticPlaneShape * plane = new btStaticPlaneShape({ 0,1,0 }, 0);
 	hitboxHalfSize = {1, 1, 1};
 
@@ -13,6 +13,7 @@ RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float frictio
 	shape = new btBoxShape({1, 1, 1});
 	rigidBody = new btRigidBody(mass, state, shape);
 	rigidBody->setUserPointer(entity);
+	rigidBody->setDamping(damping, 0);
 }
 
 RigidBodyComponent::RigidBodyComponent(const ComponentValues& value) : RigidBodyComponent() {
@@ -24,6 +25,7 @@ RigidBodyComponent::RigidBodyComponent(const ComponentValues& value) : RigidBody
 	shape = new btBoxShape({1, 1, 1});
 	rigidBody = new btRigidBody(mass, state, shape);
 	rigidBody->setUserPointer(value.entity);
+	rigidBody->setDamping(value.getFloat("damping", 0), 0);
 }
 
 RigidBodyComponent::~RigidBodyComponent() {

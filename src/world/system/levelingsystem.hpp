@@ -1,5 +1,6 @@
 #pragma once
 #include "system.hpp"
+#include "../component/levelingcomponent.hpp"
 
 class LevelingSystem : public System {
 public:
@@ -9,5 +10,5 @@ public:
 	inline std::string name() final { return "LevelingSystem"; };
 
 private:
-	int calcNextExp();
+	int _calcNextExp(LevelingComponent *comp);
 };

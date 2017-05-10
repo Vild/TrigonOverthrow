@@ -9,8 +9,11 @@
 #include "../component/projectilecomponent.hpp"
 #include "../component/instancedsimplemeshcomponent.hpp"
 #include "../component/dynamicmodelcomponent.hpp"
+#include "../component/upgradecomponent.hpp"
+#include "../../io/jsonloader.hpp"
 
 #include "../system/bulletphysicssystem.hpp"
+#include <glm/gtx/transform.hpp>
 
 #include "../entity.hpp"
 #include "../../gl/mesh.hpp"
@@ -20,7 +23,6 @@
 GunSystem::~GunSystem() {}
 
 void GunSystem::update(World& world, float delta) {
-	rmt_ScopedCPUSample(GunSystem, RMTSF_None);
 	std::vector<Entity*> toAdd;
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		auto currGunComp = entity->getComponent<GunComponent>();
@@ -36,29 +38,32 @@ void GunSystem::update(World& world, float delta) {
 			currGunComp->cooldown -= 1 * delta;
 	}
 	for (Entity* entity : toAdd) {
-		fireProjectile(entity, world.addEntity(sole::uuid4(), "Projectile"));
+		_fireProjectile(entity, world);
 	}
 }
 
-void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
-	auto transComp = me->getComponent<TransformComponent>();
-	auto transProj = projectile->addComponent<TransformComponent>();
+void GunSystem::_fireProjectile(Entity* me, World& world) {
+	auto loader = Engine::getInstance().getJSONLoader();
+	const std::string filePath = "assets/entities/player_projectile.json";
 
+	auto transComp = me->getComponent<TransformComponent>();
+	auto projectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
+
+	auto transProj = projectile->getComponent<TransformComponent>();
 	transProj->setRotation(transComp->getRotation());
 	transProj->setScale(glm::vec3(0.075, 0.075, 0.25));
 	auto dir = transComp->getDirection();
 	transProj->setDirection({-dir.x, dir.y, dir.z}); // helt kokt
 	transProj->setPosition(transComp->getPosition() + transProj->getDirection());
 
-	auto point = projectile->addComponent<PointLightComponent>();
+	auto point = projectile->getComponent<PointLightComponent>();
 	point->pointLight.diffuse = glm::vec3(1, 0, 0);
 	point->pointLight.specular = glm::vec3(0.05, 0, 0);
 	point->pointLight.constant = 1;
 	point->pointLight.linear = 0.35;
 	point->pointLight.quadratic = 0.44;
 
-	// auto currRdbComp = me->getComponent<RigidBodyComponent>();
-	auto projRdbComp = projectile->addComponent<RigidBodyComponent>(projectile);
+	auto projRdbComp = projectile->getComponent<RigidBodyComponent>();
 
 	projRdbComp->setHitboxHalfSize(transProj->getScale());
 	projRdbComp->setMass(1);
@@ -67,36 +72,39 @@ void GunSystem::fireProjectile(Entity* me, Entity* projectile) {
 	projRdbComp->setTransform(transProj);
 	projRdbComp->setActivationState(DISABLE_DEACTIVATION);
 
-	auto projLifeComp = projectile->addComponent<LifeComponent>();
+	auto projLifeComp = projectile->getComponent<LifeComponent>();
 	projLifeComp->currHP = projLifeComp->maxHP = 1;
 
-	/*auto projComp =*/projectile->addComponent<ProjectileComponent>(1.0f);
-
-	auto modelComp = projectile->addComponent<ModelComponent>();
-	modelComp->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/player_projectile.fbx");
-	modelComp->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
-	modelComp->meshData->mesh
-		->addBuffer("m",
-								[](GLuint id) {
-									glBindBuffer(GL_ARRAY_BUFFER, id);
-									glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-
-									for (int i = 0; i < 4; i++) {
-										glEnableVertexAttribArray(ShaderAttributeID::m + i);
-										glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-										glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-									}
-
-									glBindBuffer(GL_ARRAY_BUFFER, 0);
-								})
-		.finalize();
-
-	if (me->getComponent<GunComponent>()->type == GunComponent::GunType::RAYGUN)
-		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
-																																				 BulletPhysicsSystem::playerProjectileCollidesWith);
-	else
-		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
-																																				 BulletPhysicsSystem::playerProjectileCollidesWith);
+	auto upgradeComp = me->getComponent<UpgradeComponent>();
+	if (upgradeComp && upgradeComp->multipleRayMultiplier > 0) {
+		/// XXX: because i'm good at programming.
+		projectile->makeDead();
+		for (int i = -1 * upgradeComp->multipleRayMultiplier; i <= upgradeComp->multipleRayMultiplier; i++) {
+			auto newProj = loader->constructEntity(world, sole::uuid4(), filePath, json());
+			auto newRbComp = newProj->getComponent<RigidBodyComponent>();
+			auto newTrans = newProj->getComponent<TransformComponent>();
+			newTrans->setScale(transProj->getScale());
+			newTrans->setRotation(transProj->getRotation() * glm::quat_cast(glm::rotate(i * 0.25f, glm::vec3(0, 1, 0))));
+			newTrans->setPosition(transComp->getPosition() + newTrans->getDirection());
+			newRbComp->setHitboxHalfSize(transProj->getScale());
+			newRbComp->setTransform(newTrans);
+			newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * 6.0f));
+			newRbComp->setActivationState(DISABLE_DEACTIVATION);
+			Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
+				BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
+				BulletPhysicsSystem::playerProjectileCollidesWith);
+		}
+	}
+	else if(me->getComponent<GunComponent>()->type == GunComponent::GunType::RAYGUN){
+		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp,
+			BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
+			BulletPhysicsSystem::playerProjectileCollidesWith);
+	}
+	else {
+		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, 
+			BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
+			BulletPhysicsSystem::enemyProjectileCollidesWith);
+	}
 }
 
 void GunSystem::registerImGui() {}

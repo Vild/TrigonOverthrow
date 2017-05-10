@@ -50,9 +50,6 @@ Engine::~Engine() {
 	_systems.clear();
 	_states.clear();
 
-	// rmt_UnbindOpenGL();
-	// rmt_DestroyGlobalInstance(rmt);
-
 	TTF_Quit();
 	Mix_Quit();
 	IMG_Quit();
@@ -70,8 +67,6 @@ int Engine::run(bool vsync) {
 	uint32_t lastTime = SDL_GetTicks();
 
 	while (!_quit) {
-		rmt_ScopedCPUSample(GameLoop, RMTSF_None);
-		rmt_ScopedOpenGLSample(GameLoop);
 		if (*_nextState != std::type_index(typeid(Engine))) {
 			State* prev = getStatePtr();
 			*_currentState = *_nextState;
@@ -87,8 +82,6 @@ int Engine::run(bool vsync) {
 				break;
 		}
 		{
-			rmt_ScopedCPUSample(EventHandling, RMTSF_None);
-			rmt_ScopedOpenGLSample(EventHandling);
 			SDL_Event event;
 			ImGuiIO& io = ImGui::GetIO();
 			while (SDL_PollEvent(&event)) {
@@ -141,9 +134,6 @@ int Engine::run(bool vsync) {
 		}
 
 		{
-			rmt_ScopedCPUSample(WorldTick, RMTSF_None);
-			rmt_ScopedOpenGLSample(WorldTick);
-
 			uint32_t curTime = SDL_GetTicks();
 			float delta = (curTime - lastTime) / 1000.0f;
 			lastTime = curTime;
@@ -165,16 +155,12 @@ int Engine::run(bool vsync) {
 		}
 
 		{
-			rmt_ScopedCPUSample(ImGuiRender, RMTSF_None);
-			rmt_ScopedOpenGLSample(ImGuiRender);
 			// static bool debug = true;
 			// ImGui::ShowMetricsWindow(&debug);
 
 			ImGui::Render();
 		}
 		{
-			rmt_ScopedCPUSample(SwapWindow, RMTSF_None);
-			rmt_ScopedOpenGLSample(SwapWindow);
 			SDL_GL_SwapWindow(_window);
 		}
 	}
@@ -187,12 +173,7 @@ void Engine::_init(bool vsync) {
 	_initGL();
 	_initImGui();
 
-	rmt_CreateGlobalInstance(&rmt);
-	rmt_BindOpenGL();
-
-	rmt_ScopedCPUSample(Initialization, RMTSF_None);
 	{
-		rmt_ScopedCPUSample(InitializingHelpers, RMTSF_None);
 		_textureManager = std::make_shared<TextureManager>(); // TODO: Move to own function?
 		_meshLoader = std::make_shared<MeshLoader>();
 		_hidInput = std::make_shared<HIDInput>();
@@ -202,7 +183,6 @@ void Engine::_init(bool vsync) {
 	}
 
 	{
-		rmt_ScopedCPUSample(InitializingECS, RMTSF_None);
 		_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
 		_nextState = std::make_unique<std::type_index>(std::type_index(typeid(Engine)));
 

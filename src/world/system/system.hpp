@@ -2,8 +2,6 @@
 
 #include "../world.hpp"
 
-#include "../../lib/Remotery.h"
-
 class System {
 public:
 	virtual ~System() = 0;
