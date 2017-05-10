@@ -7,7 +7,7 @@
 DynamicModelSystem::DynamicModelSystem() {}
 
 void DynamicModelSystem::update(World& world, float delta) {
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	for (Entity * entity : Entity::getEntities<DynamicModelComponent>()) {
 		auto dynamicModelComp = entity->getComponent<DynamicModelComponent>();
 		if (!dynamicModelComp)
 			continue;

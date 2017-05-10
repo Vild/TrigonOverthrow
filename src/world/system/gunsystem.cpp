@@ -24,13 +24,13 @@ GunSystem::~GunSystem() {}
 
 void GunSystem::update(World& world, float delta) {
 	std::vector<Entity*> toAdd;
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	for (Entity * entity : Entity::getEntities<GunComponent>()) {
 		auto currGunComp = entity->getComponent<GunComponent>();
 		if (!currGunComp)
 			continue;
 
 		if (currGunComp->shoot) {
-			toAdd.push_back(entity.get());
+			toAdd.push_back(entity);
 			currGunComp->shoot = false;
 			currGunComp->cooldown = currGunComp->cooldownLength;
 		}

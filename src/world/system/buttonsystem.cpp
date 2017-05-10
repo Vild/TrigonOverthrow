@@ -45,8 +45,8 @@ void ButtonSystem::update(World& world, float delta) {
 	// XXX: HACK HACK
 	ButtonComponent::ButtonCallback hackCB = nullptr;
 
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		auto button = entity->getComponent<ButtonComponent>();
+	for (Entity * entity : Entity::getEntities<ButtonComponent>()) {
+			auto button = entity->getComponent<ButtonComponent>();
 		if (!button)
 			continue;
 
@@ -102,7 +102,7 @@ void ButtonSystem::update(World& world, float delta) {
 		printf("Is over: %s t: %f\n", entity->getName().c_str(), t);
 		if (t < distanceHit) {
 			distanceHit = t;
-			entityHit = entity.get();
+			entityHit = entity;
 		}
 	}
 

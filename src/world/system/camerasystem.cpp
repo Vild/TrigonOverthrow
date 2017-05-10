@@ -8,7 +8,8 @@
 CameraSystem::~CameraSystem() {}
 
 void CameraSystem::update(World& world, float delta) {
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	for (Entity * entity : Entity::getEntities<CameraComponent>()) {
+
 		auto cameraComponent = entity->getComponent<CameraComponent>();
 		if (!cameraComponent)
 			continue;

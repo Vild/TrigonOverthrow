@@ -30,7 +30,7 @@ void FloorTileSystem::update(World& world, float delta) {
 	};
 
 	glm::vec3 playerPos = playerTransform->getPosition();
-	for (auto& entity : world.getEntities()) {
+	for (Entity * entity : Entity::getEntities<FloorTileComponent>()) {
 		FloorTileComponent* ftc = entity->getComponent<FloorTileComponent>();
 
 		if (!ftc)

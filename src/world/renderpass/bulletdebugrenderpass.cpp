@@ -61,7 +61,7 @@ void BulletDebugRenderPass::render(World& world) {
 	static std::vector<glm::mat4> instances;
 	instances.clear();
 
-	for (auto& entity : world.getEntities()) {
+	for (Entity * entity : Entity::getEntities<RigidBodyComponent>()) {
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
 		if (!rigidbody)
 			continue;

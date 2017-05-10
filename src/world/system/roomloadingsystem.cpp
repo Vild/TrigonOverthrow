@@ -39,7 +39,7 @@ void RoomLoadingSystem::update(World & world, float delta)
 		}
 	}
 
-	for (auto& entity : world.getEntities())
+	for (Entity * entity : Entity::getEntities<RoomLoadingComponent>())
 	{
 		RoomLoadingComponent * rlc = nullptr;
 		if ((rlc = entity->getComponent<RoomLoadingComponent>()))

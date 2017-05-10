@@ -13,7 +13,7 @@
 LookAtSystem::~LookAtSystem() {}
 
 void LookAtSystem::update(World& world, float delta) {
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	for (Entity * entity : Entity::getEntities<LookAtComponent>()) {
 		auto lookat = entity->getComponent<LookAtComponent>();
 		if (!lookat || !lookat->target)
 			continue;

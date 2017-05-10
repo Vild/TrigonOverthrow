@@ -9,7 +9,7 @@ GhostObjectSystem::GhostObjectSystem() {}
 GhostObjectSystem::~GhostObjectSystem() {}
 
 void GhostObjectSystem::update(World& world, float delta) {
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	for (Entity * entity : Entity::getEntities<GhostObjectComponent>()) {
 		auto ghostObjComp = entity->getComponent<GhostObjectComponent>();
 		if (!ghostObjComp)
 			continue;
