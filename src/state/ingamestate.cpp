@@ -29,6 +29,7 @@
 #include "../world/component/floortilecomponent.hpp"
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/upgradecomponent.hpp"
+#include "../world/component/infiniteplanefollowcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -61,6 +62,23 @@ InGameState::InGameState() {
 			bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 		}
 	}
+
+	/*{
+		auto infplane = _world.addEntity(sole::uuid4(), "InfintePlane");
+		auto transform = infplane->addComponent<TransformComponent>();
+		transform->setScale({1000, 1, 1000});
+		auto inffollow = infplane->addComponent<InfinitePlaneFollowComponent>(transform, 0.4);
+		auto ismeshc = infplane->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(
+			GL_TRIANGLE_STRIP,
+			SimpleMesh::vertexlist_t({
+				{ -1, 0, -1 },
+				{ -1, 0,  1 },
+				{ 1, 0, -1 },
+				{ 1, 0,  1 }
+			}
+		)));
+		ismeshc->addInstance(transform);
+	}*/
 
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();

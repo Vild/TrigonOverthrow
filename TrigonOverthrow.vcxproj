@@ -82,6 +82,8 @@
     <ClCompile Include="src\world\system\gunsystem.cpp" />
     <ClCompile Include="src\world\system\hoversystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
+    <ClCompile Include="src\world\system\infiniteplanefollowsystem.cpp" />
+    <ClCompile Include="src\world\system\infiniteplanefollowsystem.hpp" />
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lifesystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />
