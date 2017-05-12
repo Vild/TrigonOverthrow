@@ -54,8 +54,8 @@ Engine::~Engine() {
 	_jsonLoader.reset();
 	_audioManager.reset();
 
-	_systems.clear();
 	_states.clear();
+	_systems.clear();
 
 	TTF_Quit();
 	Mix_CloseAudio();

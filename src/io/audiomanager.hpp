@@ -6,12 +6,12 @@
 #include <map>
 
 struct SFX {
-	std::shared_ptr<Mix_Chunk> chunk;
+	Mix_Chunk* chunk;
 	int channel;
 	int volume = 1;
 	glm::vec3 position;
 
-	SFX(std::shared_ptr<Mix_Chunk> chunk, int channel);
+	SFX(Mix_Chunk* chunk, int channel);
 	virtual ~SFX();
 
 	void play(int loops, glm::vec3 playerPosition, glm::vec3 forward = glm::vec3(0, 0, -1));
@@ -23,10 +23,10 @@ struct SFX {
 struct Music {
 	static Music* currentMusic; /// Used for determining if stop can be used
 
-	std::shared_ptr<Mix_Music> music;
+	Mix_Music* music;
 	int volume = 1;
 
-	Music(std::shared_ptr<Mix_Music> music);
+	Music(Mix_Music* music);
 	virtual ~Music();
 
 	void play(int loops = -1);
@@ -46,8 +46,8 @@ public:
 	std::unique_ptr<Music> getMusic(const std::string& file);
 
 private:
-	std::map<std::string, std::shared_ptr<Mix_Chunk>> _sfxCache;
-	std::map<std::string, std::shared_ptr<Mix_Music>> _musicCache;
+	std::map<std::string, Mix_Chunk*> _sfxCache;
+	std::map<std::string, Mix_Music*> _musicCache;
 
 	int _channelCount = 0;
 };

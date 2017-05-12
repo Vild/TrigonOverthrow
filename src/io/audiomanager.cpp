@@ -3,7 +3,7 @@
 
 #include <cstdio>
 
-SFX::SFX(std::shared_ptr<Mix_Chunk> chunk, int channel) : chunk(chunk), channel(channel), volume(MIX_MAX_VOLUME), position(glm::vec3{0, 0, 0}) {}
+SFX::SFX(Mix_Chunk* chunk, int channel) : chunk(chunk), channel(channel), volume(MIX_MAX_VOLUME), position(glm::vec3{0, 0, 0}) {}
 
 SFX::~SFX() {
 	stop();
@@ -11,7 +11,7 @@ SFX::~SFX() {
 
 void SFX::play(int loops, glm::vec3 playerPosition, glm::vec3 forward) {
 	update(playerPosition, forward);
-	Mix_PlayChannel(channel, chunk.get(), loops);
+	Mix_PlayChannel(channel, chunk, loops);
 }
 
 void SFX::stop() {
@@ -26,7 +26,7 @@ void SFX::update(glm::vec3 playerPosition, glm::vec3 forward) {
 
 Music* Music::currentMusic = currentMusic;
 
-Music::Music(std::shared_ptr<Mix_Music> music) : music(music), volume(MIX_MAX_VOLUME) {}
+Music::Music(Mix_Music* music) : music(music), volume(MIX_MAX_VOLUME) {}
 Music::~Music() {
 	stop();
 
@@ -36,9 +36,8 @@ Music::~Music() {
 
 void Music::play(int loops) {
 	currentMusic = this;
-	Mix_VolumeMusic(volume);
-	Mix_PlayMusic(music.get(), loops);
 	update();
+	Mix_PlayMusic(music, loops);
 }
 
 void Music::stop() {
@@ -53,10 +52,17 @@ void Music::update() {
 
 AudioManager::AudioManager() {}
 
-AudioManager::~AudioManager() {}
+AudioManager::~AudioManager() {
+	clear();
+}
 
 void AudioManager::clear() {
+	for (std::pair<std::string, Mix_Chunk*> p : _sfxCache)
+		Mix_FreeChunk(p.second);
 	_sfxCache.clear();
+
+	for (std::pair<std::string, Mix_Music*> p : _musicCache)
+		Mix_FreeMusic(p.second);
 	_musicCache.clear();
 }
 
@@ -64,12 +70,11 @@ std::unique_ptr<SFX> AudioManager::getSFX(const std::string& file) {
 	auto& chunk = _sfxCache[file];
 	if (!chunk) {
 		printf("Loading SFX: %s\n", file.c_str());
-		Mix_Chunk* tmpChunk = Mix_LoadWAV(file.c_str());
-		if (!tmpChunk) {
+		chunk = Mix_LoadWAV(file.c_str());
+		if (!chunk) {
 			fprintf(stderr, "\tMix_LoadWAV: %s\n", Mix_GetError());
 			return std::unique_ptr<SFX>();
 		}
-		chunk = std::shared_ptr<Mix_Chunk>(tmpChunk, &Mix_FreeChunk);
 	}
 
 	Mix_AllocateChannels(_channelCount + 1);
@@ -80,12 +85,11 @@ std::unique_ptr<Music> AudioManager::getMusic(const std::string& file) {
 	auto& music = _musicCache[file];
 	if (!music) {
 		printf("Loading Music: %s\n", file.c_str());
-		Mix_Music* tmpMusic = Mix_LoadMUS(file.c_str());
-		if (!tmpMusic) {
+		music = Mix_LoadMUS(file.c_str());
+		if (!music) {
 			fprintf(stderr, "\tMix_LoadMUS: %s\n", Mix_GetError());
 			return std::unique_ptr<Music>();
 		}
-		music = std::shared_ptr<Mix_Music>(tmpMusic, &Mix_FreeMusic);
 	}
 
 	return std::make_unique<Music>(music);
