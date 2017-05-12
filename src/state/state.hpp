@@ -14,6 +14,8 @@ public:
 	virtual Entity* getCamera() = 0;
 	virtual Entity* getPlayer() = 0;
 
+	virtual void registerImGui() = 0;
+
 protected:
 	World _world;
 };

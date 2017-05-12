@@ -12,6 +12,8 @@ public:
 	inline Entity* getCamera() final { return _camera; }
 	inline Entity* getPlayer() final { return _player; }
 
+	void registerImGui() final;
+
 private:
 	Entity* _sun;
 	Entity* _camera;
