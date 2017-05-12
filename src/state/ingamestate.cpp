@@ -30,6 +30,8 @@
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/upgradecomponent.hpp"
 #include "../world/component/musiccomponent.hpp"
+#include "../world/component/experiencecomponent.hpp"
+#include "../world/component/experienceorbcomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -122,6 +124,10 @@ InGameState::InGameState() {
 
 		auto gun = _player->addComponent<GunComponent>();
 		gun->addGun(GunComponent::GunType::RAYGUN, 30); // 60 is the the cooldown rate per frame.
+
+		auto expComp = _player->addComponent<ExperienceComponent>();
+		expComp->currExp = 0;
+		expComp->expToNextLevel = 5;
 
 		auto upgrades = _player->addComponent<UpgradeComponent>();
 		upgrades->multipleRayMultiplier = 0;

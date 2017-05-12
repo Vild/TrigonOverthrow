@@ -23,6 +23,8 @@
 #include "../world/component/floortilecomponent.hpp"
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/rigidbodycomponent.hpp"
+#include "../world/component/experiencecomponent.hpp"
+#include "../world/component/experienceorbcomponent.hpp"
 
 #ifdef WIN32
 #define __PRETTY_FUNCTION__ __func__
@@ -70,6 +72,8 @@ JSONLoader::JSONLoader() {
 	_constructors["HoverComponent"] = &constructComponent<HoverComponent>;
 	_constructors["RigidBodyComponent"] = &constructComponent<RigidBodyComponent>;
 	_constructors["ProjectileComponent"] = &constructComponent<ProjectileComponent>;
+	_constructors["ExperienceComponent"] = &constructComponent<ExperienceComponent>;
+	_constructors["ExperienceOrbComponent"] = &constructComponent<ExperienceOrbComponent>;
 }
 
 JSONLoader::~JSONLoader() {}
@@ -149,9 +153,6 @@ bool ComponentValues::getBool(const std::string& name, bool defaultValue) const 
 	else if (tmp.type() != json::value_t::object)
 		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
 
-	if (tmp.at("type").get<std::string>() == "bool")
-		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
-
 	return !!(rand() % 2);
 }
 
@@ -171,9 +172,6 @@ int ComponentValues::getInt(const std::string& name, int defaultValue) const {
 	else if (tmp.type() == json::value_t::number_unsigned)
 		return tmp.get<unsigned int>();
 	else if (tmp.type() != json::value_t::object)
-		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
-
-	if (tmp.at("type").get<std::string>() == "int")
 		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
 
 	int upper = tmp.at("upper").get<int>();
@@ -200,9 +198,6 @@ float ComponentValues::getFloat(const std::string& name, float defaultValue) con
 	else if (tmp.type() == json::value_t::number_unsigned)
 		return tmp.get<unsigned int>();
 	else if (tmp.type() != json::value_t::object)
-		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
-
-	if (tmp.at("type").get<std::string>() == "float")
 		throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
 
 	float upper;
