@@ -13,7 +13,7 @@
 LookAtSystem::~LookAtSystem() {}
 
 void LookAtSystem::update(World& world, float delta) {
-	for (Entity * entity : Entity::getEntities<LookAtComponent>()) {
+	for (Entity * entity : world.getActiveComponents<LookAtComponent>()) {
 		auto lookat = entity->getComponent<LookAtComponent>();
 		if (!lookat || !lookat->target)
 			continue;

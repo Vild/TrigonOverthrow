@@ -1,10 +1,10 @@
 import reggae;
 // -Wsuggest-override -Wno-error=suggest-override
-enum CFLAGS = "-std=c++17 -O3 -D_DEBUG -ggdb -Wall -Werror -Wno-unused-value -Wno-maybe-uninitialized -Wno-unused-but-set-variable -Wno-unused-function -fdiagnostics-color=always -fopenmp -I/usr/include/bullet/";
+enum CFLAGS = "-std=c++17 -O0 -D_DEBUG -ggdb -Wall -Werror -Wno-unused-value -Wno-maybe-uninitialized -Wno-unused-but-set-variable -Wno-unused-function -fdiagnostics-color=always -fopenmp -I/usr/include/bullet/";
 
 enum CompileCommand {
 	Compile = "g++ -c " ~ CFLAGS ~ " $in -o $out",
-	LinkTrigon = "g++ -std=c++17 -O3 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp -lBullet3Common -lBullet3Dynamics -lBullet3Geometry -lBullet3OpenCL_clew -lBulletCollision -lBulletDynamics -lBulletInverseDynamics -lBulletSoftBody -lLinearMath $in -o $out",
+	LinkTrigon = "g++ -std=c++17 -O0 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp -lBullet3Common -lBullet3Dynamics -lBullet3Geometry -lBullet3OpenCL_clew -lBulletCollision -lBulletDynamics -lBulletInverseDynamics -lBulletSoftBody -lLinearMath $in -o $out",
 	LinkEditor = "g++ -std=c++17 -O0 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lsfml-graphics -lsfml-system -lsfml-window $in -o $out",
 }
 

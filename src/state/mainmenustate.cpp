@@ -91,6 +91,7 @@ MainMenuState::MainMenuState() {
 MainMenuState::~MainMenuState() {}
 
 void MainMenuState::onEnter(State* prev) {}
+
 void MainMenuState::onLeave(State* next) {}
 
 void MainMenuState::_toggleBox(Entity& entity) {
@@ -132,6 +133,7 @@ void MainMenuState::_onButtonCallback(Entity* entity, State& state, MouseState m
 			engine.setState<InGameState>();
 		else if (entity == self._quit)
 			engine.quit();
+		return;
 	} else {
 		auto play = self._play->getComponent<TextComponent>();
 		play->textRenderer->setText((entity == self._play) ? ">Play<" : " Play ");

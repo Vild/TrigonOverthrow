@@ -6,7 +6,6 @@
 #include <vector>
 #include <cstdint>
 #include <map>
-#include <typeindex>
 
 #include "../lib/sole/sole.hpp"
 
@@ -20,22 +19,14 @@ class State;
 class Entity {
 public:
 	/// Don't call this one directly! Always use world->addEntity
-	Entity(sole::uuid uuid, std::string name);
-	virtual ~Entity()
-	{
-		for (auto& pair : components)
-		{
-			auto& ents = entities[pair.first];
-			auto it = std::find(ents.begin(), ents.end(), this);
-			ents.erase(it);
-		}
-	};
+	Entity(World& world, sole::uuid uuid, std::string name);
+	virtual ~Entity();
 
 	template <typename T, typename... Args, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	T* addComponent(Args... args) {
 		auto ret = components.insert_or_assign(typeid(T), std::make_unique<T>(args...));
 
-		entities[typeid(T)].push_back(this);
+		_world._activeComponents[typeid(T)].push_back(this);
 
 		return static_cast<T*>(ret.first->second.get());
 	}
@@ -51,16 +42,10 @@ public:
 		return component;
 	}
 
-	template<typename T>
-	static std::vector<Entity*>& getEntities()
-	{
-		return entities[typeid(T)];
-	}
-
 	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	void removeComponent() {
 		components.erase(typeid(T));
-		auto& ents = entities[typeid(T)];
+		auto& ents = _world._activeComponents[typeid(T)];
 		ents.erase(std::find(ents.begin(), ents.end(), this));
 	}
 
@@ -75,9 +60,7 @@ public:
 	inline bool& getHide() { return _hide; }
 
 private:
-	typedef std::map<std::type_index, std::vector<Entity*>> entities_t;
-	static entities_t entities;
-
+	World& _world;
 	sole::uuid _uuid;
 	std::string _name;
 	std::map<std::type_index, std::unique_ptr<Component>> components;

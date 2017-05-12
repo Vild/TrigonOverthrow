@@ -80,7 +80,7 @@ void GeometryRenderPass::render(World& world) {
 	_ismShader->setUniform("u_view", cameraComponent->viewMatrix);
 	_ismShader->setUniform("u_projection", cameraComponent->projectionMatrix);
 
-	for (Entity* entity : Entity::getEntities<ModelComponent>()) {
+	for (Entity* entity : world.getActiveComponents<ModelComponent>()) {
 		if (entity->isDead())
 			continue;
 		ModelComponent* model = entity->getComponent<ModelComponent>();
@@ -91,7 +91,7 @@ void GeometryRenderPass::render(World& world) {
 		}
 	}
 
-	for (Entity* entity : Entity::getEntities<InstancedSimpleMeshComponent>()) {
+	for (Entity* entity : world.getActiveComponents<InstancedSimpleMeshComponent>()) {
 		if (entity->isDead())
 			continue;
 		InstancedSimpleMeshComponent* ism = entity->getComponent<InstancedSimpleMeshComponent>();

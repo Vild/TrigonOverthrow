@@ -8,7 +8,7 @@
 #include <cmath>
 #include <typeinfo>
 #include <typeindex>
-#include <unordered_map>
+#include <map>
 
 #include "io/texturemanager.hpp"
 #include "io/meshloader.hpp"
@@ -24,6 +24,7 @@
 
 class Engine {
 public:
+	typedef std::unique_ptr<State> (*makeState_f)();
 	static Engine& getInstance() {
 		static Engine instance;
 		return instance;
@@ -59,14 +60,12 @@ public:
 	}
 
 	template <typename T>
-	inline std::unordered_map<std::type_index, std::unique_ptr<State>>& getStates() {
+	inline std::map<std::type_index, makeState_f>& getStates() {
 		return _states;
 	}
 
-	inline State& getState() { return *_states[*_currentState]; }
-	inline State* getStatePtr() { return _states[*_currentState].get(); }
-
-	inline const std::type_index getStateType() { return *_currentState; }
+	inline State& getState() { return *_currentState; }
+	inline State* getStatePtr() { return _currentState.get(); }
 
 	template <typename T>
 	inline void setState() {
@@ -94,9 +93,9 @@ private:
 
 	std::vector<std::unique_ptr<System>> _systems;
 
-	std::unique_ptr<std::type_index> _currentState;
+	std::unique_ptr<State> _currentState;
 	std::unique_ptr<std::type_index> _nextState;
-	std::unordered_map<std::type_index, std::unique_ptr<State>> _states;
+	std::map<std::type_index, makeState_f> _states;
 
 	Engine() {}
 	virtual ~Engine();

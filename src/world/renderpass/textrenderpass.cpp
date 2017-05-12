@@ -38,7 +38,7 @@ void TextRenderPass::render(World& world) {
 
 	glDisable(GL_CULL_FACE);
 
-	for (Entity * entity : Entity::getEntities<TextComponent>()) {
+	for (Entity * entity : world.getActiveComponents<TextComponent>()) {
 		TextComponent * text = entity->getComponent<TextComponent>();
 
 		auto transform = entity->getComponent<TransformComponent>();

@@ -54,8 +54,8 @@ Engine::~Engine() {
 	_jsonLoader.reset();
 	_audioManager.reset();
 
-	_systems.clear();
 	_states.clear();
+	_systems.clear();
 
 	TTF_Quit();
 	Mix_CloseAudio();
@@ -77,17 +77,17 @@ int Engine::run(bool vsync) {
 	while (!_quit) {
 		if (*_nextState != std::type_index(typeid(Engine))) {
 			State* prev = getStatePtr();
-			*_currentState = *_nextState;
+			std::unique_ptr<State> next = _states[*_nextState]();
 			*_nextState = std::type_index(typeid(Engine));
-			State* next = getStatePtr();
 			if (next)
 				next->onEnter(prev);
 
 			if (prev)
-				prev->onLeave(next);
+				prev->onLeave(next.get());
 
 			if (!next)
 				break;
+			_currentState = std::move(next);
 		}
 		{
 			SDL_Event event;
@@ -190,14 +190,14 @@ void Engine::_init(bool vsync) {
 	}
 
 	{
-		_currentState = std::make_unique<std::type_index>(std::type_index(typeid(nullptr)));
+		_currentState = nullptr;
 		_nextState = std::make_unique<std::type_index>(std::type_index(typeid(Engine)));
 
 		_setupSystems();
-		_states[std::type_index(typeid(nullptr))] = std::unique_ptr<State>();
-		_states[std::type_index(typeid(InGameState))] = std::make_unique<InGameState>();
-		//		_states[std::type_index(typeid(MainMenuState))] = std::make_unique<MainMenuState>();
-		setState<InGameState>();
+		_states[std::type_index(typeid(nullptr))] = []() -> std::unique_ptr<State> { return nullptr; };
+		_states[std::type_index(typeid(InGameState))] = []() -> std::unique_ptr<State> { return std::make_unique<InGameState>(); };
+		_states[std::type_index(typeid(MainMenuState))] = []() -> std::unique_ptr<State> { return std::make_unique<MainMenuState>(); };
+		setState<MainMenuState>();
 	}
 }
 

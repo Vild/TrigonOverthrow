@@ -8,7 +8,7 @@
 CameraSystem::~CameraSystem() {}
 
 void CameraSystem::update(World& world, float delta) {
-	for (Entity * entity : Entity::getEntities<CameraComponent>()) {
+	for (Entity * entity : world.getActiveComponents<CameraComponent>()) {
 
 		auto cameraComponent = entity->getComponent<CameraComponent>();
 		if (!cameraComponent)

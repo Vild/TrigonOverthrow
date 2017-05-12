@@ -15,14 +15,16 @@ void AudioSystem::update(World& world, float delta) {
 	Entity* player = engine.getState().getPlayer();
 	auto transform = player->getComponent<TransformComponent>();
 
-	glm::vec3 forward = glm::vec3(glm::mat4_cast(transform->getRotation()) * glm::vec4(0, 0, -1, 0));
+	glm::vec4 forward = glm::vec4(0, 0, -1, 0);
+	if (transform)
+		forward = glm::mat4_cast(transform->getRotation()) * forward;
 
-	for (Entity* entity : Entity::getEntities<SFXComponent>()) {
+	for (Entity* entity : world.getActiveComponents<SFXComponent>()) {
 		SFXComponent* sfx = entity->getComponent<SFXComponent>();
-		sfx->sfx->update(transform->getPosition(), forward);
+		sfx->sfx->update(transform->getPosition(), glm::vec3(forward));
 	}
 
-	for (Entity* entity : Entity::getEntities<MusicComponent>()) {
+	for (Entity* entity : world.getActiveComponents<MusicComponent>()) {
 		MusicComponent* music = entity->getComponent<MusicComponent>();
 		music->music->update();
 	}

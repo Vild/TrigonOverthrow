@@ -16,7 +16,7 @@ InputSystem::~InputSystem() {}
 void InputSystem::update(World& world, float delta) {
 	std::shared_ptr<HIDInput> hid = Engine::getInstance().getHIDInput();
 
-	for (Entity * entity : Entity::getEntities<KBMouseInputComponent>()) {
+	for (Entity * entity : world.getActiveComponents<KBMouseInputComponent>()) {
 		auto rigidBodyComponent = entity->getComponent<RigidBodyComponent>();
 		if (!rigidBodyComponent)
 			continue;

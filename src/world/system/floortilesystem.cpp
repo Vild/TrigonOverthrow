@@ -4,15 +4,11 @@
 #include "../component/floortilecomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
 
-FloorTileSystem::FloorTileSystem() {
-	this->playerTransform = nullptr;
-}
+#include "../../engine.hpp"
+
+FloorTileSystem::FloorTileSystem() {}
 
 FloorTileSystem::~FloorTileSystem() {}
-
-void FloorTileSystem::setPlayerTransform(TransformComponent* playerTransform) {
-	this->playerTransform = playerTransform;
-}
 
 void FloorTileSystem::update(World& world, float delta) {
 	static auto clamp = [](float v, float lo, float hi) -> float {
@@ -29,8 +25,12 @@ void FloorTileSystem::update(World& world, float delta) {
 		return b;
 	};
 
+	auto player = Engine::getInstance().getState().getPlayer();
+	auto playerTransform = player->getComponent<TransformComponent>();
+	if (!playerTransform)
+		return;
 	glm::vec3 playerPos = playerTransform->getPosition();
-	for (Entity * entity : Entity::getEntities<FloorTileComponent>()) {
+	for (Entity* entity : world.getActiveComponents<FloorTileComponent>()) {
 		FloorTileComponent* ftc = entity->getComponent<FloorTileComponent>();
 
 		if (!ftc)

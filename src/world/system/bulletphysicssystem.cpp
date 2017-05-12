@@ -33,7 +33,7 @@ BulletPhysicsSystem::~BulletPhysicsSystem() {
 void BulletPhysicsSystem::update(World& w, float delta) {
 	world->stepSimulation(delta);
 
-	for (Entity * entity : Entity::getEntities<RigidBodyComponent>()) {
+	for (Entity * entity : w.getActiveComponents<RigidBodyComponent>()) {
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
 		if (!rigidbody)
 			continue;
