@@ -77,7 +77,7 @@ void RoomLoadingSystem::newRoom(World * world, coord_t coord)
 	
 	auto mapInfo = jsonLoader->loadMap(maps[0]);
 
-	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
+	MapData map = mapLoader->loadFromImage("maps/test3218.png");
 	Entity * room = world->addEntity(sole::uuid4(), "Room");
 	
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
@@ -88,11 +88,16 @@ void RoomLoadingSystem::newRoom(World * world, coord_t coord)
 	float offsetX = coord.first * chunkSize.x;
 	float offsetY = coord.second * chunkSize.y;
 
+	static auto randFloat = [] (float LO, float HI)
+	{
+		return LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+	};
+
 	for (size_t i = 0, size = map.data.size(); i < size; i++)
 	{
 		int x = i % map.width;
 		int y = i / map.width;
-		float h = float(map.data[i]) / 128.f;
+		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
 
 		Entity* tile = world->addEntity(sole::uuid4(), "FloorTile");
 		tile->getHide() = true;
