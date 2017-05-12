@@ -19,11 +19,9 @@ MainMenuState::MainMenuState() {
 	_camera = _world.addEntity(sole::uuid4(), "Camera");
 	_target = _world.addEntity(sole::uuid4(), "Target");
 	_title = _world.addEntity(sole::uuid4(), "Title");
-	_play = _world.addEntity(sole::uuid4(), "Play");
-	_quit = _world.addEntity(sole::uuid4(), "Quit");
-
 	{
-		//_camera->addComponent<TransformComponent>()->recalculateMatrix();
+		/*auto transform = */ _camera->addComponent<TransformComponent>();
+		// transform->recalculateMatrix();
 		_camera->addComponent<CameraComponent>();
 
 		auto lookAt = _camera->addComponent<LookAtComponent>();
@@ -32,7 +30,10 @@ MainMenuState::MainMenuState() {
 		lookAt->offsetFromTarget = glm::vec3{0, 0, -4};
 	}
 
-	//{ _target->addComponent<TransformComponent>()->recalculateMatrix(); }
+	{
+		/*auto transform = */ _target->addComponent<TransformComponent>();
+		//	transform->recalculateMatrix();
+	}
 
 	{
 		auto transform = _title->addComponent<TransformComponent>();
@@ -44,48 +45,6 @@ MainMenuState::MainMenuState() {
 		text->transform.setPosition({-0.3, 0, 0});
 		text->transform.setScale({5, 5, 5});
 	}
-
-	{
-		auto transform = _play->addComponent<TransformComponent>();
-		// transform->position = glm::vec3{0, -0.2, 0};
-		transform->setPosition({-0.5625, -0.5625 - 0.2, 0});
-		transform->setScale({1.125, 3 * 1.0 / 16, 3 * 1.0 / 16});
-		// transform->recalculateMatrix();
-
-		auto button = _play->addComponent<ButtonComponent>();
-		button->size = glm::vec3{2, 2, 2};
-		button->position = button->size * glm::vec3(-0.5);
-		button->callback = &MainMenuState::_onButtonCallback;
-
-		auto text = _play->addComponent<TextComponent>();
-		text->textRenderer = tf->makeRenderer(" Play ", false, 6);
-		text->transform.setPosition({0, 0, 0});
-		text->transform.setScale(glm::vec3{3, 3, 3} / transform->getScale());
-
-		_play->registerImGui = &MainMenuState::_registerImGUI;
-		_toggleBox(*_play);
-	}
-
-	{
-		auto transform = _quit->addComponent<TransformComponent>();
-		// transform->position = glm::vec3{0, -0.75, 0};
-		transform->setPosition({-0.5625, -0.5625 - 0.75, 0});
-		transform->setScale({1.125, 1.0 / 16, 1.0 / 16});
-		// transform->recalculateMatrix();
-
-		auto button = _quit->addComponent<ButtonComponent>();
-		button->size = glm::vec3{2, 2, 2};
-		button->position = button->size * glm::vec3(-0.5);
-		button->callback = &MainMenuState::_onButtonCallback;
-
-		auto text = _quit->addComponent<TextComponent>();
-		text->textRenderer = tf->makeRenderer(" Quit ", false, 6);
-		text->transform.setPosition({0, 0, 0});
-		text->transform.setScale(glm::vec3{3, 3, 3} / transform->getScale());
-
-		_quit->registerImGui = &MainMenuState::_registerImGUI;
-		_toggleBox(*_quit);
-	}
 }
 
 MainMenuState::~MainMenuState() {}
@@ -94,51 +53,15 @@ void MainMenuState::onEnter(State* prev) {}
 
 void MainMenuState::onLeave(State* next) {}
 
-void MainMenuState::_toggleBox(Entity& entity) {
-	if (entity.getComponent<ModelComponent>())
-		return entity.removeComponent<ModelComponent>();
-
-	auto model = entity.addComponent<ModelComponent>();
-
-	model->meshData = Engine::getInstance().getMeshLoader()->getMesh("assets/objects/box.obj");
-	model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
-	model->meshData->mesh
-		->addBuffer("m",
-								[](GLuint id) {
-									glBindBuffer(GL_ARRAY_BUFFER, id);
-									glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
-
-									for (int i = 0; i < 4; i++) {
-										glEnableVertexAttribArray(ShaderAttributeID::m + i);
-										glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-										glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-									}
-
-									glBindBuffer(GL_ARRAY_BUFFER, 0);
-								})
-		.finalize();
-}
-
-void MainMenuState::_registerImGUI(Entity& self, State& state) {
-	bool doesRender = !!self.getComponent<ModelComponent>();
-	if (ImGui::Checkbox("Render box", &doesRender))
-		static_cast<MainMenuState&>(state)._toggleBox(self);
-}
-
-void MainMenuState::_onButtonCallback(Entity* entity, State& state, MouseState mouse) {
-	MainMenuState& self = static_cast<MainMenuState&>(state);
+void MainMenuState::registerImGui() {
 	Engine& engine = Engine::getInstance();
-	if (mouse & MouseState::left) {
-		if (entity == self._play)
-			engine.setState<InGameState>();
-		else if (entity == self._quit)
-			engine.quit();
-		return;
-	} else {
-		auto play = self._play->getComponent<TextComponent>();
-		play->textRenderer->setText((entity == self._play) ? ">Play<" : " Play ");
+	ImGuiWindowFlags windowFlags =
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
+	ImGui::Begin("MainMenu", nullptr, windowFlags);
+	if (ImGui::Button("Play"))
+		engine.setState<InGameState>();
 
-		auto quit = self._quit->getComponent<TextComponent>();
-		quit->textRenderer->setText((entity == self._quit) ? ">Quit<" : " Quit ");
-	}
+	if (ImGui::Button("Quit"))
+		engine.quit();
+	ImGui::End();
 }
