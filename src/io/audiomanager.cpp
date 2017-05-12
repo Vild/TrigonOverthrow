@@ -10,8 +10,8 @@ SFX::~SFX() {
 }
 
 void SFX::play(int loops, glm::vec3 playerPosition, glm::vec3 forward) {
-	Mix_PlayChannel(channel, chunk.get(), loops);
 	update(playerPosition, forward);
+	Mix_PlayChannel(channel, chunk.get(), loops);
 }
 
 void SFX::stop() {
@@ -36,6 +36,7 @@ Music::~Music() {
 
 void Music::play(int loops) {
 	currentMusic = this;
+	Mix_VolumeMusic(volume);
 	Mix_PlayMusic(music.get(), loops);
 	update();
 }

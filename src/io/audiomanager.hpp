@@ -8,7 +8,7 @@
 struct SFX {
 	std::shared_ptr<Mix_Chunk> chunk;
 	int channel;
-	int volume;
+	int volume = 1;
 	glm::vec3 position;
 
 	SFX(std::shared_ptr<Mix_Chunk> chunk, int channel);
@@ -24,7 +24,7 @@ struct Music {
 	static Music* currentMusic; /// Used for determining if stop can be used
 
 	std::shared_ptr<Mix_Music> music;
-	int volume;
+	int volume = 1;
 
 	Music(std::shared_ptr<Mix_Music> music);
 	virtual ~Music();

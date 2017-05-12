@@ -34,7 +34,6 @@
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
 	BulletPhysicsSystem* bulletphyiscs = engine.getSystem<BulletPhysicsSystem>();
-	FloorTileSystem* floorTileSystem = engine.getSystem<FloorTileSystem>();
 
 	_sun = _world.addEntity(sole::uuid4(), "Sun");
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
@@ -93,8 +92,6 @@ InGameState::InGameState() {
 		transform->setScale(glm::vec3(0.3));
 		transform->setDirection({0, 0, 1});
 
-		floorTileSystem->setPlayerTransform(transform);
-
 		auto model = _player->addComponent<ModelComponent>();
 		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
 		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
@@ -149,14 +146,20 @@ InGameState::InGameState() {
 		point->pointLight.quadratic = 0.07;
 
 		_player->addComponent<HoverComponent>(0.6, 100);
-		engine.getSystem<RoomLoadingSystem>()->setPlayerTransform(transform);
 	}
 }
 
 InGameState::~InGameState() {}
 
-void InGameState::onEnter(State* prev) {}
-void InGameState::onLeave(State* next) {}
+void InGameState::onEnter(State* prev) {
+	auto music = _sun->getComponent<MusicComponent>();
+	music->music->play(-1);
+}
+
+void InGameState::onLeave(State* next) {
+	auto music = _sun->getComponent<MusicComponent>();
+	music->music->stop();
+}
 
 void InGameState::_addLookAt() {
 	auto lookAt = _camera->addComponent<LookAtComponent>();

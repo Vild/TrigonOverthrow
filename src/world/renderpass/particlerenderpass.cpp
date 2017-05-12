@@ -37,7 +37,7 @@ void ParticleRenderPass::render(World& world) {
 
 	// bind the ssbo as array buffer.
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
-	for (Entity * entity : Entity::getEntities<ParticleComponent>()) {
+	for (Entity * entity : world.getActiveComponents<ParticleComponent>()) {
 		ParticleComponent * particleComp = entity->getComponent<ParticleComponent>();
 
 		auto ssbos = particleComp->ssbo;
