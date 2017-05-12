@@ -16,5 +16,5 @@ public:
 	inline std::string name() final { return "ParticleRenderPass"; };
 
 private:
-	const int NR_OF_PARTICLES = 1024;
+	const int NR_OF_PARTICLES = 256;
 };

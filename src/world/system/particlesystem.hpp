@@ -20,5 +20,5 @@ public:
 private:
 	std::vector<std::shared_ptr<ShaderProgram>> _programs;
 	const int MAX_EMITTER_COUNT = 64;
-	const int NR_OF_PARTICLES = 1024;
+	const int NR_OF_PARTICLES = 256;
 };
