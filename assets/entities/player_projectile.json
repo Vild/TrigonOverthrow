@@ -14,7 +14,8 @@
 		"ProjectileComponent": {
       "damage": 1,
       "bounceCount": 0,
-      "pierceCount":  0
+      "pierceCount": 0,
+      "speed": 10
 		},
 		"LifeComponent": {
 			"maxHP": 5

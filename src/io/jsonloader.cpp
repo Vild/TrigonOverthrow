@@ -71,7 +71,6 @@ JSONLoader::JSONLoader() {
 	_constructors["FloorTileComponent"] = &constructComponent<FloorTileComponent>;
 	_constructors["HoverComponent"] = &constructComponent<HoverComponent>;
 	_constructors["RigidBodyComponent"] = &constructComponent<RigidBodyComponent>;
-	_constructors["ProjectileComponent"] = &constructComponent<ProjectileComponent>;
 	_constructors["ExperienceComponent"] = &constructComponent<ExperienceComponent>;
 	_constructors["ExperienceOrbComponent"] = &constructComponent<ExperienceOrbComponent>;
 }

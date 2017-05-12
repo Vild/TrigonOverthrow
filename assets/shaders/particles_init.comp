@@ -13,6 +13,10 @@ layout (std430, binding = 2) buffer LifeBuffer {
 	float lives[];
 };
 
+layout (std430, binding = 3) buffer ColorBuffer {
+	vec3 colors[];
+};
+
 uniform float delta;
 
 float rand(vec2 co){
@@ -23,6 +27,7 @@ void main(){
 	uint index = gl_GlobalInvocationID.x;
 	vec3 pos = positions[index];
 	vec3 vel = velocities[index];
+	vec3 color = colors[index];
 	float life = lives[index];
 
 	vel += normalize(vec3(rand(vec2(index - life, index)), rand(vec2(index * 2, float(index) * 0.5)), rand(vec2(index - life, index)))) * delta;
@@ -32,4 +37,5 @@ void main(){
 	positions[index] = pos;
 	velocities[index] = vel;
 	lives[index] = life;
+	colors[index] = color;
 }

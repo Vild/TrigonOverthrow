@@ -64,11 +64,12 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 	point->pointLight.quadratic = 0.44;
 
 	auto projRdbComp = projectile->getComponent<RigidBodyComponent>();
+	auto projComp = projectile->getComponent<ProjectileComponent>();
 
 	projRdbComp->setHitboxHalfSize(transProj->getScale());
 	projRdbComp->setMass(1);
 	projRdbComp->setFriction(0);
-	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * 6.0f));
+	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * projComp->speed));
 	projRdbComp->setTransform(transProj);
 	projRdbComp->setActivationState(DISABLE_DEACTIVATION);
 
@@ -76,7 +77,6 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 	projLifeComp->currHP = projLifeComp->maxHP = 1;
 
 	auto upgradeComp = me->getComponent<UpgradeComponent>();
-	auto projComp = projectile->getComponent<ProjectileComponent>();
 	projComp->bounceCount = upgradeComp->reflectionCount;
 	projComp->pierceCount = upgradeComp->refractionCount;
 	if (upgradeComp && upgradeComp->multipleRayMultiplier > 0) {
@@ -94,7 +94,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 			newTrans->setPosition(transComp->getPosition() + newTrans->getDirection());
 			newRbComp->setHitboxHalfSize(transProj->getScale());
 			newRbComp->setTransform(newTrans);
-			newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * 6.0f));
+			newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * projComp->speed));
 			newRbComp->setActivationState(DISABLE_DEACTIVATION);
 			Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
 				BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,

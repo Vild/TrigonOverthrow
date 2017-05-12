@@ -8,7 +8,7 @@
 class ParticleSystem : public System {
 public:
 	enum Attachment : GLint { inPosition = 0, inVelocity, outPosition, outVelocity };
-	enum ParticleAttribute : int { position = 0, velocity, life};
+	enum ParticleAttribute : int { position = 0, velocity, life, color};
 
 	ParticleSystem();
 	virtual ~ParticleSystem();

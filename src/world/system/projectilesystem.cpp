@@ -41,6 +41,7 @@ void ProjectileSystem::update(World& world, float delta) {
 				const glm::vec3& normalOnB = cast(pt.m_normalWorldOnB);
 				if (abs(normalOnB.y) > 0)
 					continue;
+
 				auto targetLifeComp = entityA->getComponent<LifeComponent>();
 				if (targetLifeComp) {
 					targetLifeComp->currHP -= projComp->damage;
@@ -51,6 +52,7 @@ void ProjectileSystem::update(World& world, float delta) {
 					glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 
 				auto projComp = entityB->getComponent<ProjectileComponent>();
+				printf("%f\n", projComp->speed);
 				if (projComp->bounceCount > 0) {
 					auto loader = Engine::getInstance().getJSONLoader();
 					const std::string filePath = "assets/entities/player_projectile.json";
@@ -67,7 +69,7 @@ void ProjectileSystem::update(World& world, float delta) {
 
 					newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
 					newRbComp->setTransform(newTransComp);
-					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * 6.0f));
+					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
 					newRbComp->setActivationState(DISABLE_DEACTIVATION);
 					newProjectile->getComponent<ProjectileComponent>()->bounceCount = projComp->bounceCount - 1;
 					Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
@@ -88,7 +90,7 @@ void ProjectileSystem::update(World& world, float delta) {
 
 					newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
 					newRbComp->setTransform(newTransComp);
-					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * 6.0f));
+					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
 					newRbComp->setActivationState(DISABLE_DEACTIVATION);
 					newProjectile->getComponent<ProjectileComponent>()->pierceCount = projComp->pierceCount - 1;
 					Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,

@@ -50,6 +50,9 @@ void ParticleRenderPass::render(World& world) {
 		ssbos[ParticleSystem::ParticleAttribute::life]->bind();
 		glEnableVertexAttribArray(14);
 		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4)));
+		ssbos[ParticleSystem::ParticleAttribute::color]->bind();
+		glEnableVertexAttribArray(15);
+		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4) + sizeof(float)));
 		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES);
 	}
