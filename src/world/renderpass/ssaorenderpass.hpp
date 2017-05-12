@@ -4,7 +4,7 @@
 #include "../../gl/gbuffer.hpp"
 #include "../../gl/shader.hpp"
 #include "../../gl/texture.hpp"
-#include "../../gl/mesh.hpp"
+#include "../../gl/simplemesh.hpp"
 #include "renderpass.hpp"
 
 class SSAORenderSystem : public RenderPass {
@@ -24,7 +24,7 @@ public:
 
 private:
 	std::shared_ptr<Texture> noiseMap;
-	std::unique_ptr<Mesh> _plane;
+	std::unique_ptr<SimpleMesh> fsquad;
 
 	GLint sampleSize;
 	GLfloat sampleRadius;

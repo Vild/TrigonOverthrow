@@ -25,6 +25,7 @@ float getDepth(vec3 position) {
 void main() {
 	vec3 viewPosition = vec3(viewMatrix * texture(positionMap, uv));
 	vec3 normal = vec3(viewMatrix * vec4(texture(normalMap, uv).rgb, 0));
+	
 	vec3 noise = vec3(texture(noiseMap, uv * noiseScale));
 
 	vec3 tangent = normalize(noise - normal * dot(noise, normal));
@@ -34,7 +35,7 @@ void main() {
 	occlusion = 0.0;
 
 	for(int i = 0; i < sampleSize; i++) {
-		vec3 samplePoint = viewPosition + samplePoints[i] * sampleRadius;
+		vec3 samplePoint = viewPosition + (TBN * samplePoints[i]) * sampleRadius;
 		float sampleDepth = getDepth(samplePoint);
 
 		float rangeCheck = smoothstep(0.0, 1.0, sampleRadius / abs(viewPosition.z - sampleDepth));

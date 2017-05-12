@@ -2,6 +2,12 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "entity.hpp"
 
-Entity::entities_t Entity::entities = entities_t();
+Entity::Entity(World& world, sole::uuid uuid, std::string name) : _world(world), _uuid(uuid), _name(name) {}
 
-Entity::Entity(sole::uuid uuid, std::string name) : _uuid(uuid), _name(name) {}
+Entity::~Entity() {
+	for (auto& pair : components) {
+		auto& ents = _world._activeComponents[pair.first];
+		auto it = std::find(ents.begin(), ents.end(), this);
+		ents.erase(it);
+	}
+}

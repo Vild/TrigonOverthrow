@@ -45,7 +45,7 @@ void ButtonSystem::update(World& world, float delta) {
 	// XXX: HACK HACK
 	ButtonComponent::ButtonCallback hackCB = nullptr;
 
-	for (Entity * entity : Entity::getEntities<ButtonComponent>()) {
+	for (Entity * entity : world.getActiveComponents<ButtonComponent>()) {
 			auto button = entity->getComponent<ButtonComponent>();
 		if (!button)
 			continue;

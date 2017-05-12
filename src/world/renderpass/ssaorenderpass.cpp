@@ -6,8 +6,8 @@
 #include "../component/cameracomponent.hpp"
 
 SSAORenderSystem::SSAORenderSystem() {
-	sampleSize = 64;
-	sampleRadius = 0.1f;
+	sampleSize = 16;
+	sampleRadius = 0.75f;
 	sampleBias = 0.01f;
 
 	auto& engine = Engine::getInstance();
@@ -43,23 +43,8 @@ SSAORenderSystem::SSAORenderSystem() {
 		Vertex{glm::vec3{-1, -1, 0}, glm::vec3{0, 0, -1}, {1.0, 1.0, 1.0}, {0, 0}}, //
 	};
 	std::vector<GLuint> indicies = {0, 2, 1, 2, 0, 3};
-	_plane = std::make_unique<Mesh>(vertices, indicies);
-	_plane
-		->addBuffer("m",
-								[](GLuint id) {
-									glm::mat4 mData = glm::mat4(1);
-									glBindBuffer(GL_ARRAY_BUFFER, id);
-									glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), glm::value_ptr(mData), GL_STATIC_DRAW); // Will only be uploaded once
-
-									for (int i = 0; i < 4; i++) {
-										glEnableVertexAttribArray(ShaderAttributeID::m + i);
-										glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-										glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-									}
-
-									glBindBuffer(GL_ARRAY_BUFFER, 0);
-								})
-		.finalize();
+	
+	fsquad = std::make_unique<SimpleMesh>(GL_TRIANGLE_STRIP, SimpleMesh::quad);
 
 	generateUniformData(width, height);
 }
@@ -76,7 +61,19 @@ void SSAORenderSystem::generateUniformData(int width, int height) {
 
 	std::vector<glm::vec3> samplePoints;
 	for (size_t i = 0; i < 64; i++) {
-		glm::vec3 samplePoint = {randomFlaots(generator) * 2.0 - 1.0, randomFlaots(generator) * 2.0 - 1.0, randomFlaots(generator) * 2.0 - 1.0};
+
+		glm::vec3 samplePoint;
+		float dot;
+		do {
+			samplePoint = {
+				randomFlaots(generator) * 2.0 - 1.0,
+				randomFlaots(generator) * 2.0 - 1.0,
+				randomFlaots(generator),
+			};
+
+			dot = glm::dot(samplePoint, { 0,1,0 });
+		} while (dot < 0.25);
+		
 
 		samplePoint = glm::normalize(samplePoint);
 		samplePoint *= randomFlaots(generator);
@@ -90,13 +87,17 @@ void SSAORenderSystem::generateUniformData(int width, int height) {
 	}
 
 	std::vector<glm::vec3> noiseData;
-	for (size_t i = 0; i < 16; i++) {
-		glm::vec3 noise = {randomFlaots(generator) * 2.0 - 1.0, randomFlaots(generator) * 2.0 - 1.0, 0.0};
+	for (size_t i = 0; i < 64; i++) {
+		glm::vec3 noise = {
+			0, 
+			1,
+			0,
+		};
 
 		noiseData.push_back(noise);
 	}
 
-	noiseMap = std::make_shared<Texture>(4, 4, GL_RGB16F, GL_RGB, GL_FLOAT, &noiseData[0]);
+	noiseMap = std::make_shared<Texture>(8, 8, GL_RGB16F, GL_RGB, GL_FLOAT, &noiseData[0]);
 	noiseMap->bind()
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST)
@@ -105,7 +106,7 @@ void SSAORenderSystem::generateUniformData(int width, int height) {
 
 	attachInputTexture(InputAttachments::noiseMap_INTERNAL, noiseMap);
 
-	glm::vec2 noiseScale = {width / 4.0, height / 4.0};
+	glm::vec2 noiseScale = {width / 8.0, height / 8.0};
 
 	_shader->setUniform("positionMap", (GLint)InputAttachments::positionMap);
 	_shader->setUniform("normalMap", (GLint)InputAttachments::normalMap);
@@ -149,5 +150,5 @@ void SSAORenderSystem::render(World& world) {
 	_shader->setUniform("viewMatrix", cameraComponent->viewMatrix);
 	_shader->setUniform("projectionMatrix", cameraComponent->projectionMatrix);
 
-	_plane->render();
+	fsquad->draw();
 }

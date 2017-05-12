@@ -37,7 +37,7 @@ void ParticleSystem::update(World& world, float delta) {
 	// Main things to fix: All emitters with the different types should use the correct shader.
 
 	// remember to fix initiate particles.
-	for (Entity * entity : Entity::getEntities<ParticleComponent>()) {
+	for (Entity * entity : world.getActiveComponents<ParticleComponent>()) {
 		auto particleComp = entity->getComponent<ParticleComponent>();
 		if (!particleComp)
 			continue;

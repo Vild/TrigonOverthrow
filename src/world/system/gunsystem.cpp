@@ -24,7 +24,7 @@ GunSystem::~GunSystem() {}
 
 void GunSystem::update(World& world, float delta) {
 	std::vector<Entity*> toAdd;
-	for (Entity * entity : Entity::getEntities<GunComponent>()) {
+	for (Entity * entity : world.getActiveComponents<GunComponent>()) {
 		auto currGunComp = entity->getComponent<GunComponent>();
 		if (!currGunComp)
 			continue;
@@ -107,7 +107,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 			BulletPhysicsSystem::playerProjectileCollidesWith);
 	}
 	else {
-		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, 
+		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp,
 			BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
 			BulletPhysicsSystem::enemyProjectileCollidesWith);
 	}

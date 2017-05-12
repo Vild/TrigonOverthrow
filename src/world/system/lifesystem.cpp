@@ -9,7 +9,7 @@
 #include "../../engine.hpp"
 
 void LifeSystem::update(World& world, float delta) {
-	for (Entity * entity : Entity::getEntities<LifeComponent>()) {
+	for (Entity * entity : world.getActiveComponents<LifeComponent>()) {
 		auto lifeComp = entity->getComponent<LifeComponent>();
 		if (!lifeComp)
 			continue;

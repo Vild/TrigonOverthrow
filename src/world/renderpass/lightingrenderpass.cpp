@@ -139,7 +139,7 @@ void LightingRenderPass::render(World& world) {
 	float distances[MAX_POINT_LIGHTS];
 
 
-	for (Entity * entity : Entity::getEntities<SunComponent>()) {
+	for (Entity * entity : world.getActiveComponents<SunComponent>()) {
 		SunComponent * sun = entity->getComponent<SunComponent>();
 
 		if (_ambient != sun->ambient) {
@@ -155,7 +155,7 @@ void LightingRenderPass::render(World& world) {
 		enableDirLight = true;
 	}
 
-	for (Entity * entity : Entity::getEntities<PointLightComponent>()) {
+	for (Entity * entity : world.getActiveComponents<PointLightComponent>()) {
 		PointLightComponent * pointLight = entity->getComponent<PointLightComponent>();
 
 		auto transform = entity->getComponent<TransformComponent>();
