@@ -35,7 +35,7 @@ void ProjectileSystem::update(World& world, float delta) {
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
 			// Loops through everything and take the first object that was collided with.
 			// And breaks the for-loop after that.
-			if (pt.getDistance() < 0.f) {
+			if (pt.getDistance() < 0.f && !entityB->isDead()) {
 				const glm::vec3& ptA = cast(pt.getPositionWorldOnA());
 				// const glm::vec3& ptB = cast(pt.getPositionWorldOnB());
 				const glm::vec3& normalOnB = cast(pt.m_normalWorldOnB);
@@ -51,8 +51,9 @@ void ProjectileSystem::update(World& world, float delta) {
 				particleComp->addEmitter(ptA,
 					glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 
+				if (isAProj)
+					printf("Apparently it is like thislol\n");
 				auto projComp = entityB->getComponent<ProjectileComponent>();
-				printf("%f\n", projComp->speed);
 				if (projComp->bounceCount > 0) {
 					auto loader = Engine::getInstance().getJSONLoader();
 					const std::string filePath = "assets/entities/player_projectile.json";
@@ -71,7 +72,9 @@ void ProjectileSystem::update(World& world, float delta) {
 					newRbComp->setTransform(newTransComp);
 					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
 					newRbComp->setActivationState(DISABLE_DEACTIVATION);
-					newProjectile->getComponent<ProjectileComponent>()->bounceCount = projComp->bounceCount - 1;
+					projComp->bounceCount -= 1;
+					newProjectile->getComponent<ProjectileComponent>()->bounceCount = projComp->bounceCount;
+					printf("First: %i Second: %i\n", projComp->bounceCount, newProjectile->getComponent<ProjectileComponent>()->bounceCount);
 					Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
 						BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
 						BulletPhysicsSystem::playerProjectileCollidesWith);
@@ -92,13 +95,13 @@ void ProjectileSystem::update(World& world, float delta) {
 					newRbComp->setTransform(newTransComp);
 					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
 					newRbComp->setActivationState(DISABLE_DEACTIVATION);
-					newProjectile->getComponent<ProjectileComponent>()->pierceCount = projComp->pierceCount - 1;
+					projComp->pierceCount -= 1;
+					newProjectile->getComponent<ProjectileComponent>()->pierceCount = projComp->pierceCount;
 					Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
 						BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
 						BulletPhysicsSystem::playerProjectileCollidesWith);
 				}
 				entityB->makeDead();
-				break;
 			}
 		}
 	}

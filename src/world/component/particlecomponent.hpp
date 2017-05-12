@@ -45,13 +45,13 @@ struct ParticleComponent : public Component {
 		std::vector<glm::vec4> particleVelocities;
 		std::vector<glm::vec4> particleColors;
 		std::vector<float> particleLives;
-		#define frand() (rand() / float(RAND_MAX))
+		#define frand() (float(rand()) / float(RAND_MAX))
 
 		for (int i = 0; i < nrOfParticles; i++) {
 			particlePositions.push_back(glm::vec4(inPos, 0));
 			particleVelocities.push_back(glm::vec4(dir, 0));
 			particleLives.push_back(frand() * 10);
-			particleColors.push_back(glm::vec4(frand() * 10));
+			particleColors.push_back(glm::vec4(frand() * 10, 0, 0, 0));
 		}
 		ssbo[0]->setData(particlePositions);
 		ssbo[1]->setData(particleVelocities);

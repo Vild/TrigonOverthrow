@@ -43,16 +43,16 @@ void ParticleRenderPass::render(World& world) {
 		auto ssbos = particleComp->ssbo;
 		ssbos[ParticleSystem::ParticleAttribute::position]->bind();
 		glEnableVertexAttribArray(12);
-		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)0);
+		glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 		ssbos[ParticleSystem::ParticleAttribute::velocity]->bind();
 		glEnableVertexAttribArray(13);
-		glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)sizeof(glm::vec4));
+		glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 		ssbos[ParticleSystem::ParticleAttribute::life]->bind();
 		glEnableVertexAttribArray(14);
-		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4)));
+		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
 		ssbos[ParticleSystem::ParticleAttribute::color]->bind();
 		glEnableVertexAttribArray(15);
-		glVertexAttribPointer(14, 1, GL_FLOAT, GL_FALSE, sizeof(float), (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4) + sizeof(float)));
+		glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES);
 	}

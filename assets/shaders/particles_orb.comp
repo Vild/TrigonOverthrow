@@ -35,6 +35,7 @@ void main(){
 	if(life <= 0){
 		pos = spawnPos + normalize(vec3(sin(3 * index), 0, cos(index * 0.5f) - sin(8 * index) + sin(3 * index)) * delta);
 		vel = vec3(0, 1, 0);
+		color = vec3(255, 102, 0);
 		life = 5;
 	}
 	barrier();
@@ -42,7 +43,6 @@ void main(){
 	vel += vel * delta;
 	pos += vel * delta;
 	life -= 1 * delta;
-
 
 	positions[index] = pos;
 	velocities[index] = vel;
