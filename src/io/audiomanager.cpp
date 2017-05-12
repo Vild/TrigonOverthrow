@@ -54,6 +54,11 @@ AudioManager::AudioManager() {}
 
 AudioManager::~AudioManager() {}
 
+void AudioManager::clear() {
+	_sfxCache.clear();
+	_musicCache.clear();
+}
+
 std::unique_ptr<SFX> AudioManager::getSFX(const std::string& file) {
 	auto& chunk = _sfxCache[file];
 	if (!chunk) {

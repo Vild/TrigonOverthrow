@@ -21,7 +21,7 @@ struct SFX {
 };
 
 struct Music {
-	static Music* currentMusic; /// Used for determening if stop can be used
+	static Music* currentMusic; /// Used for determining if stop can be used
 
 	std::shared_ptr<Mix_Music> music;
 	int volume;
@@ -39,6 +39,8 @@ class AudioManager {
 public:
 	AudioManager();
 	virtual ~AudioManager();
+
+	void clear(); //XXX:
 
 	std::unique_ptr<SFX> getSFX(const std::string& file);
 	std::unique_ptr<Music> getMusic(const std::string& file);

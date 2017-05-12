@@ -45,6 +45,14 @@
 #include "state/mainmenustate.hpp"
 
 Engine::~Engine() {
+	_textureManager.reset();
+	_meshLoader.reset();
+	_hidInput.reset();
+	_textFactory.reset();
+	_mapLoader.reset();
+	_jsonLoader.reset();
+	_audioManager.reset();
+
 	_systems.clear();
 	_states.clear();
 

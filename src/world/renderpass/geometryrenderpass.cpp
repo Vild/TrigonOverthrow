@@ -80,31 +80,23 @@ void GeometryRenderPass::render(World& world) {
 	_ismShader->setUniform("u_view", cameraComponent->viewMatrix);
 	_ismShader->setUniform("u_projection", cameraComponent->projectionMatrix);
 
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
-		ModelComponent* model = nullptr;
-		TransformComponent* transform = nullptr;
-		InstancedSimpleMeshComponent* ism = nullptr;
+	for (Entity* entity : Entity::getEntities<ModelComponent>()) {
 		if (entity->isDead())
 			continue;
-
-		if ((model = entity->getComponent<ModelComponent>()) && (transform = entity->getComponent<TransformComponent>())) {
-			for (Entity * entity : Entity::getEntities<ModelComponent>())
-			{
-				ModelComponent* model = entity->getComponent<ModelComponent>();
-				TransformComponent* transform = entity->getComponent<TransformComponent>();
-				if (transform) {
-					_shader->bind();
-					model->render(transform->getMatrix());
-				}
-			}
-
-			for (Entity * entity : Entity::getEntities<InstancedSimpleMeshComponent>())
-			{
-				InstancedSimpleMeshComponent* ism = entity->getComponent<InstancedSimpleMeshComponent>();
-				_ismShader->bind();
-				ism->render();
-			}
+		ModelComponent* model = entity->getComponent<ModelComponent>();
+		TransformComponent* transform = entity->getComponent<TransformComponent>();
+		if (transform) {
+			_shader->bind();
+			model->render(transform->getMatrix());
 		}
+	}
+
+	for (Entity* entity : Entity::getEntities<InstancedSimpleMeshComponent>()) {
+		if (entity->isDead())
+			continue;
+		InstancedSimpleMeshComponent* ism = entity->getComponent<InstancedSimpleMeshComponent>();
+		_ismShader->bind();
+		ism->render();
 	}
 }
 

@@ -37,7 +37,7 @@ void ProjectileSystem::update(World& world, float delta) {
 			// And breaks the for-loop after that.
 			if (pt.getDistance() < 0.f) {
 				const glm::vec3& ptA = cast(pt.getPositionWorldOnA());
-				const glm::vec3& ptB = cast(pt.getPositionWorldOnB());
+				// const glm::vec3& ptB = cast(pt.getPositionWorldOnB());
 				const glm::vec3& normalOnB = cast(pt.m_normalWorldOnB);
 				if (abs(normalOnB.y) > 0)
 					continue;
@@ -55,7 +55,7 @@ void ProjectileSystem::update(World& world, float delta) {
 					auto loader = Engine::getInstance().getJSONLoader();
 					const std::string filePath = "assets/entities/player_projectile.json";
 					auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
-				
+
 					auto newTransComp = newProjectile->getComponent<TransformComponent>();
 					auto newRbComp = newProjectile->getComponent<RigidBodyComponent>();
 					auto entityBRbComp = entityB->getComponent<RigidBodyComponent>();
@@ -64,7 +64,7 @@ void ProjectileSystem::update(World& world, float delta) {
 					newTransComp->setDirection(glm::vec3(-reflection.x, reflection.y, reflection.z));
 					newTransComp->setPosition(ptA + (newTransComp->getDirection() * glm::vec3(0.5f)));
 					newTransComp->setScale(entityB->getComponent<TransformComponent>()->getScale());
-				
+
 					newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
 					newRbComp->setTransform(newTransComp);
 					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * 6.0f));
