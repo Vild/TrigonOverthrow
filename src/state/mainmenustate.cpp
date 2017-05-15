@@ -6,7 +6,6 @@
 
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
-#include "../world/component/buttoncomponent.hpp"
 #include "../world/component/textcomponent.hpp"
 #include "../world/component/lookatcomponent.hpp"
 #include "../world/component/modelcomponent.hpp"
@@ -20,8 +19,7 @@ MainMenuState::MainMenuState() {
 	_target = _world.addEntity(sole::uuid4(), "Target");
 	_title = _world.addEntity(sole::uuid4(), "Title");
 	{
-		/*auto transform = */ _camera->addComponent<TransformComponent>();
-		// transform->recalculateMatrix();
+		_camera->addComponent<TransformComponent>();
 		_camera->addComponent<CameraComponent>();
 
 		auto lookAt = _camera->addComponent<LookAtComponent>();
@@ -30,21 +28,19 @@ MainMenuState::MainMenuState() {
 		lookAt->offsetFromTarget = glm::vec3{0, 0, -4};
 	}
 
-	{
-		/*auto transform = */ _target->addComponent<TransformComponent>();
-		//	transform->recalculateMatrix();
-	}
+	{ _target->addComponent<TransformComponent>(); }
 
 	{
 		auto transform = _title->addComponent<TransformComponent>();
 		transform->setPosition({0, 0.4, 0});
-		// transform->recalculateMatrix();
 
 		auto text = _title->addComponent<TextComponent>();
 		text->textRenderer = tf->makeRenderer("Trigon", false, 10);
-		text->transform.setPosition({-0.3, 0, 0});
+		text->transform.setPosition({-0.35, 0, 0});
 		text->transform.setScale({5, 5, 5});
 	}
+
+	_buttonFont = ImGui::GetIO().Fonts->AddFontFromFileTTF("assets/fonts/DroidSans-Bold.ttf", 64 + 32);
 }
 
 MainMenuState::~MainMenuState() {}
@@ -55,13 +51,31 @@ void MainMenuState::onLeave(State* next) {}
 
 void MainMenuState::registerImGui() {
 	Engine& engine = Engine::getInstance();
-	ImGuiWindowFlags windowFlags =
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize |
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
-	ImGui::Begin("MainMenu", nullptr, windowFlags);
-	if (ImGui::Button("Play"))
-		engine.setState<InGameState>();
+	ImGui::PushFont(_buttonFont);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1, 0, 1, 1));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 0, 0, 1));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 1, 0, 1));
 
-	if (ImGui::Button("Quit"))
-		engine.quit();
+	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Always);
+	float scale = 1.0 - (512.0 / engine.getWidth());
+	ImGui::Begin("MainMenu", nullptr, windowFlags);
+	ImGui::SetWindowFontScale(scale);
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 64);
+		ImGui::Dummy(ImVec2(0, (128 + 64) * scale));
+		if (ImGui::Button("Play", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
+			engine.setState<InGameState>();
+
+		ImGui::Dummy(ImVec2(0, 64 * scale));
+		if (ImGui::Button("Quit", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
+			engine.quit();
+		ImGui::PopStyleVar();
+	}
 	ImGui::End();
+
+	ImGui::PopStyleColor(4);
+	ImGui::PopFont();
 }
