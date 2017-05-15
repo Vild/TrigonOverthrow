@@ -34,19 +34,13 @@ ParticleSystem::~ParticleSystem() {}
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
 	// Gotta change how this system works abit.
-	// Main things to fix: All emitters with the different types should use the correct shader.
+	// Main things to fix: All emitters with the different types should use the correct sh7ader.
 
 	// remember to fix initiate particles.
 	for (Entity * entity : world.getActiveComponents<ParticleComponent>()) {
 		auto particleComp = entity->getComponent<ParticleComponent>();
 		if (!particleComp)
 			continue;
-
-		if (particleComp->emitterLife <= 0) {
-			entity->removeComponent<ParticleComponent>();
-			entity->makeDead();
-			continue;
-		}
 			
 		_programs[particleComp->type]->bind()
 			.setUniform("delta", delta);
@@ -58,8 +52,6 @@ void ParticleSystem::update(World& world, float delta) {
 			_programs[particleComp->type]->setUniform("spawnPos", entity->getComponent<TransformComponent>()->getPosition());
 
 		glDispatchCompute((GLint)NR_OF_PARTICLES / 128, 1, 1);
-
-		particleComp->emitterLife -= 1 * delta;
 	}
 }
 

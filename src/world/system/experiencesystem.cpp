@@ -1,22 +1,42 @@
 #include "experiencesystem.hpp"
 #include "../component/experiencecomponent.hpp"
 #include "../component/upgradecomponent.hpp"
+#include "../component/experienceorbcomponent.hpp"
+#include "../component/transformcomponent.hpp"
+#include "../component/rigidbodycomponent.hpp"
+#include "../../engine.hpp"
 
 ExperienceSystem::~ExperienceSystem() {
 	
 }
 
 void ExperienceSystem::update(World& world, float delta) {
+	auto player = Engine::getInstance().getState().getPlayer();
+	auto playerEXP = player->getComponent<ExperienceComponent>();
 	for (std::unique_ptr<Entity>& entity: world.getEntities()) {
-		auto expComp = entity->getComponent<ExperienceComponent>();
-		if (!expComp)
+		auto expORB = entity->getComponent<ExperienceOrbComponent>();
+		if (!expORB)
 			continue;
-		if (expComp->currExp >= expComp->expToNextLevel) {
-			entity->getComponent<UpgradeComponent>()->upgradePoints += 1;
-			expComp->currExp -= expComp->expToNextLevel;
-			expComp->expToNextLevel += 5;
+
+		auto orbPos = entity->getComponent<TransformComponent>()->getPosition();
+		auto playerPos = player->getComponent<TransformComponent>()->getPosition();
+		float distance = glm::distance(playerPos, orbPos);
+		if ((distance <= playerEXP->pickUpRadius) || expORB->hasBeenPicked) {
+			if (distance <= 1) {
+				entity->makeDead();
+				playerEXP->currExp += expORB->amntOfExp;
+			}
+			expORB->hasBeenPicked = true;
+			auto rdbComp = entity->getComponent<RigidBodyComponent>()->getRigidBody();
+			rdbComp->setLinearVelocity(cast(glm::normalize(playerPos - orbPos) * glm::vec3(4)));
 		}
 	}
+	if(playerEXP)
+		while (playerEXP->currExp >= playerEXP->expToNextLevel) {
+			player->getComponent<UpgradeComponent>()->upgradePoints += 1;
+			playerEXP->currExp -= playerEXP->expToNextLevel;
+			playerEXP->expToNextLevel += 5;
+		}
 }
 
 void ExperienceSystem::registerImGui() {

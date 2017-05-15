@@ -47,59 +47,62 @@ void ProjectileSystem::update(World& world, float delta) {
 					targetLifeComp->currHP -= projComp->damage;
 					targetLifeComp->hpchanged = true;
 				}
-				auto particleComp = world.addEntity(sole::uuid4(), "ProjCollisionParticles")->addComponent<ParticleComponent>();
-				particleComp->addEmitter(ptA,
+				auto particleEntity = world.addEntity(sole::uuid4(), "ProjCollisionParticles");
+				particleEntity->addComponent<ParticleComponent>()->addEmitter(ptA,
 					glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
-
+				auto particleComp = particleEntity->addComponent<LifeComponent>();
+				particleComp->currHP = particleComp->maxHP = 5;
 				if (isAProj)
 					printf("Apparently it is like thislol\n");
-				auto projComp = entityB->getComponent<ProjectileComponent>();
-				if (projComp->bounceCount > 0) {
-					auto loader = Engine::getInstance().getJSONLoader();
-					const std::string filePath = "assets/entities/player_projectile.json";
-					auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
+				else {
+					auto projComp = entityB->getComponent<ProjectileComponent>();
+					if (projComp->bounceCount > 0) {
+						auto loader = Engine::getInstance().getJSONLoader();
+						const std::string filePath = "assets/entities/player_projectile.json";
+						auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
 
-					auto newTransComp = newProjectile->getComponent<TransformComponent>();
-					auto newRbComp = newProjectile->getComponent<RigidBodyComponent>();
-					auto entityBRbComp = entityB->getComponent<RigidBodyComponent>();
-					auto entityBTrans = entityB->getComponent<TransformComponent>();
-					glm::vec3 reflection = glm::reflect(entityBTrans->getDirection(), glm::vec3(-normalOnB.x, normalOnB.y, normalOnB.z));
-					newTransComp->setDirection(glm::vec3(-reflection.x, reflection.y, reflection.z));
-					newTransComp->setPosition(ptA + (newTransComp->getDirection() * glm::vec3(0.5f)));
-					newTransComp->setScale(entityB->getComponent<TransformComponent>()->getScale());
+						auto newTransComp = newProjectile->getComponent<TransformComponent>();
+						auto newRbComp = newProjectile->getComponent<RigidBodyComponent>();
+						auto entityBRbComp = entityB->getComponent<RigidBodyComponent>();
+						auto entityBTrans = entityB->getComponent<TransformComponent>();
+						glm::vec3 reflection = glm::reflect(entityBTrans->getDirection(), glm::vec3(-normalOnB.x, normalOnB.y, normalOnB.z));
+						newTransComp->setDirection(glm::vec3(-reflection.x, reflection.y, reflection.z));
+						newTransComp->setPosition(ptA + (newTransComp->getDirection() * glm::vec3(0.5f)));
+						newTransComp->setScale(entityB->getComponent<TransformComponent>()->getScale());
 
-					newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
-					newRbComp->setTransform(newTransComp);
-					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
-					newRbComp->setActivationState(DISABLE_DEACTIVATION);
-					projComp->bounceCount -= 1;
-					newProjectile->getComponent<ProjectileComponent>()->bounceCount = projComp->bounceCount;
-					printf("First: %i Second: %i\n", projComp->bounceCount, newProjectile->getComponent<ProjectileComponent>()->bounceCount);
-					Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
-						BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
-						BulletPhysicsSystem::playerProjectileCollidesWith);
-				}
-				if (projComp->pierceCount > 0 && entityA->getComponent<LifeComponent>()) {
-					auto loader = Engine::getInstance().getJSONLoader();
-					const std::string filePath = "assets/entities/player_projectile.json";
-					auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
-					auto newTransComp = newProjectile->getComponent<TransformComponent>();
-					auto newRbComp = newProjectile->getComponent<RigidBodyComponent>();
-					auto entityBRbComp = entityB->getComponent<RigidBodyComponent>();
-					auto entityBTrans = entityB->getComponent<TransformComponent>();
-					newTransComp->setDirection(glm::vec3(-entityBTrans->getDirection().x, entityBTrans->getDirection().y, entityBTrans->getDirection().z));
-					newTransComp->setPosition(ptA + (newTransComp->getDirection()));
-					newTransComp->setScale(entityB->getComponent<TransformComponent>()->getScale());
+						newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
+						newRbComp->setTransform(newTransComp);
+						newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
+						newRbComp->setActivationState(DISABLE_DEACTIVATION);
+						projComp->bounceCount -= 1;
+						newProjectile->getComponent<ProjectileComponent>()->bounceCount = projComp->bounceCount;
+						printf("First: %i Second: %i\n", projComp->bounceCount, newProjectile->getComponent<ProjectileComponent>()->bounceCount);
+						Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
+							BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
+							BulletPhysicsSystem::playerProjectileCollidesWith);
+					}
+					if (projComp->pierceCount > 0 && entityA->getComponent<LifeComponent>()) {
+						auto loader = Engine::getInstance().getJSONLoader();
+						const std::string filePath = "assets/entities/player_projectile.json";
+						auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
+						auto newTransComp = newProjectile->getComponent<TransformComponent>();
+						auto newRbComp = newProjectile->getComponent<RigidBodyComponent>();
+						auto entityBRbComp = entityB->getComponent<RigidBodyComponent>();
+						auto entityBTrans = entityB->getComponent<TransformComponent>();
+						newTransComp->setDirection(glm::vec3(-entityBTrans->getDirection().x, entityBTrans->getDirection().y, entityBTrans->getDirection().z));
+						newTransComp->setPosition(ptA + (newTransComp->getDirection()));
+						newTransComp->setScale(entityB->getComponent<TransformComponent>()->getScale());
 
-					newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
-					newRbComp->setTransform(newTransComp);
-					newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
-					newRbComp->setActivationState(DISABLE_DEACTIVATION);
-					projComp->pierceCount -= 1;
-					newProjectile->getComponent<ProjectileComponent>()->pierceCount = projComp->pierceCount;
-					Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
-						BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
-						BulletPhysicsSystem::playerProjectileCollidesWith);
+						newRbComp->setHitboxHalfSize(entityBRbComp->getHitboxHalfSize());
+						newRbComp->setTransform(newTransComp);
+						newRbComp->getRigidBody()->applyCentralImpulse(cast(newTransComp->getDirection() * projComp->speed));
+						newRbComp->setActivationState(DISABLE_DEACTIVATION);
+						projComp->pierceCount -= 1;
+						newProjectile->getComponent<ProjectileComponent>()->pierceCount = projComp->pierceCount;
+						Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
+							BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
+							BulletPhysicsSystem::playerProjectileCollidesWith);
+					}
 				}
 				entityB->makeDead();
 			}

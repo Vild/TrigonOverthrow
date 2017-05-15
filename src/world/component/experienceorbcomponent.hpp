@@ -3,6 +3,7 @@
 
 struct ExperienceOrbComponent : public Component{
 	int amntOfExp;
+	bool hasBeenPicked = false;
 
 	ExperienceOrbComponent() = default;
 	ExperienceOrbComponent(const ComponentValues& value);

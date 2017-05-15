@@ -18,13 +18,6 @@
       "texture": "assets/textures/errorNormal.png",
       "needsMMatrix": true
     },
-    "ExperienceOrbComponent": {
-      "amntOfExp": {
-        "type": "int",
-        "upper": 5,
-        "lower": 1
-      }
-    },
 		"DynamicModelComponent": {},
 		"LifeComponent": {
 			"maxHP": 6

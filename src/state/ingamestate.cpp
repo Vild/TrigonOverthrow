@@ -112,9 +112,6 @@ InGameState::InGameState() {
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
 			.finalize();
-		// auto particle = _player->addComponent<ParticleComponent>();
-		// particle->type = ParticleComponent::ParticleEffect::EXPLOSION;
-		// particle->addEmitter(glm::vec3(0,0,1), glm::vec3(0,0,1), 1024);
 
 		_player->addComponent<KBMouseInputComponent>();
 
@@ -126,6 +123,7 @@ InGameState::InGameState() {
 		auto expComp = _player->addComponent<ExperienceComponent>();
 		expComp->currExp = 0;
 		expComp->expToNextLevel = 5;
+		expComp->pickUpRadius = 4.8;
 
 		auto upgrades = _player->addComponent<UpgradeComponent>();
 		upgrades->multipleRayMultiplier = 0;

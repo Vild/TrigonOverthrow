@@ -14,7 +14,6 @@
 			]
 		},
 		"ParticleComponent":{
-			"emitterLife": 10,
 			"nrOfParticles": 256,
 			"position":[
 				0,
@@ -30,8 +29,12 @@
 		},
 		"ModelComponent": {
 			"mesh": "assets/objects/enemy_7HP.fbx",
-			"texture": "assets/textures/errorNormal.png",
+			"texture": "assets/textures/exp_orb_texture.png",
 			"needsMMatrix": true
+		},
+		"RigidBodyComponent": {
+			"mass": 1,
+			"friction": 0
 		},
 		"ExperienceOrbComponent": {
 		"amntOfExp": {

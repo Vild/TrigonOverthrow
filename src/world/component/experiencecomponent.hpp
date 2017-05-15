@@ -3,6 +3,7 @@
 struct ExperienceComponent : public Component {
 	int currExp;
 	int expToNextLevel;
+	float pickUpRadius;
 
 	ExperienceComponent() = default;
 	ExperienceComponent(const ComponentValues& value);

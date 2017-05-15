@@ -23,7 +23,6 @@ struct ParticleComponent : public Component {
 	std::shared_ptr<Emitter> emitter;
 	ParticleEffect type;
 	std::vector<std::shared_ptr<ShaderStorageBuffer>> ssbo;
-	float emitterLife;
 	int nrOfParticles;
 
 	ParticleComponent() = default;
@@ -40,7 +39,6 @@ struct ParticleComponent : public Component {
 		ssbo[2] = std::make_shared<ShaderStorageBuffer>(nrOfParticles * sizeof(float));
 		ssbo[3] = std::make_shared<ShaderStorageBuffer>(nrOfParticles * sizeof(glm::vec4));
 		this->type = type;
-		emitterLife = 5;
 		std::vector<glm::vec4> particlePositions;
 		std::vector<glm::vec4> particleVelocities;
 		std::vector<glm::vec4> particleColors;

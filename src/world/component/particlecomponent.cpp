@@ -3,7 +3,6 @@
 #include "particlecomponent.hpp"
 
 ParticleComponent::ParticleComponent(const ComponentValues& value) : ParticleComponent() {
-	emitterLife = value.getFloat("emitterLife", 5);
 	nrOfParticles = value.getInt("nrOfParticles", 256);
 	glm::vec3 pos = value.getVec3("position", {0, 0, 0});
 	glm::vec3 direction = value.getVec3("direction", { 0, 1, 0 });

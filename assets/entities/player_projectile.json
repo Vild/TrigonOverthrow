@@ -18,7 +18,7 @@
       "speed": 10
 		},
 		"LifeComponent": {
-			"maxHP": 5
+			"maxHP": 1
 		},
 		"PointLightComponent": {
 			"diffuse": [
