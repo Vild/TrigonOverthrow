@@ -10,5 +10,7 @@ ExperienceComponent::~ExperienceComponent() {
 }
 
 void ExperienceComponent::registerImGui() {
+	if (ImGui::DragInt("CurrentEXP", &currExp));
 
+	if (ImGui::DragInt("EXPtoNextLevel", &expToNextLevel));
 }

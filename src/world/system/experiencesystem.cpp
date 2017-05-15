@@ -22,7 +22,7 @@ void ExperienceSystem::update(World& world, float delta) {
 		auto playerPos = player->getComponent<TransformComponent>()->getPosition();
 		float distance = glm::distance(playerPos, orbPos);
 		if ((distance <= playerEXP->pickUpRadius) || expORB->hasBeenPicked) {
-			if (distance <= 1) {
+			if (distance <= 0.3f) {
 				entity->makeDead();
 				playerEXP->currExp += expORB->amntOfExp;
 			}

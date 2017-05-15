@@ -12,4 +12,6 @@ void UpgradeComponent::registerImGui() {
 	if (ImGui::DragInt("BounceCount", &reflectionCount));
 
 	if (ImGui::DragInt("PierceCount", &refractionCount));
+
+	if (ImGui::DragInt("UpgradePoints", &upgradePoints));
 }
