@@ -74,6 +74,8 @@ public:
 
 	inline void quit() { *_nextState = std::type_index(typeid(nullptr)); }
 
+	inline bool& getPause() { return _pause; }
+
 private:
 	unsigned int _width = 1280;
 	unsigned int _height = 720;
@@ -96,6 +98,7 @@ private:
 	std::unique_ptr<State> _currentState;
 	std::unique_ptr<std::type_index> _nextState;
 	std::map<std::type_index, makeState_f> _states;
+	bool _pause = false;
 
 	Engine() {}
 	virtual ~Engine();

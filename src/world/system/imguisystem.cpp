@@ -8,14 +8,17 @@
 ImGuiSystem::~ImGuiSystem() {}
 
 void ImGuiSystem::update(World& world, float delta) {
-	State& state = Engine::getInstance().getState();
+	Engine& engine = Engine::getInstance();
+	State& state = engine.getState();
 
 	ImGui::SetNextWindowPos(ImVec2(8, 48), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(384, 512), ImGuiSetCond_Once);
 	ImGui::SetNextWindowCollapsed(true, ImGuiSetCond_Once);
 	ImGui::Begin("Settings Window");
 
-	ImGui::Text("State");
+	ImGui::Checkbox("Pause world", &engine.getPause());
+
+	ImGui::Text("State:");
 	state.registerImGui();
 
 	ImGui::Text("Entities:");

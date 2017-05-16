@@ -142,23 +142,24 @@ int Engine::run(bool vsync) {
 
 		{
 			uint32_t curTime = SDL_GetTicks();
-			float delta = (curTime - lastTime) / 1000.0f;
+			float delta = _pause ? 0 : (curTime - lastTime) / 1000.0f;
 			lastTime = curTime;
 
 			_hidInput->update();
 
 			_system_tick(delta);
 			std::vector<std::unique_ptr<Entity>>& entities = getState().getWorld().getEntities();
-			// Rigidbody entities in bulletphysicssystem.
-			for (std::unique_ptr<Entity>& entity : entities) {
-				auto rgbComponent = entity->getComponent<RigidBodyComponent>();
-				if (!rgbComponent)
-					continue;
-				if (entity->isDead())
-					getSystem<BulletPhysicsSystem>()->removeRigidBody(rgbComponent);
-			}
 			// Entities in world.
-			entities.erase(std::remove_if(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& e) -> bool { return e->isDead(); }), entities.end());
+			entities.erase(std::remove_if(entities.begin(), entities.end(),
+																		[&](const std::unique_ptr<Entity>& e) -> bool {
+																			if (!e->isDead())
+																				return false;
+																			auto rgbComponent = e->getComponent<RigidBodyComponent>();
+																			if (rgbComponent)
+																				getSystem<BulletPhysicsSystem>()->removeRigidBody(rgbComponent);
+																			return true;
+																		}),
+										 entities.end());
 		}
 
 		{
