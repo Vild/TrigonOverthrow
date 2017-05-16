@@ -11,7 +11,7 @@ uniform mat4 v;
 uniform mat4 p;
 
 void main() {
-	vColor = vertColor;
+	vColor = vec3(life * 0.5f, life, life);
 	gl_PointSize = 2;
 	gl_Position = p * v * vec4(vertPos, 1.0f);
 }

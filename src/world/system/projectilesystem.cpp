@@ -52,6 +52,7 @@ void ProjectileSystem::update(World& world, float delta) {
 					glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 				auto particleComp = particleEntity->addComponent<LifeComponent>();
 				particleComp->currHP = particleComp->maxHP = 5;
+
 				if (isAProj)
 					printf("Apparently it is like thislol\n");
 				else {
