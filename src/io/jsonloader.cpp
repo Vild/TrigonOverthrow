@@ -24,6 +24,8 @@
 #include "../world/component/rigidbodycomponent.hpp"
 #include "../world/component/experiencecomponent.hpp"
 #include "../world/component/experienceorbcomponent.hpp"
+#include "../world/component/aicomponent.hpp"
+#include "../world/component/sfxcomponent.hpp"
 
 #ifdef WIN32
 #define __PRETTY_FUNCTION__ __func__
@@ -71,6 +73,8 @@ JSONLoader::JSONLoader() {
 	_constructors["RigidBodyComponent"] = &constructComponent<RigidBodyComponent>;
 	_constructors["ExperienceComponent"] = &constructComponent<ExperienceComponent>;
 	_constructors["ExperienceOrbComponent"] = &constructComponent<ExperienceOrbComponent>;
+	_constructors["AIComponent"] = &constructComponent<AIComponent>;
+	_constructors["SFXComponent"] = &constructComponent<SFXComponent>;
 }
 
 JSONLoader::~JSONLoader() {}

@@ -77,7 +77,6 @@ void ProjectileSystem::update(World& world, float delta) {
 						newRbComp->setActivationState(DISABLE_DEACTIVATION);
 						projComp->bounceCount -= 1;
 						newProjectile->getComponent<ProjectileComponent>()->bounceCount = projComp->bounceCount;
-						printf("First: %i Second: %i\n", projComp->bounceCount, newProjectile->getComponent<ProjectileComponent>()->bounceCount);
 						Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
 							BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
 							BulletPhysicsSystem::playerProjectileCollidesWith);

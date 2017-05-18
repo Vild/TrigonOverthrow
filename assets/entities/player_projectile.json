@@ -17,6 +17,10 @@
       "pierceCount": 0,
       "speed": 10
 		},
+		"SFXComponent":{
+			"file": "assets/sfx/player_projectile.ogg",
+			"loops": 0
+		},
 		"LifeComponent": {
 			"maxHP": 1
 		},

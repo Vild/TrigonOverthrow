@@ -33,6 +33,7 @@
 #include "world/system/roomloadingsystem.hpp"
 #include "world/system/audiosystem.hpp"
 #include "world/system/experiencesystem.hpp"
+#include "world/system/aisystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -319,6 +320,7 @@ void Engine::_setupSystems() {
 	// Pure systems
 	_systems.push_back(std::make_unique<ImGuiSystem>());
 	_systems.push_back(std::make_unique<InputSystem>());
+	_systems.push_back(std::make_unique<AISystem>());
 	_systems.push_back(std::make_unique<BulletPhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());

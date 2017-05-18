@@ -14,7 +14,7 @@ SFXComponent::SFXComponent(const ComponentValues& value) {
 
 	sfx = Engine::getInstance().getAudioManager()->getSFX(value.getString("file", ""));
 	if (value.getBool("autoplay", true))
-		sfx->play(value.getBool("loops", -1), transform->getPosition(), forward);
+		sfx->play(value.getInt("loops", -1), transform->getPosition(), forward);
 }
 
 SFXComponent::~SFXComponent() {}
