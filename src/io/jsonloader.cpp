@@ -4,7 +4,6 @@
 #include <cstdio>
 #include <fstream>
 
-#include "../world/component/buttoncomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
 #include "../world/component/kbmouseinputcomponent.hpp"
 #include "../world/component/lookatcomponent.hpp"
@@ -50,7 +49,6 @@ static void constructComponent(Entity* entity, const ComponentValues& value) {
 }
 
 JSONLoader::JSONLoader() {
-	_constructors["ButtonComponent"] = &constructComponent<ButtonComponent>;
 	_constructors["CameraComponent"] = &constructComponent<CameraComponent>;
 	_constructors["KBMouseInputComponent"] = &constructComponent<KBMouseInputComponent>;
 	_constructors["LookAtComponent"] = &constructComponent<LookAtComponent>;

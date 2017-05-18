@@ -23,11 +23,11 @@
 GunSystem::~GunSystem() {}
 
 void GunSystem::update(World& world, float delta) {
+	if (delta == 0)
+		return;
 	std::vector<Entity*> toAdd;
-	for (Entity * entity : world.getActiveComponents<GunComponent>()) {
+	for (Entity* entity : world.getActiveComponents<GunComponent>()) {
 		auto currGunComp = entity->getComponent<GunComponent>();
-		if (!currGunComp)
-			continue;
 
 		if (currGunComp->shoot) {
 			toAdd.push_back(entity);
@@ -96,20 +96,15 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 			newRbComp->setTransform(newTrans);
 			newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * 6.0f));
 			newRbComp->setActivationState(DISABLE_DEACTIVATION);
-			Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp,
-				BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
-				BulletPhysicsSystem::playerProjectileCollidesWith);
+			Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp, BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
+																																					 BulletPhysicsSystem::playerProjectileCollidesWith);
 		}
-	}
-	else if(me->getComponent<GunComponent>()->type == GunComponent::GunType::RAYGUN){
-		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp,
-			BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
-			BulletPhysicsSystem::playerProjectileCollidesWith);
-	}
-	else {
-		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp,
-			BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
-			BulletPhysicsSystem::enemyProjectileCollidesWith);
+	} else if (me->getComponent<GunComponent>()->type == GunComponent::GunType::RAYGUN) {
+		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
+																																				 BulletPhysicsSystem::playerProjectileCollidesWith);
+	} else {
+		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
+																																				 BulletPhysicsSystem::enemyProjectileCollidesWith);
 	}
 }
 
