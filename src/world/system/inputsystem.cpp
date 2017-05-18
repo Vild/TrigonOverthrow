@@ -8,6 +8,7 @@
 #include "../component/particlecomponent.hpp"
 
 #include "../../engine.hpp"
+#include "../system/roomloadingsystem.hpp"
 
 #include <cstdio>
 
@@ -63,6 +64,12 @@ void InputSystem::update(World& world, float delta) {
 		auto gun = entity->getComponent<GunComponent>();
 		if (gun && hid->getKey(SDL_SCANCODE_F) && gun->cooldown <= 0) {
 			gun->shoot = true;
+		}
+
+		if (hid->getKey(SDL_SCANCODE_B))
+		{
+			auto a = Engine::getInstance().getSystem<RoomLoadingSystem>();
+			a->bossRoomLoaded = RoomLoadingSystem::BossRoom::LOADING;
 		}
 	}
 }

@@ -26,4 +26,15 @@ void FloorTileComponent::setHeightFactor(float heightFactor) {
 	this->heightFactor = heightFactor;
 }
 
+bool FloorTileComponent::lowerFloor(float delta)
+{
+	if (height > 0.0f)
+		height -= delta;
+
+	if (height < 0.0f)
+		height = 0.0f;
+
+	return height == 0.0f;
+}
+
 void FloorTileComponent::registerImGui() {}

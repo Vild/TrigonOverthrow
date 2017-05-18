@@ -29,6 +29,7 @@ void FloorTileSystem::update(World& world, float delta) {
 	auto playerTransform = player->getComponent<TransformComponent>();
 	if (!playerTransform)
 		return;
+
 	glm::vec3 playerPos = playerTransform->getPosition();
 	for (Entity* entity : world.getActiveComponents<FloorTileComponent>()) {
 		FloorTileComponent* ftc = entity->getComponent<FloorTileComponent>();
@@ -46,8 +47,6 @@ void FloorTileSystem::update(World& world, float delta) {
 		glm::vec3 tilePos = tc->getPosition();
 		float distance = glm::distance(playerPos, tilePos);
 
-		if (height <= 0 || distance >= 10)
-			continue;
 
 		heightFactor = max(heightFactor, 1.0f - clamp(log2(max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f));
 
@@ -58,9 +57,6 @@ void FloorTileSystem::update(World& world, float delta) {
 		if (!rbc)
 			continue;
 		rbc->setTransform(tc);
-
-		if (heightFactor == 1.f)
-			entity->removeComponent<FloorTileComponent>();
 	}
 }
 

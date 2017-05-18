@@ -11,7 +11,7 @@ MapData MapLoader::loadFromImage(const std::string& filename) {
 
 	SDL_Surface* loadedSurface = IMG_Load(filename.c_str());
 	if (loadedSurface == NULL)
-		printf("Couldn't load image %s! SDL_image error: %s\n", filename.c_str(), IMG_GetError());
+		throw printf("Couldn't load image %s! SDL_image error: %s\n", filename.c_str(), IMG_GetError());
 
 	int bpp = loadedSurface->format->BytesPerPixel;
 

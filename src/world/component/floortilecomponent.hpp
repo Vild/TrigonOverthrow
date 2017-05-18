@@ -15,6 +15,9 @@ public:
 
 	void setHeightFactor(float heightFactor);
 
+	// Lowers the floor step by step and returns true if height = 0
+	bool lowerFloor(float delta);
+
 	// Inherited via Component
 	inline std::string name() final { return "FloorTileComponent"; }
 	void registerImGui() final;
