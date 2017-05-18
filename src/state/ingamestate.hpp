@@ -24,4 +24,6 @@ private:
 	void _addLookAt();
 
 	static void _registerImGUI(Entity& self, State& state);
+	static void _updateUI(State& state, bool show);
+	static void _menuRenderUI(Entity& self, State& state);
 };

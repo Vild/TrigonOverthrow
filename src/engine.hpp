@@ -19,7 +19,7 @@
 #include "io/audiomanager.hpp"
 
 #include "world/world.hpp"
-#include "../src/world/system/system.hpp"
+#include "world/system/system.hpp"
 #include "state/state.hpp"
 
 class Engine {
@@ -38,6 +38,10 @@ public:
 	inline unsigned int& getWidth() { return _width; }
 	inline unsigned int& getHeight() { return _height; }
 	inline SDL_Window* getWindow() { return _window; }
+
+	inline ImFont* getDefaultFont() { return _defaultFont; }
+	inline ImFont* getBigFont() { return _bigFont; }
+	inline ImFont* getMediumFont() { return _mediumFont; }
 
 	inline std::shared_ptr<TextureManager> getTextureManager() { return _textureManager; }
 	inline std::shared_ptr<MeshLoader> getMeshLoader() { return _meshLoader; }
@@ -84,6 +88,10 @@ private:
 	bool _quit;
 	SDL_Window* _window;
 	SDL_GLContext _context;
+
+	ImFont* _defaultFont;
+	ImFont* _bigFont;
+	ImFont* _mediumFont;
 
 	std::shared_ptr<TextureManager> _textureManager;
 	std::shared_ptr<MeshLoader> _meshLoader;

@@ -58,6 +58,7 @@
     <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
     <ClInclude Include="src\world\component\hovercomponent.hpp" />
+    <ClInclude Include="src\world\component\ingamemenucomponent.hpp" />
     <ClInclude Include="src\world\component\instancedsimplemeshcomponent.hpp" />
     <ClInclude Include="src\world\component\kbmouseinputcomponent.hpp" />
     <ClInclude Include="src\world\component\lifecomponent.hpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="src\world\system\gunsystem.hpp" />
     <ClInclude Include="src\world\system\hoversystem.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />
+    <ClInclude Include="src\world\system\ingamemenusystem.hpp" />
     <ClInclude Include="src\world\system\inputsystem.hpp" />
     <ClInclude Include="src\world\system\lifesystem.hpp" />
     <ClInclude Include="src\world\system\lookatsystem.hpp" />
@@ -138,6 +140,7 @@
     <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
     <ClCompile Include="src\world\component\hovercomponent.cpp" />
+    <ClCompile Include="src\world\component\ingamemenucomponent.cpp" />
     <ClCompile Include="src\world\component\instancedsimplemeshcomponent.cpp" />
     <ClCompile Include="src\world\component\kbmouseinputcomponent.cpp" />
     <ClCompile Include="src\world\component\lifecomponent.cpp" />
@@ -174,6 +177,7 @@
     <ClCompile Include="src\world\system\gunsystem.cpp" />
     <ClCompile Include="src\world\system\hoversystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
+    <ClCompile Include="src\world\system\ingamemenusystem.cpp" />
     <ClCompile Include="src\world\system\inputsystem.cpp" />
     <ClCompile Include="src\world\system\lifesystem.cpp" />
     <ClCompile Include="src\world\system\lookatsystem.cpp" />

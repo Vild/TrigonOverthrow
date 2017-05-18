@@ -20,6 +20,4 @@ private:
 	Entity* _camera;
 	Entity* _target;
 	Entity* _title;
-
-	ImFont* _buttonFont;
 };

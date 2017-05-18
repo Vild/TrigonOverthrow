@@ -13,6 +13,7 @@ SFXComponent::SFXComponent(const ComponentValues& value) {
 	glm::vec3 forward = glm::vec3(glm::mat4_cast(transform->getRotation()) * glm::vec4(0, 0, -1, 0));
 
 	sfx = Engine::getInstance().getAudioManager()->getSFX(value.getString("file", ""));
+	sfx->volume = value.getInt("volume", 1);
 	if (value.getBool("autoplay", true))
 		sfx->play(value.getInt("loops", -1), transform->getPosition(), forward);
 }
