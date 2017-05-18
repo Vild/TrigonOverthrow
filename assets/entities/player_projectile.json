@@ -19,7 +19,8 @@
 		},
 		"SFXComponent":{
 			"file": "assets/sfx/player_projectile.ogg",
-			"loops": 0
+			"loops": 0,
+			"volume": 128
 		},
 		"LifeComponent": {
 			"maxHP": 1
