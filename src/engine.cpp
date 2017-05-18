@@ -23,7 +23,6 @@
 #include "world/system/lookatsystem.hpp"
 #include "world/system/camerasystem.hpp"
 #include "world/system/particlesystem.hpp"
-#include "world/system/buttonsystem.hpp"
 #include "world/system/gunsystem.hpp"
 #include "world/system/lifesystem.hpp"
 #include "world/system/bulletphysicssystem.hpp"
@@ -323,7 +322,7 @@ void Engine::_setupSystems() {
 	_systems.push_back(std::make_unique<BulletPhysicsSystem>());
 	_systems.push_back(std::make_unique<LookAtSystem>());
 	_systems.push_back(std::make_unique<CameraSystem>());
-	_systems.push_back(std::make_unique<ButtonSystem>());
+
 	_systems.push_back(std::make_unique<GunSystem>());
 	_systems.push_back(std::make_unique<ParticleSystem>());
 	_systems.push_back(std::make_unique<ProjectileSystem>());

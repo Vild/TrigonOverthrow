@@ -15,6 +15,9 @@ void ImGuiSystem::update(World& world, float delta) {
 	ImGui::SetNextWindowCollapsed(true, ImGuiSetCond_Once);
 	ImGui::Begin("Settings Window");
 
+	ImGui::Text("State");
+	state.registerImGui();
+
 	ImGui::Text("Entities:");
 	char name[255] = {0};
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {

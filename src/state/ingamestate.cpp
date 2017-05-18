@@ -165,6 +165,8 @@ void InGameState::onLeave(State* next) {
 	music->music->stop();
 }
 
+void InGameState::registerImGui() {}
+
 void InGameState::_addLookAt() {
 	auto lookAt = _camera->addComponent<LookAtComponent>();
 	lookAt->target = _player;
