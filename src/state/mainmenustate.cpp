@@ -39,8 +39,6 @@ MainMenuState::MainMenuState() {
 		text->transform.setPosition({-0.35, 0, 0});
 		text->transform.setScale({5, 5, 5});
 	}
-
-	_buttonFont = ImGui::GetIO().Fonts->AddFontFromFileTTF("assets/fonts/DroidSans-Bold.ttf", 64 + 32);
 }
 
 MainMenuState::~MainMenuState() {}
@@ -51,9 +49,9 @@ void MainMenuState::onLeave(State* next) {}
 
 void MainMenuState::registerImGui() {
 	Engine& engine = Engine::getInstance();
-	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize |
-		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
-	ImGui::PushFont(_buttonFont);
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+																 ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
+	ImGui::PushFont(engine.getBigFont());
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1, 0, 1, 1));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 0, 0, 1));

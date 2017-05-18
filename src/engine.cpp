@@ -32,6 +32,7 @@
 #include "world/system/hoversystem.hpp"
 #include "world/system/roomloadingsystem.hpp"
 #include "world/system/audiosystem.hpp"
+#include "world/system/ingamemenusystem.hpp"
 
 #include "world/renderpass/geometryrenderpass.hpp"
 #include "world/renderpass/ssaorenderpass.hpp"
@@ -102,7 +103,7 @@ int Engine::run(bool vsync) {
 						break;
 					switch (event.key.keysym.sym) {
 					case SDLK_ESCAPE:
-						_quit = true;
+						getSystem<InGameMenuSystem>()->escapePressed = true;
 						break;
 					default:
 						break;
@@ -267,7 +268,9 @@ void Engine::_initImGui() {
 	ImGui_ImplSdlGL3_Init(_window);
 
 	ImGuiIO& io = ImGui::GetIO();
-	io.Fonts->AddFontFromFileTTF("assets/fonts/DroidSans.ttf", 18.0f);
+	_defaultFont = io.Fonts->AddFontFromFileTTF("assets/fonts/DroidSans.ttf", 18.0f);
+	_bigFont = io.Fonts->AddFontFromFileTTF("assets/fonts/DroidSans-Bold.ttf", 64 + 32);
+	_mediumFont = io.Fonts->AddFontFromFileTTF("assets/fonts/DroidSans-Bold.ttf", 64 + 16);
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Colors[ImGuiCol_Text] = ImVec4(0.83f, 0.95f, 0.95f, 1.00f);
@@ -361,6 +364,9 @@ void Engine::_setupSystems() {
 		_systems.push_back(std::move(text));
 		_systems.push_back(std::make_unique<BulletDebugRenderPass>());
 	}
+
+	// This is kinda a renderpass, but still not
+	_systems.push_back(std::make_unique<InGameMenuSystem>());
 }
 
 void Engine::_system_tick(float delta) {
