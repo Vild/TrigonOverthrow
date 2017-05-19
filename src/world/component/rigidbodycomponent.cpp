@@ -74,8 +74,12 @@ void RigidBodyComponent::setHitboxHalfSize(const glm::vec3& size) {
 	rigidBody->setCollisionShape(shape);
 }
 
-void RigidBodyComponent::setTransform(TransformComponent* transform) {
-	rigidBody->setWorldTransform(btTransform(cast(transform->getRotation()), cast(transform->getPosition())));
+void RigidBodyComponent::setTransform(TransformComponent* transform)
+{
+	btQuaternion rot = cast(transform->getRotation());
+	btVector3 pos = cast(transform->getPosition());
+
+	rigidBody->setWorldTransform(btTransform(rot, pos));
 	setHitboxHalfSize(transform->getScale() * 0.5f);
 }
 

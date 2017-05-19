@@ -60,7 +60,7 @@ void RoomLoadingSystem::update(World& world, float delta) {
 		for (Entity* entity : world.getActiveComponents<FloorTileComponent>())
 		{
 			FloorTileComponent * ftc = entity->getComponent<FloorTileComponent>();
-			allDone &= ftc->lowerFloor(delta);
+			allDone &= ftc->isDone();
 		}
 
 		if (allDone)
@@ -79,6 +79,15 @@ std::string RoomLoadingSystem::name() {
 	return "RoomLoadingSystem";
 }
 
+void RoomLoadingSystem::spawnBossRoom(World & world)
+{
+	for (Entity* entity : world.getActiveComponents<FloorTileComponent>())
+	{
+		entity->getComponent<FloorTileComponent>()->lowerFloor();
+	}
+	bossRoomLoaded = BossRoom::LOADING;
+}
+
 void RoomLoadingSystem::loadBossRoom(World * world)
 {
 	static Engine* engine = &Engine::getInstance();
@@ -93,9 +102,17 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 		chunks.erase(chunk.first);
 	}
 
+	for (Entity * e : world->getActiveComponents<RoomLoadingComponent>())
+	{
+		e->getComponent<RoomLoadingComponent>()->unload();
+	}
+
 	auto mapInfo = jsonLoader->loadMap("assets/maps/trigon.json");
 	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
 	Entity * room = world->addEntity(sole::uuid4(), "BossRoom");
+
+	auto rlc = room->addComponent<RoomLoadingComponent>(glm::vec2(0,0));
+	rlc->addEntity(room);
 
 	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
 
@@ -107,6 +124,9 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	glm::vec3 playerPos = playerTransform->getPosition();
 	float offsetX = int(playerPos.x - map.width * 0.5f);
 	float offsetY = int(playerPos.z - map.height * 0.25f);
+
+	float mapCenterX = int(playerPos.x + map.width * 0.0f);
+	float mapCenterY = int(playerPos.z + map.height * 0.25f);
 
 	static auto randFloat = [](float LO, float HI)
 	{
@@ -121,6 +141,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 
 		Entity* tile = world->addEntity(sole::uuid4(), "BossTile");
 		tile->getHide() = true;
+		rlc->addEntity(tile);
 
 		TransformComponent* transform = tile->addComponent<TransformComponent>();
 
@@ -133,7 +154,77 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 
 		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_WALL, BulletPhysicsSystem::wallCollidesWith);
 
-		tile->addComponent<FloorTileComponent>(h);
+		auto ftc = tile->addComponent<FloorTileComponent>(h);
+		ftc->riseFloor();
+	}
+
+
+	auto entities = mapInfo->constructEntities(*world);
+	for (Entity* entity : entities) {
+		rlc->addEntity(entity);
+		TransformComponent* tr = entity->getComponent<TransformComponent>();
+		RigidBodyComponent* rb = entity->getComponent<RigidBodyComponent>();
+		if (tr) {
+			tr->move({ offsetX, 1.5f, offsetY });
+			rb->setTransform(tr);
+			bulletphyiscs->addRigidBody(rb, BulletPhysicsSystem::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
+		}
+	}
+
+	{
+		Entity* wall = world->addEntity(sole::uuid(), "WallTop");
+		TransformComponent* transform = wall->addComponent<TransformComponent>();
+		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
+
+		transform->setPosition({mapCenterX, 5, mapCenterY + map.height * 0.5f});
+		transform->setScale({ 1 + map.width, 10, 1 });
+		rigidbody->setTransform(transform);
+
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::COL_WALL, BulletPhysicsSystem::wallCollidesWith);
+
+		rlc->addEntity(wall);
+	}
+
+	{
+		Entity* wall = world->addEntity(sole::uuid(), "WallBot");
+		TransformComponent* transform = wall->addComponent<TransformComponent>();
+		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
+
+		transform->setPosition({ mapCenterX, 5, mapCenterY - map.height * 0.5f });
+		transform->setScale({ 1 + map.width, 10, 1 });
+		rigidbody->setTransform(transform);
+
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::COL_WALL, BulletPhysicsSystem::wallCollidesWith);
+
+		rlc->addEntity(wall);
+	}
+
+	{
+		Entity* wall = world->addEntity(sole::uuid(), "WallLeft");
+		TransformComponent* transform = wall->addComponent<TransformComponent>();
+		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
+
+		transform->setPosition({ mapCenterX + map.width * 0.5f, 5, mapCenterY });
+		transform->setScale({ 1 , 10, 1 + map.height });
+		rigidbody->setTransform(transform);
+
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::COL_WALL, BulletPhysicsSystem::wallCollidesWith);
+
+		rlc->addEntity(wall);
+	}
+
+	{
+		Entity* wall = world->addEntity(sole::uuid(), "WallRight");
+		TransformComponent* transform = wall->addComponent<TransformComponent>();
+		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
+
+		transform->setPosition({ mapCenterX - map.width * 0.5f, 5, mapCenterY });
+		transform->setScale({ 1 , 10, 1 + map.height });
+		rigidbody->setTransform(transform);
+
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::COL_WALL, BulletPhysicsSystem::wallCollidesWith);
+
+		rlc->addEntity(wall);
 	}
 
 }

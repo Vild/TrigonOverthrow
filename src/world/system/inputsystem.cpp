@@ -69,7 +69,7 @@ void InputSystem::update(World& world, float delta) {
 		if (hid->getKey(SDL_SCANCODE_B))
 		{
 			auto a = Engine::getInstance().getSystem<RoomLoadingSystem>();
-			a->bossRoomLoaded = RoomLoadingSystem::BossRoom::LOADING;
+			a->spawnBossRoom(world);
 		}
 	}
 }

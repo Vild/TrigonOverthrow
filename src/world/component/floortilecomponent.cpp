@@ -5,6 +5,8 @@
 FloorTileComponent::FloorTileComponent(float height) {
 	this->height = height;
 	this->heightFactor = 0.0f;
+	this->progress = 1.0f;
+	this->state = STATE_DYNAMIC;
 }
 
 FloorTileComponent::FloorTileComponent(const ComponentValues& value) : FloorTileComponent() {
@@ -26,15 +28,49 @@ void FloorTileComponent::setHeightFactor(float heightFactor) {
 	this->heightFactor = heightFactor;
 }
 
-bool FloorTileComponent::lowerFloor(float delta)
+void FloorTileComponent::lowerFloor()
 {
-	if (height > 0.0f)
-		height -= delta;
+	state = STATE_LOWERING;
+	progress = 0.0f;
+}
 
-	if (height < 0.0f)
-		height = 0.0f;
+void FloorTileComponent::staticFloor()
+{
+	state = STATE_STATIC;
+	progress = 1.0f;
+}
 
-	return height == 0.0f;
+void FloorTileComponent::riseFloor()
+{
+	state = STATE_RISING;
+	progress = 0.0f;
+}
+
+void FloorTileComponent::dynamicFloor()
+{
+	state = STATE_DYNAMIC;
+	progress = 1.0f;
+}
+
+bool FloorTileComponent::isDone()
+{
+	return progress >= 1.0f;
+}
+
+
+FloorTileComponent::State FloorTileComponent::getState()
+{
+	return state;
+}
+
+float FloorTileComponent::getProgress()
+{
+	return progress;
+}
+
+void FloorTileComponent::setProgress(float progress)
+{
+	this->progress = progress;
 }
 
 void FloorTileComponent::registerImGui() {}

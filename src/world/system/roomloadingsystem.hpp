@@ -17,6 +17,8 @@ public:
 
 	BossRoom bossRoomLoaded;
 
+	void spawnBossRoom(World & world);
+
 private:
 
 	glm::ivec2 chunkSize = {32, 18};
