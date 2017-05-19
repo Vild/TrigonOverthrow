@@ -205,34 +205,101 @@ void InGameState::_updateUI(State& state, bool show) {
 }
 
 void InGameState::_menuRenderUI(Entity& self, State& state) {
-	// InGameState& this_ = static_cast<InGameState&>(state);
+	InGameState& this_ = static_cast<InGameState&>(state);
 	Engine& engine = Engine::getInstance();
-	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-																 ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
+	Entity* player = this_.getPlayer();
+	UpgradeComponent* upgrade = player->getComponent<UpgradeComponent>();
+	ExperienceComponent* experience = player->getComponent<ExperienceComponent>();
+
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+																 ImGuiWindowFlags_NoCollapse /* | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar */;
 	ImGui::PushFont(engine.getMediumFont());
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1, 0, 1, 1));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 0, 0, 1));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 1, 0, 1));
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1, 1, 1, 1));
+	ImGui::PushStyleColor(ImGuiCol_ModalWindowDarkening, ImVec4(0.1, 0.15, 0.15, 0.75));
 
 	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Always);
-	float scale = 1.0 - (512.0 / engine.getWidth());
-	ImGui::Begin("MainMenu", nullptr, windowFlags);
-	ImGui::SetWindowFontScale(scale);
-	{
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 64);
-		ImGui::Dummy(ImVec2(0, (128 + 64) * scale));
-		ImGui::Dummy(ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale));
-		/*if (ImGui::Button("Play", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
-			engine.setState<InGameState>();*/
+	// ImGui::SetNextWindowSize(ImVec2(800, 200), ImGuiSetCond_Always);
+	// float scale = 1.0 - (512.0 / engine.getWidth());
 
-		ImGui::Dummy(ImVec2(0, 64 * scale));
-		if (ImGui::Button("Quit", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
-			engine.quit();
+	ImGui::OpenPopup("Trigon paused");
+	if (ImGui::BeginPopupModal("Trigon paused", nullptr, windowFlags)) {
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 16);
+
+		ImGui::Text("Upgrade points: %d", upgrade->upgradePoints);
+		ImGui::Text("%d/%d xp until next upgrade point", experience->currExp, experience->expToNextLevel);
+		ImGui::Separator();
+
+		bool enableShop = !!upgrade->upgradePoints;
+
+		ImVec4 enableButton = ImVec4(0.1, 0.5, 0.2, 1);
+		ImVec4 enableButtonHovered = ImVec4(0.3, 0.8, 0.3, 1);
+		ImVec4 enableButtonActive = ImVec4(0.95, 0.95, 0.95, 1);
+		ImVec4 disableButton = ImVec4(0.6, 0.6, 0.6, 1);
+		ImVec4 disableButtonHovered = ImVec4(0.6, 0.6, 0.6, 1);
+		ImVec4 disableButtonActive = ImVec4(0.6, 0.6, 0.6, 1);
+
+#define BUTTON_COLORS(enable) \
+	(enable) ? enableButton : disableButton, (enable) ? enableButtonHovered : disableButtonHovered, (enable) ? enableButtonActive : disableButtonActive
+
+		ImGui::Columns(2);
+		ImGui::SetColumnOffset(1, 385);
+
+		ImGui::Text("Multiple Ray Multiplier: %d", upgrade->multipleRayMultiplier);
+		ImGui::NextColumn();
+		bool enabled = enableShop && upgrade->multipleRayMultiplier < UpgradeComponent::MAX_EXTRA_RAYS;
+		if (ImGui::ButtonWithColor("+##MRM", ImVec2(0, 0), BUTTON_COLORS(enabled)) && enabled) {
+			upgrade->multipleRayMultiplier++;
+			upgrade->upgradePoints--;
+		}
+		ImGui::NextColumn();
+
+		ImGui::Text("Reflection Count: %d", upgrade->reflectionCount);
+		ImGui::NextColumn();
+		enabled = enableShop && upgrade->reflectionCount < UpgradeComponent::MAX_REFLECT_LIMIT;
+		if (ImGui::ButtonWithColor("+##RC", ImVec2(0, 0), BUTTON_COLORS(enabled)) && enabled) {
+			upgrade->reflectionCount++;
+			upgrade->upgradePoints--;
+		}
+		ImGui::NextColumn();
+
+		ImGui::Text("Refraction Count: %d", upgrade->refractionCount);
+		ImGui::NextColumn();
+		enabled = enableShop && upgrade->refractionCount < UpgradeComponent::MAX_REFRACTION_LIMIT;
+		if (ImGui::ButtonWithColor("+##RC2", ImVec2(0, 0), BUTTON_COLORS(enabled)) && enabled) {
+			upgrade->refractionCount++;
+			upgrade->upgradePoints--;
+		}
+		ImGui::NextColumn();
+
+		ImGui::Columns(1);
+
+		ImGui::Separator();
+		if (ImGui::Button("Continue", ImVec2(200, 0)))
+			engine.getSystem<InGameMenuSystem>()->escapePressed = true; // :3
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_ModalWindowDarkening, ImVec4(0.1, 0, 0, 0.75));
+		if (ImGui::ButtonWithColor("Quit", ImVec2(200, 0), ImVec4(0.5, 0, 0, 1), ImVec4(0.8, 0, 0, 1), ImVec4(0.95, 0, 0, 1)))
+			ImGui::OpenPopup("Quit?");
+		if (ImGui::BeginPopupModal("Quit?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+			ImGui::Text("All that beautiful progress will be lost.\nThis operation cannot be undone!\n\n");
+			ImGui::Separator();
+
+			if (ImGui::ButtonWithColor("Yes", ImVec2(250, 0), ImVec4(0.5, 0, 0, 1), ImVec4(0.8, 0, 0, 1), ImVec4(0.95, 0, 0, 1)))
+				engine.quit();
+			ImGui::SameLine();
+
+			if (ImGui::ButtonWithColor("No", ImVec2(250, 0), ImVec4(0, 0.5, 0, 1), ImVec4(0, 0.8, 0, 1), ImVec4(0, 0.95, 0, 1)))
+				ImGui::CloseCurrentPopup();
+
+			ImGui::EndPopup();
+		}
+		ImGui::PopStyleColor(1);
+
 		ImGui::PopStyleVar();
+		ImGui::EndPopup();
 	}
-	ImGui::End();
 
-	ImGui::PopStyleColor(4);
+	ImGui::PopStyleColor(2);
 	ImGui::PopFont();
 }
