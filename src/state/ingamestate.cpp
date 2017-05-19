@@ -12,6 +12,7 @@
 #include "../world/system/bulletphysicssystem.hpp"
 #include "../world/system/floortilesystem.hpp"
 #include "../world/system/roomloadingsystem.hpp"
+#include "../world/system/ingamemenusystem.hpp"
 
 #include "../world/component/transformcomponent.hpp"
 #include "../world/component/cameracomponent.hpp"
@@ -30,6 +31,9 @@
 #include "../world/component/hovercomponent.hpp"
 #include "../world/component/upgradecomponent.hpp"
 #include "../world/component/musiccomponent.hpp"
+#include "../world/component/experiencecomponent.hpp"
+#include "../world/component/experienceorbcomponent.hpp"
+#include "../world/component/ingamemenucomponent.hpp"
 
 InGameState::InGameState() {
 	auto& engine = Engine::getInstance();
@@ -110,9 +114,6 @@ InGameState::InGameState() {
 										glBindBuffer(GL_ARRAY_BUFFER, 0);
 									})
 			.finalize();
-		// auto particle = _player->addComponent<ParticleComponent>();
-		// particle->type = ParticleComponent::ParticleEffect::EXPLOSION;
-		// particle->addEmitter(glm::vec3(0,0,1), glm::vec3(0,0,1), 1024);
 
 		_player->addComponent<KBMouseInputComponent>();
 
@@ -120,6 +121,11 @@ InGameState::InGameState() {
 
 		auto gun = _player->addComponent<GunComponent>();
 		gun->addGun(GunComponent::GunType::RAYGUN, 30); // 60 is the the cooldown rate per frame.
+
+		auto expComp = _player->addComponent<ExperienceComponent>();
+		expComp->currExp = 0;
+		expComp->expToNextLevel = 5;
+		expComp->pickUpRadius = 4.8;
 
 		auto upgrades = _player->addComponent<UpgradeComponent>();
 		upgrades->multipleRayMultiplier = 0;
@@ -154,11 +160,16 @@ InGameState::~InGameState() {}
 void InGameState::onEnter(State* prev) {
 	auto music = _sun->getComponent<MusicComponent>();
 	music->music->play(-1);
+
+	InGameMenuSystem* menuSystem = Engine::getInstance().getSystem<InGameMenuSystem>();
+	menuSystem->updateUI = &_updateUI;
 }
 
 void InGameState::onLeave(State* next) {
 	auto music = _sun->getComponent<MusicComponent>();
 	music->music->stop();
+	InGameMenuSystem* menuSystem = Engine::getInstance().getSystem<InGameMenuSystem>();
+	menuSystem->updateUI = nullptr;
 }
 
 void InGameState::registerImGui() {}
@@ -179,4 +190,49 @@ void InGameState::_registerImGUI(Entity& self, State& state) {
 		else
 			self.removeComponent<LookAtComponent>();
 	}
+}
+
+void InGameState::_updateUI(State& state, bool show) {
+	Engine& engine = Engine::getInstance();
+	InGameState& this_ = static_cast<InGameState&>(state);
+	engine.getPause() = show;
+	if (show) {
+		auto menu = this_._sun->addComponent<InGameMenuComponent>();
+
+		menu->renderUI = &_menuRenderUI;
+	} else
+		this_._sun->removeComponent<InGameMenuComponent>();
+}
+
+void InGameState::_menuRenderUI(Entity& self, State& state) {
+	// InGameState& this_ = static_cast<InGameState&>(state);
+	Engine& engine = Engine::getInstance();
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+																 ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
+	ImGui::PushFont(engine.getMediumFont());
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1, 0, 1, 1));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 0, 0, 1));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 1, 0, 1));
+
+	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Always);
+	float scale = 1.0 - (512.0 / engine.getWidth());
+	ImGui::Begin("MainMenu", nullptr, windowFlags);
+	ImGui::SetWindowFontScale(scale);
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 64);
+		ImGui::Dummy(ImVec2(0, (128 + 64) * scale));
+		ImGui::Dummy(ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale));
+		/*if (ImGui::Button("Play", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
+			engine.setState<InGameState>();*/
+
+		ImGui::Dummy(ImVec2(0, 64 * scale));
+		if (ImGui::Button("Quit", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
+			engine.quit();
+		ImGui::PopStyleVar();
+	}
+	ImGui::End();
+
+	ImGui::PopStyleColor(4);
+	ImGui::PopFont();
 }

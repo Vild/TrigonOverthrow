@@ -1,5 +1,5 @@
 {
-	"name": "Enemy (Close range)",
+	"name": "Enemy (Long range)",
 	"components": {
 		"TransformComponent": {
 			"position": [
@@ -13,12 +13,18 @@
 				0.3
 			]
 		},
-    "ModelComponent": {
-      "mesh": "assets/objects/enemy_7HP.fbx",
-      "texture": "assets/textures/errorNormal.png",
-      "needsMMatrix": true
-    },
+		"ModelComponent": {
+		  "mesh": "assets/objects/enemy_7HP.fbx",
+		  "texture": "assets/textures/green_texture.png",
+		  "needsMMatrix": true
+		},
 		"DynamicModelComponent": {},
+		"AIComponent":{
+			"attackType": 0,
+			"moveType": 1,
+			"usefulTimer": 0,
+			"doInverse": false
+		},
 		"LifeComponent": {
 			"maxHP": 6
 		},

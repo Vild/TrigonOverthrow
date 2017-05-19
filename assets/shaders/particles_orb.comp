@@ -17,7 +17,9 @@ layout (std430, binding = 3) buffer ColorBuffer {
 	vec3 colors[];
 };
 
+
 uniform float delta;
+uniform vec3 spawnPos;
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -30,7 +32,15 @@ void main(){
 	vec3 color = colors[index];
 	float life = lives[index];
 
-	vel = normalize(vec3(sin(3 * index), abs(cos(index * 0.5f)), cos(index * 0.5f) - sin(8 * index) + sin(3 * index)) * delta) * 4.0f;
+	if(life <= 0){
+		pos = spawnPos + normalize(vec3(sin(3 * index), 0, cos(index * 0.5f) - sin(8 * index) + sin(3 * index)) * delta);
+		vel = vec3(0, 1, 0);
+		color = vec3(255, 102, 0);
+		life = 5;
+	}
+	barrier();
+
+	vel += vel * delta;
 	pos += vel * delta;
 	life -= 1 * delta;
 

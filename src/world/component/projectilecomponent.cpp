@@ -8,6 +8,7 @@ ProjectileComponent::ProjectileComponent(const ComponentValues& value) : Project
 	damage = value.getFloat("damage", 1);
 	bounceCount = value.getInt("bounceCount", 0);
 	pierceCount = value.getInt("pierceCount", 0);
+	speed = value.getFloat("speed", 6.0f);
 }
 
 ProjectileComponent::~ProjectileComponent() {}

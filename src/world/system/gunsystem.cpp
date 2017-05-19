@@ -56,19 +56,12 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 	transProj->setDirection({-dir.x, dir.y, dir.z}); // helt kokt
 	transProj->setPosition(transComp->getPosition() + transProj->getDirection());
 
-	auto point = projectile->getComponent<PointLightComponent>();
-	point->pointLight.diffuse = glm::vec3(1, 0, 0);
-	point->pointLight.specular = glm::vec3(0.05, 0, 0);
-	point->pointLight.constant = 1;
-	point->pointLight.linear = 0.35;
-	point->pointLight.quadratic = 0.44;
-
 	auto projRdbComp = projectile->getComponent<RigidBodyComponent>();
+	auto projComp = projectile->getComponent<ProjectileComponent>();
 
-	projRdbComp->setHitboxHalfSize(transProj->getScale());
 	projRdbComp->setMass(1);
 	projRdbComp->setFriction(0);
-	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * 6.0f));
+	projRdbComp->getRigidBody()->applyCentralImpulse(cast(transProj->getDirection() * projComp->speed));
 	projRdbComp->setTransform(transProj);
 	projRdbComp->setActivationState(DISABLE_DEACTIVATION);
 
@@ -76,7 +69,6 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 	projLifeComp->currHP = projLifeComp->maxHP = 1;
 
 	auto upgradeComp = me->getComponent<UpgradeComponent>();
-	auto projComp = projectile->getComponent<ProjectileComponent>();
 	projComp->bounceCount = upgradeComp->reflectionCount;
 	projComp->pierceCount = upgradeComp->refractionCount;
 	if (upgradeComp && upgradeComp->multipleRayMultiplier > 0) {
@@ -94,7 +86,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 			newTrans->setPosition(transComp->getPosition() + newTrans->getDirection());
 			newRbComp->setHitboxHalfSize(transProj->getScale());
 			newRbComp->setTransform(newTrans);
-			newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * 6.0f));
+			newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * projComp->speed));
 			newRbComp->setActivationState(DISABLE_DEACTIVATION);
 			Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(newRbComp, BulletPhysicsSystem::CollisionType::COL_PLAYER_PROJECTILE,
 																																					 BulletPhysicsSystem::playerProjectileCollidesWith);

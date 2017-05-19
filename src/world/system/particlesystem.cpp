@@ -11,7 +11,7 @@
 
 ParticleSystem::ParticleSystem() {
 	// Creating shaders for each particle effect. Check particlecomponent.hpp for the enumeration.
-	_programs.resize(3);
+	_programs.resize(4);
 	_programs[ParticleComponent::ParticleEffect::INITIATE] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().addUniform("delta");
@@ -23,6 +23,10 @@ ParticleSystem::ParticleSystem() {
 	_programs[ParticleComponent::ParticleEffect::SPEW] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_spew.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::SPEW]->bind().addUniform("delta");
+
+	_programs[ParticleComponent::ParticleEffect::ORB] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::ORB]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_orb.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::ORB]->bind().addUniform("delta").addUniform("spawnPos");
 }
 
 ParticleSystem::~ParticleSystem() {}
@@ -30,28 +34,24 @@ ParticleSystem::~ParticleSystem() {}
 //#pragma omp parallel for schedule(dynamic, 128)
 void ParticleSystem::update(World& world, float delta) {
 	// Gotta change how this system works abit.
-	// Main things to fix: All emitters with the different types should use the correct shader.
+	// Main things to fix: All emitters with the different types should use the correct sh7ader.
 
 	// remember to fix initiate particles.
 	for (Entity * entity : world.getActiveComponents<ParticleComponent>()) {
 		auto particleComp = entity->getComponent<ParticleComponent>();
 		if (!particleComp)
 			continue;
-
-		if (particleComp->emitterLife <= 0) {
-			entity->removeComponent<ParticleComponent>();
-			entity->makeDead();
-			continue;
-		}
-
+			
 		_programs[particleComp->type]->bind()
 			.setUniform("delta", delta);
 		particleComp->ssbo[ParticleAttribute::position]->bindBase(ParticleAttribute::position);
 		particleComp->ssbo[ParticleAttribute::velocity]->bindBase(ParticleAttribute::velocity);
 		particleComp->ssbo[ParticleAttribute::life]->bindBase(ParticleAttribute::life);
-		glDispatchCompute((GLint)NR_OF_PARTICLES / 128, 1, 1);
+		particleComp->ssbo[ParticleAttribute::color]->bindBase(ParticleAttribute::color);
+		if (particleComp->type == ParticleComponent::ParticleEffect::ORB)
+			_programs[particleComp->type]->setUniform("spawnPos", entity->getComponent<TransformComponent>()->getPosition());
 
-		particleComp->emitterLife -= 1 * delta;
+		glDispatchCompute((GLint)NR_OF_PARTICLES / 128, 1, 1);
 	}
 }
 

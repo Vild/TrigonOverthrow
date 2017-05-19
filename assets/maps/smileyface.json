@@ -9,19 +9,19 @@
 					"position": [
 						4,
 						0.2,
-						0
+						-2
 					]
 				}
 			}
 		},
 		"25b0c718-dfb5-4f86-a4e1-2c57763eb737": {
-			"template": "enemy_closeRange",
+			"template": "enemy_longRange",
 			"components": {
 				"TransformComponent": {
 					"position": [
 						5,
 						0.2,
-						0
+						-2
 					]
 				},
 				"TextComponent": {

@@ -8,9 +8,11 @@ struct UpgradeComponent : public Component {
 	const int MAX_EXTRA_RAYS = 2;
 	const int MAX_REFLECT_LIMIT = 3;
 	const int MAX_REFRACTION_LIMIT = 3;
+
 	int multipleRayMultiplier;
 	int reflectionCount;
 	int refractionCount;
+	int upgradePoints;
 
 	UpgradeComponent() = default;
 	UpgradeComponent(const ComponentValues& value);

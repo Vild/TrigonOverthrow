@@ -15,4 +15,5 @@ public:
 	float damage;
 	int bounceCount;
 	int pierceCount;
+	float speed;
 };

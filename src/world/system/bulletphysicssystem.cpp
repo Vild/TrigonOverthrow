@@ -4,6 +4,7 @@
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/transformcomponent.hpp"
 #include "../component/projectilecomponent.hpp"
+#include "../component/experienceorbcomponent.hpp"
 #include <Bullet3Common/b3Transform.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "../../engine.hpp"
@@ -43,7 +44,7 @@ void BulletPhysicsSystem::update(World& w, float delta) {
 			continue;
 
 		auto projComp = entity->getComponent<ProjectileComponent>();
-		if (projComp)
+		if (projComp || entity->getComponent<ExperienceOrbComponent>())
 			rigidbody->getRigidBody()->setGravity(btVector3(0, 0, 0));
 
 		btTransform t = rigidbody->getRigidBody()->getWorldTransform();
