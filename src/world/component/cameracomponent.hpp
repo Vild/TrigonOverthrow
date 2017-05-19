@@ -12,7 +12,7 @@ struct CameraComponent : public Component {
 	glm::mat4 projectionMatrix;
 	float fov = 1.0f;
 	float zNear = 1.f;
-	float zFar = 25.f;
+	float zFar = 75.f;
 	float aspect = 1.77f;
 
 	void recalculateProjectionMatrix();

@@ -1,0 +1,57 @@
+{
+  "name": "Enemy (Close range)",
+  "components": {
+    "TransformComponent": {
+      "position": [0,0,0],
+      "scale": [2,2,2]
+    },
+    "ModelComponent": {
+      "mesh": "assets/objects/enemy_7HP.fbx",
+      "texture": "assets/textures/errorNormal.png",
+      "needsMMatrix": true
+    },
+    "DynamicModelComponent": {},
+    "LifeComponent": {
+      "maxHP": 6
+    },
+    "TextComponent": {
+      "text": "Hello, I am a Trigoon, prepare to die!",
+      "position": [
+        0,
+        2,
+        5
+      ],
+      "scale": [
+        4,
+        4,
+        4
+      ]
+    },
+    "RigidBodyComponent": {
+      "mass": 1,
+      "friction": 1,
+      "damping": 0.9
+    },
+    "PointLightComponent": {
+      "diffuse": [
+        -0.5,
+        -0.5,
+        -0.5
+      ],
+      "specular": [
+        0,
+        0,
+        0
+      ],
+      "constant": 1,
+      "linear": 0.14,
+      "quadratic": 0.07,
+      "offset": [
+        0,
+        0.5,
+        0
+      ]
+    },
+    "HoverComponent": {}
+  }
+}

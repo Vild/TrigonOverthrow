@@ -6,6 +6,7 @@
 class RoomLoadingSystem : public System
 {
 public:
+	enum class BossRoom { NO, LOADING, YES };
 	RoomLoadingSystem();
 	virtual ~RoomLoadingSystem();
 
@@ -14,7 +15,12 @@ public:
 	virtual void registerImGui() override;
 	virtual std::string name() override;
 
+	BossRoom bossRoomLoaded;
+
+	void spawnBossRoom(World & world);
+
 private:
+
 	glm::ivec2 chunkSize = {32, 18};
 
 	typedef std::pair<int, int> coord_t;
@@ -23,5 +29,6 @@ private:
 
 
 	void newRoom(World * world, coord_t coord);
+	void loadBossRoom(World * world);
 
 };

@@ -53,9 +53,9 @@ void MainMenuState::registerImGui() {
 																 ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
 	ImGui::PushFont(engine.getBigFont());
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1, 0, 1, 1));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 0, 0, 1));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 1, 0, 1));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1, 0.1, 0.1, 1));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2, 0.2, 0.2, 1));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.05, 0.05, 0.05, 1));
 
 	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Always);
 	float scale = 1.0 - (512.0 / engine.getWidth());
