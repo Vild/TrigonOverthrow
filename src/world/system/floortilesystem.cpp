@@ -50,6 +50,8 @@ void FloorTileSystem::update(World& world, float delta)
 				heightFactor = max(heightFactor, glm::smoothstep(0.0f, 1.0f, progress));
 				if (progress >= 1.0f) ftc->staticFloor();
 				break;
+			default:
+				break;
 			}
 
 			ftc->setProgress(progress);
