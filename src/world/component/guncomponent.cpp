@@ -4,8 +4,8 @@
 
 GunComponent::GunComponent(const ComponentValues& value) : GunComponent() {
 	type = static_cast<GunType>(value.getInt("type", (int)GunComponent::RAYGUN));
-	cooldown = value.getInt("cooldown", 0);
-	cooldownLength = value.getInt("cooldownLength", 32);
+	cooldown = value.getFloat("cooldown", 0);
+	cooldownLength = value.getFloat("cooldownLength", 0.7);
 	shoot = value.getBool("shoot", false);
 }
 

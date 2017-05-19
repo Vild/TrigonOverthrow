@@ -20,7 +20,6 @@ BulletPhysicsSystem::BulletPhysicsSystem() {
 	broadphaseInterface = new btDbvtBroadphase();
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphaseInterface, constraintSolver, collisionConfig);
-	world->setGravity({0, -9.82f, 0});
 }
 
 BulletPhysicsSystem::~BulletPhysicsSystem() {
@@ -33,7 +32,6 @@ BulletPhysicsSystem::~BulletPhysicsSystem() {
 
 void BulletPhysicsSystem::update(World& w, float delta) {
 	world->stepSimulation(delta);
-
 	for (Entity * entity : w.getActiveComponents<RigidBodyComponent>()) {
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
 		if (!rigidbody)

@@ -2,7 +2,6 @@
 #include "component.hpp"
 
 struct AIComponent : public Component {
-	enum ProjectilePattern : int {straight = 0};
 	enum MovePattern : int {normal = 0, sinus, circle};
 
 	AIComponent() = default;
@@ -11,7 +10,6 @@ struct AIComponent : public Component {
 	inline std::string name() final { return "AIComponent"; }
 	void registerImGui() final;
 
-	ProjectilePattern attackType;
 	MovePattern moveType;
 	float usefulTimer;
 	bool doInverse;

@@ -3,17 +3,20 @@
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/transformcomponent.hpp"
 #include "../component/aicomponent.hpp"
-#define PI 3.14159265
+#include "../component/guncomponent.hpp"
 
 void AISystem::update(World& world, float delta) {
-	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
+	for (Entity* entity : world.getActiveComponents<AIComponent>()) {
 		auto ai = entity->getComponent<AIComponent>();
-		if (!ai)
-			continue;
+		auto gunComp = entity->getComponent<GunComponent>();
+		if(gunComp)
+			if (gunComp->cooldown <= 0)
+				gunComp->shoot = true;
+
 		auto rdbComp = entity->getComponent<RigidBodyComponent>();
 		auto rigidbody = rdbComp->getRigidBody();
 		auto dir = entity->getComponent<TransformComponent>()->getDirection();
-		if (ai->usefulTimer >= 2 * PI)
+		if (ai->usefulTimer >= 2 * M_PI)
 			ai->usefulTimer = 0;
 		rigidbody->applyCentralForce(cast(_calculateForceDirection(dir, ai->usefulTimer, ai->moveType) * rdbComp->getMass() * 5.f));
 		ai->usefulTimer += 1 * delta;

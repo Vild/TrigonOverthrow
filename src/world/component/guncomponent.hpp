@@ -11,8 +11,8 @@ struct GunComponent : public Component {
 	virtual ~GunComponent();
 
 	GunType type;
-	int cooldown;
-	int cooldownLength;
+	float cooldown;
+	float cooldownLength;
 	bool shoot;
 
 	void addGun(GunType inType, int inCooldown);

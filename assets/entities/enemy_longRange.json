@@ -19,9 +19,14 @@
 		  "needsMMatrix": true
 		},
 		"DynamicModelComponent": {},
-		"AIComponent":{
-			"attackType": 0,
-			"moveType": 1,
+    "GunComponent": {
+      "type": 1,
+      "cooldown": 0,
+      "cooldownLength": 1,
+      "shoot": true
+    },
+    "AIComponent":{
+			"moveType": 2,
 			"usefulTimer": 0,
 			"doInverse": false
 		},
@@ -42,7 +47,12 @@
 			]
 		},
 		"RigidBodyComponent": {
-			"mass": 1,
+      "hitboxHalfSize": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "mass": 1,
 			"friction": 1,
 			"damping": 0.9
 		},

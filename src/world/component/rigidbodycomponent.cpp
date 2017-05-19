@@ -2,6 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "rigidbodycomponent.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include "../system/bulletphysicssystem.hpp"
+#include "../../engine.hpp"
 
 RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float friction, float damping) {
 	// btStaticPlaneShape * plane = new btStaticPlaneShape({ 0,1,0 }, 0);
@@ -17,8 +19,7 @@ RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float frictio
 }
 
 RigidBodyComponent::RigidBodyComponent(const ComponentValues& value) : RigidBodyComponent() {
-	hitboxHalfSize = {1, 1, 1};
-
+	hitboxHalfSize = value.getVec3("hitboxHalfSize", {1, 1, 1});
 	mass = value.getFloat("mass", 1);
 	friction = value.getFloat("friction", 1);
 	state = new btDefaultMotionState();
