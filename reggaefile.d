@@ -4,8 +4,7 @@ enum CFLAGS = "-std=c++17 -O0 -D_DEBUG -ggdb -Wall -Werror -Wno-unused-value -Wn
 
 enum CompileCommand {
 	Compile = "g++ -c " ~ CFLAGS ~ " $in -o $out",
-	LinkTrigon = "g++ -std=c++17 -O0 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp -lBullet3Common -lBullet3Dynamics -lBullet3Geometry -lBullet3OpenCL_clew -lBulletCollision -lBulletDynamics -lBulletInverseDynamics -lBulletSoftBody -lLinearMath $in -o $out",
-	LinkEditor = "g++ -std=c++17 -O0 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lsfml-graphics -lsfml-system -lsfml-window $in -o $out",
+	Link = "g++ -std=c++17 -O0 -ggdb -Wall -Werror -pedantic -Wno-maybe-uninitialized -fdiagnostics-color=always -fopenmp -lm -ldl -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lassimp -lBullet3Common -lBullet3Dynamics -lBullet3Geometry -lBullet3OpenCL_clew -lBulletCollision -lBulletDynamics -lBulletInverseDynamics -lBulletSoftBody -lLinearMath $in -o $out"
 }
 
 Target[] MakeObjects(string src)() {
@@ -33,8 +32,7 @@ Target[] MakeObjects(string src)() {
 }
 
 Build myBuild() {
-	auto trigonoverthrow = Target("trigonoverthrow", CompileCommand.LinkTrigon, MakeObjects!"src/");
-	auto editor = Target("trigoneditor", CompileCommand.LinkEditor, MakeObjects!"editor/");
+	auto trigonoverthrow = Target("trigonoverthrow", CompileCommand.Link, MakeObjects!"src/");
 
-	return Build(trigonoverthrow, editor);
+	return Build(trigonoverthrow);
 }
