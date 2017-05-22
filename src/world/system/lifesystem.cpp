@@ -7,6 +7,7 @@
 #include "../component/projectilecomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../system/bulletphysicssystem.hpp"
+#include "../system/roomloadingsystem.hpp"
 #include "../../io/jsonloader.hpp"
 #include "../../engine.hpp"
 
@@ -34,6 +35,8 @@ void LifeSystem::update(World& world, float delta) {
 				Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(rdbComp,
 					BulletPhysicsSystem::CollisionType::COL_EXP_ORB,
 					BulletPhysicsSystem::orbCollidesWith);
+
+				Engine::getInstance().getSystem<RoomLoadingSystem>()->enemyDead(world);
 			}
 		}
 

@@ -13,6 +13,7 @@
 RoomLoadingSystem::RoomLoadingSystem() 
 {
 	bossRoomLoaded = BossRoom::NO;
+	enemiesDead = 0;
 }
 
 RoomLoadingSystem::~RoomLoadingSystem() {}
@@ -53,6 +54,8 @@ void RoomLoadingSystem::update(World& world, float delta) {
 				}
 			}
 		}
+
+
 	}
 	else if (bossRoomLoaded == BossRoom::LOADING)
 	{
@@ -86,6 +89,13 @@ void RoomLoadingSystem::spawnBossRoom(World & world)
 		entity->getComponent<FloorTileComponent>()->lowerFloor();
 	}
 	bossRoomLoaded = BossRoom::LOADING;
+}
+
+void RoomLoadingSystem::enemyDead(World & world)
+{
+	enemiesDead++;
+	if (enemiesDead > 2)
+		spawnBossRoom(world);
 }
 
 void RoomLoadingSystem::loadBossRoom(World * world)

@@ -15,7 +15,7 @@
       "damage": 1,
       "bounceCount": 0,
       "pierceCount": 0,
-      "speed": 10
+      "speed": 15
 		},
 		"SFXComponent":{
 			"file": "assets/sfx/player_projectile.ogg",
@@ -23,7 +23,7 @@
 			"volume": 128
 		},
 		"LifeComponent": {
-			"maxHP": 1
+			"maxHP": 2
 		},
 		"PointLightComponent": {
 			"diffuse": [

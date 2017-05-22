@@ -19,7 +19,11 @@ public:
 
 	void spawnBossRoom(World & world);
 
+	void enemyDead(World & world);
+
 private:
+	int enemiesDead;
+
 
 	glm::ivec2 chunkSize = {32, 18};
 
