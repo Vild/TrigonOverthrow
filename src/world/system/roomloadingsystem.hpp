@@ -23,15 +23,15 @@ public:
 
 private:
 	int enemiesDead;
+	std::vector<std::shared_ptr<MapInformation>> _maps;
 
-	void spawnSpawnRoom(World & world);
 	glm::ivec2 chunkSize = {32, 18};
 
 	typedef std::pair<int, int> coord_t;
 	typedef std::map<coord_t, Entity *> map_t;
 	map_t chunks;
 
-
+	void spawnSpawnRoom(World & world);
 	void newRoom(World * world, coord_t coord);
 	void loadBossRoom(World * world);
 

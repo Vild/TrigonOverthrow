@@ -10,10 +10,27 @@
 
 #include "../../state/ingamestate.hpp"
 
-RoomLoadingSystem::RoomLoadingSystem() 
+RoomLoadingSystem::RoomLoadingSystem()
 {
 	bossRoomLoaded = BossRoom::NO;
 	enemiesDead = 0;
+
+	static std::string maps[] = {
+		"assets/maps/room1.json",
+		"assets/maps/room2.json",
+		"assets/maps/room3.json",
+		"assets/maps/room4.json",
+		"assets/maps/room5.json",
+		"assets/maps/room6.json",
+		"assets/maps/room7.json",
+		"assets/maps/room8.json"
+	};
+
+
+	static JSONLoader* jsonLoader = Engine::getInstance().getJSONLoader().get();
+
+	for (const std::string& map : maps)
+		_maps.push_back(jsonLoader->loadMap(map));
 }
 
 RoomLoadingSystem::~RoomLoadingSystem() {}
@@ -120,7 +137,7 @@ void RoomLoadingSystem::spawnSpawnRoom(World & world)
 	coord_t coord = { 0,0 };
 
 	MapData map = mapLoader->loadFromImage("assets/maps/Spawn.png");
-	Entity * room = world.addEntity(sole::uuid4(), "Room");
+	Entity * room = world.addEntity("Room");
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
 	rlc->addEntity(room);
 
@@ -140,7 +157,7 @@ void RoomLoadingSystem::spawnSpawnRoom(World & world)
 		int y = i / map.width;
 		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
 
-		Entity* tile = world.addEntity(sole::uuid4(), "FloorTile");
+		Entity* tile = world.addEntity("FloorTile");
 		tile->getHide() = true;
 
 		TransformComponent* transform = tile->addComponent<TransformComponent>();
@@ -309,26 +326,13 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 	static Engine* engine = &Engine::getInstance();
 	static MapLoader* mapLoader = engine->getMapLoader().get();
-	static JSONLoader* jsonLoader = engine->getJSONLoader().get();
 	static BulletPhysicsSystem* bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
 
-	static const char* mapss[] = {
-		"assets/maps/Room1.png",
-		"assets/maps/Room2.png", 
-		"assets/maps/Room3.png", 
-		"assets/maps/Room4.png",
-		"assets/maps/Room5.png",
-		"assets/maps/Room6.png",
-		"assets/maps/Room7.png",
-		"assets/maps/Room8.png"
-	};
+	auto mapInfo = _maps[rand() % 8];
 
-	static std::string maps[] = {"assets/maps/smileyface.json"};
-
-	auto mapInfo = jsonLoader->loadMap(maps[0]);
+	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
 	Entity * room = world->addEntity("Room");
 
-	MapData map = mapLoader->loadFromImage(mapss[rand() % 8]);
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
 
 	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
