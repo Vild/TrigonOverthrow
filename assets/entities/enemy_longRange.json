@@ -14,18 +14,18 @@
 			]
 		},
 		"ModelComponent": {
-		  "mesh": "assets/objects/enemy_7HP.fbx",
-		  "texture": "assets/textures/green_texture.png",
-		  "needsMMatrix": true
+			"mesh": "assets/objects/enemy_7HP.fbx",
+			"texture": "assets/textures/green_texture.png",
+			"needsMMatrix": true
 		},
 		"DynamicModelComponent": {},
-    "GunComponent": {
-      "type": 1,
-      "cooldown": 0,
-      "cooldownLength": 1,
-      "shoot": true
-    },
-    "AIComponent":{
+		"GunComponent": {
+			"type": 1,
+			"cooldown": 0,
+			"cooldownLength": 1,
+			"shoot": true
+		},
+		"AIComponent":{
 			"moveType": 2,
 			"usefulTimer": 0,
 			"doInverse": false
@@ -47,20 +47,20 @@
 			]
 		},
 		"RigidBodyComponent": {
-      "hitboxHalfSize": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "mass": 1,
+			"hitboxHalfSize": [
+				1.0,
+				1.0,
+				1.0
+			],
+			"mass": 1,
 			"friction": 1,
 			"damping": 0.9
 		},
 		"PointLightComponent": {
 			"diffuse": [
-				-0.5,
-				-0.5,
-				-0.5
+				0.0,
+				0.2,
+				0.5
 			],
 			"specular": [
 				0,

@@ -33,7 +33,7 @@
     "SFXComponent": {
       "file": "assets/sfx/enemy_projectile.ogg",
       "loops": 0,
-      "volume": 64
+      "volume": 32
     },
     "LifeComponent": {
       "maxHP": 1

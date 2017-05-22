@@ -16,7 +16,6 @@
 #include "../world/component/suncomponent.hpp"
 #include "../world/component/instancedsimplemeshcomponent.hpp"
 #include "../world/component/transformcomponent.hpp"
-#include "../world/component/ghostobjectcomponent.hpp"
 #include "../world/component/lifecomponent.hpp"
 #include "../world/component/projectilecomponent.hpp"
 #include "../world/component/floortilecomponent.hpp"
@@ -66,7 +65,6 @@ JSONLoader::JSONLoader() {
 	_constructors["SunComponent"] = &constructComponent<SunComponent>;
 	_constructors["InstancedSimpleMeshComponent"] = &constructComponent<InstancedSimpleMeshComponent>;
 	_constructors["TransformComponent"] = &constructComponent<TransformComponent>;
-	_constructors["GhostObjectComponent"] = &constructComponent<GhostObjectComponent>;
 	_constructors["LifeComponent"] = &constructComponent<LifeComponent>;
 	_constructors["ProjectileComponent"] = &constructComponent<ProjectileComponent>;
 	_constructors["FloorTileComponent"] = &constructComponent<FloorTileComponent>;
