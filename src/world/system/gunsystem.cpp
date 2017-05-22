@@ -126,6 +126,26 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 		auto projLifeComp = projectile->getComponent<LifeComponent>();
 		projLifeComp->currHP = projLifeComp->maxHP = 3;
 
+		auto upgradeComp = me->getComponent<UpgradeComponent>();
+		if (upgradeComp && upgradeComp->multipleRayMultiplier > 0) {
+			projectile->makeDead();
+			for (int i = -1 * upgradeComp->multipleRayMultiplier; i <= upgradeComp->multipleRayMultiplier; i++) {
+				auto newProj = loader->constructEntity(world, sole::uuid4(), filePath, json());
+				auto newRbComp = newProj->getComponent<RigidBodyComponent>();
+				auto newTrans = newProj->getComponent<TransformComponent>();
+				auto newProjComp = newProj->getComponent<ProjectileComponent>();
+				newTrans->setScale(transProj->getScale());
+				newTrans->setRotation(transProj->getRotation() * glm::quat_cast(glm::rotate(i * 0.25f, glm::vec3(0, 1, 0))));
+				newTrans->setPosition(transComp->getPosition() + newTrans->getDirection());
+				newRbComp->setHitboxHalfSize(transProj->getScale());
+				newRbComp->setTransform(newTrans);
+				newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * projComp->speed));
+				newRbComp->setActivationState(DISABLE_DEACTIVATION);
+				Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
+					BulletPhysicsSystem::enemyProjectileCollidesWith);
+			}
+		}
+
 		Engine::getInstance().getSystem<BulletPhysicsSystem>()->addRigidBody(projRdbComp, BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
 			BulletPhysicsSystem::enemyProjectileCollidesWith);
 	}

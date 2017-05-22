@@ -1,32 +1,29 @@
 {
-  "name": "Enemy (Close range)",
+  "name": "Trigon the ''Sphere''",
   "components": {
     "TransformComponent": {
       "position": [0,0,0],
       "scale": [2,2,2]
     },
     "ModelComponent": {
-      "mesh": "assets/objects/enemy_7HP.fbx",
-      "texture": "assets/textures/errorNormal.png",
+      "mesh": "assets/objects/enemy_20HP.fbx",
+      "texture": "assets/textures/buttonSR.png",
       "needsMMatrix": true
     },
-    "DynamicModelComponent": {},
+    "DynamicModelComponent": {
+		"texture": "assets/textures/buttonSR.png"
+	},
     "LifeComponent": {
-      "maxHP": 6
+      "maxHP": 20
     },
-    "TextComponent": {
-      "text": "Hello, I am a Trigoon, prepare to die!",
-      "position": [
-        0,
-        2,
-        5
-      ],
-      "scale": [
-        4,
-        4,
-        4
-      ]
-    },
+	"AIComponent":{
+		"moveType": 2,
+		"usefulTimer": 0,
+		"doInverse": false
+	},
+	"UpgradeComponent":{
+		"projMultiplier": 10
+	},
     "RigidBodyComponent": {
       "mass": 1,
       "friction": 1,
@@ -34,9 +31,9 @@
     },
     "PointLightComponent": {
       "diffuse": [
-        -0.5,
-        -0.5,
-        -0.5
+        -1,
+        -1,
+        -1
       ],
       "specular": [
         0,

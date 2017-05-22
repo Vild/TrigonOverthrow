@@ -53,7 +53,7 @@ void ProjectileSystem::update(World& world, float delta) {
 					particleEntity->addComponent<ParticleComponent>()->addEmitter(ptA,
 						glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 					auto particleComp = particleEntity->addComponent<LifeComponent>();
-					particleComp->currHP = particleComp->maxHP = 5;
+					particleComp->currHP = particleComp->maxHP = 3;
 					auto projComp = entityA->getComponent<ProjectileComponent>();
 
 					if (projComp->bounceCount > 0)
@@ -76,7 +76,7 @@ void ProjectileSystem::update(World& world, float delta) {
 						glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 
 					auto particleComp = particleEntity->addComponent<LifeComponent>();
-					particleComp->currHP = particleComp->maxHP = 5;
+					particleComp->currHP = particleComp->maxHP = 3;
 					auto projComp = entityB->getComponent<ProjectileComponent>();
 					
 					if (projComp->bounceCount > 0) {

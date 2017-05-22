@@ -1,7 +1,7 @@
 #include "upgradecomponent.hpp"
 
 UpgradeComponent::UpgradeComponent(const ComponentValues& value) : UpgradeComponent() {
-	// TODO:
+	multipleRayMultiplier = value.getInt("projMultiplier", 0);
 }
 
 UpgradeComponent::~UpgradeComponent() {}
