@@ -30,7 +30,7 @@ void main(){
 	vec3 color = colors[index];
 	float life = lives[index];
 
-	vel = normalize(vec3(sin(3 * index), abs(cos(index * 0.5f)), cos(index * 0.5f) - sin(8 * index) + sin(3 * index)) * delta) * 4.0f;
+	vel = normalize(vec3(sin(3 * index), 0.2f, cos(index * 0.5f) - sin(8 * index) + sin(3 * index)) * delta) * 2.0f;
 	pos += vel * delta;
 	life -= 1 * delta;
 

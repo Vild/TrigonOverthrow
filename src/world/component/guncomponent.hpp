@@ -15,7 +15,7 @@ struct GunComponent : public Component {
 	float cooldownLength;
 	bool shoot;
 
-	void addGun(GunType inType, int inCooldown);
+	void addGun(GunType inType, float inCooldown);
 	void registerImGui() final;
 	inline std::string name() final { return "GunComponent"; }
 };

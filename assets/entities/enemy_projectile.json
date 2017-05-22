@@ -3,7 +3,7 @@
   "components": {
     "TransformComponent": {},
     "ModelComponent": {
-      "mesh": "assets/objects/enemy_projectile.fbx",
+      "mesh": "assets/objects/enemy_1HP.fbx",
       "texture": "assets/textures/errorNormal.png",
       "needsMMatrix": true
     },
@@ -18,7 +18,7 @@
       "speed": 2
     },
     "AIComponent": {
-      "moveType": 1,
+      "moveType": 2,
       "usefulTimer": 0,
       "doInverse": false
     },

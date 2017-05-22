@@ -43,6 +43,7 @@ void ProjectileSystem::update(World& world, float delta) {
 					continue;
 
 				if (isAProj) {
+					entityB->getComponent<RigidBodyComponent>()->getRigidBody()->clearForces();
 					auto targetLifeComp = entityB->getComponent<LifeComponent>();
 					if (targetLifeComp) {
 						targetLifeComp->currHP -= projComp->damage;
@@ -64,6 +65,7 @@ void ProjectileSystem::update(World& world, float delta) {
 					entityA->makeDead();
 				}
 				else {
+					entityA->getComponent<RigidBodyComponent>()->getRigidBody()->clearForces();
 					auto targetLifeComp = entityA->getComponent<LifeComponent>();
 					if (targetLifeComp) {
 						targetLifeComp->currHP -= projComp->damage;

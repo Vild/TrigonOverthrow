@@ -38,7 +38,7 @@ glm::vec3 AISystem::_calculateForceDirection(glm::vec3 dir, float time, AICompon
 		newDir = glm::normalize(right + dir * sin(time));
 		break;
 	case AIComponent::MovePattern::circle:
-		newDir = glm::vec3(right.x * sin(time), 0, dir.z * cos(time));
+		newDir = dir + glm::vec3(right.x * sin(time), 0, right.z * cos(time));
 		break;
 	}
 

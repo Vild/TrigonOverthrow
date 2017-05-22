@@ -24,6 +24,7 @@ struct ParticleComponent : public Component {
 	ParticleEffect type;
 	std::vector<std::shared_ptr<ShaderStorageBuffer>> ssbo;
 	int nrOfParticles;
+	glm::vec3 usefulUniform;
 
 	ParticleComponent() = default;
 	ParticleComponent(const ComponentValues& value);
@@ -48,8 +49,11 @@ struct ParticleComponent : public Component {
 		for (int i = 0; i < nrOfParticles; i++) {
 			particlePositions.push_back(glm::vec4(inPos, 0));
 			particleVelocities.push_back(glm::vec4(dir, 0));
-			particleLives.push_back(frand() * 10);
-			particleColors.push_back(glm::vec4(frand() * 10, 0, 0, 0));
+			particleLives.push_back(frand() * 5);
+			if (i <= nrOfParticles / 2)
+				particleColors.push_back(glm::vec4(1, 1, 1, 0));
+			else
+				particleColors.push_back(glm::vec4(0, 0, 0, 0));
 		}
 		ssbo[0]->setData(particlePositions);
 		ssbo[1]->setData(particleVelocities);

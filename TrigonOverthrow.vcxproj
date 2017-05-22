@@ -37,6 +37,7 @@
     <ClCompile Include="src\lib\imgui_demo.cpp" />
     <ClCompile Include="src\lib\imgui_draw.cpp" />
     <ClCompile Include="src\lib\imgui_impl_sdl_gl3.cpp" />
+    <ClCompile Include="src\lib\imgui_user.cpp" />
     <ClCompile Include="src\lib\sole\sole.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\state\ingamestate.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="src\lib\imgui.h" />
     <ClInclude Include="src\lib\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="src\lib\imgui_internal.h" />
+    <ClInclude Include="src\lib\imgui_user.h" />
     <ClInclude Include="src\lib\json.hpp" />
     <ClInclude Include="src\lib\KHR\khrplatform.h" />
     <ClInclude Include="src\lib\Remotery.h" />

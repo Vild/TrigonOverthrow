@@ -11,7 +11,7 @@ GunComponent::GunComponent(const ComponentValues& value) : GunComponent() {
 
 GunComponent::~GunComponent() {}
 
-void GunComponent::addGun(GunComponent::GunType inType, int inCooldown) {
+void GunComponent::addGun(GunComponent::GunType inType, float inCooldown) {
 	type = inType;
 	cooldownLength = inCooldown;
 	cooldown = 0;
