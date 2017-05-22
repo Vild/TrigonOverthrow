@@ -26,7 +26,8 @@ void ImGuiSystem::update(World& world, float delta) {
 	for (std::unique_ptr<Entity>& entity : world.getEntities()) {
 		if (entity->getHide())
 			continue;
-		snprintf(name, sizeof(name), "%s (%s)##%p", entity->getName().c_str(), entity->getUUID().str().c_str(), (void*)entity.get());
+		ImGui::PushID(entity.get());
+		snprintf(name, sizeof(name), "%s", entity->getName().c_str());
 		if (ImGui::TreeNode(name)) {
 			ImGui::Text("Actions:");
 			if (entity->registerImGui)
@@ -42,6 +43,7 @@ void ImGuiSystem::update(World& world, float delta) {
 
 			ImGui::TreePop();
 		}
+		ImGui::PopID();
 	}
 	ImGui::Selectable("");
 	ImGui::Text("Systems:");

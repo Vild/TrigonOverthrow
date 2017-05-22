@@ -4,7 +4,6 @@
 #include <memory>
 #include <map>
 #include <typeindex>
-#include "../lib/sole/sole.hpp"
 
 class Entity;
 
@@ -13,8 +12,8 @@ public:
 	World();
 	virtual ~World();
 
-	Entity* addEntity(const sole::uuid& uuid = sole::uuid4(), const std::string& name = "Generic") {
-		_entities.push_back(std::make_unique<Entity>(*this, uuid, name));
+	Entity* addEntity(const std::string& name = "Generic") {
+		_entities.push_back(std::make_unique<Entity>(*this, name));
 		return _entities.back().get();
 	}
 

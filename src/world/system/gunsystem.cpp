@@ -51,7 +51,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 		const std::string filePath = "assets/entities/player_projectile.json";
 
 		auto transComp = me->getComponent<TransformComponent>();
-		auto projectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
+		auto projectile = loader->constructEntity(world, filePath, json());
 
 		auto transProj = projectile->getComponent<TransformComponent>();
 		transProj->setRotation(transComp->getRotation());
@@ -77,7 +77,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 			/// XXX: because i'm good at programming.
 			projectile->makeDead();
 			for (int i = -1 * upgradeComp->multipleRayMultiplier; i <= upgradeComp->multipleRayMultiplier; i++) {
-				auto newProj = loader->constructEntity(world, sole::uuid4(), filePath, json());
+				auto newProj = loader->constructEntity(world, filePath, json());
 				auto newRbComp = newProj->getComponent<RigidBodyComponent>();
 				auto newTrans = newProj->getComponent<TransformComponent>();
 				auto newProjComp = newProj->getComponent<ProjectileComponent>();
@@ -108,7 +108,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 
 		auto transComp = me->getComponent<TransformComponent>();
 		glm::vec3 dir = normalize(playerPos - transComp->getPosition());
-		auto projectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
+		auto projectile = loader->constructEntity(world, filePath, json());
 
 		auto transProj = projectile->getComponent<TransformComponent>();
 		transProj->setRotation(transComp->getRotation());

@@ -15,9 +15,9 @@
 
 MainMenuState::MainMenuState() {
 	std::shared_ptr<TextFactory> tf = Engine::getInstance().getTextFactory();
-	_camera = _world.addEntity(sole::uuid4(), "Camera");
-	_target = _world.addEntity(sole::uuid4(), "Target");
-	_title = _world.addEntity(sole::uuid4(), "Title");
+	_camera = _world.addEntity("Camera");
+	_target = _world.addEntity("Target");
+	_title = _world.addEntity("Title");
 	{
 		_camera->addComponent<TransformComponent>();
 		_camera->addComponent<CameraComponent>();

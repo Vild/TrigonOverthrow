@@ -69,7 +69,7 @@ void AudioManager::clear() {
 std::unique_ptr<SFX> AudioManager::getSFX(const std::string& file) {
 	auto& chunk = _sfxCache[file];
 	if (!chunk) {
-		printf("Loading SFX: %s\n", file.c_str());
+		printf("Loading sfx: %s\n", file.c_str());
 		chunk = Mix_LoadWAV(file.c_str());
 		if (!chunk) {
 			fprintf(stderr, "\tMix_LoadWAV: %s\n", Mix_GetError());
@@ -84,7 +84,7 @@ std::unique_ptr<SFX> AudioManager::getSFX(const std::string& file) {
 std::unique_ptr<Music> AudioManager::getMusic(const std::string& file) {
 	auto& music = _musicCache[file];
 	if (!music) {
-		printf("Loading Music: %s\n", file.c_str());
+		printf("Loading music: %s\n", file.c_str());
 		music = Mix_LoadMUS(file.c_str());
 		if (!music) {
 			fprintf(stderr, "\tMix_LoadMUS: %s\n", Mix_GetError());

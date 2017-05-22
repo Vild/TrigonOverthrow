@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <map>
 
-#include "../lib/sole/sole.hpp"
 
 #include "component/component.hpp"
 
@@ -19,7 +18,7 @@ class State;
 class Entity {
 public:
 	/// Don't call this one directly! Always use world->addEntity
-	Entity(World& world, sole::uuid uuid, std::string name);
+	Entity(World& world, std::string name);
 	virtual ~Entity();
 
 	template <typename T, typename... Args, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
@@ -52,7 +51,6 @@ public:
 	typedef void (*registerImGui_f)(Entity& self, State& state);
 	registerImGui_f registerImGui = nullptr;
 
-	inline sole::uuid& getUUID() { return _uuid; }
 	inline std::string& getName() { return _name; }
 	inline void makeDead() { _dead = true; }
 	inline bool isDead() { return _dead; }
@@ -61,7 +59,6 @@ public:
 
 private:
 	World& _world;
-	sole::uuid _uuid;
 	std::string _name;
 	std::map<std::type_index, std::unique_ptr<Component>> components;
 

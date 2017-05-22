@@ -49,7 +49,7 @@ void ProjectileSystem::update(World& world, float delta) {
 						targetLifeComp->currHP -= projComp->damage;
 						targetLifeComp->hpchanged = true;
 					}
-					auto particleEntity = world.addEntity(sole::uuid4(), "ProjCollisionParticles");
+					auto particleEntity = world.addEntity("ProjCollisionParticles");
 					particleEntity->addComponent<ParticleComponent>()->addEmitter(ptA,
 						glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 					auto particleComp = particleEntity->addComponent<LifeComponent>();
@@ -71,14 +71,14 @@ void ProjectileSystem::update(World& world, float delta) {
 						targetLifeComp->currHP -= projComp->damage;
 						targetLifeComp->hpchanged = true;
 					}
-					auto particleEntity = world.addEntity(sole::uuid4(), "ProjCollisionParticles");
+					auto particleEntity = world.addEntity("ProjCollisionParticles");
 					particleEntity->addComponent<ParticleComponent>()->addEmitter(ptB,
 						glm::vec3(0, 1, 0), ParticleComponent::ParticleEffect::EXPLOSION);
 
 					auto particleComp = particleEntity->addComponent<LifeComponent>();
 					particleComp->currHP = particleComp->maxHP = 3;
 					auto projComp = entityB->getComponent<ProjectileComponent>();
-					
+
 					if (projComp->bounceCount > 0) {
 						_createBouncingProjectile(world, projComp, entityB, ptA, normalOnB);
 					}
@@ -95,7 +95,7 @@ void ProjectileSystem::update(World& world, float delta) {
 void ProjectileSystem::_createBouncingProjectile(World& world, ProjectileComponent* prevProj, Entity* self, const glm::vec3& collPoint, const glm::vec3& otherNormal) {
 	auto loader = Engine::getInstance().getJSONLoader();
 	const std::string filePath = "assets/entities/player_projectile.json";
-	auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
+	auto newProjectile = loader->constructEntity(world, filePath, json());
 
 	auto newTransComp = newProjectile->getComponent<TransformComponent>();
 	auto newRbComp = newProjectile->getComponent<RigidBodyComponent>();
@@ -120,7 +120,7 @@ void ProjectileSystem::_createBouncingProjectile(World& world, ProjectileCompone
 void ProjectileSystem::_createPiercingProjectile(World& world, ProjectileComponent* prevProj, Entity* self, const glm::vec3& collPoint, const glm::vec3& otherNormal) {
 	auto loader = Engine::getInstance().getJSONLoader();
 	const std::string filePath = "assets/entities/player_projectile.json";
-	auto newProjectile = loader->constructEntity(world, sole::uuid4(), filePath, json());
+	auto newProjectile = loader->constructEntity(world, filePath, json());
 	auto newTransComp = newProjectile->getComponent<TransformComponent>();
 	auto newRbComp = newProjectile->getComponent<RigidBodyComponent>();
 	auto entityBRbComp = self->getComponent<RigidBodyComponent>();

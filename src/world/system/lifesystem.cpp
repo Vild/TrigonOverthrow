@@ -21,7 +21,7 @@ void LifeSystem::update(World& world, float delta) {
 			entity->makeDead();
 			if (!entity->getComponent<ProjectileComponent>() && !entity->getComponent<ParticleComponent>()) {
 				const std::string filePath = "assets/entities/experienceOrb.json";
-				auto newEntity = Engine::getInstance().getJSONLoader()->constructEntity(world, sole::uuid4(), filePath.c_str(), json());
+				auto newEntity = Engine::getInstance().getJSONLoader()->constructEntity(world, filePath.c_str(), json());
 				auto newTransComp = newEntity->getComponent<TransformComponent>();
 				auto oldTransComp = entity->getComponent<TransformComponent>();
 				auto newParticleComp = newEntity->getComponent<ParticleComponent>();

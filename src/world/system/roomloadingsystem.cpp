@@ -186,7 +186,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 
 	auto mapInfo = jsonLoader->loadMap("assets/maps/trigon.json");
 	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
-	Entity * room = world->addEntity(sole::uuid4(), "BossRoom");
+	Entity * room = world->addEntity("BossRoom");
 
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::vec2(0,0));
 	rlc->addEntity(room);
@@ -217,7 +217,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 		int y = i / map.width;
 		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
 
-		Entity* tile = world->addEntity(sole::uuid4(), "BossTile");
+		Entity* tile = world->addEntity("BossTile");
 		tile->getHide() = true;
 		rlc->addEntity(tile);
 
@@ -250,7 +250,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallTop");
+		Entity* wall = world->addEntity("WallTop");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -264,7 +264,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallBot");
+		Entity* wall = world->addEntity("WallBot");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -278,7 +278,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallLeft");
+		Entity* wall = world->addEntity("WallLeft");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -292,7 +292,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallRight");
+		Entity* wall = world->addEntity("WallRight");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -326,10 +326,9 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 	static std::string maps[] = {"assets/maps/smileyface.json"};
 
 	auto mapInfo = jsonLoader->loadMap(maps[0]);
+	Entity * room = world->addEntity("Room");
 
 	MapData map = mapLoader->loadFromImage(mapss[rand() % 8]);
-	Entity * room = world->addEntity(sole::uuid4(), "Room");
-	
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
 
 	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
@@ -348,7 +347,7 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 		int y = i / map.width;
 		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
 
-		Entity* tile = world->addEntity(sole::uuid4(), "FloorTile");
+		Entity* tile = world->addEntity("FloorTile");
 		tile->getHide() = true;
 
 		TransformComponent* transform = tile->addComponent<TransformComponent>();

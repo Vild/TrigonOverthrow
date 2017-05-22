@@ -1,8 +1,8 @@
 {
 	"name": "smileyface",
 	"map": "smileyface.png",
-	"entities": {
-		"25b0c718-dfb5-4f86-a4e1-2c57763eb736": {
+	"entities": [
+		 {
 			"template": "enemy_closeRange",
 			"components": {
 				"TransformComponent": {
@@ -14,7 +14,7 @@
 				}
 			}
 		},
-		"25b0c718-dfb5-4f86-a4e1-2c57763eb737": {
+		{
 			"template": "enemy_longRange",
 			"components": {
 				"TransformComponent": {
@@ -29,5 +29,5 @@
 				}
 			}
 		}
-	}
+	]
 }
