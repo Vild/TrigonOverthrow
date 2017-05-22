@@ -4,14 +4,18 @@
 #include "../component/transformcomponent.hpp"
 #include "../component/aicomponent.hpp"
 #include "../component/guncomponent.hpp"
+#include "../../engine.hpp"
 
 void AISystem::update(World& world, float delta) {
 	for (Entity* entity : world.getActiveComponents<AIComponent>()) {
 		auto ai = entity->getComponent<AIComponent>();
 		auto gunComp = entity->getComponent<GunComponent>();
-		if(gunComp)
-			if (gunComp->cooldown <= 0)
+		if (gunComp) {
+			auto playerPos = Engine::getInstance().getState().getPlayer()->getComponent<TransformComponent>()->getPosition();
+			float distance = glm::distance(playerPos, entity->getComponent<TransformComponent>()->getPosition());
+			if (gunComp->cooldown <= 0 && distance <= 10)
 				gunComp->shoot = true;
+		}
 
 		auto rdbComp = entity->getComponent<RigidBodyComponent>();
 		auto rigidbody = rdbComp->getRigidBody();
@@ -38,7 +42,7 @@ glm::vec3 AISystem::_calculateForceDirection(glm::vec3 dir, float time, AICompon
 		newDir = glm::normalize(right + dir * sin(time));
 		break;
 	case AIComponent::MovePattern::circle:
-		newDir = dir + glm::vec3(right.x * sin(time), 0, right.z * cos(time));
+		newDir = glm::vec3(right.x * sin(time), 0, dir.z * cos(time));
 		break;
 	}
 

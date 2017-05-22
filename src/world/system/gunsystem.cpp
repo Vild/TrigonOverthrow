@@ -110,7 +110,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 
 		auto transProj = projectile->getComponent<TransformComponent>();
 		transProj->setRotation(transComp->getRotation());
-		transProj->setScale(glm::vec3(0.1));
+		transProj->setScale(glm::vec3(0.2));
 		transProj->setDirection({ -dir.x, dir.y, dir.z }); // helt kokt
 		transProj->setPosition(transComp->getPosition() + dir);
 

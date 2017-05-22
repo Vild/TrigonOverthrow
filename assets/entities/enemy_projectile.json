@@ -3,11 +3,16 @@
   "components": {
     "TransformComponent": {},
     "ModelComponent": {
-      "mesh": "assets/objects/enemy_1HP.fbx",
+      "mesh": "assets/objects/enemy_projectile.fbx",
       "texture": "assets/textures/errorNormal.png",
       "needsMMatrix": true
     },
     "RigidBodyComponent": {
+      "hitboxHalfSize": [
+        0.5,
+        0.5,
+        0.5
+      ],
       "mass": 1,
       "friction": 0
     },
@@ -18,7 +23,7 @@
       "speed": 2
     },
     "AIComponent": {
-      "moveType": 2,
+      "moveType": 0,
       "usefulTimer": 0,
       "doInverse": false
     },
