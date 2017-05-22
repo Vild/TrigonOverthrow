@@ -328,7 +328,7 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 	static MapLoader* mapLoader = engine->getMapLoader().get();
 	static BulletPhysicsSystem* bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
 
-	auto mapInfo = _maps[rand() % 8];
+	auto mapInfo = _maps[rand() % _maps.size()];
 
 	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
 	Entity * room = world->addEntity("Room");

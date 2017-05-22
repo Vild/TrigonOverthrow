@@ -2,7 +2,7 @@
 	"name": "smileyface",
 	"map": "smileyface.png",
 	"entities": [
-		 {
+		{
 			"template": "enemy_closeRange",
 			"components": {
 				"TransformComponent": {
