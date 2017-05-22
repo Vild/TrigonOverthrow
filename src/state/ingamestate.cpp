@@ -75,7 +75,7 @@ InGameState::InGameState() {
 
 		auto music = _sun->addComponent<MusicComponent>();
 		music->music = engine.getAudioManager()->getMusic("assets/music/Mega Hyper Ultrastorm.ogg");
-		music->music->volume = 4;
+		music->music->volume = 8;
 		music->music->play(-1);
 	}
 
