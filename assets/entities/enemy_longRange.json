@@ -15,10 +15,12 @@
 		},
 		"ModelComponent": {
 			"mesh": "assets/objects/enemy_7HP.fbx",
-			"texture": "assets/textures/green_texture.png",
+			"texture": "assets/textures/white_texture.png",
 			"needsMMatrix": true
 		},
-		"DynamicModelComponent": {},
+		"DynamicModelComponent": {
+			"texture": "assets/textures/white_texture.png"
+		},
 		"GunComponent": {
 			"type": 1,
 			"cooldown": 0,

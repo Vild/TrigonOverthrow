@@ -15,10 +15,12 @@
 		},
 		"ModelComponent": {
 			"mesh": "assets/objects/enemy_7HP.fbx",
-			"texture": "assets/textures/errorNormal.png",
+			"texture": "assets/textures/green_texture.png",
 			"needsMMatrix": true
 		},
-		"DynamicModelComponent": {},
+		"DynamicModelComponent": {
+			"texture": "assets/textures/green_texture.png"
+		},
 		"LifeComponent": {
 			"maxHP": 6
 		},
