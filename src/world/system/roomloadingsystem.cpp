@@ -245,11 +245,22 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 	static JSONLoader* jsonLoader = engine->getJSONLoader().get();
 	static BulletPhysicsSystem* bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
 
+	static const char* mapss[] = {
+		"assets/maps/Room1.png",
+		"assets/maps/Room2.png", 
+		"assets/maps/Room3.png", 
+		"assets/maps/Room4.png",
+		"assets/maps/Room5.png",
+		"assets/maps/Room6.png",
+		"assets/maps/Room7.png",
+		"assets/maps/Room8.png"
+	};
+
 	static std::string maps[] = {"assets/maps/smileyface.json"};
 
 	auto mapInfo = jsonLoader->loadMap(maps[0]);
 
-	MapData map = mapLoader->loadFromImage("maps/test3218.png");
+	MapData map = mapLoader->loadFromImage(mapss[rand() % 8]);
 	Entity * room = world->addEntity(sole::uuid4(), "Room");
 	
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
