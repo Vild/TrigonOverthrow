@@ -13,11 +13,11 @@
 				0.3
 			]
 		},
-    "ModelComponent": {
-      "mesh": "assets/objects/enemy_7HP.fbx",
-      "texture": "assets/textures/errorNormal.png",
-      "needsMMatrix": true
-    },
+		"ModelComponent": {
+			"mesh": "assets/objects/enemy_7HP.fbx",
+			"texture": "assets/textures/errorNormal.png",
+			"needsMMatrix": true
+		},
 		"DynamicModelComponent": {},
 		"LifeComponent": {
 			"maxHP": 6
@@ -42,9 +42,9 @@
 		},
 		"PointLightComponent": {
 			"diffuse": [
-				-0.5,
-				-0.5,
-				-0.5
+				0.0,
+				0.0,
+				0.5
 			],
 			"specular": [
 				0,
