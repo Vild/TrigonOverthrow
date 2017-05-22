@@ -2,5 +2,17 @@
 	"name": "trigon",
 	"map": "trigon.png",
 	"entities": {
+		"25b0c718-dfb5-4f86-a4e1-2c57763eb736": {
+			"template": "enemy_trigon",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						32,
+						0,
+						32
+					]
+				}
+			}
+		}
 	}
 }

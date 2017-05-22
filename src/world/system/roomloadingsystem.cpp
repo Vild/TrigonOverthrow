@@ -236,7 +236,6 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 
 		rlc->addEntity(wall);
 	}
-
 }
 
 void RoomLoadingSystem::newRoom(World* world, coord_t coord) {

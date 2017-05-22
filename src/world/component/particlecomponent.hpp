@@ -49,7 +49,7 @@ struct ParticleComponent : public Component {
 		for (int i = 0; i < nrOfParticles; i++) {
 			particlePositions.push_back(glm::vec4(inPos, 0));
 			particleVelocities.push_back(glm::vec4(dir, 0));
-			particleLives.push_back(frand() * 5);
+			particleLives.push_back(frand() * 2);
 			if (i <= nrOfParticles / 2)
 				particleColors.push_back(glm::vec4(1, 1, 1, 0));
 			else

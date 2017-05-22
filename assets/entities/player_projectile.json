@@ -8,8 +8,13 @@
 			"needsMMatrix": true
 		},
 		"RigidBodyComponent": {
-			"mass": 1,
-			"friction": 0
+		  "hitboxHalfSize": [
+			0.1,
+			0.1,
+			0.2
+		  ],
+		  "mass": 1,
+		  "friction": 0
 		},
 		"ProjectileComponent": {
       "damage": 1,
