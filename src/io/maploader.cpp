@@ -20,7 +20,7 @@ MapData MapLoader::loadFromImage(const std::string& filename) {
 	std::vector<Uint8> data;
 
 	for (int y = height - 1; y >= 0; y--)
-		for (int x = 0; x < width; x++)
+		for (int x = width - 1; x >= 0; x--)
 			data.push_back(((Uint8*)loadedSurface->pixels)[loadedSurface->pitch * y + x * bpp]);
 
 	SDL_FreeSurface(loadedSurface);
