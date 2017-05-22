@@ -62,7 +62,7 @@ void InputSystem::update(World& world, float delta) {
 		}
 
 		auto gun = entity->getComponent<GunComponent>();
-		if (gun && hid->getMouseState() == left && gun->cooldown <= 0) {
+		if (gun && (hid->getMouseState() == left || hid->getKey(SDL_SCANCODE_F)) && gun->cooldown <= 0) {
 			gun->shoot = true;
 		}
 
