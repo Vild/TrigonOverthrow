@@ -50,7 +50,6 @@
     <ClCompile Include="src\world\component\experiencecomponent.cpp" />
     <ClCompile Include="src\world\component\experienceorbcomponent.cpp" />
     <ClCompile Include="src\world\component\floortilecomponent.cpp" />
-    <ClCompile Include="src\world\component\ghostobjectcomponent.cpp" />
     <ClCompile Include="src\world\component\guncomponent.cpp" />
     <ClCompile Include="src\world\component\hovercomponent.cpp" />
     <ClCompile Include="src\world\component\ingamemenucomponent.cpp" />
@@ -86,7 +85,6 @@
     <ClCompile Include="src\world\system\dynamicmodelsystem.cpp" />
     <ClCompile Include="src\world\system\experiencesystem.cpp" />
     <ClCompile Include="src\world\system\floortilesystem.cpp" />
-    <ClCompile Include="src\world\system\ghostobjectsystem.cpp" />
     <ClCompile Include="src\world\system\gunsystem.cpp" />
     <ClCompile Include="src\world\system\hoversystem.cpp" />
     <ClCompile Include="src\world\system\imguisystem.cpp" />
@@ -139,7 +137,6 @@
     <ClInclude Include="src\world\component\experiencecomponent.hpp" />
     <ClInclude Include="src\world\component\experienceorbcomponent.hpp" />
     <ClInclude Include="src\world\component\floortilecomponent.hpp" />
-    <ClInclude Include="src\world\component\ghostobjectcomponent.hpp" />
     <ClInclude Include="src\world\component\guncomponent.hpp" />
     <ClInclude Include="src\world\component\hovercomponent.hpp" />
     <ClInclude Include="src\world\component\ingamemenucomponent.hpp" />
@@ -178,7 +175,6 @@
     <ClInclude Include="src\world\system\camerasystem.hpp" />
     <ClInclude Include="src\world\system\dynamicmodelsystem.hpp" />
     <ClInclude Include="src\world\system\floortilesystem.hpp" />
-    <ClInclude Include="src\world\system\ghostobjectsystem.hpp" />
     <ClInclude Include="src\world\system\gunsystem.hpp" />
     <ClInclude Include="src\world\system\hoversystem.hpp" />
     <ClInclude Include="src\world\system\imguisystem.hpp" />
