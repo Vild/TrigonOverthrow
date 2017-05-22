@@ -69,8 +69,6 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 		projRdbComp->setTransform(transProj);
 		projRdbComp->setActivationState(DISABLE_DEACTIVATION);
 
-		auto projLifeComp = projectile->getComponent<LifeComponent>();
-		projLifeComp->currHP = projLifeComp->maxHP = 1;
 
 		auto upgradeComp = me->getComponent<UpgradeComponent>();
 		projComp->bounceCount = upgradeComp->reflectionCount;

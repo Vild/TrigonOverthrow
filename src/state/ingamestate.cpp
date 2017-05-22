@@ -42,29 +42,29 @@ InGameState::InGameState() {
 	_sun = _world.addEntity(sole::uuid4(), "Sun");
 	_camera = _world.addEntity(sole::rebuild("f8bb5ea8-e3fb-4ec7-939d-5d70ae3e9d12"), "Camera");
 	_player = _world.addEntity(sole::rebuild("31bcc9bd-78bb-45b7-bb86-1917bcf5df6d"), "Player");
-	_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
-	_enemy = _world.addEntity(sole::uuid4(), "Enemy");
+	//_floor = _world.addEntity(sole::rebuild("b056cfea-b2cd-4c91-b921-5b8ee6b286d6"), "Floor");
+	//_enemy = _world.addEntity(sole::uuid4(), "Enemy");
 
-	{
-		std::shared_ptr<MapInformation> mapInfo = engine.getJSONLoader()->loadMap("assets/maps/smileyface.json");
-		std::vector<Entity*> entities = mapInfo->constructEntities(_world);
-		for (Entity* entity : entities) {
-			if (!entity)
-				continue;
+	//{
+	//	std::shared_ptr<MapInformation> mapInfo = engine.getJSONLoader()->loadMap("assets/maps/smileyface.json");
+	//	std::vector<Entity*> entities = mapInfo->constructEntities(_world);
+	//	for (Entity* entity : entities) {
+	//		if (!entity)
+	//			continue;
 
-			// XXX: hack
-			auto transform = entity->getComponent<TransformComponent>();
-			if (!transform)
-				continue;
-			auto rigidbody = entity->getComponent<RigidBodyComponent>();
-			if (!rigidbody)
-				continue;
-			rigidbody->setHitboxHalfSize(transform->getScale());
-			rigidbody->setTransform(transform);
+	//		// XXX: hack
+	//		auto transform = entity->getComponent<TransformComponent>();
+	//		if (!transform)
+	//			continue;
+	//		auto rigidbody = entity->getComponent<RigidBodyComponent>();
+	//		if (!rigidbody)
+	//			continue;
+	//		rigidbody->setHitboxHalfSize(transform->getScale());
+	//		rigidbody->setTransform(transform);
 
-			bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
-		}
-	}
+	//		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
+	//	}
+	//}
 
 	{ // Adding Sun
 		auto sun = _sun->addComponent<SunComponent>();
