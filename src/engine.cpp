@@ -82,7 +82,7 @@ int Engine::run(bool vsync) {
 	while (!_quit) {
 		if (*_nextState != std::type_index(typeid(Engine))) {
 			State* prev = getStatePtr();
-			getSystem<BulletPhysicsSystem>()->reset();
+			std::for_each(getSystems().begin(), getSystems().end(), [](auto& sys) { sys->reset(); });
 			std::unique_ptr<State> next = _states[*_nextState]();
 			*_nextState = std::type_index(typeid(Engine));
 			if (next)

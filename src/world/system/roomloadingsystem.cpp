@@ -13,6 +13,7 @@
 
 RoomLoadingSystem::RoomLoadingSystem()
 {
+	first = true;
 	bossRoomLoaded = BossRoom::NO;
 	enemiesDead = 0;
 
@@ -54,7 +55,6 @@ void RoomLoadingSystem::update(World& world, float delta) {
 	if (bossRoomLoaded == BossRoom::NO)
 	{
 
-		static bool first = true;
 		if (first)
 		{
 			spawnSpawnRoom(world);

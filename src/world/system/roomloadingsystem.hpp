@@ -20,11 +20,18 @@ public:
 	void spawnBossRoom(World & world);
 
 	void enemyDead(World & world);
+	void reset() override
+	{
+		chunks.clear();
+		bossRoomLoaded = BossRoom::NO;
+		enemiesDead = 0;
+		first = true;
+	}
 
 private:
 	int enemiesDead;
 	std::vector<std::shared_ptr<MapInformation>> _maps;
-
+	bool first;
 	glm::ivec2 chunkSize = {32, 18};
 
 	typedef std::pair<int, int> coord_t;
