@@ -19,17 +19,30 @@ RoomLoadingSystem::RoomLoadingSystem()
 RoomLoadingSystem::~RoomLoadingSystem() {}
 
 void RoomLoadingSystem::update(World& world, float delta) {
+
+
 	if (!(typeid(Engine::getInstance().getState()) == typeid(InGameState)))
 		return;
 
 	auto player = Engine::getInstance().getState().getPlayer();
+	if (!player) return;
+
+
 	auto playerTransform = player->getComponent<TransformComponent>();
 	if (!playerTransform)
 		return;
 
 	if (bossRoomLoaded == BossRoom::NO)
 	{
-		glm::vec3 playerPos = playerTransform->getPosition() - glm::vec3(chunkSize.x * 0.5f, 0, chunkSize.y / 4.f);
+
+		static bool first = true;
+		if (first)
+		{
+			spawnSpawnRoom(world);
+			first = false;
+		}
+
+		glm::vec3 playerPos = playerTransform->getPosition() - glm::vec3(chunkSize.x * 0.5f, 0, chunkSize.y * 0.25f);
 		coord_t playerChunk = {playerPos.x / chunkSize.x, playerPos.z / chunkSize.y};
 
 		for (size_t i = 0; i < 9; i++) {
@@ -98,8 +111,62 @@ void RoomLoadingSystem::enemyDead(World & world)
 		spawnBossRoom(world);
 }
 
+void RoomLoadingSystem::spawnSpawnRoom(World & world)
+{
+	static Engine* engine = &Engine::getInstance();
+	static MapLoader* mapLoader = engine->getMapLoader().get();
+	static BulletPhysicsSystem* bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
+
+	coord_t coord = { 0,0 };
+
+	MapData map = mapLoader->loadFromImage("assets/maps/Spawn.png");
+	Entity * room = world.addEntity(sole::uuid4(), "Room");
+	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
+	rlc->addEntity(room);
+
+	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
+
+	float offsetX = coord.first * chunkSize.x;
+	float offsetY = coord.second * chunkSize.y;
+
+	static auto randFloat = [](float LO, float HI)
+	{
+		return LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+	};
+
+	for (size_t i = 0, size = map.data.size(); i < size; i++)
+	{
+		int x = i % map.width;
+		int y = i / map.width;
+		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
+
+		Entity* tile = world.addEntity(sole::uuid4(), "FloorTile");
+		tile->getHide() = true;
+
+		TransformComponent* transform = tile->addComponent<TransformComponent>();
+
+		transform->setScale({ 1, 3, 1 });
+		transform->setPosition({ x + offsetX, 0.0f, y + offsetY });
+		ismc->addInstance(transform);
+
+		RigidBodyComponent* rigidbody = tile->addComponent<RigidBodyComponent>(tile);
+		rigidbody->setTransform(transform);
+
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_WALL, BulletPhysicsSystem::wallCollidesWith);
+
+		tile->addComponent<FloorTileComponent>(h);
+		rlc->addEntity(tile);
+	}
+
+	chunks.insert_or_assign(coord, room);
+
+}
+
 void RoomLoadingSystem::loadBossRoom(World * world)
 {
+	auto player = Engine::getInstance().getState().getPlayer();
+	if (!player) return;
+
 	static Engine* engine = &Engine::getInstance();
 	static MapLoader* mapLoader = engine->getMapLoader().get();
 	static JSONLoader* jsonLoader = engine->getJSONLoader().get();
@@ -126,7 +193,8 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 
 	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
 
-	auto player = Engine::getInstance().getState().getPlayer();
+
+
 	auto playerTransform = player->getComponent<TransformComponent>();
 	if (!playerTransform)
 		return;

@@ -24,7 +24,7 @@ public:
 private:
 	int enemiesDead;
 
-
+	void spawnSpawnRoom(World & world);
 	glm::ivec2 chunkSize = {32, 18};
 
 	typedef std::pair<int, int> coord_t;

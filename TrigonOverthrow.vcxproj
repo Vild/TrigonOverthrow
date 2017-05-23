@@ -127,6 +127,7 @@
     <ClInclude Include="src\lib\stb_textedit.h" />
     <ClInclude Include="src\lib\stb_truetype.h" />
     <ClInclude Include="src\state\ingamestate.hpp" />
+    <ClInclude Include="src\state\losestate.hpp" />
     <ClInclude Include="src\state\mainmenustate.hpp" />
     <ClInclude Include="src\state\state.hpp" />
     <ClInclude Include="src\world\component\aicomponent.hpp" />

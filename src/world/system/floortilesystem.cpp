@@ -13,6 +13,8 @@ FloorTileSystem::~FloorTileSystem() {}
 void FloorTileSystem::update(World& world, float delta)
 {
 	auto player = Engine::getInstance().getState().getPlayer();
+	if (!player) return;
+
 	auto playerTransform = player->getComponent<TransformComponent>();
 	if (!playerTransform)
 		return;
@@ -35,6 +37,10 @@ void FloorTileSystem::update(World& world, float delta)
 
 			switch (ftc->getState())
 			{
+			case FloorTileComponent::STATE_FLUID:
+				heightFactor = 1.0f - clamp(log2(max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f);
+				break;
+
 			case FloorTileComponent::STATE_DYNAMIC:
 				heightFactor = max(heightFactor, 1.0f - clamp(log2(max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f));
 				break;
