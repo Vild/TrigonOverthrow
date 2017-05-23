@@ -308,6 +308,7 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 		if (tr) {
 			tr->move({offsetX, 1.5f, offsetY});
 			rb->setTransform(tr);
+			rb->setHitboxHalfSize(tr->getScale());
 			bulletphyiscs->addRigidBody(rb, BulletPhysicsSystem::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 		}
 	}

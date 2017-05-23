@@ -120,7 +120,7 @@ InGameState::InGameState() {
 		/*auto life = */ _player->addComponent<LifeComponent>();
 
 		auto gun = _player->addComponent<GunComponent>();
-		gun->addGun(GunComponent::GunType::RAYGUN, 0.1f); // 60 is the the cooldown rate per frame.
+		gun->addGun(GunComponent::GunType::RAYGUN, 0.35f); // 60 is the the cooldown rate per frame.
 
 		auto expComp = _player->addComponent<ExperienceComponent>();
 		expComp->currExp = 0;

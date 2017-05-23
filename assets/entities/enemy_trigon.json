@@ -2,8 +2,15 @@
   "name": "Trigon the ''Sphere''",
   "components": {
     "TransformComponent": {
-      "position": [0,0,0],
-      "scale": [2,2,2]
+      "position": [
+		0,
+		0,
+		0
+	  ],
+      "scale": [2,
+	  2,
+	  2
+	  ]
     },
     "ModelComponent": {
       "mesh": "assets/objects/enemy_20HP.fbx",
