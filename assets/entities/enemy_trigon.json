@@ -7,55 +7,59 @@
 		0,
 		0
 	  ],
-      "scale": [2,
-	  2,
-	  2
+      "scale": [
+		2,
+		2,
+		2
 	  ]
     },
     "ModelComponent": {
       "mesh": "assets/objects/enemy_20HP.fbx",
-      "texture": "assets/textures/buttonSR.png",
+      "texture": "assets/textures/black_texture.png",
       "needsMMatrix": true
     },
     "DynamicModelComponent": {
-		"texture": "assets/textures/buttonSR.png"
+		"texture": "assets/textures/black_texture.png"
 	},
     "LifeComponent": {
       "maxHP": 20
     },
-	"AIComponent":{
-		"moveType": 2,
-		"usefulTimer": 0,
-		"doInverse": false
-	},
-	"UpgradeComponent":{
-		"projMultiplier": 10
+	"BossAIComponent":{
+		
 	},
     "RigidBodyComponent": {
+	  "hitboxHalfSize": [
+		3.0,
+		3.0,
+		3.0
+	  ],
       "mass": 1,
       "friction": 1,
       "damping": 0.9
     },
     "PointLightComponent": {
       "diffuse": [
-        -1,
-        -1,
-        -1
+        0.098,
+        0.098,
+        0.098
       ],
       "specular": [
-        0,
-        0,
-        0
+        0.0039,
+        0.0039,
+        0.0039
       ],
-      "constant": 1,
-      "linear": 0.14,
-      "quadratic": 0.07,
+      "constant": 0.25,
+      "linear": 0.20,
+      "quadratic": -0.046,
       "offset": [
         0,
         0.5,
         0
       ]
     },
-    "HoverComponent": {}
+    "HoverComponent": {
+		"hoverHeight": 0.85,
+		"hoverForce": 150
+	}
   }
 }

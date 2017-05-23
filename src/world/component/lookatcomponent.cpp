@@ -1,11 +1,12 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "lookatcomponent.hpp"
-
+#include "../../engine.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 LookAtComponent::LookAtComponent(const ComponentValues& value) : LookAtComponent() {
-	// TODO: Soon™
+	followMode = (FollowMode)value.getInt("followMode", 2);
+	target = Engine::getInstance().getState().getPlayer();
 }
 
 LookAtComponent::~LookAtComponent() {}

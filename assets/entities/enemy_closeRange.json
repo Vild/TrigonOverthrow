@@ -18,6 +18,21 @@
 			"texture": "assets/textures/green_texture.png",
 			"needsMMatrix": true
 		},
+		"LookAtComponent":{
+			"followMode": 2
+			
+		},
+		"GunComponent": {
+			"type": 1,
+			"cooldown": 0,
+			"cooldownLength": 1,
+			"shoot": true
+		},
+		"AIComponent":{
+			"moveType": 0,
+			"usefulTimer": 0,
+			"doInverse": false
+		},
 		"DynamicModelComponent": {
 			"texture": "assets/textures/green_texture.png"
 		},

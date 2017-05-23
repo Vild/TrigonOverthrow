@@ -26,6 +26,7 @@
 #include "../world/component/aicomponent.hpp"
 #include "../world/component/sfxcomponent.hpp"
 #include "../world/component/upgradecomponent.hpp"
+#include "../world/component/bossaicomponent.hpp"
 
 #ifdef WIN32
 #define __PRETTY_FUNCTION__ __func__
@@ -75,6 +76,7 @@ JSONLoader::JSONLoader() {
 	_constructors["AIComponent"] = &constructComponent<AIComponent>;
 	_constructors["SFXComponent"] = &constructComponent<SFXComponent>;
 	_constructors["UpgradeComponent"] = &constructComponent<UpgradeComponent>;
+	_constructors["BossAIComponent"] = &constructComponent<BossAIComponent>;
 }
 
 JSONLoader::~JSONLoader() {}

@@ -24,7 +24,6 @@ struct ParticleComponent : public Component {
 	ParticleEffect type;
 	std::vector<std::shared_ptr<ShaderStorageBuffer>> ssbo;
 	int nrOfParticles;
-	glm::vec3 usefulUniform;
 
 	ParticleComponent() = default;
 	ParticleComponent(const ComponentValues& value);

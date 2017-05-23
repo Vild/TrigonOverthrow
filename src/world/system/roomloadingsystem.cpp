@@ -9,6 +9,7 @@
 #include "../component/roomloadingcomponent.hpp"
 
 #include "../../state/ingamestate.hpp"
+#include "bossaisystem.hpp"
 
 RoomLoadingSystem::RoomLoadingSystem() 
 {
@@ -118,7 +119,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	auto mapInfo = jsonLoader->loadMap("assets/maps/trigon.json");
-	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
+	MapData map = mapLoader->loadFromImage("assets/maps/trigon_map.png");
 	Entity * room = world->addEntity(sole::uuid4(), "BossRoom");
 
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::vec2(0,0));
@@ -137,6 +138,8 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 
 	float mapCenterX = int(playerPos.x + map.width * 0.0f);
 	float mapCenterY = int(playerPos.z + map.height * 0.25f);
+
+	Engine::getInstance().getSystem<BossAISystem>()->setCentre(glm::vec3(mapCenterX, 0, mapCenterY));
 
 	static auto randFloat = [](float LO, float HI)
 	{
