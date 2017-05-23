@@ -11,7 +11,7 @@
 
 ParticleSystem::ParticleSystem() {
 	// Creating shaders for each particle effect. Check particlecomponent.hpp for the enumeration.
-	_programs.resize(4);
+	_programs.resize(5);
 	_programs[ParticleComponent::ParticleEffect::INITIATE] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_init.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::INITIATE]->bind().addUniform("delta");
@@ -27,6 +27,10 @@ ParticleSystem::ParticleSystem() {
 	_programs[ParticleComponent::ParticleEffect::ORB] = std::make_shared<ShaderProgram>();
 	_programs[ParticleComponent::ParticleEffect::ORB]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_orb.comp", ShaderType::compute)).finalize();
 	_programs[ParticleComponent::ParticleEffect::ORB]->bind().addUniform("delta").addUniform("spawnPos");
+
+	_programs[ParticleComponent::ParticleEffect::TRIGON] = std::make_shared<ShaderProgram>();
+	_programs[ParticleComponent::ParticleEffect::TRIGON]->bind().attach(std::make_shared<ShaderUnit>("assets/shaders/particles_trigon.comp", ShaderType::compute)).finalize();
+	_programs[ParticleComponent::ParticleEffect::TRIGON]->bind().addUniform("delta").addUniform("spawnPos");
 }
 
 ParticleSystem::~ParticleSystem() {}
@@ -48,10 +52,9 @@ void ParticleSystem::update(World& world, float delta) {
 		particleComp->ssbo[ParticleAttribute::velocity]->bindBase(ParticleAttribute::velocity);
 		particleComp->ssbo[ParticleAttribute::life]->bindBase(ParticleAttribute::life);
 		particleComp->ssbo[ParticleAttribute::color]->bindBase(ParticleAttribute::color);
-		if (particleComp->type == ParticleComponent::ParticleEffect::ORB)
+		if (particleComp->type == ParticleComponent::ParticleEffect::ORB || particleComp->type == ParticleComponent::ParticleEffect::TRIGON)
 			_programs[particleComp->type]->setUniform("spawnPos", entity->getComponent<TransformComponent>()->getPosition());
-
-		glDispatchCompute((GLint)NR_OF_PARTICLES / 128, 1, 1);
+		glDispatchCompute((GLint)particleComp->nrOfParticles / 128, 1, 1);
 	}
 }
 

@@ -6,6 +6,8 @@
 #include "../component/particlecomponent.hpp"
 #include "../component/projectilecomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
+#include "../component/aicomponent.hpp"
+#include "../component/bossaicomponent.hpp"
 #include "../system/bulletphysicssystem.hpp"
 #include "../system/roomloadingsystem.hpp"
 #include "../../io/jsonloader.hpp"
@@ -40,7 +42,8 @@ void LifeSystem::update(World& world, float delta) {
 			}
 		}
 
-		if (entity->getComponent<ProjectileComponent>() || entity->getComponent<ParticleComponent>()) {
+		if (entity->getComponent<ProjectileComponent>() || entity->getComponent<ParticleComponent>() && 
+			!entity->getComponent<AIComponent>() && !entity->getComponent<BossAIComponent>()) {
 			lifeComp->currHP -= 1 * delta;
 		}
 

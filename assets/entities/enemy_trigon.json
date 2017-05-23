@@ -13,6 +13,21 @@
 		2
 	  ]
     },
+	"ParticleComponent":{
+		"nrOfParticles": 1024,
+		"position":[
+				0,
+				0,
+				0
+		],
+		"direction":[
+				0,
+				1,
+				0
+		],
+		"particleEffect": 4,
+		"blend": false
+	},
     "ModelComponent": {
       "mesh": "assets/objects/enemy_20HP.fbx",
       "texture": "assets/textures/black_texture.png",

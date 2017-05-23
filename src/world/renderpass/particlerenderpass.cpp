@@ -39,8 +39,10 @@ void ParticleRenderPass::render(World& world) {
 	_shader->bind().setUniform("v", cameraComponent->viewMatrix).setUniform("p", cameraComponent->projectionMatrix);
 	for (Entity * entity : world.getActiveComponents<ParticleComponent>()) {
 		ParticleComponent * particleComp = entity->getComponent<ParticleComponent>();
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (particleComp->blend) {
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
 		auto ssbos = particleComp->ssbo;
 		ssbos[ParticleSystem::ParticleAttribute::position]->bind();
 		glEnableVertexAttribArray(12);
@@ -55,7 +57,7 @@ void ParticleRenderPass::render(World& world) {
 		glEnableVertexAttribArray(15);
 		glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-		glDrawArrays(GL_POINTS, 0, NR_OF_PARTICLES);
+		glDrawArrays(GL_POINTS, 0, particleComp->nrOfParticles);
 		glDisable(GL_BLEND);
 	}
 }

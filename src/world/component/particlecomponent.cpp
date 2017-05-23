@@ -7,6 +7,7 @@ ParticleComponent::ParticleComponent(const ComponentValues& value) : ParticleCom
 	glm::vec3 pos = value.getVec3("position", {0, 0, 0});
 	glm::vec3 direction = value.getVec3("direction", { 0, 1, 0 });
 	type = (ParticleEffect)value.getInt("particleEffect", 4);
+	blend = value.getBool("blend", true);
 	addEmitter(pos, direction, type);
 }
 

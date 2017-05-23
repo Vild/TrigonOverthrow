@@ -8,7 +8,7 @@
 #include "../../gl/shader.hpp"
 
 struct ParticleComponent : public Component {
-	enum ParticleEffect : int {INITIATE = 0, EXPLOSION, SPEW, ORB};
+	enum ParticleEffect : int {INITIATE = 0, EXPLOSION, SPEW, ORB, TRIGON};
 	struct Emitter {
 		Emitter(glm::vec3 pos, glm::vec3 dir) { 
 			this->pos = pos;
@@ -23,14 +23,16 @@ struct ParticleComponent : public Component {
 	std::shared_ptr<Emitter> emitter;
 	ParticleEffect type;
 	std::vector<std::shared_ptr<ShaderStorageBuffer>> ssbo;
-	int nrOfParticles;
+	int nrOfParticles = 0;
+	bool blend = true;
 
 	ParticleComponent() = default;
 	ParticleComponent(const ComponentValues& value);
 	virtual ~ParticleComponent();
 	void addEmitter(glm::vec3 inPos, glm::vec3 dir, ParticleEffect type) {
 		emitter = std::make_shared<Emitter>(inPos, dir);
-		nrOfParticles = 256;
+		if (nrOfParticles == 0)
+			nrOfParticles = 256;
 		if (ssbo.size() > 0)
 			ssbo.clear();
 		ssbo.resize(4);
@@ -48,7 +50,10 @@ struct ParticleComponent : public Component {
 		for (int i = 0; i < nrOfParticles; i++) {
 			particlePositions.push_back(glm::vec4(inPos, 0));
 			particleVelocities.push_back(glm::vec4(dir, 0));
-			particleLives.push_back(frand() * 2);
+			if (type == TRIGON)
+				particleLives.push_back(frand() * 10);
+			else
+				particleLives.push_back(frand() * 2);
 			if (i <= nrOfParticles / 2)
 				particleColors.push_back(glm::vec4(1, 1, 1, 0));
 			else
