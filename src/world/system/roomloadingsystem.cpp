@@ -7,8 +7,10 @@
 #include "../component/transformcomponent.hpp"
 #include "../component/floortilecomponent.hpp"
 #include "../component/roomloadingcomponent.hpp"
+#include "../component/bossaicomponent.hpp"
 
 #include "../../state/ingamestate.hpp"
+#include "../../state/winstate.hpp"
 #include "bossaisystem.hpp"
 
 RoomLoadingSystem::RoomLoadingSystem()
@@ -123,8 +125,10 @@ void RoomLoadingSystem::spawnBossRoom(World & world)
 	bossRoomLoaded = BossRoom::LOADING;
 }
 
-void RoomLoadingSystem::enemyDead(World & world)
+void RoomLoadingSystem::enemyDead(World & world, Entity* entity)
 {
+	if (entity->getComponent<BossAIComponent>())
+		return Engine::getInstance().setState<WinState>();
 	enemiesDead++;
 	if (enemiesDead > 2)
 		spawnBossRoom(world);

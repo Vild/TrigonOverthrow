@@ -9,12 +9,12 @@ BossAISystem::BossAISystem() {
 }
 
 BossAISystem::~BossAISystem() {
-	
+
 }
 
 void BossAISystem::update(World& world, float delta) {
 	for (Entity* entity : world.getActiveComponents<BossAIComponent>()) {
-		auto bossAIComp = entity->getComponent<BossAIComponent>();
+		/*auto bossAIComp = */ entity->getComponent<BossAIComponent>();
 		if (_walkToMiddle)
 			_moveMiddle(entity);
 	}
@@ -34,5 +34,5 @@ void BossAISystem::_moveMiddle(Entity* entity) {
 }
 
 void BossAISystem::registerImGui() {
-	
+
 }

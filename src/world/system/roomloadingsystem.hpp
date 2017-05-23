@@ -19,7 +19,7 @@ public:
 
 	void spawnBossRoom(World & world);
 
-	void enemyDead(World & world);
+	void enemyDead(World & world, Entity* entity);
 	void reset() override
 	{
 		chunks.clear();

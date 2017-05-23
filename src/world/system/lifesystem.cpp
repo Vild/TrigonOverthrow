@@ -36,7 +36,7 @@ void LifeSystem::update(World& world, float delta) {
 					BulletPhysicsSystem::CollisionType::COL_EXP_ORB,
 					BulletPhysicsSystem::orbCollidesWith);
 
-				Engine::getInstance().getSystem<RoomLoadingSystem>()->enemyDead(world);
+				Engine::getInstance().getSystem<RoomLoadingSystem>()->enemyDead(world, entity);
 			}
 		}
 

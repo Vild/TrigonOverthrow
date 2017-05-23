@@ -11,7 +11,7 @@
 #include "../world/component/modelcomponent.hpp"
 
 #include "../engine.hpp"
-#include "../state/mainmenustate.hpp"
+#include "../state/ingamestate.hpp"
 
 WinState::WinState() {
 	std::shared_ptr<TextFactory> tf = Engine::getInstance().getTextFactory();
@@ -65,7 +65,7 @@ void WinState::registerImGui() {
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 64);
 		ImGui::Dummy(ImVec2(0, 256 * scale));
 		if (ImGui::Button("Play Again?", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
-			engine.setState<MainMenuState>();
+			engine.setState<InGameState>();
 
 		ImGui::Dummy(ImVec2(0, 64 * scale));
 		if (ImGui::Button("Quit", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))

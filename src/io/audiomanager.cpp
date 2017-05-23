@@ -57,12 +57,7 @@ AudioManager::~AudioManager() {
 }
 
 void AudioManager::clear() {
-	for (std::pair<std::string, Mix_Chunk*> p : _sfxCache)
-		Mix_FreeChunk(p.second);
 	_sfxCache.clear();
-
-	for (std::pair<std::string, Mix_Music*> p : _musicCache)
-		Mix_FreeMusic(p.second);
 	_musicCache.clear();
 }
 
