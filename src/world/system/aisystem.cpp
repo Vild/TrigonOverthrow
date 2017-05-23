@@ -12,7 +12,8 @@ void AISystem::update(World& world, float delta) {
 		auto gunComp = entity->getComponent<GunComponent>();
 		if (gunComp) {
 			auto player = Engine::getInstance().getState().getPlayer();
-			if (!player) return;
+			if (!player)
+				return;
 
 			auto playerPos = player->getComponent<TransformComponent>()->getPosition();
 			float distance = glm::distance(playerPos, entity->getComponent<TransformComponent>()->getPosition());
@@ -31,7 +32,7 @@ void AISystem::update(World& world, float delta) {
 }
 
 void AISystem::registerImGui() {
-	
+
 }
 
 glm::vec3 AISystem::_calculateForceDirection(glm::vec3 dir, float time, AIComponent::MovePattern type) {

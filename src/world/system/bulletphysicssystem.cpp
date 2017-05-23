@@ -30,9 +30,28 @@ BulletPhysicsSystem::~BulletPhysicsSystem() {
 	delete collisionConfig;
 }
 
+void BulletPhysicsSystem::reset() {
+	delete world;
+	delete broadphaseInterface;
+	delete constraintSolver;
+	delete dispatcher;
+	delete collisionConfig;
+
+	activeInstance = this;
+
+	collisionConfig = new btDefaultCollisionConfiguration();
+	dispatcher = new btCollisionDispatcher(collisionConfig);
+	constraintSolver = new btSequentialImpulseConstraintSolver();
+	broadphaseInterface = new btDbvtBroadphase();
+
+	world = new btDiscreteDynamicsWorld(dispatcher, broadphaseInterface, constraintSolver, collisionConfig);
+}
+
 void BulletPhysicsSystem::update(World& w, float delta) {
+	if (!Engine::getInstance().getState().getPlayer())
+		return;
 	world->stepSimulation(delta);
-	for (Entity * entity : w.getActiveComponents<RigidBodyComponent>()) {
+	for (Entity* entity : w.getActiveComponents<RigidBodyComponent>()) {
 		auto rigidbody = entity->getComponent<RigidBodyComponent>();
 		if (!rigidbody)
 			continue;

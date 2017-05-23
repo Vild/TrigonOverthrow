@@ -13,7 +13,8 @@ AudioSystem::~AudioSystem() {}
 void AudioSystem::update(World& world, float delta) {
 	Engine& engine = Engine::getInstance();
 	Entity* player = engine.getState().getPlayer();
-	if (!player) return;
+	if (!player)
+		return;
 
 	auto transform = player->getComponent<TransformComponent>();
 
