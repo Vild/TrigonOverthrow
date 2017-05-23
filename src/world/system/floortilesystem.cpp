@@ -38,22 +38,22 @@ void FloorTileSystem::update(World& world, float delta)
 			switch (ftc->getState())
 			{
 			case FloorTileComponent::STATE_FLUID:
-				heightFactor = 1.0f - clamp(log2(max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f);
+				heightFactor = 1.0f - clamp(log2(_max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f);
 				break;
 
 			case FloorTileComponent::STATE_DYNAMIC:
-				heightFactor = max(heightFactor, 1.0f - clamp(log2(max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f));
+				heightFactor = _max(heightFactor, 1.0f - clamp(log2(_max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f));
 				break;
 
 			case FloorTileComponent::STATE_LOWERING:
 				progress += delta * 0.5f;
-				heightFactor = min(heightFactor, glm::smoothstep(1.0f, 0.0f, progress));
+				heightFactor = _min(heightFactor, glm::smoothstep(1.0f, 0.0f, progress));
 				if (progress >= 1.0f) ftc->staticFloor();
 				break;
 
 			case FloorTileComponent::STATE_RISING:
 				progress += delta * 0.5f;
-				heightFactor = max(heightFactor, glm::smoothstep(0.0f, 1.0f, progress));
+				heightFactor = _max(heightFactor, glm::smoothstep(0.0f, 1.0f, progress));
 				if (progress >= 1.0f) ftc->staticFloor();
 				break;
 			default:
@@ -79,14 +79,14 @@ inline float FloorTileSystem::clamp(float v, float lo, float hi)
 	return v;
 }
 
-inline float FloorTileSystem::max(float a, float b)
+inline float FloorTileSystem::_max(float a, float b)
 {
 	if (a > b)
 		return a;
 	return b;
 }
 
-inline float FloorTileSystem::min(float a, float b)
+inline float FloorTileSystem::_min(float a, float b)
 {
 	if (a < b)
 		return a;

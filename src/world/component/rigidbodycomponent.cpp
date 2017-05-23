@@ -19,7 +19,7 @@ RigidBodyComponent::RigidBodyComponent(Entity* entity, float mass, float frictio
 }
 
 RigidBodyComponent::RigidBodyComponent(const ComponentValues& value) : RigidBodyComponent() {
-	hitboxHalfSize = value.getVec3("hitboxHalfSize", {1, 1, 1});
+	hitboxHalfSize = value.getVec3("hitboxHalfSize", {0.5, 0.5, 0.5});
 	mass = value.getFloat("mass", 1);
 	friction = value.getFloat("friction", 1);
 	state = new btDefaultMotionState();
@@ -83,7 +83,7 @@ void RigidBodyComponent::setTransform(TransformComponent* transform)
 	rigidBody->setWorldTransform(btTransform(rot, pos));
 	auto tempScale = transform->getScale();
 
-	setHitboxHalfSize({tempScale.x * hitboxHalfSize.x, tempScale.y * hitboxHalfSize.y , tempScale.z * hitboxHalfSize.z});
+	setHitboxHalfSize({tempScale.x * 0.5f, tempScale.y * 0.5f, tempScale.z * 0.5f });
 }
 
 void RigidBodyComponent::setActivationState(int newState) {

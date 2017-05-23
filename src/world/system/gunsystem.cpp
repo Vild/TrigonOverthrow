@@ -86,7 +86,6 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 				newTrans->setScale(transProj->getScale());
 				newTrans->setRotation(transProj->getRotation() * glm::quat_cast(glm::rotate(i * 0.25f, glm::vec3(0, 1, 0))));
 				newTrans->setPosition(transComp->getPosition() + newTrans->getDirection());
-				newRbComp->setHitboxHalfSize(transProj->getScale());
 				newRbComp->setTransform(newTrans);
 				newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * projComp->speed));
 				newRbComp->setActivationState(DISABLE_DEACTIVATION);
@@ -139,7 +138,6 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 				newTrans->setScale(transProj->getScale());
 				newTrans->setRotation(transProj->getRotation() * glm::quat_cast(glm::rotate(i * 0.25f, glm::vec3(0, 1, 0))));
 				newTrans->setPosition(transComp->getPosition() + newTrans->getDirection());
-				newRbComp->setHitboxHalfSize(transProj->getScale());
 				newRbComp->setTransform(newTrans);
 				newRbComp->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * projComp->speed));
 				newRbComp->setActivationState(DISABLE_DEACTIVATION);

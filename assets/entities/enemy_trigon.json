@@ -28,11 +28,6 @@
 		
 	},
     "RigidBodyComponent": {
-	  "hitboxHalfSize": [
-		3.0,
-		3.0,
-		3.0
-	  ],
       "mass": 1,
       "friction": 1,
       "damping": 0.9
