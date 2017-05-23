@@ -36,13 +36,11 @@ std::vector<Entity*> MapInformation::constructEntities(World& world) {
 	std::vector<Entity*> result;
 
 	for (auto it = entities.begin(); it != entities.end(); ++it) {
-		sole::uuid uuid = sole::rebuild(it.key());
-
-		json entity = it.value();
+		json entity = *it;
 		std::string template_ = entity.at("template").get<std::string>();
 		json components = entity.at("components");
 
-		result.push_back(jsonLoader.constructEntity(world, uuid, "assets/entities/" + template_ + ".json", components));
+		result.push_back(jsonLoader.constructEntity(world, "assets/entities/" + template_ + ".json", components));
 	}
 
 	return result;
@@ -84,6 +82,7 @@ JSONLoader::~JSONLoader() {}
 std::shared_ptr<MapInformation> JSONLoader::loadMap(const std::string& map) {
 	json root;
 	try {
+		printf("Loading map: %s\n", map.c_str());
 		std::ifstream input(map);
 		input >> root;
 	} catch (const std::invalid_argument& e) {
@@ -100,7 +99,7 @@ std::shared_ptr<MapInformation> JSONLoader::loadMap(const std::string& map) {
 	return std::make_shared<MapInformation>(*this, root.at("name").get<std::string>(), root.at("map").get<std::string>(), root.at("entities"));
 }
 
-Entity* JSONLoader::constructEntity(World& world, const sole::uuid& uuid, const std::string& entityTemplate, const json& mapEntityComponents) {
+Entity* JSONLoader::constructEntity(World& world, const std::string& entityTemplate, const json& mapEntityComponents) {
 	json root;
 	try {
 		std::ifstream input(entityTemplate);
@@ -120,7 +119,7 @@ Entity* JSONLoader::constructEntity(World& world, const sole::uuid& uuid, const 
 
 	json components = root.at("components");
 
-	Entity* entity = world.addEntity(uuid, name);
+	Entity* entity = world.addEntity(name);
 
 	for (auto it = components.begin(); it != components.end(); ++it) {
 		std::string name = it.key();

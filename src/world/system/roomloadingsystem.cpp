@@ -11,26 +11,56 @@
 #include "../../state/ingamestate.hpp"
 #include "bossaisystem.hpp"
 
-RoomLoadingSystem::RoomLoadingSystem() 
+RoomLoadingSystem::RoomLoadingSystem()
 {
 	bossRoomLoaded = BossRoom::NO;
 	enemiesDead = 0;
+
+	static std::string maps[] = {
+		"assets/maps/room1.json",
+		"assets/maps/room2.json",
+		"assets/maps/room3.json",
+		"assets/maps/room4.json",
+		"assets/maps/room5.json",
+		"assets/maps/room6.json",
+		"assets/maps/room7.json",
+		"assets/maps/room8.json"
+	};
+
+
+	static JSONLoader* jsonLoader = Engine::getInstance().getJSONLoader().get();
+
+	for (const std::string& map : maps)
+		_maps.push_back(jsonLoader->loadMap(map));
 }
 
 RoomLoadingSystem::~RoomLoadingSystem() {}
 
 void RoomLoadingSystem::update(World& world, float delta) {
+
+
 	if (!(typeid(Engine::getInstance().getState()) == typeid(InGameState)))
 		return;
 
 	auto player = Engine::getInstance().getState().getPlayer();
+	if (!player) return;
+
+
 	auto playerTransform = player->getComponent<TransformComponent>();
 	if (!playerTransform)
 		return;
 
 	if (bossRoomLoaded == BossRoom::NO)
 	{
-		glm::vec3 playerPos = playerTransform->getPosition() - glm::vec3(chunkSize.x * 0.5f, 0, chunkSize.y / 4.f);
+
+		static bool first = true;
+		if (first)
+		{
+			spawnSpawnRoom(world);
+			first = false;
+		}
+
+		glm::vec3 playerPos = playerTransform->getPosition() - glm::vec3(chunkSize.x * 0.5f, 0, chunkSize.y * 0.25f);
 		coord_t playerChunk = {playerPos.x / chunkSize.x, playerPos.z / chunkSize.y};
 
 		for (size_t i = 0; i < 9; i++) {
@@ -99,8 +129,62 @@ void RoomLoadingSystem::enemyDead(World & world)
 		spawnBossRoom(world);
 }
 
+void RoomLoadingSystem::spawnSpawnRoom(World & world)
+{
+	static Engine* engine = &Engine::getInstance();
+	static MapLoader* mapLoader = engine->getMapLoader().get();
+	static BulletPhysicsSystem* bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
+
+	coord_t coord = { 0,0 };
+
+	MapData map = mapLoader->loadFromImage("assets/maps/Spawn.png");
+	Entity * room = world.addEntity("Room");
+	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
+	rlc->addEntity(room);
+
+	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
+
+	float offsetX = coord.first * chunkSize.x;
+	float offsetY = coord.second * chunkSize.y;
+
+	static auto randFloat = [](float LO, float HI)
+	{
+		return LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+	};
+
+	for (size_t i = 0, size = map.data.size(); i < size; i++)
+	{
+		int x = i % map.width;
+		int y = i / map.width;
+		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
+
+		Entity* tile = world.addEntity("FloorTile");
+		tile->getHide() = true;
+
+		TransformComponent* transform = tile->addComponent<TransformComponent>();
+
+		transform->setScale({ 1, 3, 1 });
+		transform->setPosition({ x + offsetX, 0.0f, y + offsetY });
+		ismc->addInstance(transform);
+
+		RigidBodyComponent* rigidbody = tile->addComponent<RigidBodyComponent>(tile);
+		rigidbody->setTransform(transform);
+
+		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_WALL, BulletPhysicsSystem::wallCollidesWith);
+
+		tile->addComponent<FloorTileComponent>(h);
+		rlc->addEntity(tile);
+	}
+
+	chunks.insert_or_assign(coord, room);
+
+}
+
 void RoomLoadingSystem::loadBossRoom(World * world)
 {
+	auto player = Engine::getInstance().getState().getPlayer();
+	if (!player) return;
+
 	static Engine* engine = &Engine::getInstance();
 	static MapLoader* mapLoader = engine->getMapLoader().get();
 	static JSONLoader* jsonLoader = engine->getJSONLoader().get();
@@ -119,15 +203,16 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	auto mapInfo = jsonLoader->loadMap("assets/maps/trigon.json");
-	MapData map = mapLoader->loadFromImage("assets/maps/trigon_map.png");
-	Entity * room = world->addEntity(sole::uuid4(), "BossRoom");
+	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
+	Entity * room = world->addEntity("BossRoom");
 
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::vec2(0,0));
 	rlc->addEntity(room);
 
 	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
 
-	auto player = Engine::getInstance().getState().getPlayer();
+
+
 	auto playerTransform = player->getComponent<TransformComponent>();
 	if (!playerTransform)
 		return;
@@ -152,7 +237,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 		int y = i / map.width;
 		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
 
-		Entity* tile = world->addEntity(sole::uuid4(), "BossTile");
+		Entity* tile = world->addEntity("BossTile");
 		tile->getHide() = true;
 		rlc->addEntity(tile);
 
@@ -185,7 +270,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallTop");
+		Entity* wall = world->addEntity("WallTop");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -199,7 +284,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallBot");
+		Entity* wall = world->addEntity("WallBot");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -213,7 +298,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallLeft");
+		Entity* wall = world->addEntity("WallLeft");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -227,7 +312,7 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 	}
 
 	{
-		Entity* wall = world->addEntity(sole::uuid(), "WallRight");
+		Entity* wall = world->addEntity("WallRight");
 		TransformComponent* transform = wall->addComponent<TransformComponent>();
 		RigidBodyComponent* rigidbody = wall->addComponent<RigidBodyComponent>(wall);
 
@@ -244,27 +329,13 @@ void RoomLoadingSystem::loadBossRoom(World * world)
 void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 	static Engine* engine = &Engine::getInstance();
 	static MapLoader* mapLoader = engine->getMapLoader().get();
-	static JSONLoader* jsonLoader = engine->getJSONLoader().get();
 	static BulletPhysicsSystem* bulletphyiscs = engine->getSystem<BulletPhysicsSystem>();
 
-	static const char* mapss[] = {
-		"assets/maps/Room1.png",
-		"assets/maps/Room2.png", 
-		"assets/maps/Room3.png", 
-		"assets/maps/Room4.png",
-		"assets/maps/Room5.png",
-		"assets/maps/Room6.png",
-		"assets/maps/Room7.png",
-		"assets/maps/Room8.png"
-	};
+	auto mapInfo = _maps[rand() % _maps.size()];
 
-	static std::string maps[] = {"assets/maps/smileyface.json"};
+	MapData map = mapLoader->loadFromImage("assets/maps/" + mapInfo->map);
+	Entity * room = world->addEntity("Room");
 
-	auto mapInfo = jsonLoader->loadMap(maps[0]);
-
-	MapData map = mapLoader->loadFromImage(mapss[rand() % 8]);
-	Entity * room = world->addEntity(sole::uuid4(), "Room");
-	
 	auto rlc = room->addComponent<RoomLoadingComponent>(glm::ivec2(coord.first, coord.second));
 
 	auto ismc = room->addComponent<InstancedSimpleMeshComponent>(std::make_unique<SimpleMesh>(GL_TRIANGLES, SimpleMesh::box));
@@ -283,7 +354,7 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 		int y = i / map.width;
 		float h = float(map.data[i]) / 128.f + randFloat(0, 0.1);
 
-		Entity* tile = world->addEntity(sole::uuid4(), "FloorTile");
+		Entity* tile = world->addEntity("FloorTile");
 		tile->getHide() = true;
 
 		TransformComponent* transform = tile->addComponent<TransformComponent>();
@@ -311,7 +382,6 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 		if (tr) {
 			tr->move({offsetX, 1.5f, offsetY});
 			rb->setTransform(tr);
-			rb->setHitboxHalfSize(tr->getScale());
 			bulletphyiscs->addRigidBody(rb, BulletPhysicsSystem::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 		}
 	}

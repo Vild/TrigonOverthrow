@@ -11,7 +11,10 @@ void AISystem::update(World& world, float delta) {
 		auto ai = entity->getComponent<AIComponent>();
 		auto gunComp = entity->getComponent<GunComponent>();
 		if (gunComp) {
-			auto playerPos = Engine::getInstance().getState().getPlayer()->getComponent<TransformComponent>()->getPosition();
+			auto player = Engine::getInstance().getState().getPlayer();
+			if (!player) return;
+
+			auto playerPos = player->getComponent<TransformComponent>()->getPosition();
 			float distance = glm::distance(playerPos, entity->getComponent<TransformComponent>()->getPosition());
 			if (gunComp->cooldown <= 0 && distance <= 10)
 				gunComp->shoot = true;

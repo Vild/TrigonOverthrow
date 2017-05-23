@@ -12,6 +12,8 @@ ExperienceSystem::~ExperienceSystem() {
 
 void ExperienceSystem::update(World& world, float delta) {
 	auto player = Engine::getInstance().getState().getPlayer();
+	if (!player) return;
+
 	auto playerEXP = player->getComponent<ExperienceComponent>();
 	for (std::unique_ptr<Entity>& entity: world.getEntities()) {
 		auto expORB = entity->getComponent<ExperienceOrbComponent>();

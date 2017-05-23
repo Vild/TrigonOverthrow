@@ -1,0 +1,57 @@
+{
+	"name": "room4",
+	"map": "room4.png",
+	"entities": [
+		{
+			"template": "enemy_longRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						13,
+						0.2,
+						14
+					]
+				}
+			}
+		},
+		{
+			"template": "enemy_longRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						19,
+						0.2,
+						11
+					]
+				}
+			}
+		},
+
+
+
+		{
+			"template": "enemy_closeRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						7,
+						0.2,
+						11
+					]
+				}
+			}
+		},
+		{
+			"template": "enemy_closeRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						25,
+						0.2,
+						2
+					]
+				}
+			}
+		}
+	]
+}

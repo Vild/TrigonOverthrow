@@ -4,7 +4,7 @@
 
 #include <cstdio>
 
-Entity::Entity(World& world, sole::uuid uuid, std::string name) : _world(world), _uuid(uuid), _name(name) {}
+Entity::Entity(World& world, std::string name) : _world(world), _name(name) {}
 
 Entity::~Entity() {
 	for (auto& pair : components) {

@@ -33,7 +33,7 @@ public:
 	virtual ~JSONLoader();
 
 	std::shared_ptr<MapInformation> loadMap(const std::string& map);
-	Entity* constructEntity(World& world, const sole::uuid& uuid, const std::string& entityTemplate, const json& mapEntityComponents);
+	Entity* constructEntity(World& world, const std::string& entityTemplate, const json& mapEntityComponents);
 
 private:
 	typedef void (*constructComponent_f)(Entity* entity, const ComponentValues& value);

@@ -13,6 +13,8 @@ AudioSystem::~AudioSystem() {}
 void AudioSystem::update(World& world, float delta) {
 	Engine& engine = Engine::getInstance();
 	Entity* player = engine.getState().getPlayer();
+	if (!player) return;
+
 	auto transform = player->getComponent<TransformComponent>();
 
 	glm::vec4 forward = glm::vec4(0, 0, -1, 0);

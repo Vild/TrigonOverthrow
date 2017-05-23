@@ -1,0 +1,81 @@
+{
+	"name": "room7",
+	"map": "room7.png",
+	"entities": [
+		{
+			"template": "enemy_longRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						17,
+						0.2,
+						8
+					]
+				}
+			}
+		},
+		{
+			"template": "enemy_longRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						25,
+						0.2,
+						6
+					]
+				}
+			}
+		},
+		{
+			"template": "enemy_longRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						26,
+						0.2,
+						6
+					]
+				}
+			}
+		},
+
+
+
+		{
+			"template": "enemy_closeRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						3,
+						0.2,
+						7
+					]
+				}
+			}
+		},
+		{
+			"template": "enemy_closeRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						3,
+						0.2,
+						8
+					]
+				}
+			}
+		},
+		{
+			"template": "enemy_closeRange",
+			"components": {
+				"TransformComponent": {
+					"position": [
+						3,
+						0.2,
+						9
+					]
+				}
+			}
+		}
+	]
+}

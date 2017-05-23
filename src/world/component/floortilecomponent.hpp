@@ -5,7 +5,7 @@
 
 class FloorTileComponent : public Component {
 public:
-	enum State {STATE_DYNAMIC, STATE_LOWERING, STATE_RISING, STATE_STATIC};
+	enum State {STATE_DYNAMIC, STATE_LOWERING, STATE_RISING, STATE_STATIC, STATE_FLUID};
 
 	FloorTileComponent() = default;
 	FloorTileComponent(float height);

@@ -123,12 +123,11 @@
     <ClInclude Include="src\lib\json.hpp" />
     <ClInclude Include="src\lib\KHR\khrplatform.h" />
     <ClInclude Include="src\lib\Remotery.h" />
-    <ClInclude Include="src\lib\sole\sole.fwd.hpp" />
-    <ClInclude Include="src\lib\sole\sole.hpp" />
     <ClInclude Include="src\lib\stb_rect_pack.h" />
     <ClInclude Include="src\lib\stb_textedit.h" />
     <ClInclude Include="src\lib\stb_truetype.h" />
     <ClInclude Include="src\state\ingamestate.hpp" />
+    <ClInclude Include="src\state\losestate.hpp" />
     <ClInclude Include="src\state\mainmenustate.hpp" />
     <ClInclude Include="src\state\state.hpp" />
     <ClInclude Include="src\world\component\aicomponent.hpp" />
