@@ -83,7 +83,11 @@ void RigidBodyComponent::setTransform(TransformComponent* transform)
 	rigidBody->setWorldTransform(btTransform(rot, pos));
 	auto tempScale = transform->getScale();
 
-	setHitboxHalfSize({tempScale.x * 0.5f, tempScale.y * 0.5f, tempScale.z * 0.5f });
+	setHitboxHalfSize({
+		tempScale.x * 0.5f,
+		tempScale.y * 0.5f, 
+		tempScale.z * 0.5f
+	});
 }
 
 void RigidBodyComponent::setActivationState(int newState) {
