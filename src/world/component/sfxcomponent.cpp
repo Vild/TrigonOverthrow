@@ -8,7 +8,8 @@ SFXComponent::SFXComponent(std::unique_ptr<SFX> sfx) : sfx(std::move(sfx)) {}
 SFXComponent::SFXComponent(const ComponentValues& value) {
 	Engine& engine = Engine::getInstance();
 	Entity* player = engine.getState().getPlayer();
-	if (!player) return;
+	if (!player)
+		return;
 	auto transform = player->getComponent<TransformComponent>();
 
 	glm::vec3 forward = glm::vec3(glm::mat4_cast(transform->getRotation()) * glm::vec4(0, 0, -1, 0));

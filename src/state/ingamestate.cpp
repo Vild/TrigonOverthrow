@@ -208,6 +208,8 @@ void InGameState::_menuRenderUI(Entity& self, State& state) {
 	InGameState& this_ = static_cast<InGameState&>(state);
 	Engine& engine = Engine::getInstance();
 	Entity* player = this_.getPlayer();
+	if (!player)
+		return;
 	UpgradeComponent* upgrade = player->getComponent<UpgradeComponent>();
 	ExperienceComponent* experience = player->getComponent<ExperienceComponent>();
 

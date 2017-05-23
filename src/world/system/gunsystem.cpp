@@ -100,7 +100,8 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 	case GunComponent::ENERGYGUN: {
 		auto loader = Engine::getInstance().getJSONLoader();
 		auto player = Engine::getInstance().getState().getPlayer();
-		if (!player) return;
+		if (!player)
+			return;
 
 		auto playerPos = player->getComponent<TransformComponent>()->getPosition();
 		const std::string filePath = "assets/entities/enemy_projectile.json";

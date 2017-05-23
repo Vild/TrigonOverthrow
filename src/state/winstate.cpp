@@ -1,6 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include "mainmenustate.hpp"
+#include "winstate.hpp"
 
 #include <glm/gtx/transform.hpp>
 
@@ -11,9 +11,9 @@
 #include "../world/component/modelcomponent.hpp"
 
 #include "../engine.hpp"
-#include "../state/ingamestate.hpp"
+#include "../state/mainmenustate.hpp"
 
-MainMenuState::MainMenuState() {
+WinState::WinState() {
 	std::shared_ptr<TextFactory> tf = Engine::getInstance().getTextFactory();
 	_camera = _world.addEntity("Camera");
 	_target = _world.addEntity("Target");
@@ -35,19 +35,19 @@ MainMenuState::MainMenuState() {
 		transform->setPosition({0, 0.4, 0});
 
 		auto text = _title->addComponent<TextComponent>();
-		text->textRenderer = tf->makeRenderer("Trigon", false, 10);
+		text->textRenderer = tf->makeRenderer("You won!", false, 10);
 		text->transform.setPosition({-0.35, 0, 0});
 		text->transform.setScale({5, 5, 5});
 	}
 }
 
-MainMenuState::~MainMenuState() {}
+WinState::~WinState() {}
 
-void MainMenuState::onEnter(State* prev) {}
+void WinState::onEnter(State* prev) {}
 
-void MainMenuState::onLeave(State* next) {}
+void WinState::onLeave(State* next) {}
 
-void MainMenuState::registerImGui() {
+void WinState::registerImGui() {
 	Engine& engine = Engine::getInstance();
 	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
 																 ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
@@ -64,8 +64,8 @@ void MainMenuState::registerImGui() {
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 64);
 		ImGui::Dummy(ImVec2(0, 256 * scale));
-		if (ImGui::Button("Play", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
-			engine.setState<InGameState>();
+		if (ImGui::Button("Play Again?", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))
+			engine.setState<MainMenuState>();
 
 		ImGui::Dummy(ImVec2(0, 64 * scale));
 		if (ImGui::Button("Quit", ImVec2((256 * 2 + 64) * scale, (128 + 16) * scale)))

@@ -43,7 +43,8 @@ void RoomLoadingSystem::update(World& world, float delta) {
 		return;
 
 	auto player = Engine::getInstance().getState().getPlayer();
-	if (!player) return;
+	if (!player)
+		return;
 
 
 	auto playerTransform = player->getComponent<TransformComponent>();
@@ -183,7 +184,8 @@ void RoomLoadingSystem::spawnSpawnRoom(World & world)
 void RoomLoadingSystem::loadBossRoom(World * world)
 {
 	auto player = Engine::getInstance().getState().getPlayer();
-	if (!player) return;
+	if (!player)
+		return;
 
 	static Engine* engine = &Engine::getInstance();
 	static MapLoader* mapLoader = engine->getMapLoader().get();
