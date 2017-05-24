@@ -5,9 +5,9 @@ ExperienceOrbComponent::ExperienceOrbComponent(const ComponentValues& value) : E
 }
 
 ExperienceOrbComponent::~ExperienceOrbComponent() {
-	
+
 }
 
 void ExperienceOrbComponent::registerImGui() {
-	
+
 }

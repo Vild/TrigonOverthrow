@@ -2,13 +2,15 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "lifecomponent.hpp"
 
-LifeComponent::LifeComponent() : maxHP(4), currHP(4), hpchanged(false) {}
+#include <cstdio>
+
+LifeComponent::LifeComponent() : maxHP(4), currHP(4), hpchanged(true) {}
 
 LifeComponent::LifeComponent(float inMaxHP) : maxHP(inMaxHP), currHP(inMaxHP), hpchanged(true) {}
 
 LifeComponent::LifeComponent(const ComponentValues& value) : LifeComponent() {
 	currHP = maxHP = value.getFloat("maxHP", 4);
-	hpchanged = false;
+	hpchanged = true;
 }
 
 LifeComponent::~LifeComponent() {}

@@ -9,6 +9,7 @@ Entity::Entity(World& world, std::string name) : _world(world), _name(name) {}
 Entity::~Entity() {
 	for (auto& pair : components) {
 		try {
+			components.erase(pair.first);
 			auto& ents = _world._activeComponents[pair.first];
 			auto it = std::find(ents.begin(), ents.end(), this);
 			ents.erase(it);

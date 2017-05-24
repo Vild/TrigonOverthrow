@@ -33,7 +33,8 @@
 			"doInverse": false
 		},
 		"LifeComponent": {
-			"maxHP": 6
+			"upper": 6,
+			"lower": 2
 		},
 		"TextComponent": {
 			"text": "Hello, I am a Trigoon, prepare to die!\u0001",

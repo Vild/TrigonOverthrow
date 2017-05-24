@@ -130,7 +130,7 @@ void RoomLoadingSystem::enemyDead(World & world, Entity* entity)
 	if (entity->getComponent<BossAIComponent>())
 		return Engine::getInstance().setState<WinState>();
 	enemiesDead++;
-	if (enemiesDead > 2)
+	if (enemiesDead > ENEMIES_KILLED_BEFORE_BOSS)
 		spawnBossRoom(world);
 }
 

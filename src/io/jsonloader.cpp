@@ -229,7 +229,7 @@ float ComponentValues::getFloat(const std::string& name, float defaultValue) con
 			throw JSONParseException("Expected another type!", name, __PRETTY_FUNCTION__, __LINE__);
 	}
 
-	return lower + (rand() / float(RAND_MAX)) * (upper - lower);
+	return lower + (float(rand()) / float(RAND_MAX)) * (upper - lower);
 }
 
 glm::vec2 ComponentValues::getVec2(const std::string& name, const glm::vec2& defaultValue) const {

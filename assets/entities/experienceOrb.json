@@ -37,10 +37,9 @@
 			"friction": 0
 		},
 		"ExperienceOrbComponent": {
-		"amntOfExp": {
-			"type": "int",
-			"upper": 5,
-			"lower": 1
+			"amntOfExp": {
+				"upper": 5,
+				"lower": 1
 			}
 		},
 		"PointLightComponent": {

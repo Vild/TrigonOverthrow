@@ -3,6 +3,8 @@
 #include "system.hpp"
 #include "../component/transformcomponent.hpp"
 
+const int ENEMIES_KILLED_BEFORE_BOSS = 16;
+
 class RoomLoadingSystem : public System
 {
 public:
