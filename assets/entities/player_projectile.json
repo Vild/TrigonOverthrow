@@ -1,7 +1,13 @@
 {
 	"name": "Projectile",
 	"components": {
-		"TransformComponent": {},
+		"TransformComponent": {
+			"scale":[
+				0.075,
+				0.075,
+				0.25
+			]
+		},
 		"ModelComponent": {
 			"mesh": "assets/objects/player_projectile.fbx",
 			"texture": "assets/textures/errorNormal.png",

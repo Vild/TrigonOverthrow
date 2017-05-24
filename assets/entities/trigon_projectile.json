@@ -27,7 +27,7 @@
       "damage": 1,
       "bounceCount": 0,
       "pierceCount": 0,
-      "speed": 15
+      "speed": 5
     },
 	"GunComponent":{
 		
@@ -38,7 +38,7 @@
       "volume": 32
     },
     "LifeComponent": {
-      "maxHP": 2
+      "maxHP": 5
     },
     "PointLightComponent": {
       "diffuse": [

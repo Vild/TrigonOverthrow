@@ -31,7 +31,7 @@
 	"GunComponent":{
 		"type": 1,
 		"cooldown": 0,
-		"cooldownLength": 0.5,
+		"cooldownLength": 0.35,
 		"shoot": false
 	},
     "ModelComponent": {

@@ -59,7 +59,7 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 
 		auto transProj = projectile->getComponent<TransformComponent>();
 		transProj->setRotation(transComp->getRotation());
-		transProj->setScale(glm::vec3(0.075, 0.075, 0.25));
+		//transProj->setScale(glm::vec3(0.075, 0.075, 0.25));
 		auto dir = transComp->getDirection();
 		transProj->setDirection({ -dir.x, dir.y, dir.z }); // helt kokt
 		transProj->setPosition(transComp->getPosition() + transProj->getDirection());
@@ -174,7 +174,7 @@ void GunSystem::_bossFireProjectile(Entity* boss, World& world) {
 			auto newRdb = newProj->getComponent<RigidBodyComponent>();
 			auto newTrans = newProj->getComponent<TransformComponent>();
 			auto bossPos = transComp->getPosition() - glm::vec3(0, 0.2, 0);
-			newTrans->setRotation(transComp->getRotation() * glm::quat_cast(glm::rotate(i * 36.f * bossAIComp->usefulTimer, glm::vec3(0, 1, 0))));
+			newTrans->setRotation(transComp->getRotation() * glm::quat_cast(glm::rotate(i * 36.f, glm::vec3(0, 1, 0))));
 			newTrans->setPosition(bossPos + transComp->getDirection());
 			newRdb->setTransform(newTrans);
 			newRdb->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * newProjComp->speed));
@@ -189,29 +189,5 @@ void GunSystem::_bossFireProjectile(Entity* boss, World& world) {
 		break;
 	}
 }
-
-//auto bossAIComp = boss->getComponent<BossAIComponent>();
-//auto transComp = boss->getComponent<TransformComponent>();
-//auto physWorld = Engine::getInstance().getSystem<BulletPhysicsSystem>();
-//auto loader = Engine::getInstance().getJSONLoader();
-//const std::string filePath = "assets/entities/trigon_projectile.json";
-//switch (bossAIComp->currState) {
-//case BossAIComponent::BossStates::firstPhase: {
-//	// 36 degrees for each projectile
-//	for (int i = 0; i < 11; i++) {
-//		auto newProj = loader->constructEntity(world, filePath, json());
-//		auto newProjComp = newProj->getComponent<ProjectileComponent>();
-//		auto newRdb = newProj->getComponent<RigidBodyComponent>();
-//		auto newTrans = newProj->getComponent<TransformComponent>();
-//		auto bossPos = transComp->getPosition() - glm::vec3(0, 0.2, 0);
-//		newTrans->setRotation(transComp->getRotation() * glm::quat_cast(glm::rotate(i * 36.f, glm::vec3(0, 1, 0))));
-//		newTrans->setPosition(bossPos + transComp->getDirection());
-//		newRdb->setTransform(newTrans);
-//		newRdb->getRigidBody()->applyCentralImpulse(cast(newTrans->getDirection() * newProjComp->speed));
-//		newRdb->setActivationState(DISABLE_DEACTIVATION);
-//		physWorld->addRigidBody(newRdb, BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
-//			BulletPhysicsSystem::enemyProjectileCollidesWith);
-//	}
-//}
 
 void GunSystem::registerImGui() {}

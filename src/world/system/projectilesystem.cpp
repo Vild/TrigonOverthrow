@@ -92,6 +92,10 @@ void ProjectileSystem::update(World& world, float delta) {
 	}
 }
 
+void ProjectileSystem::_decideProjectile(Entity* a, Entity* b) {
+	
+}
+
 void ProjectileSystem::_createBouncingProjectile(World& world, ProjectileComponent* prevProj, Entity* self, const glm::vec3& collPoint, const glm::vec3& otherNormal) {
 	auto loader = Engine::getInstance().getJSONLoader();
 	const std::string filePath = "assets/entities/player_projectile.json";

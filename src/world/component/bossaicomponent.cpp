@@ -6,7 +6,7 @@
 BossAIComponent::BossAIComponent(const ComponentValues& value) {
 	usefulTimer = 0;
 	doInverse = false;
-	currState = BossStates::monologue;
+	currState = BossStates::firstPhase;
 	monologueTimer = 10;
 	currentBatch = 0;
 	//auto loader = Engine::getInstance().getJSONLoader();

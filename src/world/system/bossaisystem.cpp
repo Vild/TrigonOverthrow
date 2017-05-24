@@ -51,7 +51,7 @@ void BossAISystem::_doPhase(Entity* entity, float delta) {
 		bossAIComp->monologueTimer -= 1 * delta;
 		break;
 	case BossAIComponent::BossStates::firstPhase:
-		rigidbody->applyCentralForce(cast(_calculateForceDirection(transComp->getDirection(), bossAIComp->usefulTimer) * rdbComp->getMass() * 20.f));
+		rigidbody->applyCentralForce(cast(_calculateForceDirection(transComp->getDirection(), bossAIComp->usefulTimer) * rdbComp->getMass() * 10.f));
 		break;
 	case BossAIComponent::BossStates::secondPhase:
 		break;
