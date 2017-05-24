@@ -11,4 +11,5 @@ public:
 
 private:
 	void _fireProjectile(Entity* me, World& world);
+	void _bossFireProjectile(Entity* boss, World& world);
 };

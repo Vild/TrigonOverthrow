@@ -7,12 +7,16 @@
 #include "../../engine.hpp"
 
 void AISystem::update(World& world, float delta) {
+	auto player = Engine::getInstance().getState().getPlayer();
+	if (!player) return;
+
 	for (Entity* entity : world.getActiveComponents<AIComponent>()) {
 		auto ai = entity->getComponent<AIComponent>();
 		auto gunComp = entity->getComponent<GunComponent>();
 		if (gunComp) {
-			auto player = Engine::getInstance().getState().getPlayer();
-			if (!player) return;
+			auto playerTrans = player->getComponent<TransformComponent>();
+			if (!playerTrans)
+				continue;
 
 			auto playerPos = player->getComponent<TransformComponent>()->getPosition();
 			float distance = glm::distance(playerPos, entity->getComponent<TransformComponent>()->getPosition());

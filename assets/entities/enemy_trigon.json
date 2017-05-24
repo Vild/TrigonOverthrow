@@ -28,6 +28,12 @@
 		"particleEffect": 4,
 		"blend": false
 	},
+	"GunComponent":{
+		"type": 1,
+		"cooldown": 0,
+		"cooldownLength": 0.5,
+		"shoot": false
+	},
     "ModelComponent": {
       "mesh": "assets/objects/enemy_20HP.fbx",
       "texture": "assets/textures/black_texture.png",
@@ -68,7 +74,7 @@
       ]
     },
     "HoverComponent": {
-		"hoverHeight": 0.85,
+		"hoverHeight": 0.8,
 		"hoverForce": 150
 	}
   }

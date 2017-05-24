@@ -1,6 +1,6 @@
 #pragma once
 #include "system.hpp"
-#include "../component/aicomponent.hpp"
+#include "../component/bossaicomponent.hpp"
 
 class BossAISystem : public System {
 public:
@@ -12,6 +12,8 @@ public:
 	void setCentre(glm::vec3 centre) { _centre = centre; }
 private:
 	bool _walkToMiddle;
+	void _doPhase(Entity* boss, float delta);
+	glm::vec3 _calculateForceDirection(glm::vec3 inDir, float time);
 	glm::vec3 _centre;
 	void _moveMiddle(Entity* entity);
 };

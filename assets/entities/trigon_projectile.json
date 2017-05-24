@@ -1,0 +1,64 @@
+{
+  "name": "Projectile",
+  "components": {
+    "TransformComponent": {
+		"scale": [
+			0.2,
+			0.2,
+			0.2
+	  ]
+	},
+    "ModelComponent": {
+      "mesh": "assets/objects/enemy_projectile.fbx",
+      "texture": "assets/textures/black_texture.png",
+      "needsMMatrix": true
+    },
+    "RigidBodyComponent": {
+      "hitboxHalfSize": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "mass": 1,
+      "friction": 0,
+	  "damping": 0
+    },
+    "ProjectileComponent": {
+      "damage": 1,
+      "bounceCount": 0,
+      "pierceCount": 0,
+      "speed": 15
+    },
+	"GunComponent":{
+		
+	},
+    "SFXComponent": {
+      "file": "assets/sfx/enemy_projectile.ogg",
+      "loops": 0,
+      "volume": 32
+    },
+    "LifeComponent": {
+      "maxHP": 2
+    },
+    "PointLightComponent": {
+      "diffuse": [
+        0.0039,
+        0.0039,
+        0.0039
+      ],
+      "specular": [
+        0.0039,
+        0.0039,
+        0.0039
+      ],
+      "constant": 0.25,
+      "linear": 0.20,
+      "quadratic": -0.25,
+      "offset": [
+        0,
+        0.5,
+        0
+      ]
+    }
+  }
+}

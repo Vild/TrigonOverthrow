@@ -1,6 +1,6 @@
 {
 	"name": "trigon",
-	"map": "trigon.png",
+	"map": "trigon_map.png",
 	"entities": {
 		"25b0c718-dfb5-4f86-a4e1-2c57763eb736": {
 			"template": "enemy_trigon",
@@ -8,7 +8,7 @@
 				"TransformComponent": {
 					"position": [
 						32,
-						32,
+						16,
 						32
 					]
 				}
