@@ -18,6 +18,11 @@ void LifeSystem::update(World& world, float delta) {
 		auto lifeComp = entity->getComponent<LifeComponent>();
 		if (!lifeComp)
 			continue;
+		
+		auto bossAIComp = entity->getComponent<BossAIComponent>();
+		if (bossAIComp && lifeComp->currHP <= lifeComp->maxHP/2) {
+			bossAIComp->currState = BossAIComponent::BossStates::secondPhase;
+		}
 
 		if (lifeComp->currHP <= 0) {
 			entity->makeDead();

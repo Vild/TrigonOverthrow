@@ -4,7 +4,7 @@
 #include "../component/transformcomponent.hpp"
 #include "../component/rigidbodycomponent.hpp"
 #include "../component/guncomponent.hpp"
-
+#include <glm/gtx/transform.hpp>
 
 BossAISystem::BossAISystem() {
 	_walkToMiddle = false;
@@ -51,7 +51,7 @@ void BossAISystem::_doPhase(Entity* entity, float delta) {
 		bossAIComp->monologueTimer -= 1 * delta;
 		break;
 	case BossAIComponent::BossStates::firstPhase:
-		rigidbody->applyCentralForce(cast(_calculateForceDirection(transComp->getDirection(), bossAIComp->usefulTimer) * rdbComp->getMass() * 10.f));
+		transComp->setRotation(glm::quat_cast(glm::rotate(1.f * bossAIComp->usefulTimer, glm::vec3(0, 1, 0))));
 		break;
 	case BossAIComponent::BossStates::secondPhase:
 		break;
@@ -63,10 +63,11 @@ void BossAISystem::_doPhase(Entity* entity, float delta) {
 	bossAIComp->usefulTimer += 1 * delta;
 }
 
-glm::vec3 BossAISystem::_calculateForceDirection(glm::vec3 inDir, float time) {
+glm::vec3 BossAISystem::_calculateForceDirection(float time) {
 	glm::vec3 newDir = glm::vec3(0);
-	glm::vec3 right = glm::cross(inDir, glm::vec3(0, 1, 0));
-	newDir = glm::vec3(right.x * sin(time), 0, inDir.z * cos(time));
+	glm::vec3 forward = glm::vec3(0, 0, -1);
+	glm::vec3 right = glm::cross(forward, glm::vec3(0, 1, 0));
+	newDir = glm::vec3(right.x * sin(time), 0, forward.z * cos(time));
 	return newDir;
 }
 void BossAISystem::registerImGui() {

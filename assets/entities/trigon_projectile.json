@@ -35,7 +35,7 @@
     "SFXComponent": {
       "file": "assets/sfx/enemy_projectile.ogg",
       "loops": 0,
-      "volume": 32
+      "volume": 15
     },
     "LifeComponent": {
       "maxHP": 5
@@ -53,7 +53,7 @@
       ],
       "constant": 0.25,
       "linear": 0.20,
-      "quadratic": -0.25,
+      "quadratic": -0.32,
       "offset": [
         0,
         0.5,

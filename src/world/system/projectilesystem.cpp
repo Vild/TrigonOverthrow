@@ -35,7 +35,10 @@ void ProjectileSystem::update(World& world, float delta) {
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
 			// Loops through everything and take the first object that was collided with.
 			// And breaks the for-loop after that.
-			if (pt.getDistance() < 0.f && !entityB->isDead()) {
+			if (entityA->isDead() || entityB->isDead())
+				break;
+
+			if (pt.getDistance() < 0.f) {
 				const glm::vec3& ptA = cast(pt.getPositionWorldOnA());
 				const glm::vec3& ptB = cast(pt.getPositionWorldOnB());
 				const glm::vec3& normalOnB = cast(pt.m_normalWorldOnB);
@@ -90,10 +93,6 @@ void ProjectileSystem::update(World& world, float delta) {
 			}
 		}
 	}
-}
-
-void ProjectileSystem::_decideProjectile(Entity* a, Entity* b) {
-	
 }
 
 void ProjectileSystem::_createBouncingProjectile(World& world, ProjectileComponent* prevProj, Entity* self, const glm::vec3& collPoint, const glm::vec3& otherNormal) {
