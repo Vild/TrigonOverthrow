@@ -33,8 +33,6 @@ void ProjectileSystem::update(World& world, float delta) {
 		int numContacts = contactManifold->getNumContacts();
 		for (int j = 0; j < numContacts; j++) {
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
-			// Loops through everything and take the first object that was collided with.
-			// And breaks the for-loop after that.
 			if (entityA->isDead() || entityB->isDead())
 				break;
 
@@ -64,7 +62,6 @@ void ProjectileSystem::update(World& world, float delta) {
 
 					if (projComp->pierceCount > 0 && entityA->getComponent<LifeComponent>())
 						_createPiercingProjectile(world, projComp, entityA, ptB, normalOnB);
-
 					entityA->makeDead();
 				}
 				else {

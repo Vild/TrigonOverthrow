@@ -30,6 +30,8 @@ public:
 	BulletPhysicsSystem();
 	virtual ~BulletPhysicsSystem();
 
+	void reset();
+
 	// Inherited via System
 	void update(World& world, float delta) final;
 	void registerImGui() final;

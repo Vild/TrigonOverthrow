@@ -10,6 +10,7 @@ public:
 
 	virtual void registerImGui() = 0;
 	virtual std::string name() = 0;
+	virtual void reset() {};
 };
 
 inline System::~System() {}

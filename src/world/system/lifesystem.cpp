@@ -10,6 +10,7 @@
 #include "../component/bossaicomponent.hpp"
 #include "../system/bulletphysicssystem.hpp"
 #include "../system/roomloadingsystem.hpp"
+#include "../component/guncomponent.hpp"
 #include "../../io/jsonloader.hpp"
 #include "../../engine.hpp"
 
@@ -18,11 +19,6 @@ void LifeSystem::update(World& world, float delta) {
 		auto lifeComp = entity->getComponent<LifeComponent>();
 		if (!lifeComp)
 			continue;
-		
-		auto bossAIComp = entity->getComponent<BossAIComponent>();
-		if (bossAIComp && lifeComp->currHP <= lifeComp->maxHP/2) {
-			bossAIComp->currState = BossAIComponent::BossStates::secondPhase;
-		}
 
 		if (lifeComp->currHP <= 0) {
 			entity->makeDead();
@@ -43,7 +39,7 @@ void LifeSystem::update(World& world, float delta) {
 					BulletPhysicsSystem::CollisionType::COL_EXP_ORB,
 					BulletPhysicsSystem::orbCollidesWith);
 
-				Engine::getInstance().getSystem<RoomLoadingSystem>()->enemyDead(world);
+				Engine::getInstance().getSystem<RoomLoadingSystem>()->enemyDead(world, entity);
 			}
 		}
 

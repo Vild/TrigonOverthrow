@@ -47,6 +47,8 @@
 
 #include "state/ingamestate.hpp"
 #include "state/mainmenustate.hpp"
+#include "state/winstate.hpp"
+#include "state/losestate.hpp"
 
 Engine::~Engine() {
 	_textureManager.reset();
@@ -80,17 +82,17 @@ int Engine::run(bool vsync) {
 	while (!_quit) {
 		if (*_nextState != std::type_index(typeid(Engine))) {
 			State* prev = getStatePtr();
+			std::for_each(getSystems().begin(), getSystems().end(), [](auto& sys) { sys->reset(); });
 			std::unique_ptr<State> next = _states[*_nextState]();
 			*_nextState = std::type_index(typeid(Engine));
 			if (next)
 				next->onEnter(prev);
-
 			if (prev)
 				prev->onLeave(next.get());
-
 			if (!next)
 				break;
 			_currentState = std::move(next);
+
 		}
 		{
 			SDL_Event event;
@@ -156,11 +158,13 @@ int Engine::run(bool vsync) {
 			// Entities in world.
 			entities.erase(std::remove_if(entities.begin(), entities.end(),
 																		[&](const std::unique_ptr<Entity>& e) -> bool {
-																			if (!e->isDead())
+																			if (!e->isDead() && (*_nextState != std::type_index(typeid(LoseState)) || *_nextState != std::type_index(typeid(WinState))))
 																				return false;
 																			auto rgbComponent = e->getComponent<RigidBodyComponent>();
 																			if (rgbComponent)
 																				getSystem<BulletPhysicsSystem>()->removeRigidBody(rgbComponent);
+																			if (e.get() == getState().getPlayer())
+																				setState<LoseState>();
 																			return true;
 																		}),
 										 entities.end());
@@ -201,6 +205,8 @@ void Engine::_init(bool vsync) {
 		_states[std::type_index(typeid(nullptr))] = []() -> std::unique_ptr<State> { return nullptr; };
 		_states[std::type_index(typeid(InGameState))] = []() -> std::unique_ptr<State> { return std::make_unique<InGameState>(); };
 		_states[std::type_index(typeid(MainMenuState))] = []() -> std::unique_ptr<State> { return std::make_unique<MainMenuState>(); };
+		_states[std::type_index(typeid(WinState))] = []() -> std::unique_ptr<State> { return std::make_unique<WinState>(); };
+		_states[std::type_index(typeid(LoseState))] = []() -> std::unique_ptr<State> { return std::make_unique<LoseState>(); };
 		setState<MainMenuState>();
 	}
 }
@@ -234,7 +240,7 @@ void Engine::_initSDL() {
 		fprintf(stderr, "TTF_GetError: %s\n", TTF_GetError());
 		throw "Failed to load SDL2_ttf";
 	}
-
+	//SDL_ShowCursor(0);
 	_window =
 		SDL_CreateWindow("Trigon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	if (!_window)

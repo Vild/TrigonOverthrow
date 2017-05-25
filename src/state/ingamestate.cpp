@@ -132,11 +132,6 @@ InGameState::InGameState() {
 		upgrades->reflectionCount = 0;
 		upgrades->refractionCount = 1;
 
-		auto text = _player->addComponent<TextComponent>();
-		text->textRenderer = engine.getTextFactory()->makeRenderer("Hello, My name is Mr. Duck!\x01");
-		text->transform.setPosition(glm::vec3(0, 1, 0));
-		text->transform.setScale(glm::vec3(10));
-
 		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
 		rigidbody->getRigidBody()->setDamping(0.9, 0);
 		rigidbody->setHitboxHalfSize(transform->getScale());
@@ -208,6 +203,8 @@ void InGameState::_menuRenderUI(Entity& self, State& state) {
 	InGameState& this_ = static_cast<InGameState&>(state);
 	Engine& engine = Engine::getInstance();
 	Entity* player = this_.getPlayer();
+	if (!player)
+		return;
 	UpgradeComponent* upgrade = player->getComponent<UpgradeComponent>();
 	ExperienceComponent* experience = player->getComponent<ExperienceComponent>();
 

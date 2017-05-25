@@ -13,7 +13,8 @@ FloorTileSystem::~FloorTileSystem() {}
 void FloorTileSystem::update(World& world, float delta)
 {
 	auto player = Engine::getInstance().getState().getPlayer();
-	if (!player) return;
+	if (!player)
+		return;
 
 	auto playerTransform = player->getComponent<TransformComponent>();
 	if (!playerTransform)

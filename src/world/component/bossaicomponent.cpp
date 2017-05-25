@@ -5,10 +5,9 @@
 
 BossAIComponent::BossAIComponent(const ComponentValues& value) {
 	usefulTimer = 0;
-	doInverse = false;
-	currState = BossStates::monologue;
-	monologueTimer = 6;
-	currentBatch = 0;
+	dir = glm::vec3(-1, 0, 0);
+	currState = (BossStates)value.getInt("bossState", BossStates::monologue);
+	monologueTimer = value.getFloat("monologueTimer", 7.f);
 	//auto loader = Engine::getInstance().getJSONLoader();
 	//auto world = Engine::getInstance().getState().getWorld();
 	//auto physWorld = Engine::getInstance().getSystem<BulletPhysicsSystem>();

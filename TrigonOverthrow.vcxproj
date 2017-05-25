@@ -40,8 +40,10 @@
     <ClCompile Include="src\lib\imgui_user.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\state\ingamestate.cpp" />
+    <ClCompile Include="src\state\losestate.cpp" />
     <ClCompile Include="src\state\mainmenustate.cpp" />
     <ClCompile Include="src\state\state.cpp" />
+    <ClCompile Include="src\state\winstate.cpp" />
     <ClCompile Include="src\world\component\aicomponent.cpp" />
     <ClCompile Include="src\world\component\bossaicomponent.cpp" />
     <ClCompile Include="src\world\component\cameracomponent.cpp" />
@@ -129,6 +131,7 @@
     <ClInclude Include="src\state\losestate.hpp" />
     <ClInclude Include="src\state\mainmenustate.hpp" />
     <ClInclude Include="src\state\state.hpp" />
+    <ClInclude Include="src\state\winstate.hpp" />
     <ClInclude Include="src\world\component\aicomponent.hpp" />
     <ClInclude Include="src\world\component\bossaicomponent.hpp" />
     <ClInclude Include="src\world\component\buttoncomponent.hpp" />

@@ -104,7 +104,8 @@ void GunSystem::_fireProjectile(Entity* me, World& world) {
 	case GunComponent::ENERGYGUN: {
 		auto loader = Engine::getInstance().getJSONLoader();
 		auto player = Engine::getInstance().getState().getPlayer();
-		if (!player) return;
+		if (!player)
+			return;
 
 		auto playerPos = player->getComponent<TransformComponent>()->getPosition();
 		const std::string filePath = "assets/entities/enemy_projectile.json";
@@ -165,9 +166,9 @@ void GunSystem::_bossFireProjectile(Entity* boss, World& world) {
 	auto physWorld = Engine::getInstance().getSystem<BulletPhysicsSystem>();
 	auto loader = Engine::getInstance().getJSONLoader();
 	const std::string filePath = "assets/entities/trigon_projectile.json";
-	switch (bossAIComp->currState) {
+	/*switch (bossAIComp->currState) {
 	case BossAIComponent::BossStates::firstPhase: {
-		// 36 degrees for each projectile
+		// 36 degrees for each projectile*/
 		for (int i = 0; i < 11; i++) {
 			auto newProj = loader->constructEntity(world, filePath, json());
 			auto newProjComp = newProj->getComponent<ProjectileComponent>();
@@ -183,11 +184,11 @@ void GunSystem::_bossFireProjectile(Entity* boss, World& world) {
 			physWorld->addRigidBody(newRdb, BulletPhysicsSystem::CollisionType::COL_ENEMY_PROJECTILE,
 				BulletPhysicsSystem::enemyProjectileCollidesWith);
 		}
-	}
+	/*}
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void GunSystem::registerImGui() {}

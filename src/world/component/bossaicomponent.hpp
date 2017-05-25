@@ -13,7 +13,7 @@ struct BossAIComponent : public Component {
 
 	BossStates currState;
 	float usefulTimer;
-	bool doInverse;
+	glm::vec3 dir;
 
 	float monologueTimer;
 	int currentBatch;

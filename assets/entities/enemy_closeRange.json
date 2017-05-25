@@ -20,7 +20,6 @@
 		},
 		"LookAtComponent":{
 			"followMode": 2
-			
 		},
 		"GunComponent": {
 			"type": 1,
@@ -37,20 +36,10 @@
 			"texture": "assets/textures/green_texture.png"
 		},
 		"LifeComponent": {
-			"maxHP": 6
-		},
-		"TextComponent": {
-			"text": "Hello, I am a Trigoon, prepare to die!\u0001",
-			"position": [
-				0,
-				2,
-				5
-			],
-			"scale": [
-				4,
-				4,
-				4
-			]
+			"maxHP": {
+				"upper": 7,
+				"lower": 2
+			}
 		},
 		"RigidBodyComponent": {
 			"mass": 1,

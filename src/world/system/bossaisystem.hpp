@@ -13,7 +13,8 @@ public:
 private:
 	bool _walkToMiddle;
 	void _doPhase(Entity* boss, float delta);
+	void _moveMiddle(Entity* boss);
 	glm::vec3 _calculateForceDirection(float time);
 	glm::vec3 _centre;
-	void _moveMiddle(Entity* entity);
+	float _walkDistance;
 };

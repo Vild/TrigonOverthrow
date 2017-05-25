@@ -44,6 +44,8 @@ ModelComponent::ModelComponent(const ComponentValues& value) : ModelComponent() 
 ModelComponent::~ModelComponent() {}
 
 void ModelComponent::render(const glm::mat4& m, GLenum drawMode) {
+	if (!meshData)
+		return;
 	meshData->texture->bind(0);
 	meshData->normalTexture->bind(1);
 	meshData->mesh->uploadBufferData("m", m);

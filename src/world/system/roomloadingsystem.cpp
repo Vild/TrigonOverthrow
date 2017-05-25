@@ -7,12 +7,15 @@
 #include "../component/transformcomponent.hpp"
 #include "../component/floortilecomponent.hpp"
 #include "../component/roomloadingcomponent.hpp"
+#include "../component/bossaicomponent.hpp"
 
 #include "../../state/ingamestate.hpp"
+#include "../../state/winstate.hpp"
 #include "bossaisystem.hpp"
 
 RoomLoadingSystem::RoomLoadingSystem()
 {
+	first = true;
 	bossRoomLoaded = BossRoom::NO;
 	enemiesDead = 0;
 
@@ -43,7 +46,8 @@ void RoomLoadingSystem::update(World& world, float delta) {
 		return;
 
 	auto player = Engine::getInstance().getState().getPlayer();
-	if (!player) return;
+	if (!player)
+		return;
 
 
 	auto playerTransform = player->getComponent<TransformComponent>();
@@ -53,7 +57,6 @@ void RoomLoadingSystem::update(World& world, float delta) {
 	if (bossRoomLoaded == BossRoom::NO)
 	{
 
-		static bool first = true;
 		if (first)
 		{
 			spawnSpawnRoom(world);
@@ -122,10 +125,12 @@ void RoomLoadingSystem::spawnBossRoom(World & world)
 	bossRoomLoaded = BossRoom::LOADING;
 }
 
-void RoomLoadingSystem::enemyDead(World & world)
+void RoomLoadingSystem::enemyDead(World & world, Entity* entity)
 {
+	if (entity->getComponent<BossAIComponent>())
+		return Engine::getInstance().setState<WinState>();
 	enemiesDead++;
-	if (enemiesDead > 2)
+	if (enemiesDead > ENEMIES_KILLED_BEFORE_BOSS)
 		spawnBossRoom(world);
 }
 
@@ -183,7 +188,8 @@ void RoomLoadingSystem::spawnSpawnRoom(World & world)
 void RoomLoadingSystem::loadBossRoom(World * world)
 {
 	auto player = Engine::getInstance().getState().getPlayer();
-	if (!player) return;
+	if (!player)
+		return;
 
 	static Engine* engine = &Engine::getInstance();
 	static MapLoader* mapLoader = engine->getMapLoader().get();
@@ -382,6 +388,7 @@ void RoomLoadingSystem::newRoom(World* world, coord_t coord) {
 		if (tr) {
 			tr->move({offsetX, 1.5f, offsetY});
 			rb->setTransform(tr);
+			rb->setHitboxHalfSize(tr->getScale());
 			bulletphyiscs->addRigidBody(rb, BulletPhysicsSystem::COL_ENEMY, BulletPhysicsSystem::enemyCollidesWith);
 		}
 	}

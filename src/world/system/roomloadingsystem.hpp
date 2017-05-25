@@ -3,6 +3,8 @@
 #include "system.hpp"
 #include "../component/transformcomponent.hpp"
 
+const int ENEMIES_KILLED_BEFORE_BOSS = 16;
+
 class RoomLoadingSystem : public System
 {
 public:
@@ -19,12 +21,19 @@ public:
 
 	void spawnBossRoom(World & world);
 
-	void enemyDead(World & world);
+	void enemyDead(World & world, Entity* entity);
+	void reset() override
+	{
+		chunks.clear();
+		bossRoomLoaded = BossRoom::NO;
+		enemiesDead = 0;
+		first = true;
+	}
 
 private:
 	int enemiesDead;
 	std::vector<std::shared_ptr<MapInformation>> _maps;
-
+	bool first;
 	glm::ivec2 chunkSize = {32, 18};
 
 	typedef std::pair<int, int> coord_t;

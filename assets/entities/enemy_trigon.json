@@ -31,7 +31,7 @@
 	"GunComponent":{
 		"type": 1,
 		"cooldown": 0,
-		"cooldownLength": 0.35,
+		"cooldownLength": 1.0,
 		"shoot": false
 	},
     "ModelComponent": {
@@ -46,7 +46,8 @@
       "maxHP": 20
     },
 	"BossAIComponent":{
-		
+		"currState": 0,
+		"monologueTimer": 7
 	},
     "RigidBodyComponent": {
       "mass": 1,

@@ -35,10 +35,10 @@ void InputSystem::update(World& world, float delta) {
 		if (hid->getKey(SDL_SCANCODE_D))
 			inputDir.x--;
 
-		if (hid->getKey(SDL_SCANCODE_SPACE))
+		/*if (hid->getKey(SDL_SCANCODE_SPACE))
 			inputDir.y++;
 		if (hid->getKey(SDL_SCANCODE_LCTRL))
-			inputDir.y--;
+			inputDir.y--;*/
 
 		float accelSpeed = 20;
 		// float maxSpeed = 5;

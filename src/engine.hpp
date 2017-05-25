@@ -74,6 +74,7 @@ public:
 	template <typename T>
 	inline void setState() {
 		*_nextState = std::type_index(typeid(T));
+		printf("##########Changing state: %s\n", typeid(T).name());
 	}
 
 	inline void quit() { *_nextState = std::type_index(typeid(nullptr)); }
