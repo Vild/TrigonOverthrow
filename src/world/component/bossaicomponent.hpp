@@ -4,7 +4,7 @@
 #include <vector>
 
 struct BossAIComponent : public Component {
-	enum BossStates : int {monologue = 0, firstPhase, secondPhase, finalPhase};
+	enum BossStates : int {monologue = 0, firstPhase, finalPhase};
 	BossAIComponent() = default;
 	BossAIComponent(const ComponentValues& value);
 	virtual ~BossAIComponent();

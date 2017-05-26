@@ -68,18 +68,14 @@ void BossAISystem::_doPhase(Entity* entity, float delta) {
 		rigidbody->applyCentralForce(cast(bossAIComp->dir) * 10.f);
 		if (lifeComp->currHP <= lifeComp->maxHP - 5) {
 			entity->getComponent<GunComponent>()->cooldownLength *= 0.5f;
-			bossAIComp->currState = BossAIComponent::BossStates::secondPhase;
+			bossAIComp->currState = BossAIComponent::BossStates::finalPhase;
 		}
 		bossAIComp->usefulTimer += 1 * delta;
 		break;
-	case BossAIComponent::BossStates::secondPhase:
+	case BossAIComponent::BossStates::finalPhase:
 		transComp->setRotation(glm::quat_cast(glm::rotate(1.f * bossAIComp->usefulTimer, glm::vec3(0, 1, 0))));
 		rigidbody->applyCentralForce(cast(bossAIComp->dir) * 10.f);
 		rigidbody->applyCentralForce(cast(_calculateForceDirection(bossAIComp->usefulTimer)) * 10.f);
-		bossAIComp->usefulTimer += 1 * delta;
-		break;
-	case BossAIComponent::BossStates::finalPhase:
-
 		bossAIComp->usefulTimer += 1 * delta;
 		break;
 	default:

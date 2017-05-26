@@ -27,18 +27,15 @@
       "damage": 1,
       "bounceCount": 0,
       "pierceCount": 0,
-      "speed": 5
+      "speed": 12
     },
-	"GunComponent":{
-		
-	},
     "SFXComponent": {
       "file": "assets/sfx/enemy_projectile.ogg",
       "loops": 0,
       "volume": 15
     },
     "LifeComponent": {
-      "maxHP": 5
+      "maxHP": 2.5
     },
     "PointLightComponent": {
       "diffuse": [

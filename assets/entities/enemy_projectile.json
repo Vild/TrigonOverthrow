@@ -20,7 +20,7 @@
       "damage": 1,
       "bounceCount": 0,
       "pierceCount": 0,
-      "speed": 2
+      "speed": 4
     },
     "AIComponent": {
       "moveType": 0,
@@ -37,26 +37,6 @@
     },
     "LifeComponent": {
       "maxHP": 1
-    },
-    "PointLightComponent": {
-      "diffuse": [
-        1,
-        0,
-        0
-      ],
-      "specular": [
-        0.05,
-        0.0,
-        0.0
-      ],
-      "constant": 1,
-      "linear": 0.35,
-      "quadratic": 0.44,
-      "offset": [
-        0,
-        0.5,
-        0
-      ]
     }
   }
 }
