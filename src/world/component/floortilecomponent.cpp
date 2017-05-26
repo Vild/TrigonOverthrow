@@ -6,7 +6,7 @@ FloorTileComponent::FloorTileComponent(float height) {
 	this->height = height;
 	this->heightFactor = 0.0f;
 	this->progress = 1.0f;
-	this->state = STATE_DYNAMIC;
+	this->state = STATE_FLUID;
 }
 
 FloorTileComponent::FloorTileComponent(const ComponentValues& value) : FloorTileComponent() {

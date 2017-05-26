@@ -92,59 +92,12 @@ InGameState::InGameState() {
 
 	{ // Adding Player
 		auto transform = _player->addComponent<TransformComponent>();
-		transform->setPosition(glm::vec3(3));
+		transform->setPosition(glm::vec3(32, 32, 32));
 		transform->setScale(glm::vec3(0.3));
 		transform->setDirection({0, 0, 1});
 
-		auto model = _player->addComponent<ModelComponent>();
-		model->meshData = engine.getMeshLoader()->getMesh("assets/objects/player.fbx");
-		model->meshData->texture = Engine::getInstance().getTextureManager()->getTexture("assets/textures/errorNormal.png");
-		model->meshData->mesh
-			->addBuffer("m",
-									[](GLuint id) {
-										glBindBuffer(GL_ARRAY_BUFFER, id);
-										glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-
-										for (int i = 0; i < 4; i++) {
-											glEnableVertexAttribArray(ShaderAttributeID::m + i);
-											glVertexAttribPointer(ShaderAttributeID::m + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4) * i));
-											glVertexAttribDivisor(ShaderAttributeID::m + i, 1);
-										}
-
-										glBindBuffer(GL_ARRAY_BUFFER, 0);
-									})
-			.finalize();
-
 		_player->addComponent<KBMouseInputComponent>();
 
-		/*auto life = */ _player->addComponent<LifeComponent>();
-
-		auto gun = _player->addComponent<GunComponent>();
-		gun->addGun(GunComponent::GunType::RAYGUN, 0.35f); // 60 is the the cooldown rate per frame.
-
-		auto expComp = _player->addComponent<ExperienceComponent>();
-		expComp->currExp = 0;
-		expComp->expToNextLevel = 5;
-		expComp->pickUpRadius = 4.8;
-
-		auto upgrades = _player->addComponent<UpgradeComponent>();
-		upgrades->multipleRayMultiplier = 0;
-		upgrades->reflectionCount = 0;
-		upgrades->refractionCount = 1;
-
-		auto rigidbody = _player->addComponent<RigidBodyComponent>(_player, 1.0f, 1.0f);
-		rigidbody->getRigidBody()->setDamping(0.9, 0);
-		rigidbody->setHitboxHalfSize(transform->getScale());
-		rigidbody->setTransform(transform);
-		rigidbody->setActivationState(DISABLE_DEACTIVATION);
-		bulletphyiscs->addRigidBody(rigidbody, BulletPhysicsSystem::CollisionType::COL_PLAYER, BulletPhysicsSystem::playerCollidesWith);
-
-		auto point = _player->addComponent<PointLightComponent>();
-		point->pointLight.diffuse = glm::vec3(0, 0.9, 0);
-		point->pointLight.specular = glm::vec3(0, 0.05, 0);
-		point->pointLight.constant = 1;
-		point->pointLight.linear = 0.14;
-		point->pointLight.quadratic = 0.07;
 
 		_player->addComponent<HoverComponent>(0.6, 100);
 	}

@@ -35,15 +35,16 @@ void FloorTileSystem::update(World& world, float delta)
 			float distance = glm::distance(playerPos, tilePos);
 			float progress = ftc->getProgress();
 
+			float radius = 10;
 
 			switch (ftc->getState())
 			{
 			case FloorTileComponent::STATE_FLUID:
-				heightFactor = 1.0f - clamp(log2(_max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f);
+				heightFactor = 1.0f - clamp(log2(_max(0, distance - radius)) * 0.5f, 0.0f, 1.0f);
 				break;
 
 			case FloorTileComponent::STATE_DYNAMIC:
-				heightFactor = _max(heightFactor, 1.0f - clamp(log2(_max(0, distance - 4.0f)) * 0.5f, 0.0f, 1.0f));
+				heightFactor = _max(heightFactor, 1.0f - clamp(log2(_max(0, distance - radius)) * 0.5f, 0.0f, 1.0f));
 				break;
 
 			case FloorTileComponent::STATE_LOWERING:
