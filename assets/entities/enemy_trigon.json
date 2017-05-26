@@ -1,79 +1,84 @@
 {
-  "name": "Trigon the ''Sphere''",
-  "components": {
-    "TransformComponent": {
-      "position": [
-		0,
-		0,
-		0
-	  ],
-      "scale": [
-		2,
-		2,
-		2
-	  ]
-    },
-	"ParticleComponent":{
-		"nrOfParticles": 1024,
-		"position":[
+	"name": "Trigon the ''Sphere''",
+	"components": {
+		"TransformComponent": {
+			"position": [
 				0,
 				0,
 				0
-		],
-		"direction":[
+			],
+			"scale": [
+				2,
+				2,
+				2
+			]
+		},
+		"ParticleComponent": {
+			"nrOfParticles": 1024,
+			"position": [
+				0,
+				0,
+				0
+			],
+			"direction": [
 				0,
 				1,
 				0
-		],
-		"particleEffect": 4,
-		"blend": false
-	},
-	"GunComponent":{
-		"type": 1,
-		"cooldown": 0,
-		"cooldownLength": 1.0,
-		"shoot": false
-	},
-    "ModelComponent": {
-      "mesh": "assets/objects/enemy_20HP.fbx",
-      "texture": "assets/textures/black_texture.png",
-      "needsMMatrix": true
-    },
-    "DynamicModelComponent": {
-		"texture": "assets/textures/black_texture.png"
-	},
-	"BossAIComponent":{
-		"currState": 0,
-		"monologueTimer": 7
-	},
-    "RigidBodyComponent": {
-      "mass": 1,
-      "friction": 1,
-      "damping": 0.9
-    },
-    "PointLightComponent": {
-      "diffuse": [
-        0.098,
-        0.098,
-        0.098
-      ],
-      "specular": [
-        0.0039,
-        0.0039,
-        0.0039
-      ],
-      "constant": 0.25,
-      "linear": 0.20,
-      "quadratic": -0.046,
-      "offset": [
-        0,
-        0.5,
-        0
-      ]
-    },
-    "HoverComponent": {
-		"hoverHeight": 0.8,
-		"hoverForce": 150
+			],
+			"particleEffect": 4,
+			"blend": false
+		},
+		"GunComponent": {
+			"type": 1,
+			"cooldown": 0,
+			"cooldownLength": 1.0,
+			"shoot": false
+		},
+		"ModelComponent": {
+			"mesh": "assets/objects/enemy_20HP.fbx",
+			"texture": "assets/textures/black_texture.png",
+			"needsMMatrix": true
+		},
+		"DynamicModelComponent": {
+			"texture": "assets/textures/black_texture.png"
+		},
+		"BossAIComponent": {
+			"currState": 0,
+			"monologueTimer": 7
+		},
+		"RigidBodyComponent": {
+			"mass": 1,
+			"friction": 1,
+			"damping": 0.9
+		},
+		"PointLightComponent": {
+			"diffuse": [
+				0.098,
+				0.098,
+				0.098
+			],
+			"specular": [
+				0.0039,
+				0.0039,
+				0.0039
+			],
+			"constant": 0.25,
+			"linear": 0.20,
+			"quadratic": -0.046,
+			"offset": [
+				0,
+				0.5,
+				0
+			]
+		},
+		"HoverComponent": {
+			"hoverHeight": 0.8,
+			"hoverForce": 150
+		},
+		"SFXComponent": {
+			"file": "assets/sfx/trigon_intro.ogg",
+			"loops": 0,
+			"volume": 96
+		}
 	}
-  }
 }
