@@ -9,14 +9,15 @@ DynamicModelSystem::DynamicModelSystem() {}
 void DynamicModelSystem::update(World& world, float delta) {
 	for (Entity * entity : world.getActiveComponents<DynamicModelComponent>()) {
 		auto dynamicModelComp = entity->getComponent<DynamicModelComponent>();
-		if (!dynamicModelComp)
+		auto lifeComp = entity->getComponent<LifeComponent>();
+
+		if (!lifeComp)
 			continue;
 
 		auto modelComp = entity->getComponent<ModelComponent>();
-		auto lifeComp = entity->getComponent<LifeComponent>();
 		if (lifeComp->hpchanged && lifeComp->currHP > 0) {
 			lifeComp->hpchanged = false;
-			modelComp->meshData = dynamicModelComp->meshes[lifeComp->currHP];
+			modelComp->meshData = dynamicModelComp->meshes[lifeComp->currHP - 1];
 		}
 	}
 }

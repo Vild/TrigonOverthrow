@@ -60,6 +60,8 @@ void BossAISystem::_doPhase(Entity* entity, float delta) {
 		if (bossAIComp->monologueTimer <= 0) {
 			bossAIComp->currState = BossAIComponent::BossStates::firstPhase;
 			rdbComp->setActivationState(DISABLE_DEACTIVATION);
+			auto life = entity->addComponent<LifeComponent>();
+			life->currHP = life->maxHP = 20;
 		}
 		bossAIComp->monologueTimer -= 1 * delta;
 		break;

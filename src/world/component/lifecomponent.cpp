@@ -10,7 +10,7 @@ LifeComponent::LifeComponent(float inMaxHP) : maxHP(inMaxHP), currHP(inMaxHP), h
 
 LifeComponent::LifeComponent(const ComponentValues& value) : LifeComponent() {
 	currHP = maxHP = value.getFloat("maxHP", 4);
-	hpchanged = false;
+	hpchanged = true;
 }
 
 LifeComponent::~LifeComponent() {}

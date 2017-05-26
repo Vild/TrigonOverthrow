@@ -42,9 +42,6 @@
     "DynamicModelComponent": {
 		"texture": "assets/textures/black_texture.png"
 	},
-    "LifeComponent": {
-      "maxHP": 20
-    },
 	"BossAIComponent":{
 		"currState": 0,
 		"monologueTimer": 7

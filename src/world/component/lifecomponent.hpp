@@ -11,7 +11,7 @@ struct LifeComponent : public Component {
 
 	float maxHP;
 	float currHP;
-	bool hpchanged;
+	bool hpchanged = true;
 	void registerImGui() final;
 	inline std::string name() final { return "LifeComponent"; }
 };
