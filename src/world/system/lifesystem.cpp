@@ -43,7 +43,7 @@ void LifeSystem::update(World& world, float delta) {
 			}
 		}
 
-		if (entity->getComponent<ProjectileComponent>() || entity->getComponent<ParticleComponent>() && 
+		if ((entity->getComponent<ProjectileComponent>() || entity->getComponent<ParticleComponent>()) &&
 			!entity->getComponent<AIComponent>() && !entity->getComponent<BossAIComponent>()) {
 			lifeComp->currHP -= 1 * delta;
 		}
