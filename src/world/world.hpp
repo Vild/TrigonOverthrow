@@ -6,6 +6,7 @@
 #include <typeindex>
 
 class Entity;
+class Component;
 
 class World {
 public:
@@ -26,8 +27,9 @@ public:
 
 private:
 	friend class Entity;
-	std::vector<std::unique_ptr<Entity>> _entities;
+	friend class Component;
 	std::map<std::type_index, std::vector<Entity*>> _activeComponents;
+	std::vector<std::unique_ptr<Entity>> _entities;
 };
 
 #include "entity.hpp"

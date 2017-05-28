@@ -23,7 +23,7 @@ public:
 
 	template <typename T, typename... Args, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	T* addComponent(Args... args) {
-		auto ret = components.insert_or_assign(typeid(T), std::make_unique<T>(args...));
+		auto ret = _components.insert_or_assign(typeid(T), std::make_unique<T>(args...));
 
 		_world._activeComponents[typeid(T)].push_back(this);
 
@@ -33,9 +33,9 @@ public:
 	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	T* getComponent() {
 		T* component = nullptr;
-		auto it = components.find(typeid(T));
+		auto it = _components.find(typeid(T));
 
-		if (it != components.end())
+		if (it != _components.end())
 			component = static_cast<T*>(it->second.get());
 
 		return component;
@@ -43,7 +43,7 @@ public:
 
 	template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type* = nullptr>
 	void removeComponent() {
-		components.erase(typeid(T));
+		_components.erase(typeid(T));
 		auto& ents = _world._activeComponents[typeid(T)];
 		ents.erase(std::find(ents.begin(), ents.end(), this));
 	}
@@ -54,13 +54,13 @@ public:
 	inline std::string& getName() { return _name; }
 	inline void makeDead() { _dead = true; }
 	inline bool isDead() { return _dead; }
-	inline std::map<std::type_index, std::unique_ptr<Component>>& getComponents() { return components; }
+	inline std::map<std::type_index, std::unique_ptr<Component>>& getComponents() { return _components; }
 	inline bool& getHide() { return _hide; }
 
 private:
 	World& _world;
 	std::string _name;
-	std::map<std::type_index, std::unique_ptr<Component>> components;
+	std::map<std::type_index, std::unique_ptr<Component>> _components;
 
 	bool _dead = false;
 	bool _hide = false;

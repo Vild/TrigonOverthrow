@@ -4,7 +4,4 @@
 
 World::World() {}
 
-World::~World() {
-	_entities.clear();
-	_activeComponents.clear();
-}
+World::~World() {}
